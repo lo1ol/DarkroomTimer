@@ -8,7 +8,9 @@ uint8_t kBeepVolume = 0.7 * 255;
 
 void Timer::setup() {
     pinMode(m_beepPin, OUTPUT);
+    pinMode(m_controlPin, OUTPUT);
     analogWrite(m_beepPin, 0);
+    analogWrite(m_controlPin, 0);
 }
 
 void Timer::tick() {
@@ -31,6 +33,7 @@ void Timer::start(unsigned long ms) {
     m_leftTime = ms;
     m_stopTime = m_currentTime + ms;
     m_status = RUNNING;
+    digitalWrite(m_controlPin, HIGH);
 }
 
 void Timer::pause() {
@@ -39,6 +42,7 @@ void Timer::pause() {
         m_total += m_leftTime + m_currentTime;
         m_leftTime = m_stopTime - m_currentTime;
         m_status = PAUSED;
+        digitalWrite(m_controlPin, LOW);
     }
 }
 
@@ -46,6 +50,7 @@ void Timer::resume() {
     if (m_status == PAUSED) {
         m_stopTime = m_currentTime + m_leftTime;
         m_status = RUNNING;
+        digitalWrite(m_controlPin, HIGH);
     }
 }
 
@@ -58,6 +63,7 @@ void Timer::stop() {
         else
             m_total += m_leftTime + m_currentTime - m_stopTime;
         m_leftTime = 0;
+        digitalWrite(m_controlPin, LOW);
     }
 }
 

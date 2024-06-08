@@ -16,6 +16,7 @@
 #define MAX_SYMS_PER_LINE 16
 
 #define MODE_SWITCH_BTN 6
+#define VIEW_BTN A1
 #define START_BTN A0
 #define EXTRA_BTN 8
 
@@ -23,6 +24,7 @@
 #define ENCODER_CLK 10
 
 #define BEEPER 11
+#define RELAY A4
 
 void getFormatedTime(unsigned long ms, char* buf, bool accurate = true);
 
@@ -37,4 +39,5 @@ extern LiquidCrystal gLcd;
 extern RotaryEncoder gEncoder;
 extern Button gStartBtn;
 extern Button gExtraBtn;
+extern Button gViewBtn;
 extern Timer gTimer;

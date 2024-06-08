@@ -6,7 +6,7 @@ class Timer {
 public:
     enum status_t { STOPPED, RUNNING, PAUSED };
 
-    Timer(uint8_t beepPin) : m_beepPin(beepPin) {}
+    Timer(uint8_t beepPin, uint8_t controlPin) : m_beepPin(beepPin), m_controlPin(controlPin) {}
 
     void setup();
 
@@ -30,4 +30,5 @@ private:
     status_t m_status;
 
     uint8_t m_beepPin;
+    uint8_t m_controlPin;
 };

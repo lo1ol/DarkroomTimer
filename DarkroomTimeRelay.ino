@@ -42,11 +42,14 @@ void checkSwitchMode() {
     }
 }
 
+int gRelayState = LOW;
+
 void setup() {
     Serial.begin(9600);
     gModeSwitchBtn.begin();
     gStartBtn.begin();
     gExtraBtn.begin();
+    gViewBtn.begin();
     gTimer.setup();
     gLcd.begin(MAX_SYMS_PER_LINE, 2);
 
@@ -57,8 +60,17 @@ void loop() {
     gTimer.tick();
     gEncoder.tick();
 
-    if (gTimer.state() == Timer::STOPPED)
+    if (gTimer.state() == Timer::STOPPED) {
+        if (gViewBtn.pressed()) {
+            gRelayState = !gRelayState;
+            digitalWrite(RELAY, gRelayState);
+        }
+
+        if (gRelayState == HIGH)
+            return;
+
         checkSwitchMode();
+    }
 
     gModeProcessor->process();
 }
