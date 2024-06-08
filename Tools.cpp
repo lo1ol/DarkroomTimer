@@ -90,11 +90,20 @@ void printTimeLog(const char* prefix, unsigned long (*timeGetter)(size_t), size_
         printTimeLogOnLine("", timeGetter, maxIndex, lastNonPrintedIndex, 1);
 }
 
+void isr() {
+    gEncoder.tickISR();
+}
+
+void setupEncoder() {
+    attachInterrupt(0, isr, CHANGE);
+    attachInterrupt(1, isr, CHANGE);
+    gEncoder.setEncISR(true);
+}
+
 int getEncoderShift() {
     if (!gEncoder.turn())
         return 0;
-
-    return gEncoder.dir();
+    return gEncoder.dir() * (gEncoder.fast() ? 5 : 1);
 }
 
 void getInt(size_t& choosen, size_t min, size_t max) {

@@ -1,5 +1,7 @@
 #pragma once
 
+#define EB_FAST_TIME 15
+
 #include <EncButton.h>
 #include <LiquidCrystal.h>
 
@@ -33,6 +35,8 @@ void printTimeLog(const char* prefix, unsigned long (*timeGetter)(size_t), size_
 
 void getInt(size_t& choosen, size_t min, size_t max);
 void getTime(unsigned long& time);
+
+void setupEncoder();
 
 extern LiquidCrystal gLcd;
 extern EncButton gEncoder;

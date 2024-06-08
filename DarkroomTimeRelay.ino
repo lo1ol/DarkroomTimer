@@ -49,6 +49,8 @@ void setup() {
     gTimer.setup();
     gLcd.begin(MAX_SYMS_PER_LINE, 2);
 
+    setupEncoder();
+
     setMode(ModeId::testFStops);
 }
 
