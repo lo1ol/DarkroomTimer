@@ -1,8 +1,7 @@
 #pragma once
 
-#include <Button.h>
+#include <EncButton.h>
 #include <LiquidCrystal.h>
-#include <RotaryEncoder.h>
 
 #include "Timer.h"
 
@@ -36,7 +35,7 @@ void getInt(size_t& choosen, size_t min, size_t max);
 void getTime(unsigned long& time);
 
 extern LiquidCrystal gLcd;
-extern RotaryEncoder gEncoder;
+extern EncButton gEncoder;
 extern Button gStartBtn;
 extern Button gExtraBtn;
 extern Button gViewBtn;

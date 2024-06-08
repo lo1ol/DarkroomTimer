@@ -3,7 +3,7 @@
 #include <string.h>
 
 LiquidCrystal gLcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
-RotaryEncoder gEncoder(ENCODER_DT, ENCODER_CLK);
+EncButton gEncoder(ENCODER_DT, ENCODER_CLK);
 Button gStartBtn(START_BTN);
 Button gExtraBtn(EXTRA_BTN);
 Button gViewBtn(VIEW_BTN);
@@ -90,8 +90,15 @@ void printTimeLog(const char* prefix, unsigned long (*timeGetter)(size_t), size_
         printTimeLogOnLine("", timeGetter, maxIndex, lastNonPrintedIndex, 1);
 }
 
+int getEncoderShift() {
+    if (!gEncoder.turn())
+        return 0;
+
+    return gEncoder.dir();
+}
+
 void getInt(size_t& choosen, size_t min, size_t max) {
-    int shift = (int)gEncoder.getDirection();
+    int shift = getEncoderShift();
 
     if (choosen == min && shift == -1)
         return;
@@ -103,7 +110,7 @@ void getInt(size_t& choosen, size_t min, size_t max) {
 }
 
 void getTime(unsigned long& time) {
-    int shift = (int)gEncoder.getDirection();
+    int shift = getEncoderShift();
 
     int factor;
     if ((time + shift) < 10000)

@@ -20,7 +20,7 @@ MaskMode::MaskMode() {
 }
 
 void MaskMode::process() {
-    if (gExtraBtn.pressed() && gTimer.state() != Timer::RUNNING) {
+    if (gExtraBtn.press() && gTimer.state() != Timer::RUNNING) {
         if (m_step == Step::setMasks) {
             if (m_currentMask + 1 == m_numberOfMasks) {
                 m_step = Step::log;
@@ -77,7 +77,7 @@ void MaskMode::process() {
         printFormatedTime("", gMasks[m_currentMask]);
     }
 
-    if (gStartBtn.pressed()) {
+    if (gStartBtn.press()) {
         if (gTimer.state() == Timer::STOPPED) {
             gTimer.start(gMasks[m_currentMask]);
             ++m_currentMask;

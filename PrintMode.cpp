@@ -15,10 +15,10 @@ void PrintMode::process() {
         printFormatedTime("", gTimer.left());
     }
 
-    if (gExtraBtn.pressed())
+    if (gExtraBtn.press())
         gTimer.stop();
 
-    if (gStartBtn.pressed()) {
+    if (gStartBtn.press()) {
         switch (gTimer.state()) {
         case Timer::RUNNING:
             gTimer.pause();
