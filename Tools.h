@@ -1,6 +1,7 @@
 #pragma once
 
-#define EB_FAST_TIME 10
+#define EB_FAST_TIME 13
+#define EB_HOLD_TIME 500
 
 #include <EncButton.h>
 #include <LiquidCrystal.h>
@@ -40,6 +41,7 @@ void setupEncoder();
 
 extern LiquidCrystal gLcd;
 extern EncButton gEncoder;
+extern Button gModeSwitchBtn;
 extern Button gStartBtn;
 extern Button gExtraBtn;
 extern Button gViewBtn;

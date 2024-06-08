@@ -8,6 +8,7 @@ class MaskMode final : public ModeProcessor {
 public:
     MaskMode();
     void process() override;
+    void reset() override;
 
 private:
     Step m_step;

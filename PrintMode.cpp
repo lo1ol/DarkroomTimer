@@ -28,12 +28,7 @@ void PrintMode::process() {
         printFormatedLine(str, 1);
     }
 
-    if (gExtraBtn.press()) {
-        gTimer.stop();
-        gTimer.resetTotal();
-    }
-
-    if (gStartBtn.press()) {
+    if (gStartBtn.click()) {
         switch (gTimer.state()) {
         case Timer::RUNNING:
             gTimer.pause();
@@ -46,4 +41,9 @@ void PrintMode::process() {
             break;
         }
     }
+}
+
+void PrintMode::reset() {
+    gTimer.stop();
+    gTimer.resetTotal();
 }

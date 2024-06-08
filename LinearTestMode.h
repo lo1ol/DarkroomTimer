@@ -8,6 +8,7 @@ class LinearTestMode final : public ModeProcessor {
 public:
     LinearTestMode();
     void process() override;
+    void reset() override;
 
 private:
     Step m_step;

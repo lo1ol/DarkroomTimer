@@ -34,10 +34,8 @@ void setMode(ModeId modeId) {
     }
 }
 
-Button gModeSwitchBtn(MODE_SWITCH_BTN);
-
 void checkSwitchMode() {
-    if (gModeSwitchBtn.press()) {
+    if (gModeSwitchBtn.click()) {
         setMode((ModeId)(((int)gModeId + 1) % (int)ModeId::last_));
     }
 }
@@ -62,7 +60,7 @@ void loop() {
     gModeSwitchBtn.tick();
 
     if (gTimer.state() == Timer::STOPPED) {
-        if (gViewBtn.press()) {
+        if (gViewBtn.click()) {
             gRelayState = !gRelayState;
             digitalWrite(RELAY, gRelayState);
         }
@@ -74,4 +72,7 @@ void loop() {
     }
 
     gModeProcessor->process();
+
+    if (gExtraBtn.hold())
+        gModeProcessor->reset();
 }

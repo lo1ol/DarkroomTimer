@@ -8,6 +8,7 @@ class FStopTestMode final : public ModeProcessor {
 public:
     FStopTestMode();
     void process() override;
+    void reset() override;
 
 private:
     Step m_step;

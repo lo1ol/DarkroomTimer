@@ -9,7 +9,7 @@ LinearTestMode::LinearTestMode() {
 }
 
 void LinearTestMode::process() {
-    if (gExtraBtn.press() && gTimer.state() != Timer::RUNNING) {
+    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
         m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
         m_currentRun = 1;
         gTimer.resetTotal();
@@ -50,10 +50,19 @@ void LinearTestMode::process() {
 
     printFormatedTime("", printTime);
 
-    if (gStartBtn.press()) {
+    if (gStartBtn.click()) {
         if (gTimer.state() == Timer::STOPPED) {
             gTimer.start(printTime);
             ++m_currentRun;
         }
     }
+}
+
+void LinearTestMode::reset() {
+    if (m_step != Step::run)
+        return;
+
+    gTimer.stop();
+    gTimer.resetTotal();
+    m_currentRun = 1;
 }
