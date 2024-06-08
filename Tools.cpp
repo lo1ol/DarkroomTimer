@@ -109,13 +109,12 @@ int getEncoderShift() {
 void getInt(size_t& choosen, size_t min, size_t max) {
     int shift = getEncoderShift();
 
-    if (choosen == min && shift == -1)
-        return;
-
-    if (choosen == max && shift == 1)
-        return;
-
-    choosen += shift;
+    if (shift < 0 && (choosen - min) < -shift)
+        choosen = min;
+    else if (shift > 0 && (max - choosen) < shift)
+        choosen = max;
+    else
+        choosen += shift;
 }
 
 void getTime(unsigned long& time) {

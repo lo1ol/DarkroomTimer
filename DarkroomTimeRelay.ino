@@ -45,7 +45,6 @@ void checkSwitchMode() {
 int gRelayState = LOW;
 
 void setup() {
-    Serial.begin(9600);
     gTimer.setup();
     gLcd.begin(MAX_SYMS_PER_LINE, 2);
 

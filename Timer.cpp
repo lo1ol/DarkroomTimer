@@ -39,7 +39,7 @@ void Timer::start(unsigned long ms) {
 void Timer::pause() {
     if (m_status == RUNNING) {
         analogWrite(m_beepPin, 0);
-        m_total += m_leftTime + m_currentTime;
+        m_total += m_leftTime + m_currentTime - m_stopTime;
         m_leftTime = m_stopTime - m_currentTime;
         m_status = PAUSED;
         digitalWrite(m_controlPin, LOW);

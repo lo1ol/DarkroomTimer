@@ -47,7 +47,7 @@ void MaskMode::process() {
         return;
     case Step::setMasks: {
         char str[MAX_SYMS_PER_LINE + 1];
-        sprintf(str, "Mask #%u", m_currentMask + 1);
+        sprintf(str, "Mask set: #%u", m_currentMask + 1);
         printFormatedLine(str, 0);
         getTime(gMasks[m_currentMask]);
         printFormatedTime("", gMasks[m_currentMask]);

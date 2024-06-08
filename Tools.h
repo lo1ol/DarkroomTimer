@@ -1,6 +1,6 @@
 #pragma once
 
-#define EB_FAST_TIME 15
+#define EB_FAST_TIME 10
 
 #include <EncButton.h>
 #include <LiquidCrystal.h>
