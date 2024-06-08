@@ -7,7 +7,7 @@
 #include "Timer.h"
 
 #define LCD_RS 12
-#define LCD_EN 11
+#define LCD_EN 13
 #define LCD_D4 5
 #define LCD_D5 4
 #define LCD_D6 3
@@ -21,6 +21,8 @@
 
 #define ENCODER_DT 9
 #define ENCODER_CLK 10
+
+#define BEEPER 11
 
 void getFormatedTime(unsigned long ms, char* buf, bool accurate = true);
 

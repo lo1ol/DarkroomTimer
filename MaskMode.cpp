@@ -3,7 +3,7 @@
 #include "Tools.h"
 
 namespace {
-constexpr size_t gMasksMaxNumber 10;
+constexpr size_t gMasksMaxNumber = 10;
 
 // Ardruino cpp library haven't std::function,
 // so it's pretty hard to pass lambda that capture something

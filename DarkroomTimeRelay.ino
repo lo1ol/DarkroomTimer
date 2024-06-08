@@ -47,6 +47,7 @@ void setup() {
     gModeSwitchBtn.begin();
     gStartBtn.begin();
     gExtraBtn.begin();
+    gTimer.setup();
     gLcd.begin(MAX_SYMS_PER_LINE, 2);
 
     setMode(ModeId::testFStops);
