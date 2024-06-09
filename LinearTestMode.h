@@ -1,6 +1,6 @@
 #include "ModeProcessor.h"
 
-#include <stddef.h>
+#include <stdint.h>
 
 class LinearTestMode final : public ModeProcessor {
     enum class Step { initTime, stepTime, run, last_ };
@@ -12,7 +12,7 @@ public:
 
 private:
     Step m_step;
-    size_t m_currentRun;
-    unsigned long m_initTime;
-    unsigned long m_stepTime;
+    uint8_t m_currentRun;
+    uint32_t m_initTime;
+    uint32_t m_stepTime;
 };

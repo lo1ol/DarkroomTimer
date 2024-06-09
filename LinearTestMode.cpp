@@ -30,11 +30,10 @@ void LinearTestMode::process() {
         break;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1];
-    char formatedTotal[5];
-    getFormatedTime(gTimer.total(), formatedTotal);
-
-    sprintf(str, "L Test#%d T:%s", m_currentRun - (gTimer.state() == Timer::RUNNING), formatedTotal);
+    char str[MAX_SYMS_PER_LINE + 1] = "L Test#";
+    concatInt(str, m_currentRun - (gTimer.state() == Timer::RUNNING));
+    concat(str, " T:");
+    concatTime(str, gTimer.total());
     printFormatedLine(str, 0);
 
     if (gTimer.state() == Timer::RUNNING) {
@@ -42,7 +41,7 @@ void LinearTestMode::process() {
         return;
     }
 
-    unsigned long printTime;
+    uint32_t printTime;
     if (m_currentRun == 1)
         printTime = m_initTime;
     else

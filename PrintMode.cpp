@@ -7,12 +7,8 @@ PrintMode::PrintMode() {
 }
 
 void PrintMode::process() {
-    char str[MAX_SYMS_PER_LINE + 1];
-    char formatedTime[5];
-
-    getFormatedTime(gTimer.total(), formatedTime);
-
-    sprintf(str, "Print: T=%s", formatedTime);
+    char str[MAX_SYMS_PER_LINE + 1] = "Print: T=";
+    concatTime(str, gTimer.total());
     printFormatedLine(str, 0);
 
     if (gTimer.state() == Timer::STOPPED) {

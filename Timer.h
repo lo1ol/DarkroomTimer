@@ -11,22 +11,24 @@ public:
     void setup();
 
     void tick();
-    void start(unsigned long ms);
+    void start(uint32_t ms);
     void pause();
     void resume();
     void stop();
-    unsigned long left();
+    uint32_t left();
 
-    unsigned long total();
+    uint32_t total();
     void resetTotal();
+
+    void setLagTime(uint32_t) {}
 
     status_t state();
 
 private:
-    unsigned long m_currentTime;
-    unsigned long m_leftTime;
-    unsigned long m_stopTime;
-    unsigned long m_total;
+    uint32_t m_currentTime;
+    uint32_t m_leftTime;
+    uint32_t m_stopTime;
+    uint32_t m_total;
     status_t m_status;
 
     uint8_t m_beepPin;

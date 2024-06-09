@@ -29,7 +29,7 @@ void Timer::tick() {
     }
 }
 
-void Timer::start(unsigned long ms) {
+void Timer::start(uint32_t ms) {
     m_leftTime = ms;
     m_stopTime = m_currentTime + ms;
     m_status = RUNNING;
@@ -67,14 +67,14 @@ void Timer::stop() {
     }
 }
 
-unsigned long Timer::left() {
+uint32_t Timer::left() {
     if (m_status == RUNNING) {
         return m_stopTime - m_currentTime;
     }
     return m_leftTime;
 }
 
-unsigned long Timer::total() {
+uint32_t Timer::total() {
     return m_total + (m_leftTime - left());
 }
 

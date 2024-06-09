@@ -28,14 +28,26 @@
 #define BEEPER 10
 #define RELAY A4
 
-void getFormatedTime(unsigned long ms, char* buf, bool accurate = true);
+void getFormatedTime(uint32_t ms, char* buf, bool accurate = true);
+
+inline void concat(char* dst, const char* src) {
+    strcpy(dst + strlen(dst), src);
+}
+
+inline void concatInt(char* dst, int value) {
+    itoa(value, dst + strlen(dst), 10);
+}
+
+inline void concatTime(char* dst, uint32_t ms, bool accurate = true) {
+    getFormatedTime(ms, dst + strlen(dst), accurate);
+}
 
 void printFormatedLine(const char* line, int pos);
-void printFormatedTime(const char* prefix, unsigned long ms);
-void printTimeLog(const char* prefix, unsigned long (*timeGetter)(size_t), size_t maxIndex);
+void printFormatedTime(const char* prefix, uint32_t ms);
+void printTimeLog(const char* prefix, uint32_t (*timeGetter)(uint8_t), uint8_t maxIndex);
 
-void getInt(size_t& choosen, size_t min, size_t max);
-void getTime(unsigned long& time);
+void getInt(uint8_t& choosen, uint8_t min, uint8_t max);
+void getTime(uint32_t& time);
 
 void setupEncoder();
 

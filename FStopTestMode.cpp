@@ -8,8 +8,8 @@ constexpr uint8_t kFStopPartVarinatns[] = { 6, 5, 4, 3, 2, 1 };
 // Ardruino cpp library haven't std::function,
 // so it's pretty hard to pass lambda that capture something
 // We need this vars inside so let's make them static objects
-unsigned long gFStopInitTime;
-size_t gFStopPartId;
+uint32_t gFStopInitTime;
+uint8_t gFStopPartId;
 } // namespace
 
 FStopTestMode::FStopTestMode() {
@@ -36,17 +36,17 @@ void FStopTestMode::process() {
         printFormatedLine("Test F Stops", 0);
 
         getInt(gFStopPartId, 0, sizeof(kFStopPartVarinatns) - 1);
-        char str[MAX_SYMS_PER_LINE + 1];
-        sprintf(str, "F stop: 1/%u", (unsigned)kFStopPartVarinatns[gFStopPartId]);
+        char str[MAX_SYMS_PER_LINE + 1] = "F stop: 1/";
+        concatInt(str, kFStopPartVarinatns[gFStopPartId]);
         printFormatedLine(str, 1);
     }
         return;
     case Step::log:
         printTimeLog(
             "F Log ",
-            [](size_t N) -> unsigned long {
+            [](uint8_t N) -> uint32_t {
                 uint8_t stopPart = kFStopPartVarinatns[gFStopPartId];
-                return gFStopInitTime * (pow(2, double(N) / stopPart));
+                return gFStopInitTime * (pow(2, float(N) / stopPart));
             },
             100);
         return;
@@ -54,11 +54,11 @@ void FStopTestMode::process() {
         break;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1];
-    char formatedTotal[5];
-    getFormatedTime(gTimer.total(), formatedTotal);
+    char str[MAX_SYMS_PER_LINE + 1] = "F Test#";
+    concatInt(str, m_currentRun - (gTimer.state() == Timer::RUNNING));
+    concat(str, " T:");
+    concatTime(str, gTimer.total());
 
-    sprintf(str, "F Test#%d T:%s", m_currentRun - (gTimer.state() == Timer::RUNNING), formatedTotal);
     printFormatedLine(str, 0);
 
     if (gTimer.state() == Timer::RUNNING) {
@@ -67,13 +67,13 @@ void FStopTestMode::process() {
         return;
     }
 
-    unsigned long printTime;
+    uint32_t printTime;
     if (m_currentRun == 1)
         printTime = gFStopInitTime;
     else {
         uint8_t stopPart = kFStopPartVarinatns[gFStopPartId];
-        printTime = gFStopInitTime *
-                    (pow(2, double(m_currentRun - 1) / stopPart) - pow(2, double(m_currentRun - 2) / stopPart));
+        printTime =
+            gFStopInitTime * (pow(2, float(m_currentRun - 1) / stopPart) - pow(2, float(m_currentRun - 2) / stopPart));
     }
 
     printFormatedTime("", printTime);

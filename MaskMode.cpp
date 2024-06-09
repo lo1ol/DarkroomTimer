@@ -3,12 +3,12 @@
 #include "Tools.h"
 
 namespace {
-constexpr size_t gMasksMaxNumber = 10;
+constexpr uint8_t gMasksMaxNumber = 10;
 
 // Ardruino cpp library haven't std::function,
 // so it's pretty hard to pass lambda that capture something
 // We need this vars inside so let's make them static objects
-unsigned long gMasks[gMasksMaxNumber];
+uint32_t gMasks[gMasksMaxNumber];
 } // namespace
 
 MaskMode::MaskMode() {
@@ -40,14 +40,14 @@ void MaskMode::process() {
     case Step::setNum: {
         printFormatedLine("Mask printing", 0);
         getInt(m_numberOfMasks, 2, gMasksMaxNumber);
-        char str[MAX_SYMS_PER_LINE + 1];
-        sprintf(str, "Masks num: %u", m_numberOfMasks);
+        char str[MAX_SYMS_PER_LINE + 1] = "Masks num: ";
+        concatInt(str, m_numberOfMasks);
         printFormatedLine(str, 1);
     }
         return;
     case Step::setMasks: {
-        char str[MAX_SYMS_PER_LINE + 1];
-        sprintf(str, "Mask set: #%u", m_currentMask + 1);
+        char str[MAX_SYMS_PER_LINE + 1] = "Mask set: #";
+        concatInt(str, m_currentMask + 1);
         printFormatedLine(str, 0);
         getTime(gMasks[m_currentMask]);
         printFormatedTime("", gMasks[m_currentMask]);
@@ -55,17 +55,16 @@ void MaskMode::process() {
         return;
     case Step::log:
         printTimeLog(
-            "M Log ", [](size_t N) -> unsigned long { return gMasks[N]; }, m_numberOfMasks);
+            "M Log ", [](uint8_t N) -> uint32_t { return gMasks[N]; }, m_numberOfMasks);
         return;
     case Step::run:
         break;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1];
-    char formatedTotal[5];
-    getFormatedTime(gTimer.total(), formatedTotal);
-
-    sprintf(str, "Mask #%d T:%s", m_currentMask + 1 - (gTimer.state() == Timer::RUNNING), formatedTotal);
+    char str[MAX_SYMS_PER_LINE + 1] = "Mask #";
+    concatInt(str, m_currentMask + 1 - (gTimer.state() == Timer::RUNNING));
+    concat(str, " T:");
+    concatTime(str, gTimer.total());
     printFormatedLine(str, 0);
 
     if (gTimer.state() == Timer::RUNNING) {

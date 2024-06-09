@@ -1,6 +1,6 @@
 #include "ModeProcessor.h"
 
-#include <stddef.h>
+#include <stdint.h>
 
 class PrintMode final : public ModeProcessor {
 public:
@@ -9,5 +9,5 @@ public:
     void reset() override;
 
 private:
-    unsigned long m_printTime;
+    uint32_t m_printTime;
 };
