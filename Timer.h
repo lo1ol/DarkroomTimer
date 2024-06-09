@@ -4,7 +4,7 @@
 
 class Timer {
 public:
-    enum status_t { STOPPED, RUNNING, PAUSED };
+    enum State { STOPPED, RUNNING, PAUSED };
 
     Timer(uint8_t beepPin, uint8_t controlPin) : m_beepPin(beepPin), m_controlPin(controlPin) {}
 
@@ -15,22 +15,30 @@ public:
     void pause();
     void resume();
     void stop();
-    uint32_t left();
+    uint32_t left() const;
 
-    uint32_t total();
+    void printFormatedState() const;
+
+    uint32_t total() const;
     void resetTotal();
 
-    void setLagTime(uint32_t) {}
+    void setLagTime(uint16_t lagTime) { m_lagTime = lagTime; }
 
-    status_t state();
+    State state() const;
 
 private:
+    uint32_t afterResume() const;
+    uint32_t realStopTime() const;
+
+    State m_status;
+
+    uint8_t m_beepPin;
+    uint8_t m_controlPin;
+
+    uint16_t m_lagTime = 0;
+
     uint32_t m_currentTime;
     uint32_t m_leftTime;
     uint32_t m_stopTime;
     uint32_t m_total;
-    status_t m_status;
-
-    uint8_t m_beepPin;
-    uint8_t m_controlPin;
 };

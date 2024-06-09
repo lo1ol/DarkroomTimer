@@ -6,8 +6,9 @@
 #include "LinearTestMode.h"
 #include "MaskMode.h"
 #include "PrintMode.h"
+#include "SetLagTimeMode.h"
 
-enum class ModeId { testFStops, testLinear, print, mask, last_ };
+enum class ModeId { testFStops, testLinear, print, mask, last_, setLagTime };
 
 ModeId gModeId;
 ModeProcessor* gModeProcessor = nullptr;
@@ -31,6 +32,9 @@ void setMode(ModeId modeId) {
     case ModeId::mask:
         gModeProcessor = new MaskMode();
         break;
+    case ModeId::setLagTime:
+        gModeProcessor = new SetLagTimeMode();
+        break;
     }
 }
 
@@ -44,6 +48,7 @@ int gRelayState = LOW;
 
 void setup() {
     gTimer.setup();
+    gTimer.setLagTime(SetLagTimeMode::getLagTime());
     gLcd.begin(MAX_SYMS_PER_LINE, 2);
 
     setupEncoder();
@@ -69,6 +74,13 @@ void loop() {
             return;
 
         checkSwitchMode();
+
+        if (gViewBtn.hold() && gModeSwitchBtn.pressing()) {
+            if (gModeId != ModeId::setLagTime)
+                setMode(ModeId::setLagTime);
+            else
+                setMode(ModeId::testFStops);
+        }
     }
 
     gModeProcessor->process();

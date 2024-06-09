@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-#include <Arduino.h>
+#include "Tools.h"
 
 namespace {
 uint8_t kBeepVolume = 0.7 * 255;
@@ -24,7 +24,7 @@ void Timer::tick() {
         analogWrite(m_beepPin, kBeepVolume);
     }
 
-    if (m_currentTime > m_stopTime) {
+    if (m_currentTime > realStopTime()) {
         stop();
     }
 }
@@ -39,8 +39,8 @@ void Timer::start(uint32_t ms) {
 void Timer::pause() {
     if (m_status == RUNNING) {
         analogWrite(m_beepPin, 0);
-        m_total += m_leftTime + m_currentTime - m_stopTime;
-        m_leftTime = m_stopTime - m_currentTime;
+        m_total += afterResume();
+        m_leftTime -= afterResume();
         m_status = PAUSED;
         digitalWrite(m_controlPin, LOW);
     }
@@ -57,31 +57,68 @@ void Timer::resume() {
 void Timer::stop() {
     if (m_status != STOPPED) {
         analogWrite(m_beepPin, 0);
-        m_status = STOPPED;
-        if (m_currentTime > m_stopTime)
+        if (m_currentTime >= realStopTime())
             m_total += m_leftTime;
         else
-            m_total += m_leftTime + m_currentTime - m_stopTime;
+            m_total += afterResume();
+        m_status = STOPPED;
         m_leftTime = 0;
         digitalWrite(m_controlPin, LOW);
     }
 }
 
-uint32_t Timer::left() {
-    if (m_status == RUNNING) {
-        return m_stopTime - m_currentTime;
-    }
+uint32_t Timer::left() const {
+    if (m_status == RUNNING && afterResume())
+        return realStopTime() - m_currentTime;
+
     return m_leftTime;
 }
 
-uint32_t Timer::total() {
-    return m_total + (m_leftTime - left());
+uint32_t Timer::afterResume() const {
+    if (m_status != RUNNING)
+        return 0;
+
+    uint32_t realAfterResume = m_currentTime + m_leftTime - m_stopTime;
+
+    if (realAfterResume < m_lagTime)
+        return 0;
+
+    return realAfterResume - m_lagTime;
+}
+
+void Timer::printFormatedState() const {
+    switch (m_status) {
+    case RUNNING:
+        if (afterResume() == 0) {
+            printFormatedLine("Lag", 1);
+        } else {
+            printFormatedTime("", left());
+        }
+        break;
+    case PAUSED: {
+        char str[MAX_SYMS_PER_LINE + 1] = "";
+        concatTime(str, left());
+        concat(str, " PAUSE");
+        printFormatedLine(str, 1);
+    } break;
+    case STOPPED:
+        printFormatedLine("", 1);
+        break;
+    }
+}
+
+uint32_t Timer::realStopTime() const {
+    return m_stopTime + m_lagTime;
+}
+
+uint32_t Timer::total() const {
+    return m_total + afterResume();
 }
 
 void Timer::resetTotal() {
     m_total = 0;
 }
 
-Timer::status_t Timer::state() {
+Timer::State Timer::state() const {
     return m_status;
 }

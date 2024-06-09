@@ -37,7 +37,7 @@ void LinearTestMode::process() {
     printFormatedLine(str, 0);
 
     if (gTimer.state() == Timer::RUNNING) {
-        printFormatedTime("", gTimer.left());
+        gTimer.printFormatedState();
         return;
     }
 

@@ -16,12 +16,7 @@ void PrintMode::process() {
         getTime(m_printTime);
         printFormatedTime("", m_printTime);
     } else {
-        getFormatedTime(gTimer.left(), formatedTime);
-        if (gTimer.state() == Timer::PAUSED)
-            sprintf(str, "%s PAUSE", formatedTime);
-        else
-            sprintf(str, "%s", formatedTime);
-        printFormatedLine(str, 1);
+        gTimer.printFormatedState();
     }
 
     if (gStartBtn.click()) {

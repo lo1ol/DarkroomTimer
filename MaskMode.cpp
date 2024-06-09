@@ -68,7 +68,7 @@ void MaskMode::process() {
     printFormatedLine(str, 0);
 
     if (gTimer.state() == Timer::RUNNING) {
-        printFormatedTime("", gTimer.left());
+        gTimer.printFormatedState();
     } else if (m_currentMask == m_numberOfMasks) {
         printFormatedLine("Finish", 1);
         return;
