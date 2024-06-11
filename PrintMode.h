@@ -10,4 +10,5 @@ public:
 
 private:
     uint32_t m_printTime;
+    bool m_triggerByHold;
 };
