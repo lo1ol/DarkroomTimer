@@ -127,9 +127,9 @@ void getTime(uint32_t& time) {
     int shift = getEncoderShift();
 
     int factor;
-    if ((time + shift) < 10000)
+    if ((time + shift) < 10 * 1000L)
         factor = 500;
-    else if ((time + shift) < 100000)
+    else if ((time + shift) < 100 * 1000L)
         factor = 1000;
     else
         factor = 5000;
@@ -142,4 +142,7 @@ void getTime(uint32_t& time) {
         time += shift;
         time -= time % factor;
     }
+
+    if (time > 1000 * 1000L)
+        time = 1000 * 1000L;
 }
