@@ -14,9 +14,13 @@ void Timer::tick() {
     if (m_status != RUNNING)
         return;
 
-    if ((m_leftTime - left() < 500) || ((m_leftTime - left()) / 100) % 10) {
+    // beep when we press start btn
+    if ((m_leftTime - m_stopTime + m_currentTime) < 100) {
+        analogWrite(m_beepPin, gSettings.beepVolume);
+    } else if ((m_leftTime - left() < 500) || ((m_leftTime - left()) / 100) % 10) {
         analogWrite(m_beepPin, 0);
     } else {
+        // beep every second
         analogWrite(m_beepPin, gSettings.beepVolume);
     }
 
