@@ -7,7 +7,7 @@
 3. Click extra btn to navigate inside modes
 4. Hold extra btn to reset current printing at any mode
 5. Click start btn to start printing at any mode
-6. Hold view btn and change mode btn to set lag
+6. Hold view btn and change mode btn to go in set settings mode (set lag time and beep volume)
 
 ## Modes
 

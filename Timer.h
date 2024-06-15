@@ -22,8 +22,6 @@ public:
     uint32_t total() const;
     void resetTotal();
 
-    void setLagTime(uint16_t lagTime) { m_lagTime = lagTime; }
-
     State state() const;
 
 private:
@@ -34,8 +32,6 @@ private:
 
     uint8_t m_beepPin;
     uint8_t m_controlPin;
-
-    uint16_t m_lagTime = 0;
 
     uint32_t m_currentTime;
     uint32_t m_leftTime;

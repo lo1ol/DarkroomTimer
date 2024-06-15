@@ -9,6 +9,7 @@ Button gStartBtn(START_BTN);
 Button gExtraBtn(EXTRA_BTN);
 Button gViewBtn(VIEW_BTN);
 Timer gTimer(BEEPER, RELAY);
+Settings gSettings;
 
 void printFormatedLine(const char* line, int pos) {
     gLcd.setCursor(0, pos);

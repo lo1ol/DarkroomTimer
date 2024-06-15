@@ -2,10 +2,6 @@
 
 #include "Tools.h"
 
-namespace {
-uint8_t kBeepVolume = 0.7 * 255;
-} // namespace
-
 void Timer::setup() {
     pinMode(m_beepPin, OUTPUT);
     pinMode(m_controlPin, OUTPUT);
@@ -21,7 +17,7 @@ void Timer::tick() {
     if ((m_leftTime - left() < 500) || ((m_leftTime - left()) / 100) % 10) {
         analogWrite(m_beepPin, 0);
     } else {
-        analogWrite(m_beepPin, kBeepVolume);
+        analogWrite(m_beepPin, gSettings.beepVolume);
     }
 
     if (m_currentTime > realStopTime()) {
@@ -80,10 +76,10 @@ uint32_t Timer::afterResume() const {
 
     uint32_t realAfterResume = m_currentTime + m_leftTime - m_stopTime;
 
-    if (realAfterResume < m_lagTime)
+    if (realAfterResume < gSettings.lagTime)
         return 0;
 
-    return realAfterResume - m_lagTime;
+    return realAfterResume - gSettings.lagTime;
 }
 
 void Timer::printFormatedState() const {
@@ -108,7 +104,7 @@ void Timer::printFormatedState() const {
 }
 
 uint32_t Timer::realStopTime() const {
-    return m_stopTime + m_lagTime;
+    return m_stopTime + gSettings.lagTime;
 }
 
 uint32_t Timer::total() const {

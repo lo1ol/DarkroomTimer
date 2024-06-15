@@ -6,24 +6,25 @@
 #include <EncButton.h>
 #include <LiquidCrystal.h>
 
+#include "Settings.h"
 #include "Timer.h"
 
-#define LCD_RS 8
-#define LCD_EN 9
-#define LCD_D4 5
-#define LCD_D5 4
-#define LCD_D6 3
-#define LCD_D7 2
+#define LCD_RS 12
+#define LCD_EN 11
+#define LCD_D4 9
+#define LCD_D5 8
+#define LCD_D6 7
+#define LCD_D7 6
 
 #define MAX_SYMS_PER_LINE 16
 
-#define MODE_SWITCH_BTN A5
-#define VIEW_BTN A1
-#define START_BTN A0
-#define EXTRA_BTN A2
+#define MODE_SWITCH_BTN A0
+#define VIEW_BTN A2
+#define START_BTN A1
+#define EXTRA_BTN A3
 
-#define ENCODER_DT 11
-#define ENCODER_CLK 12
+#define ENCODER_DT 2
+#define ENCODER_CLK 3
 
 #define BEEPER 10
 #define RELAY A4
@@ -58,3 +59,4 @@ extern Button gStartBtn;
 extern Button gExtraBtn;
 extern Button gViewBtn;
 extern Timer gTimer;
+extern Settings gSettings;
