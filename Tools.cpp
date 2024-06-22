@@ -47,6 +47,29 @@ void getFormatedTime(uint32_t ms, char* buf, bool accurate) {
     concatInt(buf, dec);
 }
 
+void concat(char* dst, const char* src) {
+    int srcLen = strlen(src);
+    int shift = strlen(dst);
+    int rest = MAX_SYMS_PER_LINE - shift;
+
+    srcLen = min(srcLen, rest);
+
+    memcpy(dst + shift, src, srcLen);
+    dst[shift + srcLen] = 0;
+}
+
+void concatInt(char* dst, int value) {
+    char str[MAX_SYMS_PER_LINE + 1];
+    itoa(value, str, 10);
+    concat(dst, str);
+}
+
+void concatTime(char* dst, uint32_t ms) {
+    char str[MAX_SYMS_PER_LINE + 1];
+    getFormatedTime(ms, str);
+    concat(dst, str);
+}
+
 void printFormatedTime(const char* prefix, uint32_t ms) {
     char str[MAX_SYMS_PER_LINE + 1];
     strcpy(str, prefix);
@@ -124,15 +147,17 @@ void getInt(uint8_t& choosen, uint8_t min, uint8_t max) {
 }
 
 void getTime(uint32_t& time) {
-    int shift = getEncoderShift();
+    int32_t shift = getEncoderShift();
 
-    int factor;
+    uint16_t factor;
     if ((time + shift) < 10 * 1000L)
         factor = 500;
     else if ((time + shift) < 100 * 1000L)
         factor = 1000;
-    else
+    else if ((time + shift) < 1000 * 1000L)
         factor = 5000;
+    else
+        factor = 50000;
 
     shift *= factor;
 
@@ -143,6 +168,6 @@ void getTime(uint32_t& time) {
         time -= time % factor;
     }
 
-    if (time > 1000 * 1000L)
-        time = 1000 * 1000L;
+    if (time > 1000 * 10000L)
+        time = 1000 * 10000L;
 }

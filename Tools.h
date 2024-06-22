@@ -32,17 +32,9 @@
 
 void getFormatedTime(uint32_t ms, char* buf, bool accurate = true);
 
-inline void concat(char* dst, const char* src) {
-    strcpy(dst + strlen(dst), src);
-}
-
-inline void concatInt(char* dst, int value) {
-    itoa(value, dst + strlen(dst), 10);
-}
-
-inline void concatTime(char* dst, uint32_t ms, bool accurate = true) {
-    getFormatedTime(ms, dst + strlen(dst), accurate);
-}
+void concat(char* dst, const char* src);
+void concatInt(char* dst, int value);
+void concatTime(char* dst, uint32_t ms);
 
 void printFormatedLine(const char* line, int pos);
 void printFormatedTime(const char* prefix, uint32_t ms);
