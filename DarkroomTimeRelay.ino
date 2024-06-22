@@ -53,6 +53,9 @@ void setup() {
     setupEncoder();
 
     setMode(ModeId::testFStops);
+
+    pinMode(BACKLIGHT, OUTPUT);
+    analogWrite(BACKLIGHT, gSettings.backlight);
 }
 
 void loop() {

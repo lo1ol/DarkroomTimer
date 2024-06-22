@@ -16,13 +16,15 @@ Settings::Settings() {
     GET_SETTING(checkInitFlag);
     if (checkInitFlag != kSettingsWasInitedFlag) {
         lagTime = 0;
-        beepVolume = 10;
+        beepVolume = 6;
+        backlight = 25 * 5;
         updateEEPROM();
         return;
     }
 
     GET_SETTING(lagTime);
     GET_SETTING(beepVolume);
+    GET_SETTING(backlight);
 }
 
 void Settings::updateEEPROM() {
@@ -34,4 +36,5 @@ void Settings::updateEEPROM() {
     PUT_SETTING(kSettingsWasInitedFlag);
     PUT_SETTING(lagTime);
     PUT_SETTING(beepVolume);
+    PUT_SETTING(backlight);
 }

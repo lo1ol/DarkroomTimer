@@ -8,4 +8,5 @@ struct Settings {
 
     uint16_t lagTime;
     uint8_t beepVolume;
+    uint8_t backlight;
 };

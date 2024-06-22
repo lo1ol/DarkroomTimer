@@ -4,7 +4,7 @@
 
 class SetSettingsMode final : public ModeProcessor {
 public:
-    enum class Step { setLagTime, setBeepVolume, last_ };
+    enum class Step { setLagTime, setBacklight, setBeepVolume, last_ };
 
     SetSettingsMode();
     ~SetSettingsMode();
@@ -14,6 +14,7 @@ public:
 
 private:
     void processSetLagTime();
+    void processSetBacklight();
     void processSetBeepVolume();
 
     Step m_step;

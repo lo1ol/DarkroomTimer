@@ -41,11 +41,22 @@ void SetSettingsMode::processSetLagTime() {
 
 void SetSettingsMode::processSetBeepVolume() {
     printFormatedLine("Beep volume", 0);
-    getInt(gSettings.beepVolume, 0, 20);
+    getInt(gSettings.beepVolume, 1, 10);
     char str[3] = "";
     concatInt(str, gSettings.beepVolume);
     printFormatedLine(str, 1);
     analogWrite(BEEPER, gSettings.beepVolume);
+}
+
+void SetSettingsMode::processSetBacklight() {
+    printFormatedLine("Backlight", 0);
+    uint8_t userBacklight = min(gSettings.backlight, 50) / 5;
+    getInt(userBacklight, 1, 10);
+    gSettings.backlight = userBacklight * 5;
+    char str[3] = "";
+    concatInt(str, userBacklight);
+    printFormatedLine(str, 1);
+    analogWrite(BACKLIGHT, gSettings.backlight);
 }
 
 void SetSettingsMode::process() {
@@ -61,6 +72,9 @@ void SetSettingsMode::process() {
     switch (m_step) {
     case Step::setLagTime:
         processSetLagTime();
+        break;
+    case Step::setBacklight:
+        processSetBacklight();
         break;
     case Step::setBeepVolume:
         processSetBeepVolume();

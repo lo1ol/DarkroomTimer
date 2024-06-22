@@ -27,6 +27,7 @@
 #define ENCODER_CLK 3
 
 #define BEEPER 10
+#define BACKLIGHT 5
 #define RELAY A4
 
 void getFormatedTime(uint32_t ms, char* buf, bool accurate = true);
