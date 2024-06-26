@@ -50,6 +50,22 @@ void SetSettingsMode::processSetBeepVolume() {
     analogWrite(BEEPER, gSettings.beepVolume);
 }
 
+void SetSettingsMode::processSetAutoFinishView() {
+    printFormatedLine("Auto finish view", 0);
+    getInt(gSettings.autoFinishViewMinutes, 0, 10);
+
+    if (gSettings.autoFinishViewMinutes == 0) {
+        printFormatedLine("No", 1);
+    } else if (gSettings.autoFinishViewMinutes == 1) {
+        printFormatedLine("1 minute", 1);
+    } else {
+        char str[MAX_SYMS_PER_LINE] = "";
+        concatInt(str, gSettings.autoFinishViewMinutes);
+        concat(str, " minutes");
+        printFormatedLine(str, 1);
+    }
+}
+
 void SetSettingsMode::processSetBacklight() {
     printFormatedLine("Backlight", 0);
     uint8_t userBacklight = min(gSettings.backlight, 50) / 5;
@@ -80,6 +96,9 @@ void SetSettingsMode::process() {
         break;
     case Step::setBeepVolume:
         processSetBeepVolume();
+        break;
+    case Step::setAutoFinishView:
+        processSetAutoFinishView();
         break;
     }
 }

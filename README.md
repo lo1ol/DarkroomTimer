@@ -11,7 +11,7 @@
 3. Click extra btn to navigate inside modes
 4. Hold extra btn to reset current printing at any mode
 5. Click start btn to start printing at any mode
-6. Hold view btn and change mode btn to go in set settings mode (set lag time, LED Backlight and beep volume)
+6. Hold view btn and change mode btn to go in set settings mode (set lag time, LED Backlight, beep volume and auto finish view time)
 
 ## Modes
 
@@ -24,8 +24,9 @@
 
 1. Ability to stop any mode, while it is running, by holding extra button. Usefull to get stop process if you forget something
 2. Ability to set lag time: time of turning on a lamp. It's could be usefull to get accurate results. To set it hold view and change mode buttons. To detect lag time. Go to lag time set mode, choose minimum time and click start btn. Increase the time till the moment of seeing that lamp is actually turn on
-3. Buzzer that beep one time per 1 second. Usefull to print fast mask at dark
-4. Simple architecture of the project allows easily extend functionality
+3. Ability to set time of automatical stopping view. It could preserve lamp on your enlarger if you forgot to turn off it
+4. Buzzer that beep one time per 1 second. Usefull to print fast mask at dark
+5. Simple architecture of the project allows easily extend functionality
 
 ## Components
 

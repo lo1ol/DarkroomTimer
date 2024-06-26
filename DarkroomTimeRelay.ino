@@ -44,8 +44,6 @@ void checkSwitchMode() {
     }
 }
 
-int gRelayState = LOW;
-
 void setup() {
     gTimer.setup();
     gLcd.begin(MAX_SYMS_PER_LINE, 2);
@@ -67,13 +65,25 @@ void loop() {
     gModeSwitchBtn.tick();
 
     if (gTimer.state() == Timer::STOPPED) {
+        static bool gRelayState = LOW;
+        static uint32_t gViewModeTurnOnTime;
+
         if (gViewBtn.click()) {
             gRelayState = !gRelayState;
             digitalWrite(RELAY, gRelayState);
+            if (gRelayState == HIGH)
+                gViewModeTurnOnTime = millis();
         }
 
-        if (gRelayState == HIGH)
+        if (gRelayState == HIGH) {
+            if (gSettings.autoFinishViewMinutes != 0 &&
+                (gViewModeTurnOnTime + gSettings.autoFinishViewMinutes * 1000L * 60) < millis()) {
+                gRelayState = LOW;
+                digitalWrite(RELAY, gRelayState);
+            }
+
             return;
+        }
 
         if (gViewBtn.hold() && gModeSwitchBtn.pressing()) {
             if (gModeId != ModeId::setSettings)

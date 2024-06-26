@@ -18,6 +18,7 @@ Settings::Settings() {
         lagTime = 0;
         beepVolume = 6;
         backlight = 25 * 5;
+        autoFinishViewMinutes = 3;
         updateEEPROM();
         return;
     }
@@ -25,6 +26,7 @@ Settings::Settings() {
     GET_SETTING(lagTime);
     GET_SETTING(beepVolume);
     GET_SETTING(backlight);
+    GET_SETTING(autoFinishViewMinutes);
 }
 
 void Settings::updateEEPROM() {
@@ -37,4 +39,5 @@ void Settings::updateEEPROM() {
     PUT_SETTING(lagTime);
     PUT_SETTING(beepVolume);
     PUT_SETTING(backlight);
+    PUT_SETTING(autoFinishViewMinutes);
 }
