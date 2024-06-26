@@ -89,6 +89,8 @@ void loop() {
                 digitalWrite(RELAY, gRelayState);
             }
 
+            printFormatedLine("View", 1);
+
             return;
         }
 
