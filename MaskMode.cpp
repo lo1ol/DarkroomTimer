@@ -15,7 +15,6 @@ MaskMode::MaskMode() {
     m_numberOfMasks = 3;
     memset(gMasks, 0, sizeof(gMasks));
     gMasks[0] = 8 * 1000;
-    gMasks[1] = 2 * 1000;
     m_step = Step::setNum;
 }
 
@@ -26,8 +25,11 @@ void MaskMode::process() {
                 m_step = Step::log;
             } else {
                 ++m_currentMask;
-                if (m_currentMask > 1 && gMasks[m_currentMask] == 0)
-                    gMasks[m_currentMask] = gMasks[m_currentMask - 1];
+                if (m_currentMask > 0 && gMasks[m_currentMask] == 0)
+                    if (m_currentMask == 1)
+                        gMasks[m_currentMask] = (gMasks[0] / 400) * 100;
+                    else
+                        gMasks[m_currentMask] = gMasks[m_currentMask - 1];
             }
         } else {
             m_step = (Step)(((int)m_step + 1) % (int)Step::last_);

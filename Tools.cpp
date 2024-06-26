@@ -168,6 +168,9 @@ void getTime(uint32_t& time) {
         time -= time % factor;
     }
 
+    // use only whole number of 100 milliseconds
+    time = (time / 100) * 100;
+
     if (time > 1000 * 10000L)
         time = 1000 * 10000L;
 }
