@@ -8,7 +8,7 @@
 #include "PrintMode.h"
 #include "SetSettingsMode.h"
 
-enum class ModeId { testFStops, testLinear, print, mask, last_, setSettings };
+enum class ModeId { testFStops, testLinear, print, mask, last_ };
 
 ModeId gModeId;
 ModeProcessor* gModeProcessor = nullptr;
@@ -32,15 +32,6 @@ void setMode(ModeId modeId) {
     case ModeId::mask:
         gModeProcessor = new MaskMode();
         break;
-    case ModeId::setSettings:
-        gModeProcessor = new SetSettingsMode();
-        break;
-    }
-}
-
-void checkSwitchMode() {
-    if (gModeSwitchBtn.click()) {
-        setMode((ModeId)(((int)gModeId + 1) % (int)ModeId::last_));
     }
 }
 
@@ -64,8 +55,24 @@ void loop() {
     gViewBtn.tick();
     gModeSwitchBtn.tick();
 
+    static SetSettingsMode* gSettingsSetter = nullptr;
+    static bool gRelayState = LOW;
+
+    if (gRelayState == LOW && gTimer.state() != Timer::RUNNING && gViewBtn.hold() && gModeSwitchBtn.pressing()) {
+        if (gSettingsSetter) {
+            delete gSettingsSetter;
+            gSettingsSetter = nullptr;
+        } else {
+            gSettingsSetter = new SetSettingsMode;
+        }
+    }
+
+    if (gSettingsSetter) {
+        gSettingsSetter->process();
+        return;
+    }
+
     if (gTimer.state() == Timer::STOPPED) {
-        static bool gRelayState = LOW;
         static uint32_t gViewModeTurnOnTime;
 
         if (gViewBtn.click()) {
@@ -85,15 +92,8 @@ void loop() {
             return;
         }
 
-        if (gViewBtn.hold() && gModeSwitchBtn.pressing()) {
-            if (gModeId != ModeId::setSettings)
-                setMode(ModeId::setSettings);
-            else
-                setMode(ModeId::testFStops);
-        }
-
-        if (gModeId != ModeId::setSettings)
-            checkSwitchMode();
+        if (gModeSwitchBtn.click())
+            setMode((ModeId)(((int)gModeId + 1) % (int)ModeId::last_));
     }
 
     gModeProcessor->process();
