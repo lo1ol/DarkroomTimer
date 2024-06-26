@@ -41,9 +41,11 @@ void SetSettingsMode::processSetLagTime() {
 
 void SetSettingsMode::processSetBeepVolume() {
     printFormatedLine("Beep volume", 0);
-    getInt(gSettings.beepVolume, 1, 10);
+    uint8_t userVolume = min(gSettings.beepVolume, 30) / 3;
+    getInt(userVolume, 1, 10);
+    gSettings.beepVolume = userVolume * 3;
     char str[3] = "";
-    concatInt(str, gSettings.beepVolume);
+    concatInt(str, userVolume);
     printFormatedLine(str, 1);
     analogWrite(BEEPER, gSettings.beepVolume);
 }
