@@ -7,7 +7,7 @@
 #include "src/Modes/MaskMode.h"
 #include "src/Modes/PrintMode.h"
 
-#include "src/SetSettingsMode.h"
+#include "src/SettingsSetter.h"
 
 enum class ModeId { testFStops, testLinear, print, mask, last_ };
 
@@ -56,7 +56,7 @@ void loop() {
     gViewBtn.tick();
     gModeSwitchBtn.tick();
 
-    static SetSettingsMode* gSettingsSetter = nullptr;
+    static SettingsSetter* gSettingsSetter = nullptr;
     static bool gRelayState = LOW;
 
     if (gRelayState == LOW && gTimer.state() != Timer::RUNNING && gViewBtn.hold() && gModeSwitchBtn.pressing()) {
@@ -64,7 +64,7 @@ void loop() {
             delete gSettingsSetter;
             gSettingsSetter = nullptr;
         } else {
-            gSettingsSetter = new SetSettingsMode;
+            gSettingsSetter = new SettingsSetter;
         }
     }
 

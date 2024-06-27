@@ -2,15 +2,14 @@
 
 #include <stdint.h>
 
-class SetSettingsMode final : public ModeProcessor {
+class SettingsSetter final {
 public:
     enum class Step { setLagTime, setBacklight, setBeepVolume, setAutoFinishView, last_ };
 
-    SetSettingsMode();
-    ~SetSettingsMode();
+    SettingsSetter();
+    ~SettingsSetter();
 
-    void process() override;
-    void reset() override {}
+    void process();
 
 private:
     void processSetLagTime();

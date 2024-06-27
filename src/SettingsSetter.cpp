@@ -1,4 +1,4 @@
-#include "SetSettingsMode.h"
+#include "SettingsSetter.h"
 
 #include "Tools.h"
 
@@ -6,19 +6,19 @@ namespace {
 constexpr uint16_t kMaxLagTime = 2000;
 } // namespace
 
-SetSettingsMode::SetSettingsMode() {
+SettingsSetter::SettingsSetter() {
     m_step = Step::setLagTime;
     m_lagTime = gSettings.lagTime;
 }
 
-SetSettingsMode::~SetSettingsMode() {
+SettingsSetter::~SettingsSetter() {
     gTimer.resetTotal();
     analogWrite(BEEPER, 0);
     gSettings.lagTime = m_lagTime;
     gSettings.updateEEPROM();
 }
 
-void SetSettingsMode::processSetLagTime() {
+void SettingsSetter::processSetLagTime() {
     printFormatedLine("Lag time", 0);
     uint8_t lagDecSecs = m_lagTime / 100;
     getInt(lagDecSecs, 0, kMaxLagTime / 100);
@@ -39,7 +39,7 @@ void SetSettingsMode::processSetLagTime() {
     }
 }
 
-void SetSettingsMode::processSetBeepVolume() {
+void SettingsSetter::processSetBeepVolume() {
     printFormatedLine("Beep volume", 0);
     uint8_t userVolume = min(gSettings.beepVolume, 30) / 3;
     if (getInt(userVolume, 1, 10))
@@ -55,7 +55,7 @@ void SetSettingsMode::processSetBeepVolume() {
         analogWrite(BEEPER, 0);
 }
 
-void SetSettingsMode::processSetAutoFinishView() {
+void SettingsSetter::processSetAutoFinishView() {
     printFormatedLine("Auto finish view", 0);
     getInt(gSettings.autoFinishViewMinutes, 0, 10);
 
@@ -71,7 +71,7 @@ void SetSettingsMode::processSetAutoFinishView() {
     }
 }
 
-void SetSettingsMode::processSetBacklight() {
+void SettingsSetter::processSetBacklight() {
     printFormatedLine("Backlight", 0);
     uint8_t userBacklight = min(gSettings.backlight, 50) / 5;
     getInt(userBacklight, 1, 10);
@@ -82,7 +82,7 @@ void SetSettingsMode::processSetBacklight() {
     analogWrite(BACKLIGHT, gSettings.backlight);
 }
 
-void SetSettingsMode::process() {
+void SettingsSetter::process() {
     if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
         m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
 
