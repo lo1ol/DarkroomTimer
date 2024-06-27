@@ -1,12 +1,13 @@
-#include "Tools.h"
+#include "src/Tools.h"
 
-#include "ModeProcessor.h"
+#include "src/ModeProcessor.h"
 
-#include "FstopTestMode.h"
-#include "LinearTestMode.h"
-#include "MaskMode.h"
-#include "PrintMode.h"
-#include "SetSettingsMode.h"
+#include "src/Modes/FstopTestMode.h"
+#include "src/Modes/LinearTestMode.h"
+#include "src/Modes/MaskMode.h"
+#include "src/Modes/PrintMode.h"
+
+#include "src/SetSettingsMode.h"
 
 enum class ModeId { testFStops, testLinear, print, mask, last_ };
 

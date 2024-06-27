@@ -49,7 +49,7 @@ void SetSettingsMode::processSetBeepVolume() {
     concatInt(str, userVolume);
     printFormatedLine(str, 1);
 
-    if ((millis() - m_demoStartBeep)%1000 < 100)
+    if ((millis() - m_demoStartBeep) % 1000 < 100)
         analogWrite(BEEPER, gSettings.beepVolume);
     else
         analogWrite(BEEPER, 0);

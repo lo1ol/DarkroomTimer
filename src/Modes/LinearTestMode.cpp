@@ -1,6 +1,6 @@
 #include "LinearTestMode.h"
 
-#include "Tools.h"
+#include "../Tools.h"
 
 LinearTestMode::LinearTestMode() {
     m_initTime = 8 * 1000;

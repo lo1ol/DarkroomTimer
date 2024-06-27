@@ -1,6 +1,6 @@
 #include "MaskMode.h"
 
-#include "Tools.h"
+#include "../Tools.h"
 
 namespace {
 constexpr uint8_t gMasksMaxNumber = 10;

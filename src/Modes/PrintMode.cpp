@@ -1,6 +1,6 @@
 #include "PrintMode.h"
 
-#include "Tools.h"
+#include "../Tools.h"
 
 PrintMode::PrintMode() {
     m_printTime = 8 * 1000;
