@@ -40,7 +40,7 @@ void printFormatedLine(const char* line, int pos);
 void printFormatedTime(const char* prefix, uint32_t ms);
 void printTimeLog(const char* prefix, uint32_t (*timeGetter)(uint8_t), uint8_t maxIndex);
 
-void getInt(uint8_t& choosen, uint8_t min, uint8_t max);
+bool getInt(uint8_t& choosen, uint8_t min, uint8_t max);
 void getTime(uint32_t& time);
 
 void setupEncoder();

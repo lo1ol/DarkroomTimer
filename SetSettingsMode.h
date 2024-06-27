@@ -20,4 +20,5 @@ private:
 
     Step m_step;
     uint16_t m_lagTime;
+    uint32_t m_demoStartBeep;
 };

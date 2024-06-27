@@ -135,15 +135,22 @@ int8_t getEncoderShift() {
     return gEncoder.dir() * (gEncoder.fast() ? 5 : 1);
 }
 
-void getInt(uint8_t& choosen, uint8_t min, uint8_t max) {
+bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) {
     int8_t shift = getEncoderShift();
 
-    if (shift < 0 && (choosen - min) < -shift)
+    if (shift == 0)
+        return false;
+
+    if (shift < 0 && (choosen - min) < -shift) {
         choosen = min;
-    else if (shift > 0 && (max - choosen) < shift)
+        return false;
+    } else if (shift > 0 && (max - choosen) < shift) {
         choosen = max;
-    else
+        return false;
+    } else {
         choosen += shift;
+        return true;
+    }
 }
 
 void getTime(uint32_t& time) {

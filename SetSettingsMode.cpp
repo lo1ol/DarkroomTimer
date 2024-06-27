@@ -42,12 +42,17 @@ void SetSettingsMode::processSetLagTime() {
 void SetSettingsMode::processSetBeepVolume() {
     printFormatedLine("Beep volume", 0);
     uint8_t userVolume = min(gSettings.beepVolume, 30) / 3;
-    getInt(userVolume, 1, 10);
+    if (getInt(userVolume, 1, 10))
+        m_demoStartBeep = millis();
     gSettings.beepVolume = userVolume * 3;
     char str[3] = "";
     concatInt(str, userVolume);
     printFormatedLine(str, 1);
-    analogWrite(BEEPER, gSettings.beepVolume);
+
+    if ((millis() - m_demoStartBeep)%1000 < 100)
+        analogWrite(BEEPER, gSettings.beepVolume);
+    else
+        analogWrite(BEEPER, 0);
 }
 
 void SetSettingsMode::processSetAutoFinishView() {
