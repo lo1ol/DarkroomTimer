@@ -98,7 +98,7 @@ uint8_t printTimeLogOnLine(const char* prefix, uint32_t (*timeGetter)(uint8_t), 
         shift += bufLen;
         ++index;
 
-        if (shift + 1 >= sizeof(str))
+        if (shift + 1U >= sizeof(str))
             break;
 
         str[shift] = ' ';
@@ -168,7 +168,7 @@ void getTime(uint32_t& time) {
 
     shift *= factor;
 
-    if (shift < 0 && time < -shift) {
+    if (shift < 0 && time < static_cast<uint32_t>(-shift)) {
         time = 0;
     } else {
         time += shift;
