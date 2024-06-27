@@ -1,4 +1,4 @@
-# Powerfull darkroom time relay with a lot of features
+# Powerfull darkroom timer with a lot of features
 
 > [Инструкция на русском](./README_RU.md)
 
@@ -50,7 +50,7 @@
 
 ## Box
 
-[3D model of the body](./TimeRelayBox.stl)
+[3D model of the body](./TimerBox.stl)
 
 ## Build and upload code to Arduino
 
