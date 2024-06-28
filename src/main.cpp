@@ -36,6 +36,8 @@ void setMode(ModeId modeId) {
     }
 }
 
+VirtButton gSettingBtn;
+
 void setup() {
     gTimer.setup();
     gLcd.begin(MAX_SYMS_PER_LINE, 2);
@@ -55,11 +57,16 @@ void loop() {
     gExtraBtn.tick();
     gViewBtn.tick();
     gModeSwitchBtn.tick();
+    gSettingBtn.tick(gViewBtn, gModeSwitchBtn);
 
     static SettingsSetter* gSettingsSetter = nullptr;
     static bool gRelayState = LOW;
 
-    if (gRelayState == LOW && gTimer.state() != Timer::RUNNING && gViewBtn.hold() && gModeSwitchBtn.pressing()) {
+    // ignore if both btn was clicked
+    if (gSettingBtn.click())
+        return;
+
+    if (gRelayState == LOW && gTimer.state() != Timer::RUNNING && gSettingBtn.hold()) {
         if (gSettingsSetter) {
             delete gSettingsSetter;
             gSettingsSetter = nullptr;
