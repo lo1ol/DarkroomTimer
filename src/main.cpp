@@ -2,7 +2,7 @@
 
 #include "ModeProcessor.h"
 
-#include "Modes/FstopTestMode.h"
+#include "Modes/FStopTestMode.h"
 #include "Modes/LinearTestMode.h"
 #include "Modes/MaskMode.h"
 #include "Modes/PrintMode.h"

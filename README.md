@@ -4,6 +4,9 @@
 
 > This project is inspired by [this one](https://github.com/nikonov1101/kafstop-timer), but improve it and extend functions
 
+![PlatformIO](https://github.com/lo1ol/DarkroomTimer/actions/workflows/platform-io.yml/badge.svg)
+![clang-format](https://github.com/lo1ol/DarkroomTimer/actions/workflows/clang-format.yml/badge.svg)
+
 ## Manual
 
 1. Click view btn to turn on/off a lamp
