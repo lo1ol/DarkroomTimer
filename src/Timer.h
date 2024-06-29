@@ -17,7 +17,7 @@ public:
     void stop();
     uint32_t left() const;
 
-    void printFormatedState() const;
+    void printFormatedState(const char* additionalInfo = "") const;
 
     uint32_t total() const;
     void resetTotal();

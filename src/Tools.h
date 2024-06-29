@@ -35,6 +35,8 @@ void getFormatedTime(uint32_t ms, char* buf, bool accurate = true);
 void concat(char* dst, const char* src);
 void concatInt(char* dst, int value);
 void concatTime(char* dst, uint32_t ms);
+// should be called only one time and last
+void concatBack(char* dst, const char* src);
 
 void printFormatedLine(const char* line, int pos);
 void printFormatedTime(const char* prefix, uint32_t ms);

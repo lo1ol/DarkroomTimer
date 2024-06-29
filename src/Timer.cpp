@@ -86,25 +86,25 @@ uint32_t Timer::afterResume() const {
     return realAfterResume - gSettings.lagTime;
 }
 
-void Timer::printFormatedState() const {
+void Timer::printFormatedState(const char* additionalInfo) const {
+    char str[MAX_SYMS_PER_LINE + 1] = "";
     switch (m_status) {
     case RUNNING:
         if (afterResume() == 0) {
-            printFormatedLine("Lag", 1);
+            concat(str, "Lag");
         } else {
-            printFormatedTime("", left());
+            concatTime(str, left());
         }
         break;
-    case PAUSED: {
-        char str[MAX_SYMS_PER_LINE + 1] = "";
+    case PAUSED:
         concatTime(str, left());
         concat(str, " PAUSE");
-        printFormatedLine(str, 1);
-    } break;
     case STOPPED:
-        printFormatedLine("", 1);
         break;
     }
+
+    concatBack(str, additionalInfo);
+    printFormatedLine(str, 1);
 }
 
 uint32_t Timer::realStopTime() const {

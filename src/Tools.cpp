@@ -70,6 +70,14 @@ void concatTime(char* dst, uint32_t ms) {
     concat(dst, str);
 }
 
+void concatBack(char* dst, const char* src) {
+    uint8_t dst_len = strlen(dst);
+    uint8_t src_len = strlen(src);
+
+    memset(dst + dst_len, ' ', MAX_SYMS_PER_LINE - dst_len);
+    memcpy(dst + MAX_SYMS_PER_LINE - src_len, src, src_len);
+}
+
 void printFormatedTime(const char* prefix, uint32_t ms) {
     char str[MAX_SYMS_PER_LINE + 1];
     strcpy(str, prefix);

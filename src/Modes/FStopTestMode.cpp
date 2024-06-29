@@ -61,8 +61,11 @@ void FStopTestMode::process() {
 
     printFormatedLine(str, 0);
 
+    char fStopInfo[6] = "f 1/";
+    concatInt(fStopInfo, kFStopPartVarinatns[gFStopPartId]);
+
     if (gTimer.state() == Timer::RUNNING) {
-        gTimer.printFormatedState();
+        gTimer.printFormatedState(fStopInfo);
         return;
     }
 
@@ -75,7 +78,10 @@ void FStopTestMode::process() {
             gFStopInitTime * (pow(2, float(m_currentRun - 1) / stopPart) - pow(2, float(m_currentRun - 2) / stopPart));
     }
 
-    printFormatedTime("", printTime);
+    str[0] = 0;
+    concatTime(str, printTime);
+    concatBack(str, fStopInfo);
+    printFormatedLine(str, 1);
 
     if (gStartBtn.click()) {
         if (gTimer.state() == Timer::STOPPED) {
