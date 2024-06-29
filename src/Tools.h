@@ -30,7 +30,7 @@
 #define BACKLIGHT 5
 #define RELAY A4
 
-void getFormatedTime(uint32_t ms, char* buf, bool accurate = true, bool addZero = false);
+void getFormatedTime(uint32_t ms, char* buf, bool addZero = false);
 
 void concat(char* dst, const char* src);
 void concatInt(char* dst, int value);

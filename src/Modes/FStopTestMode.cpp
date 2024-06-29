@@ -46,7 +46,7 @@ void FStopTestMode::process() {
             "F Log ",
             [](uint8_t N) -> uint32_t {
                 uint8_t stopPart = kFStopPartVarinatns[gFStopPartId];
-                return gFStopInitTime * (pow(2, float(N) / stopPart));
+                return gFStopInitTime * pow(2, float(N) / stopPart);
             },
             100);
         return;

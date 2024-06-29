@@ -14,6 +14,11 @@ void Timer::tick() {
     if (m_status != RUNNING)
         return;
 
+    if (m_currentTime >= realStopTime()) {
+        stop();
+        return;
+    }
+
     // beep when we press start btn
     if ((m_leftTime - m_stopTime + m_currentTime) < 100) {
         analogWrite(m_beepPin, gSettings.beepVolume);
@@ -25,10 +30,6 @@ void Timer::tick() {
     }
 
     updateAfterLastResume();
-
-    if (m_currentTime > realStopTime()) {
-        stop();
-    }
 }
 
 void Timer::start(uint32_t ms) {

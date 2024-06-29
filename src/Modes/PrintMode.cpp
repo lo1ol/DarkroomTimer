@@ -13,7 +13,7 @@ void PrintMode::process() {
         m_triggerByHold = !m_triggerByHold;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1] = "Prnt ";
+    char str[MAX_SYMS_PER_LINE + 1] = "Print ";
     concat(str, m_triggerByHold ? "HLD T=" : "CLK T=");
     concatTime(str, gTimer.total());
     printFormatedLine(str, 0);
