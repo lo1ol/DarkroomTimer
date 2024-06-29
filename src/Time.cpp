@@ -5,11 +5,11 @@
 #include "Tools.h"
 
 namespace {
-void getFormatedTime(const Time& time, char* buf, bool addZero = false) {
+void getFormatedTime(const Time& time, char* buf, bool accurate = true, bool addZero = false) {
     int16_t sec = time.secs();
     uint8_t dec = time.tenth();
 
-    if (sec > 9) {
+    if (!accurate && sec > 9) {
         itoa(sec + (dec > 4), buf, 10);
         return;
     }
@@ -33,7 +33,7 @@ uint8_t printTimeLogOnLine(const char* prefix, Time (*timeGetter)(uint8_t), uint
             break;
 
         char str[DISPLAY_COLS + 1] = { 0 };
-        getFormatedTime(timeGetter(index), str);
+        getFormatedTime(timeGetter(index), str, false);
         if (!dl.tryPrint(str))
             return index;
         dl << " ";
@@ -62,6 +62,6 @@ DisplayLine& operator<<(DisplayLine& dl, const Time& time) {
 
 DisplayLine& operator>>(DisplayLine& dl, const Time& time) {
     char str[DISPLAY_COLS + 1];
-    getFormatedTime(time, str, true);
+    getFormatedTime(time, str, true, true);
     return dl >> str;
 }

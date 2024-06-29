@@ -13,7 +13,7 @@ void PrintMode::process() {
         m_triggerByHold = !m_triggerByHold;
     }
 
-    gDisplay[0] << "Print " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
+    gDisplay[0] << "Prnt " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
 
     if (gTimer.state() == Timer::STOPPED) {
         gTimer.resetTotal();

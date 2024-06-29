@@ -40,7 +40,6 @@ VirtButton gSettingBtn;
 SettingsSetter* gSettingsSetter = nullptr;
 
 void setup() {
-    Serial.begin(9600);
     gTimer.setup();
 
     setupEncoder();

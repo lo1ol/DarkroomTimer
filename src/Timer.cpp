@@ -22,18 +22,12 @@ void Timer::tick() {
 
     updateAfterLastResume();
 
-    int beep;
     // beep when we press start btn and every second
     uint32_t passed = afterResume() / 100;
     if ((m_currentTime - m_resumeTime <= 100) || (passed > 5 && !(passed % 10)))
-        beep = gSettings.beepVolume;
+        analogWrite(m_beepPin, gSettings.beepVolume);
     else
-        beep = 0;
-
-    analogWrite(m_beepPin, beep);
-    Serial.print(beep);
-    Serial.print(" ");
-    Serial.println(m_currentTime - m_resumeTime);
+        analogWrite(m_beepPin, 0);
 }
 
 void Timer::start(Time time) {
