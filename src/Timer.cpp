@@ -1,5 +1,6 @@
 #include "Timer.h"
 
+#include "DisplayLine.h"
 #include "Tools.h"
 
 void Timer::setup() {
@@ -104,25 +105,20 @@ uint32_t Timer::afterResume() const {
     return realAfterResume - gSettings.lagTime;
 }
 
-void Timer::printFormatedState(const char* additionalInfo) const {
-    char str[MAX_SYMS_PER_LINE + 1] = "";
+void Timer::printFormatedState() const {
     switch (m_status) {
     case RUNNING:
         if (afterResume() == 0) {
-            concat(str, "Lag");
+            gDisplay[1] << "Lag";
         } else {
-            concatTime(str, left());
+            gDisplay[1] << left();
         }
         break;
     case PAUSED:
-        concatTime(str, left());
-        concat(str, " PAUSE");
+        gDisplay[1] << left() << " PAUSE";
     case STOPPED:
         break;
     }
-
-    concatBack(str, additionalInfo);
-    printFormatedLine(str, 1);
 }
 
 uint32_t Timer::realStopTime() const {

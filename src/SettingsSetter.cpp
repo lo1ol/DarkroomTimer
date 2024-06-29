@@ -1,5 +1,6 @@
 #include "SettingsSetter.h"
 
+#include "DisplayLine.h"
 #include "Tools.h"
 
 namespace {
@@ -18,7 +19,7 @@ void SettingsSetter::processSetLagTime() {
     gSettings.lagTime = 0;
     m_timer.tick();
 
-    printFormatedLine("Lag time", 0);
+    gDisplay[0] << "Lag time";
     uint8_t lagDecSecs = m_lagTime / 100;
     getInt(lagDecSecs, 0, kMaxLagTime / 100);
     m_lagTime = lagDecSecs * 100;
@@ -28,21 +29,19 @@ void SettingsSetter::processSetLagTime() {
         return;
     }
 
-    printFormatedTime("", m_lagTime);
+    gDisplay[1] << m_lagTime;
 
     if (gStartBtn.click())
         m_timer.start(m_lagTime);
 }
 
 void SettingsSetter::processSetBeepVolume() {
-    printFormatedLine("Beep volume", 0);
+    gDisplay[0] << "Beep volume";
     uint8_t userVolume = min(gSettings.beepVolume, 30) / 3;
     if (getInt(userVolume, 1, 10))
         m_demoStartBeep = millis();
     gSettings.beepVolume = userVolume * 3;
-    char str[3] = "";
-    concatInt(str, userVolume);
-    printFormatedLine(str, 1);
+    gDisplay[1] << userVolume;
 
     if ((millis() - m_demoStartBeep) % 1000 < 100)
         analogWrite(BEEPER, gSettings.beepVolume);
@@ -51,41 +50,35 @@ void SettingsSetter::processSetBeepVolume() {
 }
 
 void SettingsSetter::processSetAutoFinishView() {
-    printFormatedLine("Auto finish view", 0);
+    gDisplay[0] << "Auto finish view";
     getInt(gSettings.autoFinishViewMinutes, 0, 10);
 
     if (gSettings.autoFinishViewMinutes == 0) {
-        printFormatedLine("No", 1);
-    } else if (gSettings.autoFinishViewMinutes == 1) {
-        printFormatedLine("1 minute", 1);
-    } else {
-        char str[MAX_SYMS_PER_LINE] = "";
-        concatInt(str, gSettings.autoFinishViewMinutes);
-        concat(str, " minutes");
-        printFormatedLine(str, 1);
+        gDisplay[1] << "No";
+        return;
     }
+
+    gDisplay[1] << gSettings.autoFinishViewMinutes << " minute" << (gSettings.autoFinishViewMinutes == 1 ? "" : "s");
 }
 
 void SettingsSetter::processSetBacklight() {
-    printFormatedLine("Backlight", 0);
+    gDisplay[0] << "Backlight";
     uint8_t userBacklight = min(gSettings.backlight, 50) / 5;
     getInt(userBacklight, 1, 10);
     gSettings.backlight = userBacklight * 5;
-    char str[3] = "";
-    concatInt(str, userBacklight);
-    printFormatedLine(str, 1);
+    gDisplay[1] << userBacklight;
     analogWrite(BACKLIGHT, gSettings.backlight);
 }
 
 void SettingsSetter::processStartWithSettings() {
-    printFormatedLine("Start with stngs", 0);
+    gDisplay[0] << "Start with stngs";
     uint8_t choice = gSettings.startWithSettings;
     getInt(choice, 0, 1);
     gSettings.startWithSettings = choice;
     if (choice == 0)
-        printFormatedLine("No", 1);
+        gDisplay[1] << "No";
     else
-        printFormatedLine("Yes", 1);
+        gDisplay[1] << "Yes";
 }
 
 void SettingsSetter::process() {

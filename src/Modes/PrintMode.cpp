@@ -1,5 +1,6 @@
 #include "PrintMode.h"
 
+#include "../DisplayLine.h"
 #include "../Tools.h"
 
 PrintMode::PrintMode() {
@@ -13,24 +14,16 @@ void PrintMode::process() {
         m_triggerByHold = !m_triggerByHold;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1] = "Print ";
-    concat(str, m_triggerByHold ? "HLD T=" : "CLK T=");
-    concatTime(str, gTimer.total());
-    printFormatedLine(str, 0);
-
-    str[0] = 0;
-    char afterResume[7] = "";
-    concatTime(afterResume, gTimer.afterLastResume(), true);
+    gDisplay[0] << "Print " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
 
     if (gTimer.state() == Timer::STOPPED) {
         gTimer.resetTotal();
         getTime(m_printTime);
-        concatTime(str, m_printTime);
-        concatBack(str, afterResume);
-        printFormatedLine(str, 1);
+        gDisplay[1] << m_printTime;
     } else {
-        gTimer.printFormatedState(afterResume);
+        gTimer.printFormatedState();
     }
+    gDisplay[1] >> gTimer.afterLastResume();
 
     if (!m_triggerByHold) {
         if (gStartBtn.press()) {

@@ -1,5 +1,6 @@
 #include "FStopTestMode.h"
 
+#include "../DisplayLine.h"
 #include "../Tools.h"
 
 namespace {
@@ -27,26 +28,24 @@ void FStopTestMode::process() {
 
     switch (m_step) {
     case Step::initTime:
-        printFormatedLine("Test F Stops", 0);
+        gDisplay[0] << "Test F Stops";
 
         getTime(gFStopInitTime);
-        printFormatedTime("Init t:", gFStopInitTime);
+        gDisplay[1] << "Init t:" << gFStopInitTime;
         return;
     case Step::fstopSet: {
-        printFormatedLine("Test F Stops", 0);
+        gDisplay[0] << "Test F Stops";
 
         getInt(gFStopPartId, 0, sizeof(kFStopPartVarinatns) - 1);
-        char str[MAX_SYMS_PER_LINE + 1] = "F stop: 1/";
-        concatInt(str, kFStopPartVarinatns[gFStopPartId]);
-        printFormatedLine(str, 1);
+        gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[gFStopPartId];
     }
         return;
     case Step::log:
-        printTimeLog(
+        gDisplay.printTimeLog(
             "F Log ",
             [](uint8_t N) -> uint32_t {
                 uint8_t stopPart = kFStopPartVarinatns[gFStopPartId];
-                return gFStopInitTime * pow(2, float(N) / stopPart);
+                return lround((gFStopInitTime / 100) * pow(2, float(N) / stopPart)) * 100;
             },
             100);
         return;
@@ -54,18 +53,13 @@ void FStopTestMode::process() {
         break;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1] = "F Test#";
-    concatInt(str, m_currentRun - (gTimer.state() == Timer::RUNNING));
-    concat(str, " T:");
-    concatTime(str, gTimer.total());
+    int run = m_currentRun - (gTimer.state() == Timer::RUNNING);
+    gDisplay[0] << "F Test#" << run << " T:" << gTimer.total();
 
-    printFormatedLine(str, 0);
-
-    char fStopInfo[6] = "f 1/";
-    concatInt(fStopInfo, kFStopPartVarinatns[gFStopPartId]);
+    gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[gFStopPartId];
 
     if (gTimer.state() == Timer::RUNNING) {
-        gTimer.printFormatedState(fStopInfo);
+        gTimer.printFormatedState();
         return;
     }
 
@@ -78,10 +72,7 @@ void FStopTestMode::process() {
             gFStopInitTime * (pow(2, float(m_currentRun - 1) / stopPart) - pow(2, float(m_currentRun - 2) / stopPart));
     }
 
-    str[0] = 0;
-    concatTime(str, printTime);
-    concatBack(str, fStopInfo);
-    printFormatedLine(str, 1);
+    gDisplay[1] << printTime;
 
     if (gStartBtn.click()) {
         if (gTimer.state() == Timer::STOPPED) {

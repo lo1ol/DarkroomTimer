@@ -1,5 +1,6 @@
 #include "MaskMode.h"
 
+#include "../DisplayLine.h"
 #include "../Tools.h"
 
 namespace {
@@ -40,43 +41,34 @@ void MaskMode::process() {
     }
 
     switch (m_step) {
-    case Step::setNum: {
-        printFormatedLine("Mask printing", 0);
+    case Step::setNum:
+        gDisplay[0] << "Mask printing";
         getInt(m_numberOfMasks, 2, gMasksMaxNumber);
-        char str[MAX_SYMS_PER_LINE + 1] = "Masks num: ";
-        concatInt(str, m_numberOfMasks);
-        printFormatedLine(str, 1);
-    }
+        gDisplay[1] << "Masks num: " << m_numberOfMasks;
         return;
-    case Step::setMasks: {
-        char str[MAX_SYMS_PER_LINE + 1] = "Mask set: #";
-        concatInt(str, m_currentMask + 1);
-        printFormatedLine(str, 0);
+    case Step::setMasks:
+        gDisplay[0] << "Mask set: #" << (m_currentMask + 1);
         getTime(gMasks[m_currentMask]);
-        printFormatedTime("", gMasks[m_currentMask]);
-    }
+        gDisplay[1] << gMasks[m_currentMask];
         return;
     case Step::log:
-        printTimeLog(
+        gDisplay.printTimeLog(
             "M Log ", [](uint8_t N) -> uint32_t { return gMasks[N]; }, m_numberOfMasks);
         return;
     case Step::run:
         break;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1] = "Mask #";
-    concatInt(str, m_currentMask + 1 - (gTimer.state() == Timer::RUNNING));
-    concat(str, " T:");
-    concatTime(str, gTimer.total());
-    printFormatedLine(str, 0);
+    int run = (m_currentMask + 1 - (gTimer.state() == Timer::RUNNING));
+    gDisplay[0] << "Mask #" << run << " T:" << gTimer.total();
 
     if (gTimer.state() == Timer::RUNNING) {
         gTimer.printFormatedState();
     } else if (m_currentMask == m_numberOfMasks) {
-        printFormatedLine("Finish", 1);
+        gDisplay[1] << "Finish";
         return;
     } else {
-        printFormatedTime("", gMasks[m_currentMask]);
+        gDisplay[1] << gMasks[m_currentMask];
     }
 
     if (gStartBtn.click()) {

@@ -1,5 +1,6 @@
 #include "LinearTestMode.h"
 
+#include "../DisplayLine.h"
 #include "../Tools.h"
 
 LinearTestMode::LinearTestMode() {
@@ -17,24 +18,21 @@ void LinearTestMode::process() {
 
     switch (m_step) {
     case Step::initTime:
-        printFormatedLine("Linear tests", 0);
+        gDisplay[0] << "Linear tests";
         getTime(m_initTime);
-        printFormatedTime("Init t:", m_initTime);
+        gDisplay[1] << "Init t:" << m_initTime;
         return;
     case Step::stepTime:
-        printFormatedLine("Linear tests", 0);
+        gDisplay[0] << "Linear tests";
         getTime(m_stepTime);
-        printFormatedTime("Step t:", m_stepTime);
+        gDisplay[1] << "Step t:" << m_stepTime;
         return;
     case Step::run:
         break;
     }
 
-    char str[MAX_SYMS_PER_LINE + 1] = "L Test#";
-    concatInt(str, m_currentRun - (gTimer.state() == Timer::RUNNING));
-    concat(str, " T:");
-    concatTime(str, gTimer.total());
-    printFormatedLine(str, 0);
+    int run = m_currentRun - (gTimer.state() == Timer::RUNNING);
+    gDisplay[0] << "L Test#" << run << " T:" << gTimer.total();
 
     if (gTimer.state() == Timer::RUNNING) {
         gTimer.printFormatedState();
@@ -47,7 +45,7 @@ void LinearTestMode::process() {
     else
         printTime = m_stepTime;
 
-    printFormatedTime("", printTime);
+    gDisplay[1] << printTime;
 
     if (gStartBtn.click()) {
         if (gTimer.state() == Timer::STOPPED) {

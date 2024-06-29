@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+class DisplayLine;
+
 class Timer {
 public:
     enum State { STOPPED, RUNNING, PAUSED };
@@ -17,7 +19,7 @@ public:
     void stop();
     uint32_t left() const;
 
-    void printFormatedState(const char* additionalInfo = "") const;
+    void printFormatedState() const;
 
     void resetAfterLastResume();
     uint32_t afterLastResume() const;

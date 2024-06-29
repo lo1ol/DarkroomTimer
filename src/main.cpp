@@ -41,7 +41,6 @@ SettingsSetter* gSettingsSetter = nullptr;
 
 void setup() {
     gTimer.setup();
-    gLcd.begin(MAX_SYMS_PER_LINE, 2);
 
     setupEncoder();
 
@@ -62,6 +61,7 @@ void loop() {
     gViewBtn.tick();
     gModeSwitchBtn.tick();
     gSettingBtn.tick(gViewBtn, gModeSwitchBtn);
+    gDisplay.tick();
 
     static bool gRelayState = LOW;
 
@@ -100,7 +100,7 @@ void loop() {
                 digitalWrite(RELAY, gRelayState);
             }
 
-            printFormatedLine("View", 1);
+            gDisplay[0] << "View";
 
             return;
         }
