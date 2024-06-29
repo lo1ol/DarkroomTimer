@@ -28,7 +28,7 @@ private:
     uint32_t afterResume() const;
     uint32_t realStopTime() const;
 
-    State m_status;
+    State m_status = STOPPED;
 
     uint8_t m_beepPin;
     uint8_t m_controlPin;
@@ -36,5 +36,5 @@ private:
     uint32_t m_currentTime;
     uint32_t m_leftTime;
     uint32_t m_stopTime;
-    uint32_t m_total;
+    uint32_t m_total = 0;
 };

@@ -1,5 +1,7 @@
 #include "ModeProcessor.h"
 
+#include "Timer.h"
+
 #include <stdint.h>
 
 class SettingsSetter final {
@@ -17,7 +19,8 @@ private:
     void processSetBeepVolume();
     void processSetAutoFinishView();
 
-    Step m_step;
-    uint16_t m_lagTime;
+    Step m_step = Step::setLagTime;
+    uint32_t m_lagTime;
     uint32_t m_demoStartBeep;
+    Timer m_timer;
 };

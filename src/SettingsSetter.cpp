@@ -6,37 +6,32 @@ namespace {
 constexpr uint16_t kMaxLagTime = 2000;
 } // namespace
 
-SettingsSetter::SettingsSetter() {
-    m_step = Step::setLagTime;
-    m_lagTime = gSettings.lagTime;
-}
+SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime), m_demoStartBeep(millis()), m_timer(BEEPER, RELAY) {}
 
 SettingsSetter::~SettingsSetter() {
-    gTimer.resetTotal();
     analogWrite(BEEPER, 0);
     gSettings.lagTime = m_lagTime;
     gSettings.updateEEPROM();
 }
 
 void SettingsSetter::processSetLagTime() {
+    gSettings.lagTime = 0;
+    m_timer.tick();
+
     printFormatedLine("Lag time", 0);
     uint8_t lagDecSecs = m_lagTime / 100;
     getInt(lagDecSecs, 0, kMaxLagTime / 100);
     m_lagTime = lagDecSecs * 100;
+
+    if (m_timer.state() != Timer::STOPPED) {
+        m_timer.printFormatedState();
+        return;
+    }
+
     printFormatedTime("", m_lagTime);
 
-    if (gTimer.state() == Timer::RUNNING) {
-        printFormatedTime("", gTimer.left());
-    } else {
-        printFormatedTime("", m_lagTime);
-    }
-
-    if (gStartBtn.click()) {
-        if (gTimer.state() == Timer::STOPPED) {
-            gSettings.lagTime = 0;
-            gTimer.start(m_lagTime);
-        }
-    }
+    if (gStartBtn.click())
+        m_timer.start(m_lagTime);
 }
 
 void SettingsSetter::processSetBeepVolume() {
@@ -83,11 +78,11 @@ void SettingsSetter::processSetBacklight() {
 }
 
 void SettingsSetter::process() {
-    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
+    if (gModeSwitchBtn.click() && m_timer.state() != Timer::RUNNING) {
         m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
 
-        gTimer.resetTotal();
         analogWrite(BEEPER, 0);
+        m_demoStartBeep = millis();
         gSettings.lagTime = m_lagTime;
         gSettings.updateEEPROM();
     }
