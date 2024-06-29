@@ -26,7 +26,7 @@ void printFormatedLine(const char* line, int pos) {
     gLcd.print(formatedLine);
 }
 
-void getFormatedTime(uint32_t ms, char* buf, bool accurate) {
+void getFormatedTime(uint32_t ms, char* buf, bool accurate, bool addZero) {
     long decs = lround(ms / float(100));
     ;
     uint16_t sec = decs / 10;
@@ -37,7 +37,7 @@ void getFormatedTime(uint32_t ms, char* buf, bool accurate) {
         return;
     }
 
-    if (dec == 0) {
+    if (dec == 0 && !addZero) {
         itoa(sec, buf, 10);
         return;
     }
@@ -64,9 +64,9 @@ void concatInt(char* dst, int value) {
     concat(dst, str);
 }
 
-void concatTime(char* dst, uint32_t ms) {
+void concatTime(char* dst, uint32_t ms, bool addZero) {
     char str[MAX_SYMS_PER_LINE + 1];
-    getFormatedTime(ms, str);
+    getFormatedTime(ms, str, true, addZero);
     concat(dst, str);
 }
 

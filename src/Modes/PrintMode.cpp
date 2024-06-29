@@ -5,6 +5,7 @@
 PrintMode::PrintMode() {
     m_printTime = 8 * 1000;
     m_triggerByHold = false;
+    gTimer.resetAfterLastResume();
 }
 
 void PrintMode::process() {
@@ -17,12 +18,18 @@ void PrintMode::process() {
     concatTime(str, gTimer.total());
     printFormatedLine(str, 0);
 
+    str[0] = 0;
+    char afterResume[7] = "";
+    concatTime(afterResume, gTimer.afterLastResume(), true);
+
     if (gTimer.state() == Timer::STOPPED) {
         gTimer.resetTotal();
         getTime(m_printTime);
-        printFormatedTime("", m_printTime);
+        concatTime(str, m_printTime);
+        concatBack(str, afterResume);
+        printFormatedLine(str, 1);
     } else {
-        gTimer.printFormatedState();
+        gTimer.printFormatedState(afterResume);
     }
 
     if (!m_triggerByHold) {
@@ -55,4 +62,5 @@ void PrintMode::process() {
 void PrintMode::reset() {
     gTimer.stop();
     gTimer.resetTotal();
+    gTimer.resetAfterLastResume();
 }

@@ -24,6 +24,8 @@ void Timer::tick() {
         analogWrite(m_beepPin, gSettings.beepVolume);
     }
 
+    updateAfterLastResume();
+
     if (m_currentTime > realStopTime()) {
         stop();
     }
@@ -39,6 +41,7 @@ void Timer::start(uint32_t ms) {
 void Timer::pause() {
     if (m_status == RUNNING) {
         analogWrite(m_beepPin, 0);
+        updateAfterLastResume();
         m_total += afterResume();
         m_leftTime -= afterResume();
         m_status = PAUSED;
@@ -57,6 +60,7 @@ void Timer::resume() {
 void Timer::stop() {
     if (m_status != STOPPED) {
         analogWrite(m_beepPin, 0);
+        updateAfterLastResume();
         if (m_currentTime >= realStopTime())
             m_total += m_leftTime;
         else
@@ -72,6 +76,19 @@ uint32_t Timer::left() const {
         return realStopTime() - m_currentTime;
 
     return m_leftTime;
+}
+
+uint32_t Timer::afterLastResume() const {
+    return m_afterLastResume;
+}
+
+void Timer::updateAfterLastResume() {
+    if (uint32_t lastResume = afterResume())
+        m_afterLastResume = lastResume;
+}
+
+void Timer::resetAfterLastResume() {
+    m_afterLastResume = 0;
 }
 
 uint32_t Timer::afterResume() const {

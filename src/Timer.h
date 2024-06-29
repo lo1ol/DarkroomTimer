@@ -19,12 +19,16 @@ public:
 
     void printFormatedState(const char* additionalInfo = "") const;
 
+    void resetAfterLastResume();
+    uint32_t afterLastResume() const;
+
     uint32_t total() const;
     void resetTotal();
 
     State state() const;
 
 private:
+    void updateAfterLastResume();
     uint32_t afterResume() const;
     uint32_t realStopTime() const;
 
@@ -37,4 +41,5 @@ private:
     uint32_t m_leftTime;
     uint32_t m_stopTime;
     uint32_t m_total = 0;
+    uint32_t m_afterLastResume;
 };
