@@ -9,10 +9,9 @@ class Display {
 public:
     Display(LiquidCrystal&& lcd);
     DisplayLine& operator[](uint8_t n) { return m_lines[n]; }
+    DisplayLine* getLines() { return m_lines; }
 
     void tick();
-
-    void printTimeLog(const char* prefix, uint32_t (*timeGetter)(uint8_t), uint8_t maxIndex);
 
 private:
     LiquidCrystal m_lcd;

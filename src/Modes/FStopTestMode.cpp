@@ -1,6 +1,6 @@
 #include "FStopTestMode.h"
 
-#include "../DisplayLine.h"
+#include "../Time.h"
 #include "../Tools.h"
 
 namespace {
@@ -9,12 +9,12 @@ constexpr uint8_t kFStopPartVarinatns[] = { 6, 5, 4, 3, 2, 1 };
 // Ardruino cpp library haven't std::function,
 // so it's pretty hard to pass lambda that capture something
 // We need this vars inside so let's make them static objects
-uint32_t gFStopInitTime;
+Time gFStopInitTime;
 uint8_t gFStopPartId;
 } // namespace
 
 FStopTestMode::FStopTestMode() {
-    gFStopInitTime = 2 * 1000;
+    gFStopInitTime = 20_ts;
     gFStopPartId = 5;
     m_step = Step::initTime;
 }
@@ -41,11 +41,11 @@ void FStopTestMode::process() {
     }
         return;
     case Step::log:
-        gDisplay.printTimeLog(
+        Time::printTimeLog(
             "F Log ",
-            [](uint8_t N) -> uint32_t {
+            [](uint8_t N) -> Time {
                 uint8_t stopPart = kFStopPartVarinatns[gFStopPartId];
-                return lround((gFStopInitTime / 100) * pow(2, float(N) / stopPart)) * 100;
+                return gFStopInitTime * pow(2, float(N) / stopPart);
             },
             100);
         return;
@@ -63,7 +63,7 @@ void FStopTestMode::process() {
         return;
     }
 
-    uint32_t printTime;
+    Time printTime;
     if (m_currentRun == 1)
         printTime = gFStopInitTime;
     else {

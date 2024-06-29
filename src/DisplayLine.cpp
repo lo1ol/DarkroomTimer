@@ -4,28 +4,6 @@
 
 #include <LiquidCrystal.h>
 
-namespace {
-void getFormatedTime(uint32_t ms, char* buf, bool addZero = false) {
-    uint16_t decs = ms / 100;
-    uint16_t sec = decs / 10;
-    uint8_t dec = decs % 10;
-
-    if (sec > 9) {
-        itoa(sec + (dec > 4), buf, 10);
-        return;
-    }
-
-    if (dec == 0 && !addZero) {
-        itoa(sec, buf, 10);
-        return;
-    }
-
-    itoa(sec, buf, 10);
-    strcpy(buf + strlen(buf), ".");
-    itoa(dec, buf + strlen(buf), 10);
-}
-} // namespace
-
 void DisplayLine::concat(char* dst, const char* src) {
     int srcLen = strlen(src);
     int shift = strlen(dst);
@@ -43,15 +21,7 @@ void DisplayLine::concatInt(char* dst, int value) {
     concat(dst, str);
 }
 
-void DisplayLine::concatTime(char* dst, uint32_t ms, bool addZero) {
-    char str[DISPLAY_COLS + 1];
-    getFormatedTime(ms, str, addZero);
-    concat(dst, str);
-}
-
-bool DisplayLine::tryPrintTime(uint32_t ms) {
-    char str[DISPLAY_COLS + 1];
-    getFormatedTime(ms, str);
+bool DisplayLine::tryPrint(const char* str) {
     if (strlen(str) + strlen(m_fwInfo) > DISPLAY_COLS)
         return false;
 
@@ -82,10 +52,6 @@ DisplayLine& DisplayLine::operator<<(int value) {
     concatInt(m_fwInfo, value);
     return *this;
 }
-DisplayLine& DisplayLine::operator<<(uint32_t ms) {
-    concatTime(m_fwInfo, ms);
-    return *this;
-}
 
 DisplayLine& DisplayLine::operator>>(const char* src) {
     concat(m_bwInfo, src);
@@ -94,9 +60,5 @@ DisplayLine& DisplayLine::operator>>(const char* src) {
 
 DisplayLine& DisplayLine::operator>>(int value) {
     concatInt(m_bwInfo, value);
-    return *this;
-}
-DisplayLine& DisplayLine::operator>>(uint32_t ms) {
-    concatTime(m_bwInfo, ms, true);
     return *this;
 }

@@ -4,7 +4,7 @@
 #include "Tools.h"
 
 namespace {
-constexpr uint16_t kMaxLagTime = 2000;
+constexpr int kMaxLagTime = 20;
 } // namespace
 
 SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime), m_demoStartBeep(millis()), m_timer(BEEPER, RELAY) {}
@@ -16,13 +16,13 @@ SettingsSetter::~SettingsSetter() {
 }
 
 void SettingsSetter::processSetLagTime() {
-    gSettings.lagTime = 0;
+    gSettings.lagTime = 0_ts;
     m_timer.tick();
 
     gDisplay[0] << "Lag time";
-    uint8_t lagDecSecs = m_lagTime / 100;
-    getInt(lagDecSecs, 0, kMaxLagTime / 100);
-    m_lagTime = lagDecSecs * 100;
+    uint8_t lagDecSecs = static_cast<int16_t>(m_lagTime);
+    getInt(lagDecSecs, 0, kMaxLagTime);
+    m_lagTime = Time(lagDecSecs);
 
     if (m_timer.state() != Timer::STOPPED) {
         m_timer.printFormatedState();

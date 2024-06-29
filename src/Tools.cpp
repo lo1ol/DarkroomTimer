@@ -45,31 +45,25 @@ bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) {
     }
 }
 
-void getTime(uint32_t& time) {
-    int32_t shift = getEncoderShift();
+void getTime(Time& time) {
+    Time shift{ getEncoderShift() };
 
-    uint16_t factor;
-    if ((time + shift) < 10 * 1000L)
-        factor = 500;
-    else if ((time + shift) < 100 * 1000L)
-        factor = 1000;
-    else if ((time + shift) < 1000 * 1000L)
-        factor = 5000;
+    int16_t factor;
+    if ((time + shift) < 100_ts)
+        factor = 5;
+    else if ((time + shift) < 1000_ts)
+        factor = 10;
+    else if ((time + shift) < 1000_ts)
+        factor = 50;
     else
-        factor = 50000;
+        factor = 500;
 
-    shift *= factor;
+    time += shift * factor;
+    time = Time((static_cast<int16_t>(time) / factor) * factor);
 
-    if (shift < 0 && time < static_cast<uint32_t>(-shift)) {
-        time = 0;
-    } else {
-        time += shift;
-        time -= time % factor;
-    }
+    if (time < 0_ts)
+        time = 0_ts;
 
-    // use only whole number of 100 milliseconds
-    time = (time / 100) * 100;
-
-    if (time > 1000 * 10000L)
-        time = 1000 * 10000L;
+    if (time > 18000_ts)
+        time = 18000_ts;
 }

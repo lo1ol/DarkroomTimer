@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#include "Time.h"
+
 class DisplayLine;
 
 class Timer {
@@ -13,7 +15,7 @@ public:
     void setup();
 
     void tick();
-    void start(uint32_t ms);
+    void start(Time ms);
     void pause();
     void resume();
     void stop();
@@ -22,9 +24,9 @@ public:
     void printFormatedState() const;
 
     void resetAfterLastResume();
-    uint32_t afterLastResume() const;
+    Time afterLastResume() const;
 
-    uint32_t total() const;
+    Time total() const;
     void resetTotal();
 
     State state() const;
@@ -39,9 +41,10 @@ private:
     uint8_t m_beepPin;
     uint8_t m_controlPin;
 
+    Time m_afterLastResume;
+
     uint32_t m_currentTime;
+    uint32_t m_resumeTime;
     uint32_t m_leftTime;
-    uint32_t m_stopTime;
     uint32_t m_total = 0;
-    uint32_t m_afterLastResume;
 };

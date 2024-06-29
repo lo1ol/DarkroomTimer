@@ -2,11 +2,13 @@
 
 #include <stdint.h>
 
+#include "Time.h"
+
 struct Settings {
     Settings();
     void updateEEPROM();
 
-    uint16_t lagTime;
+    Time lagTime;
     uint8_t beepVolume;
     uint8_t backlight;
     uint8_t autoFinishViewMinutes;

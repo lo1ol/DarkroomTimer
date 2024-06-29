@@ -1,11 +1,10 @@
 #include "LinearTestMode.h"
 
-#include "../DisplayLine.h"
 #include "../Tools.h"
 
 LinearTestMode::LinearTestMode() {
-    m_initTime = 8 * 1000;
-    m_stepTime = 2 * 1000;
+    m_initTime = 80_ts;
+    m_stepTime = 20_ts;
     m_step = Step::initTime;
 }
 
@@ -39,7 +38,7 @@ void LinearTestMode::process() {
         return;
     }
 
-    uint32_t printTime;
+    Time printTime;
     if (m_currentRun == 1)
         printTime = m_initTime;
     else

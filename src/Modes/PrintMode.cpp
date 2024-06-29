@@ -1,10 +1,9 @@
 #include "PrintMode.h"
 
-#include "../DisplayLine.h"
 #include "../Tools.h"
 
 PrintMode::PrintMode() {
-    m_printTime = 8 * 1000;
+    m_printTime = 80_ts;
     m_triggerByHold = false;
     gTimer.resetAfterLastResume();
 }

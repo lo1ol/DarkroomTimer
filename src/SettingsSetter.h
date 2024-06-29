@@ -21,7 +21,7 @@ private:
     void processStartWithSettings();
 
     Step m_step = Step::setLagTime;
-    uint32_t m_lagTime;
+    Time m_lagTime;
     uint32_t m_demoStartBeep;
     Timer m_timer;
 };

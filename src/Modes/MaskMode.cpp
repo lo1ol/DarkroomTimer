@@ -1,6 +1,6 @@
 #include "MaskMode.h"
 
-#include "../DisplayLine.h"
+#include "../Time.h"
 #include "../Tools.h"
 
 namespace {
@@ -9,13 +9,13 @@ constexpr uint8_t gMasksMaxNumber = 10;
 // Ardruino cpp library haven't std::function,
 // so it's pretty hard to pass lambda that capture something
 // We need this vars inside so let's make them static objects
-uint32_t gMasks[gMasksMaxNumber];
+Time gMasks[gMasksMaxNumber];
 } // namespace
 
 MaskMode::MaskMode() {
     m_numberOfMasks = 3;
     memset(gMasks, 0, sizeof(gMasks));
-    gMasks[0] = 8 * 1000;
+    gMasks[0] = 80_ts;
     m_step = Step::setNum;
 }
 
@@ -26,9 +26,9 @@ void MaskMode::process() {
                 m_step = Step::log;
             } else {
                 ++m_currentMask;
-                if (m_currentMask > 0 && gMasks[m_currentMask] == 0) {
+                if (m_currentMask > 0 && !gMasks[m_currentMask]) {
                     if (m_currentMask == 1)
-                        gMasks[m_currentMask] = (gMasks[0] / 400) * 100;
+                        gMasks[m_currentMask] = gMasks[0] / 4;
                     else
                         gMasks[m_currentMask] = gMasks[m_currentMask - 1];
                 }
@@ -52,8 +52,8 @@ void MaskMode::process() {
         gDisplay[1] << gMasks[m_currentMask];
         return;
     case Step::log:
-        gDisplay.printTimeLog(
-            "M Log ", [](uint8_t N) -> uint32_t { return gMasks[N]; }, m_numberOfMasks);
+        Time::printTimeLog(
+            "M Log ", [](uint8_t N) -> Time { return gMasks[N]; }, m_numberOfMasks);
         return;
     case Step::run:
         break;

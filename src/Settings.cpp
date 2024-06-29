@@ -8,7 +8,7 @@ Settings::Settings() {
 #define GET_SETTING(value)    \
     EEPROM.get(idx, (value)); \
     idx += sizeof(value);     \
-    hash += value;
+    hash += static_cast<uint32_t>(value);
 
     GET_SETTING(lagTime);
     GET_SETTING(beepVolume);
@@ -22,7 +22,7 @@ Settings::Settings() {
 #undef GET_SETTING
 
     if (realHash != storedHash) {
-        lagTime = 0;
+        lagTime = 0_ts;
         beepVolume = 5;
         backlight = 3 * 5;
         autoFinishViewMinutes = 3;
@@ -38,7 +38,7 @@ void Settings::updateEEPROM() {
 #define PUT_SETTING(value)    \
     EEPROM.put(idx, (value)); \
     idx += sizeof(value);     \
-    hash += value;
+    hash += static_cast<uint32_t>(value);
 
     PUT_SETTING(lagTime);
     PUT_SETTING(beepVolume);

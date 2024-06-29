@@ -20,22 +20,25 @@ void Timer::tick() {
         return;
     }
 
-    // beep when we press start btn
-    if ((m_leftTime - m_stopTime + m_currentTime) < 100) {
-        analogWrite(m_beepPin, gSettings.beepVolume);
-    } else if ((m_leftTime - left() < 500) || ((m_leftTime - left()) / 100) % 10) {
-        analogWrite(m_beepPin, 0);
-    } else {
-        // beep every second
-        analogWrite(m_beepPin, gSettings.beepVolume);
-    }
-
     updateAfterLastResume();
+
+    int beep;
+    // beep when we press start btn and every second
+    uint32_t passed = afterResume() / 100;
+    if ((m_currentTime - m_resumeTime <= 100) || (passed > 5 && !(passed % 10)))
+        beep = gSettings.beepVolume;
+    else
+        beep = 0;
+
+    analogWrite(m_beepPin, beep);
+    Serial.print(beep);
+    Serial.print(" ");
+    Serial.println(m_currentTime - m_resumeTime);
 }
 
-void Timer::start(uint32_t ms) {
-    m_leftTime = ms;
-    m_stopTime = m_currentTime + ms;
+void Timer::start(Time time) {
+    m_leftTime = time.toMillis();
+    m_resumeTime = m_currentTime;
     m_status = RUNNING;
     digitalWrite(m_controlPin, HIGH);
 }
@@ -53,7 +56,7 @@ void Timer::pause() {
 
 void Timer::resume() {
     if (m_status == PAUSED) {
-        m_stopTime = m_currentTime + m_leftTime;
+        m_resumeTime = m_currentTime;
         m_status = RUNNING;
         digitalWrite(m_controlPin, HIGH);
     }
@@ -80,29 +83,29 @@ uint32_t Timer::left() const {
     return m_leftTime;
 }
 
-uint32_t Timer::afterLastResume() const {
+Time Timer::afterLastResume() const {
     return m_afterLastResume;
 }
 
 void Timer::updateAfterLastResume() {
     if (uint32_t lastResume = afterResume())
-        m_afterLastResume = lastResume;
+        m_afterLastResume = Time::fromMillis(lastResume);
 }
 
 void Timer::resetAfterLastResume() {
-    m_afterLastResume = 0;
+    m_afterLastResume = 0_ts;
 }
 
 uint32_t Timer::afterResume() const {
     if (m_status != RUNNING)
         return 0;
 
-    uint32_t realAfterResume = m_currentTime + m_leftTime - m_stopTime;
+    uint32_t realAfterResume = m_currentTime - m_resumeTime;
 
-    if (realAfterResume < gSettings.lagTime)
+    if (realAfterResume < static_cast<uint16_t>(gSettings.lagTime.toMillis()))
         return 0;
 
-    return realAfterResume - gSettings.lagTime;
+    return realAfterResume - static_cast<uint16_t>(gSettings.lagTime.toMillis());
 }
 
 void Timer::printFormatedState() const {
@@ -111,22 +114,22 @@ void Timer::printFormatedState() const {
         if (afterResume() == 0) {
             gDisplay[1] << "Lag";
         } else {
-            gDisplay[1] << left();
+            gDisplay[1] << Time::fromMillis(left());
         }
         break;
     case PAUSED:
-        gDisplay[1] << left() << " PAUSE";
+        gDisplay[1] << Time::fromMillis(left()) << " PAUSE";
     case STOPPED:
         break;
     }
 }
 
 uint32_t Timer::realStopTime() const {
-    return m_stopTime + gSettings.lagTime;
+    return m_resumeTime + m_leftTime + gSettings.lagTime.toMillis();
 }
 
-uint32_t Timer::total() const {
-    return m_total + afterResume();
+Time Timer::total() const {
+    return Time::fromMillis(m_total + afterResume());
 }
 
 void Timer::resetTotal() {

@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#include "../Time.h"
+
 class PrintMode final : public ModeProcessor {
 public:
     PrintMode();
@@ -9,6 +11,6 @@ public:
     void reset() override;
 
 private:
-    uint32_t m_printTime;
+    Time m_printTime;
     bool m_triggerByHold;
 };

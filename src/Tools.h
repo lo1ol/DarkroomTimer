@@ -7,10 +7,11 @@
 
 #include "Display.h"
 #include "Settings.h"
+#include "Time.h"
 #include "Timer.h"
 
 bool getInt(uint8_t& choosen, uint8_t min, uint8_t max);
-void getTime(uint32_t& time);
+void getTime(Time& time);
 
 void setupEncoder();
 
