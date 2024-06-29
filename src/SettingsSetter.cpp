@@ -77,6 +77,17 @@ void SettingsSetter::processSetBacklight() {
     analogWrite(BACKLIGHT, gSettings.backlight);
 }
 
+void SettingsSetter::processStartWithSettings() {
+    printFormatedLine("Start with stngs", 0);
+    uint8_t choice = gSettings.startWithSettings;
+    getInt(choice, 0, 1);
+    gSettings.startWithSettings = choice;
+    if (choice == 0)
+        printFormatedLine("No", 1);
+    else
+        printFormatedLine("Yes", 1);
+}
+
 void SettingsSetter::process() {
     if (gModeSwitchBtn.click() && m_timer.state() != Timer::RUNNING) {
         m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
@@ -99,6 +110,9 @@ void SettingsSetter::process() {
         break;
     case Step::setAutoFinishView:
         processSetAutoFinishView();
+        break;
+    case Step::setStartWithSettings:
+        processStartWithSettings();
         break;
     }
 }

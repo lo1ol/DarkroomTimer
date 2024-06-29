@@ -37,6 +37,7 @@ void setMode(ModeId modeId) {
 }
 
 VirtButton gSettingBtn;
+SettingsSetter* gSettingsSetter = nullptr;
 
 void setup() {
     gTimer.setup();
@@ -48,6 +49,9 @@ void setup() {
 
     pinMode(BACKLIGHT, OUTPUT);
     analogWrite(BACKLIGHT, gSettings.backlight);
+
+    if (gSettings.startWithSettings)
+        gSettingsSetter = new SettingsSetter;
 }
 
 void loop() {
@@ -59,7 +63,6 @@ void loop() {
     gModeSwitchBtn.tick();
     gSettingBtn.tick(gViewBtn, gModeSwitchBtn);
 
-    static SettingsSetter* gSettingsSetter = nullptr;
     static bool gRelayState = LOW;
 
     // ignore if both btn was clicked

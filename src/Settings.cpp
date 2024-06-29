@@ -14,16 +14,19 @@ Settings::Settings() {
     GET_SETTING(beepVolume);
     GET_SETTING(backlight);
     GET_SETTING(autoFinishViewMinutes);
+    GET_SETTING(startWithSettings);
 
     uint32_t realHash = hash;
     uint32_t storedHash;
     GET_SETTING(storedHash);
+#undef GET_SETTING
 
     if (realHash != storedHash) {
         lagTime = 0;
         beepVolume = 5;
         backlight = 3 * 5;
         autoFinishViewMinutes = 3;
+        startWithSettings = false;
         updateEEPROM();
         return;
     }
@@ -41,5 +44,7 @@ void Settings::updateEEPROM() {
     PUT_SETTING(beepVolume);
     PUT_SETTING(backlight);
     PUT_SETTING(autoFinishViewMinutes);
+    PUT_SETTING(startWithSettings);
     PUT_SETTING(hash);
+#undef PUT_SETTING
 }
