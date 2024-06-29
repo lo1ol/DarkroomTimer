@@ -71,6 +71,8 @@ void loop() {
 
     if (gRelayState == LOW && gTimer.state() != Timer::RUNNING && gSettingBtn.hold()) {
         if (gSettingsSetter) {
+            if (!gSettingsSetter->couldBeClosed())
+                return;
             delete gSettingsSetter;
             gSettingsSetter = nullptr;
         } else {

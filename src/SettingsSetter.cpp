@@ -109,3 +109,7 @@ void SettingsSetter::process() {
         break;
     }
 }
+
+bool SettingsSetter::couldBeClosed() const {
+    return m_timer.state() == Timer::STOPPED;
+}

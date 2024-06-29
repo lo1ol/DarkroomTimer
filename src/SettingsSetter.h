@@ -13,6 +13,8 @@ public:
 
     void process();
 
+    bool couldBeClosed() const;
+
 private:
     void processSetLagTime();
     void processSetBacklight();
