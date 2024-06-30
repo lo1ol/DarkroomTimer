@@ -1,21 +1,15 @@
 #include "FStopTestMode.h"
 
-#include "../Time.h"
+#include "../Config.h"
 #include "../Tools.h"
 
 namespace {
 constexpr uint8_t kFStopPartVarinatns[] = { 6, 5, 4, 3, 2, 1 };
-
-// Ardruino cpp library haven't std::function,
-// so it's pretty hard to pass lambda that capture something
-// We need this vars inside so let's make them static objects
-Time gFStopInitTime;
-uint8_t gFStopPartId;
 } // namespace
 
 FStopTestMode::FStopTestMode() {
-    gFStopInitTime = 20_ts;
-    gFStopPartId = 5;
+    m_initTime = 20_ts;
+    m_FStopPartId = 5;
     m_step = Step::initTime;
 }
 
@@ -30,24 +24,18 @@ void FStopTestMode::process() {
     case Step::initTime:
         gDisplay[0] << "Test F Stops";
 
-        getTime(gFStopInitTime);
-        gDisplay[1] << "Init t:" << gFStopInitTime;
+        getTime(m_initTime);
+        gDisplay[1] << "Init t:" << m_initTime;
         return;
     case Step::fstopSet: {
         gDisplay[0] << "Test F Stops";
 
-        getInt(gFStopPartId, 0, sizeof(kFStopPartVarinatns) - 1);
-        gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[gFStopPartId];
+        getInt(m_FStopPartId, 0, sizeof(kFStopPartVarinatns) - 1);
+        gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
     }
         return;
     case Step::log:
-        Time::printTimeLog(
-            "F Log ",
-            [](uint8_t N) -> Time {
-                uint8_t stopPart = kFStopPartVarinatns[gFStopPartId];
-                return gFStopInitTime * pow(2, float(N) / stopPart);
-            },
-            100);
+        printLog();
         return;
     case Step::run:
         break;
@@ -56,7 +44,7 @@ void FStopTestMode::process() {
     int run = m_currentRun - (gTimer.state() == Timer::RUNNING);
     gDisplay[0] << "F Test#" << run << " T:" << gTimer.total();
 
-    gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[gFStopPartId];
+    gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[m_FStopPartId];
 
     if (gTimer.state() == Timer::RUNNING) {
         gTimer.printFormatedState();
@@ -64,12 +52,11 @@ void FStopTestMode::process() {
     }
 
     Time printTime;
-    if (m_currentRun == 1)
-        printTime = gFStopInitTime;
+    if (run == 1)
+        printTime = m_initTime;
     else {
-        uint8_t stopPart = kFStopPartVarinatns[gFStopPartId];
-        printTime =
-            gFStopInitTime * (pow(2, float(m_currentRun - 1) / stopPart) - pow(2, float(m_currentRun - 2) / stopPart));
+        float stopPart = kFStopPartVarinatns[m_FStopPartId];
+        printTime = m_initTime * (pow(2, (run - 1) / stopPart) - pow(2, (run - 2) / stopPart));
     }
 
     gDisplay[1] << printTime;
@@ -89,4 +76,23 @@ void FStopTestMode::reset() {
     gTimer.stop();
     gTimer.resetTotal();
     m_currentRun = 1;
+}
+
+void FStopTestMode::printLog() const {
+    gDisplay[0] << "F Log ";
+    uint8_t id = 0;
+    float stopPart = kFStopPartVarinatns[m_FStopPartId];
+
+    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
+        while (true) {
+            char str[DISPLAY_COLS + 1] = { 0 };
+            Time time = m_initTime * pow(2, id / stopPart);
+            time.getFormatedTime(str, false);
+            if (!gDisplay[row].tryPrint(str))
+                break;
+
+            gDisplay[row] << " ";
+            ++id;
+        }
+    }
 }

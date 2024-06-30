@@ -1,21 +1,11 @@
 #include "MaskMode.h"
 
-#include "../Time.h"
 #include "../Tools.h"
-
-namespace {
-constexpr uint8_t gMasksMaxNumber = 10;
-
-// Ardruino cpp library haven't std::function,
-// so it's pretty hard to pass lambda that capture something
-// We need this vars inside so let's make them static objects
-Time gMasks[gMasksMaxNumber];
-} // namespace
 
 MaskMode::MaskMode() {
     m_numberOfMasks = 3;
-    memset(gMasks, 0, sizeof(gMasks));
-    gMasks[0] = 80_ts;
+    memset(m_masks, 0, sizeof(m_masks));
+    m_masks[0] = 80_ts;
     m_step = Step::setNum;
 }
 
@@ -26,11 +16,11 @@ void MaskMode::process() {
                 m_step = Step::log;
             } else {
                 ++m_currentMask;
-                if (m_currentMask > 0 && !gMasks[m_currentMask]) {
+                if (m_currentMask > 0 && !m_masks[m_currentMask]) {
                     if (m_currentMask == 1)
-                        gMasks[m_currentMask] = gMasks[0] / 4;
+                        m_masks[m_currentMask] = m_masks[0] / 4;
                     else
-                        gMasks[m_currentMask] = gMasks[m_currentMask - 1];
+                        m_masks[m_currentMask] = m_masks[m_currentMask - 1];
                 }
             }
         } else {
@@ -48,12 +38,11 @@ void MaskMode::process() {
         return;
     case Step::setMasks:
         gDisplay[0] << "Mask set: #" << (m_currentMask + 1);
-        getTime(gMasks[m_currentMask]);
-        gDisplay[1] << gMasks[m_currentMask];
+        getTime(m_masks[m_currentMask]);
+        gDisplay[1] << m_masks[m_currentMask];
         return;
     case Step::log:
-        Time::printTimeLog(
-            "M Log ", [](uint8_t N) -> Time { return gMasks[N]; }, m_numberOfMasks);
+        printLog();
         return;
     case Step::run:
         break;
@@ -68,12 +57,12 @@ void MaskMode::process() {
         gDisplay[1] << "Finish";
         return;
     } else {
-        gDisplay[1] << gMasks[m_currentMask];
+        gDisplay[1] << m_masks[m_currentMask];
     }
 
     if (gStartBtn.click()) {
         if (gTimer.state() == Timer::STOPPED) {
-            gTimer.start(gMasks[m_currentMask]);
+            gTimer.start(m_masks[m_currentMask]);
             ++m_currentMask;
         }
     }
@@ -86,4 +75,25 @@ void MaskMode::reset() {
     gTimer.stop();
     gTimer.resetTotal();
     m_currentMask = 0;
+}
+
+void MaskMode::printLog() const {
+    gDisplay[0] << "M Log ";
+    uint8_t id = 0;
+
+    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
+        while (true) {
+            if (id == m_numberOfMasks)
+                break;
+
+            char str[DISPLAY_COLS + 1] = { 0 };
+            Time time = m_masks[id];
+            time.getFormatedTime(str);
+            if (!gDisplay[row].tryPrint(str))
+                break;
+
+            gDisplay[row] << " ";
+            ++id;
+        }
+    }
 }

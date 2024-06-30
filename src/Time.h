@@ -42,7 +42,7 @@ public:
     int16_t secs() const { return m_ts / 10; }
     uint8_t tenth() const { return m_ts % 10; }
 
-    static void printTimeLog(const char* prefix, Time (*timeGetter)(uint8_t), uint8_t maxIndex);
+    void getFormatedTime(char* buf, bool accurate = true, bool addZero = false) const;
 
 private:
     int16_t m_ts; // tenth of seconds
