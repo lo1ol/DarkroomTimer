@@ -34,9 +34,6 @@ void FStopTestMode::process() {
         gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
     }
         return;
-    case Step::log:
-        printLog();
-        return;
     case Step::run:
         break;
     }

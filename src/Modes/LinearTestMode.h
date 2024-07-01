@@ -11,6 +11,7 @@ public:
     LinearTestMode();
     void process() override;
     void reset() override;
+    void printLog() const override;
 
 private:
     Step m_step;

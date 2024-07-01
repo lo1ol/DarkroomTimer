@@ -5,16 +5,15 @@
 #include "../Time.h"
 
 class MaskMode final : public ModeProcessor {
-    enum class Step { setNum, setMasks, log, run, last_ };
+    enum class Step { setNum, setMasks, run, last_ };
 
 public:
     MaskMode();
     void process() override;
     void reset() override;
+    void printLog() const override;
 
 private:
-    void printLog() const;
-
     static constexpr uint8_t gMasksMaxNumber = 10;
 
     Step m_step;

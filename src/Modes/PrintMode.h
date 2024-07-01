@@ -9,6 +9,7 @@ public:
     PrintMode();
     void process() override;
     void reset() override;
+    void printLog() const override {}
 
 private:
     Time m_printTime;

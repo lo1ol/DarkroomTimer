@@ -10,6 +10,7 @@
 #include "Time.h"
 #include "Timer.h"
 
+int8_t getEncoderDir();
 bool getInt(uint8_t& choosen, uint8_t min, uint8_t max);
 void getTime(Time& time, bool smooth = false);
 

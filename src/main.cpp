@@ -9,7 +9,7 @@
 
 #include "SettingsSetter.h"
 
-enum class ModeId { testFStops, testLinear, print, mask, last_ };
+enum class ModeId : uint8_t { testFStops, testLinear, print, mask, last_ };
 
 ModeId gModeId;
 ModeProcessor* gModeProcessor = nullptr;
@@ -92,10 +92,10 @@ void processView() {
     gBlocked = gViewState;
 }
 
-void processModeProcessor() {
-    static bool gBlockedByModeProcessor = false;
+void processMode() {
+    static bool gBlockedByThis = false;
     // Only ModeProcessor can block timer
-    if (gBlocked && !gBlockedByModeProcessor)
+    if (gBlocked && !gBlockedByThis)
         return;
 
     gModeProcessor->process();
@@ -103,7 +103,20 @@ void processModeProcessor() {
     if (gExtraBtn.hold())
         gModeProcessor->reset();
 
-    gBlocked = gBlockedByModeProcessor = gTimer.state() != Timer::STOPPED;
+    gBlocked = gBlockedByThis = gTimer.state() != Timer::STOPPED;
+}
+
+void processLogView() {
+    static bool gBlockedByThis = false;
+    // Only ModeProcessor can block timer
+    if (gBlocked && !gBlockedByThis)
+        return;
+
+    if (gBlockedByThis)
+        gModeProcessor->printLog();
+
+    if (gModeSwitchBtn.click())
+        gBlocked = gBlockedByThis = !gBlockedByThis;
 }
 
 void setup() {
@@ -130,13 +143,15 @@ void loop() {
     gSettingBtn.tick(gViewBtn, gModeSwitchBtn);
     gDisplay.tick();
 
+    if (!gBlocked && gModeSwitchBtn.pressing()) {
+        int8_t dir = getEncoderDir();
+        if (dir)
+            setMode((ModeId)((uint8_t)((uint8_t)gModeId + dir) % (uint8_t)ModeId::last_));
+        gEncoder.clear();
+    }
+
     processSettings();
     processView();
-    processModeProcessor();
-
-    if (gBlocked)
-        return;
-
-    if (gModeSwitchBtn.click())
-        setMode((ModeId)(((int)gModeId + 1) % (int)ModeId::last_));
+    processLogView();
+    processMode();
 }

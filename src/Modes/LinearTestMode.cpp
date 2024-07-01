@@ -62,3 +62,21 @@ void LinearTestMode::reset() {
     gTimer.resetTotal();
     m_currentRun = 1;
 }
+
+void LinearTestMode::printLog() const {
+    gDisplay[0] << "L Log ";
+    uint8_t id = 0;
+
+    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
+        while (true) {
+            char str[DISPLAY_COLS + 1] = { 0 };
+            Time time = m_initTime + m_stepTime * id;
+            time.getFormatedTime(str, false);
+            if (!gDisplay[row].tryPrint(str))
+                break;
+
+            gDisplay[row] << " ";
+            ++id;
+        }
+    }
+}

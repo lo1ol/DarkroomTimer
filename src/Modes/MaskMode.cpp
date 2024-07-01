@@ -13,7 +13,7 @@ void MaskMode::process() {
     if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
         if (m_step == Step::setMasks) {
             if (m_currentMask + 1 == m_numberOfMasks) {
-                m_step = Step::log;
+                m_step = Step::run;
             } else {
                 ++m_currentMask;
                 if (m_currentMask > 0 && !m_masks[m_currentMask]) {
@@ -40,9 +40,6 @@ void MaskMode::process() {
         gDisplay[0] << "Mask set: #" << (m_currentMask + 1);
         getTime(m_masks[m_currentMask]);
         gDisplay[1] << m_masks[m_currentMask];
-        return;
-    case Step::log:
-        printLog();
         return;
     case Step::run:
         break;
