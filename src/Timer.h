@@ -16,10 +16,13 @@ public:
 
     void tick();
     void start(Time ms);
-    void pause();
+    // info was it really paused
+    bool pause();
     void resume();
     void stop();
     uint32_t left() const;
+
+    bool stopped() const { return m_justStopped; }
 
     void printFormatedState() const;
 
@@ -35,6 +38,9 @@ private:
     void updateAfterLastResume();
     uint32_t afterResume() const;
     uint32_t realStopTime() const;
+    bool reallyStarted() const;
+
+    bool m_justStopped;
 
     State m_status = STOPPED;
 

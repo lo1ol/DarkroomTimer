@@ -14,6 +14,7 @@ void MaskMode::process() {
         if (m_step == Step::setMasks) {
             if (m_currentMask + 1 == m_numberOfMasks) {
                 m_step = Step::run;
+                m_currentMask = 0;
             } else {
                 ++m_currentMask;
                 if (m_currentMask > 0 && !m_masks[m_currentMask]) {

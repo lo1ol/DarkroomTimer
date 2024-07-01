@@ -12,6 +12,7 @@ void Timer::setup() {
 
 void Timer::tick() {
     m_currentTime = millis();
+    m_justStopped = false;
     if (m_status != RUNNING)
         return;
 
@@ -37,7 +38,7 @@ void Timer::start(Time time) {
     digitalWrite(m_controlPin, HIGH);
 }
 
-void Timer::pause() {
+bool Timer::pause() {
     if (m_status == RUNNING) {
         analogWrite(m_beepPin, 0);
         updateAfterLastResume();
@@ -45,7 +46,11 @@ void Timer::pause() {
         m_leftTime -= afterResume();
         m_status = PAUSED;
         digitalWrite(m_controlPin, LOW);
+
+        return reallyStarted();
     }
+
+    return false;
 }
 
 void Timer::resume() {
@@ -67,6 +72,7 @@ void Timer::stop() {
         m_status = STOPPED;
         m_leftTime = 0;
         digitalWrite(m_controlPin, LOW);
+        m_justStopped = reallyStarted();
     }
 }
 
@@ -128,6 +134,10 @@ Time Timer::total() const {
 
 void Timer::resetTotal() {
     m_total = 0;
+}
+
+bool Timer::reallyStarted() const {
+    return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
 }
 
 Timer::State Timer::state() const {

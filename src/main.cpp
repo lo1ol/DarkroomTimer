@@ -98,10 +98,10 @@ void processMode() {
     if (gBlocked && !gBlockedByThis)
         return;
 
-    gModeProcessor->process();
-
     if (gExtraBtn.hold())
         gModeProcessor->reset();
+
+    gModeProcessor->process();
 
     gBlocked = gBlockedByThis = gTimer.state() != Timer::STOPPED;
 }
