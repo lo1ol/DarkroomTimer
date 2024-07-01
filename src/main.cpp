@@ -36,8 +36,75 @@ void setMode(ModeId modeId) {
     }
 }
 
+bool gBlocked = false;
+
 VirtButton gSettingBtn;
 SettingsSetter* gSettingsSetter = nullptr;
+
+void processSettings() {
+    if (gBlocked && !gSettingsSetter)
+        return;
+
+    // ignore if both btn was clicked
+    if (gSettingBtn.click())
+        return;
+
+    if (gSettingBtn.hold()) {
+        if (gSettingsSetter) {
+            if (!gSettingsSetter->couldBeClosed())
+                return;
+            delete gSettingsSetter;
+            gSettingsSetter = nullptr;
+        } else {
+            gSettingsSetter = new SettingsSetter;
+        }
+    }
+
+    if (gSettingsSetter)
+        gSettingsSetter->process();
+
+    gBlocked = gSettingsSetter;
+}
+
+void processView() {
+    static bool gViewState = LOW;
+
+    if (gBlocked && !gViewState)
+        return;
+
+    static uint32_t gViewModeTurnOffTime;
+
+    if (gViewBtn.click()) {
+        gViewState = !gViewState;
+        digitalWrite(RELAY, gViewState);
+        gViewModeTurnOffTime = millis() + gSettings.autoFinishViewMinutes * 60000L;
+    }
+
+    if (gViewState == HIGH) {
+        if (gSettings.autoFinishViewMinutes != 0 && gViewModeTurnOffTime < millis()) {
+            gViewState = LOW;
+            digitalWrite(RELAY, gViewState);
+        }
+
+        gDisplay[0] << "View";
+    }
+
+    gBlocked = gViewState;
+}
+
+void processModeProcessor() {
+    static bool gBlockedByModeProcessor = false;
+    // Only ModeProcessor can block timer
+    if (gBlocked && !gBlockedByModeProcessor)
+        return;
+
+    gModeProcessor->process();
+
+    if (gExtraBtn.hold())
+        gModeProcessor->reset();
+
+    gBlocked = gBlockedByModeProcessor = gTimer.state() != Timer::STOPPED;
+}
 
 void setup() {
     gTimer.setup();
@@ -63,56 +130,13 @@ void loop() {
     gSettingBtn.tick(gViewBtn, gModeSwitchBtn);
     gDisplay.tick();
 
-    static bool gRelayState = LOW;
+    processSettings();
+    processView();
+    processModeProcessor();
 
-    // ignore if both btn was clicked
-    if (gSettingBtn.click())
+    if (gBlocked)
         return;
 
-    if (gRelayState == LOW && gTimer.state() != Timer::RUNNING && gSettingBtn.hold()) {
-        if (gSettingsSetter) {
-            if (!gSettingsSetter->couldBeClosed())
-                return;
-            delete gSettingsSetter;
-            gSettingsSetter = nullptr;
-        } else {
-            gSettingsSetter = new SettingsSetter;
-        }
-    }
-
-    if (gSettingsSetter) {
-        gSettingsSetter->process();
-        return;
-    }
-
-    if (gTimer.state() == Timer::STOPPED) {
-        static uint32_t gViewModeTurnOnTime;
-
-        if (gViewBtn.click()) {
-            gRelayState = !gRelayState;
-            digitalWrite(RELAY, gRelayState);
-            if (gRelayState == HIGH)
-                gViewModeTurnOnTime = millis();
-        }
-
-        if (gRelayState == HIGH) {
-            if (gSettings.autoFinishViewMinutes != 0 &&
-                (gViewModeTurnOnTime + gSettings.autoFinishViewMinutes * 1000L * 60) < millis()) {
-                gRelayState = LOW;
-                digitalWrite(RELAY, gRelayState);
-            }
-
-            gDisplay[0] << "View";
-
-            return;
-        }
-
-        if (gModeSwitchBtn.click())
-            setMode((ModeId)(((int)gModeId + 1) % (int)ModeId::last_));
-    }
-
-    gModeProcessor->process();
-
-    if (gExtraBtn.hold())
-        gModeProcessor->reset();
+    if (gModeSwitchBtn.click())
+        setMode((ModeId)(((int)gModeId + 1) % (int)ModeId::last_));
 }
