@@ -55,11 +55,6 @@ void LinearTestMode::process() {
 }
 
 void LinearTestMode::reset() {
-    if (m_step != Step::run)
-        return;
-
-    gTimer.stop();
-    gTimer.resetTotal();
     m_currentRun = 1;
 }
 

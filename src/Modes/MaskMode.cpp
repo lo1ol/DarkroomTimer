@@ -28,7 +28,7 @@ void MaskMode::switchMode() {
         m_currentMask = 0;
     }
 
-    gTimer.resetTotal();
+    gTimer.reset();
 }
 
 void MaskMode::process() {
@@ -73,8 +73,6 @@ void MaskMode::reset() {
     if (m_step != Step::run)
         return;
 
-    gTimer.stop();
-    gTimer.resetTotal();
     m_currentMask = 0;
 }
 

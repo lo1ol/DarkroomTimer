@@ -5,7 +5,6 @@
 PrintMode::PrintMode() {
     m_printTime = 80_ts;
     m_triggerByHold = false;
-    resetPrintInfo();
 }
 
 void PrintMode::switchMode() {
@@ -59,15 +58,11 @@ void PrintMode::process() {
 }
 
 void PrintMode::reset() {
-    gTimer.stop();
     appendPrintLog(gTimer.afterLastResume());
-    gTimer.resetTotal();
-    gTimer.resetAfterLastResume();
 }
 
 void PrintMode::resetPrintInfo() {
-    gTimer.resetTotal();
-    gTimer.resetAfterLastResume();
+    gTimer.reset();
     m_logSize = 0;
 }
 

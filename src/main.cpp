@@ -98,8 +98,10 @@ void processMode() {
     if (gBlocked && !gBlockedByThis)
         return;
 
-    if (gExtraBtn.hold())
+    if (gExtraBtn.hold()) {
         gModeProcessor->reset();
+        gTimer.reset();
+    }
 
     if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING)
         gModeProcessor->switchMode();
@@ -148,9 +150,11 @@ void loop() {
 
     if (!gBlocked && gModeSwitchBtn.pressing()) {
         int8_t dir = getEncoderDir();
-        if (dir)
+        if (dir) {
             setMode((ModeId)((uint8_t)((uint8_t)gModeId + dir) % (uint8_t)ModeId::last_));
-        gEncoder.clear();
+            gEncoder.clear();
+            gTimer.reset();
+        }
     }
 
     processSettings();

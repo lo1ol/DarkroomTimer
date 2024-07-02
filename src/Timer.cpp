@@ -136,6 +136,12 @@ void Timer::resetTotal() {
     m_total = 0;
 }
 
+void Timer::reset() {
+    stop();
+    resetTotal();
+    resetAfterLastResume();
+}
+
 bool Timer::reallyStarted() const {
     return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
 }

@@ -32,6 +32,8 @@ public:
     Time total() const;
     void resetTotal();
 
+    void reset();
+
     State state() const;
 
 private:

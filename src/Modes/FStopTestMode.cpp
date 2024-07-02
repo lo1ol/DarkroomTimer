@@ -16,7 +16,7 @@ FStopTestMode::FStopTestMode() {
 void FStopTestMode::switchMode() {
     m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
     m_currentRun = 1;
-    gTimer.resetTotal();
+    gTimer.reset();
 }
 
 void FStopTestMode::process() {
@@ -67,11 +67,6 @@ void FStopTestMode::process() {
 }
 
 void FStopTestMode::reset() {
-    if (m_step != Step::run)
-        return;
-
-    gTimer.stop();
-    gTimer.resetTotal();
     m_currentRun = 1;
 }
 
