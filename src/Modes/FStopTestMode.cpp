@@ -14,7 +14,7 @@ FStopTestMode::FStopTestMode() {
 }
 
 void FStopTestMode::process() {
-    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
         m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
         m_currentRun = 1;
         gTimer.resetTotal();

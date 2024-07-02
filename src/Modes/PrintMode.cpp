@@ -9,7 +9,7 @@ PrintMode::PrintMode() {
 }
 
 void PrintMode::process() {
-    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
         m_triggerByHold = !m_triggerByHold;
     }
 

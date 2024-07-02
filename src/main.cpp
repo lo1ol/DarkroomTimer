@@ -115,7 +115,7 @@ void processLogView() {
     if (gBlockedByThis)
         gModeProcessor->printLog();
 
-    if (gModeSwitchBtn.click())
+    if (gExtraBtn.click())
         gBlocked = gBlockedByThis = !gBlockedByThis;
 }
 

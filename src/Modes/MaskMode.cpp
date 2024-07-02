@@ -10,7 +10,7 @@ MaskMode::MaskMode() {
 }
 
 void MaskMode::process() {
-    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
         if (m_step == Step::setMasks) {
             if (m_currentMask + 1 == m_numberOfMasks) {
                 m_step = Step::run;
