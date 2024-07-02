@@ -101,9 +101,12 @@ void processMode() {
     if (gExtraBtn.hold())
         gModeProcessor->reset();
 
+    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING)
+        gModeProcessor->switchMode();
+
     gModeProcessor->process();
 
-    gBlocked = gBlockedByThis = gTimer.state() != Timer::STOPPED;
+    gBlocked = gBlockedByThis = gTimer.state() == Timer::RUNNING;
 }
 
 void processLogView() {

@@ -9,27 +9,30 @@ MaskMode::MaskMode() {
     m_step = Step::setNum;
 }
 
-void MaskMode::process() {
-    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
-        if (m_step == Step::setMasks) {
-            if (m_currentMask + 1 == m_numberOfMasks) {
-                m_step = Step::run;
-                m_currentMask = 0;
-            } else {
-                ++m_currentMask;
-                if (m_currentMask > 0 && !m_masks[m_currentMask]) {
-                    if (m_currentMask == 1)
-                        m_masks[m_currentMask] = m_masks[0] / 4;
-                    else
-                        m_masks[m_currentMask] = m_masks[m_currentMask - 1];
-                }
-            }
-        } else {
-            m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
+void MaskMode::switchMode() {
+    if (m_step == Step::setMasks) {
+        if (m_currentMask + 1 == m_numberOfMasks) {
+            m_step = Step::run;
             m_currentMask = 0;
+        } else {
+            ++m_currentMask;
+            if (m_currentMask > 0 && !m_masks[m_currentMask]) {
+                if (m_currentMask == 1)
+                    m_masks[m_currentMask] = m_masks[0] / 4;
+                else
+                    m_masks[m_currentMask] = m_masks[m_currentMask - 1];
+            }
         }
-        gTimer.resetTotal();
+    } else {
+        m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
+        m_currentMask = 0;
     }
+
+    gTimer.resetTotal();
+}
+
+void MaskMode::process() {
+    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {}
 
     switch (m_step) {
     case Step::setNum:

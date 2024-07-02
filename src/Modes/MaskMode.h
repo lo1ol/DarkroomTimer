@@ -12,6 +12,7 @@ public:
     void process() override;
     void reset() override;
     void printLog() const override;
+    void switchMode() override;
 
 private:
     static constexpr uint8_t gMasksMaxNumber = 10;

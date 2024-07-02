@@ -8,11 +8,11 @@ PrintMode::PrintMode() {
     resetPrintInfo();
 }
 
-void PrintMode::process() {
-    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
-        m_triggerByHold = !m_triggerByHold;
-    }
+void PrintMode::switchMode() {
+    m_triggerByHold = !m_triggerByHold;
+}
 
+void PrintMode::process() {
     gDisplay[0] << "Prnt " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
 
     if (gTimer.stopped())

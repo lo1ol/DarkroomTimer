@@ -8,13 +8,13 @@ LinearTestMode::LinearTestMode() {
     m_step = Step::initTime;
 }
 
-void LinearTestMode::process() {
-    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {
-        m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
-        m_currentRun = 1;
-        gTimer.resetTotal();
-    }
+void LinearTestMode::switchMode() {
+    m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
+    m_currentRun = 1;
+    gTimer.resetTotal();
+}
 
+void LinearTestMode::process() {
     switch (m_step) {
     case Step::initTime:
         gDisplay[0] << "Linear tests";

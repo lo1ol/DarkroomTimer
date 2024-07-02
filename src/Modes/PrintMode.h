@@ -10,6 +10,7 @@ public:
     void process() override;
     void reset() override;
     void printLog() const override;
+    void switchMode() override;
 
 private:
     void appendPrintLog(const Time&);
