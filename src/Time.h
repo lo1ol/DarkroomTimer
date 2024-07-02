@@ -19,6 +19,11 @@ public:
     Time operator/(int n) const { return Time{ m_ts / n }; }
     Time operator+(const Time& o) const { return Time{ m_ts + o.m_ts }; }
 
+    Time& operator*=(const int16_t x) {
+        m_ts *= x;
+        return *this;
+    }
+
     Time& operator+=(const Time& o) {
         m_ts += o.m_ts;
         return *this;

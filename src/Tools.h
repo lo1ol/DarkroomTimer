@@ -11,7 +11,7 @@
 #include "Timer.h"
 
 bool getInt(uint8_t& choosen, uint8_t min, uint8_t max);
-void getTime(Time& time);
+void getTime(Time& time, bool smooth = false);
 
 void setupEncoder();
 

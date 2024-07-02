@@ -1,7 +1,5 @@
 #include "Tools.h"
 
-#include <string.h>
-
 EncButton gEncoder(ENCODER_DT, ENCODER_CLK);
 Button gModeSwitchBtn(MODE_SWITCH_BTN);
 Button gStartBtn(START_BTN);
@@ -21,14 +19,16 @@ void setupEncoder() {
     gEncoder.setEncISR(true);
 }
 
-int8_t getEncoderShift() {
+int8_t getEncoderDir() {
     if (!gEncoder.turn())
         return 0;
-    return gEncoder.dir() * (gEncoder.fast() ? 5 : 1);
+    return gEncoder.dir();
 }
 
 bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) {
-    int8_t shift = getEncoderShift();
+    int8_t shift = getEncoderDir();
+    if (max - min > 30 && gEncoder.fast())
+        shift *= 5;
 
     if (shift == 0)
         return false;
@@ -45,18 +45,22 @@ bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) {
     }
 }
 
-void getTime(Time& time) {
-    Time shift{ getEncoderShift() };
+void getTime(Time& time, bool smooth) {
+    Time shift{ getEncoderDir() };
+    if (!smooth && gEncoder.fast())
+        shift *= 5;
 
     int16_t factor;
-    if ((time + shift) < 100_ts)
+    if ((time + shift) < 50_ts)
+        factor = 1;
+    else if ((time + shift) < 100_ts)
         factor = 5;
     else if ((time + shift) < 1000_ts)
         factor = 10;
     else if ((time + shift) < 1000_ts)
         factor = 50;
     else
-        factor = 500;
+        factor = 100;
 
     time += shift * factor;
     time = Time((static_cast<int16_t>(time) / factor) * factor);
