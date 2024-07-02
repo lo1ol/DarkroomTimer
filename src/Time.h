@@ -7,7 +7,8 @@ class DisplayLine;
 
 class Time {
 public:
-    explicit Time(int16_t ts = 0) : m_ts(ts) {}
+    constexpr Time() : Time(0) {}
+    constexpr explicit Time(int16_t ts) : m_ts(ts) {}
 
     explicit operator bool() { return m_ts; }
     explicit operator int16_t() { return m_ts; }
@@ -49,6 +50,6 @@ inline Time operator*(int16_t x, const Time& time) {
 DisplayLine& operator<<(DisplayLine&, const Time&);
 DisplayLine& operator>>(DisplayLine&, const Time&);
 
-inline Time operator""_ts(unsigned long long ts) {
+constexpr inline Time operator""_ts(unsigned long long ts) {
     return Time(ts);
 }
