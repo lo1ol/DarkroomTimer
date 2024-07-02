@@ -7,6 +7,7 @@ MaskMode::MaskMode() {
     memset(m_masks, 0, sizeof(m_masks));
     m_masks[0] = 80_ts;
     m_step = Step::setNum;
+    m_currentMask = 0;
 }
 
 void MaskMode::switchMode() {
@@ -32,8 +33,6 @@ void MaskMode::switchMode() {
 }
 
 void MaskMode::process() {
-    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING) {}
-
     switch (m_step) {
     case Step::setNum:
         gDisplay[0] << "Mask printing";
@@ -79,6 +78,7 @@ void MaskMode::reset() {
 void MaskMode::printLog() const {
     gDisplay[0] << "M Log ";
     uint8_t id = 0;
+    bool canPrint = m_step == Step::run;
 
     for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
         while (true) {
@@ -88,7 +88,7 @@ void MaskMode::printLog() const {
             char str[DISPLAY_COLS + 1] = { 0 };
             Time time = m_masks[id];
             time.getFormatedTime(str);
-            if (!gDisplay[row].tryPrint(str))
+            if (!gDisplay[row].tryPrint(str, canPrint && m_currentMask == id))
                 break;
 
             gDisplay[row] << " ";

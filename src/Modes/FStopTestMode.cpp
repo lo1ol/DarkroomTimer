@@ -11,6 +11,7 @@ FStopTestMode::FStopTestMode() {
     m_initTime = 20_ts;
     m_FStopPartId = 5;
     m_step = Step::initTime;
+    m_currentRun = 1;
 }
 
 void FStopTestMode::switchMode() {
@@ -74,13 +75,14 @@ void FStopTestMode::printLog() const {
     gDisplay[0] << "F Log ";
     uint8_t id = 0;
     float stopPart = kFStopPartVarinatns[m_FStopPartId];
+    bool canPrint = m_step == Step::run;
 
     for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
         while (true) {
             char str[DISPLAY_COLS + 1] = { 0 };
             Time time = m_initTime * pow(2, id / stopPart);
             time.getFormatedTime(str, false);
-            if (!gDisplay[row].tryPrint(str))
+            if (!gDisplay[row].tryPrint(str, canPrint && m_currentRun - 1 == id))
                 break;
 
             gDisplay[row] << " ";

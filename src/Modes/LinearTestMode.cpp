@@ -6,12 +6,13 @@ LinearTestMode::LinearTestMode() {
     m_initTime = 80_ts;
     m_stepTime = 20_ts;
     m_step = Step::initTime;
+    m_currentRun = 1;
 }
 
 void LinearTestMode::switchMode() {
     m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
-    m_currentRun = 1;
     gTimer.resetTotal();
+    m_currentRun = 1;
 }
 
 void LinearTestMode::process() {
@@ -61,13 +62,14 @@ void LinearTestMode::reset() {
 void LinearTestMode::printLog() const {
     gDisplay[0] << "L Log ";
     uint8_t id = 0;
+    bool canPrint = m_step == Step::run;
 
     for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
         while (true) {
             char str[DISPLAY_COLS + 1] = { 0 };
             Time time = m_initTime + m_stepTime * id;
             time.getFormatedTime(str, false);
-            if (!gDisplay[row].tryPrint(str))
+            if (!gDisplay[row].tryPrint(str, canPrint && m_currentRun - 1 == id))
                 break;
 
             gDisplay[row] << " ";

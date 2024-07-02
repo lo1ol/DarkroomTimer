@@ -21,11 +21,18 @@ void DisplayLine::concatInt(char* dst, int value) {
     concat(dst, str);
 }
 
-bool DisplayLine::tryPrint(const char* str) {
-    if (strlen(str) + strlen(m_fwInfo) > DISPLAY_COLS)
+bool DisplayLine::tryPrint(const char* src, bool blink) {
+    uint8_t srclen = strlen(src);
+    uint8_t dstlen = strlen(m_fwInfo);
+    if (srclen + dstlen > DISPLAY_COLS)
         return false;
 
-    concat(m_fwInfo, str);
+    if (blink) {
+        m_blinkLength = srclen;
+        m_blinkPos = dstlen;
+    }
+
+    concat(m_fwInfo, src);
     return true;
 }
 
@@ -36,11 +43,24 @@ void DisplayLine::tick() {
     auto bwLen = strlen(m_bwInfo);
     memcpy(m_fwInfo + DISPLAY_COLS - bwLen, m_bwInfo, bwLen);
 
+    if (m_blinkLength) {
+        if (millis() - m_blinkTimer > 500) {
+            m_blinkState = !m_blinkState;
+            m_blinkTimer = millis();
+        }
+
+        if (m_blinkState)
+            memset(m_fwInfo + m_blinkPos, ' ', m_blinkLength);
+    }
+
     m_lcd.setCursor(0, m_line);
+
     m_lcd.print(m_fwInfo);
 
     m_fwInfo[0] = 0;
     m_bwInfo[0] = 0;
+
+    m_blinkLength = 0;
 }
 
 DisplayLine& DisplayLine::operator<<(const char* src) {
