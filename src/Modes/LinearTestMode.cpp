@@ -6,13 +6,13 @@ LinearTestMode::LinearTestMode() {
     m_initTime = 80_ts;
     m_stepTime = 20_ts;
     m_step = Step::initTime;
-    m_currentRun = 1;
+    m_currentRun = 0;
 }
 
 void LinearTestMode::switchMode() {
     m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
     gTimer.resetTotal();
-    m_currentRun = 1;
+    m_currentRun = 0;
 }
 
 void LinearTestMode::process() {
@@ -31,49 +31,53 @@ void LinearTestMode::process() {
         break;
     }
 
-    int run = m_currentRun - (gTimer.state() == Timer::RUNNING);
-    gDisplay[0] << "L Test#" << run << " T:" << gTimer.total();
+    gDisplay[0] << "L Test#" << m_currentRun + 1 << " T:" << gTimer.total();
 
     if (gTimer.state() == Timer::RUNNING) {
         gTimer.printFormatedState();
         return;
     }
 
-    Time printTime;
-    if (m_currentRun == 1)
-        printTime = m_initTime;
-    else
-        printTime = m_stepTime;
+    gDisplay[1] << getPrintTime();
+    processRun();
+}
 
-    gDisplay[1] << printTime;
+Time LinearTestMode::getPrintTime() const {
+    if (m_currentRun == 0)
+        return m_initTime;
 
-    if (gStartBtn.click()) {
-        if (gTimer.state() == Timer::STOPPED) {
-            gTimer.start(printTime);
-            ++m_currentRun;
-        }
-    }
+    return m_stepTime;
+}
+
+void LinearTestMode::processRun() {
+    if (gTimer.stopped())
+        ++m_currentRun;
+
+    if (!gStartBtn.click())
+        return;
+
+    if (gTimer.state() != Timer::STOPPED)
+        return;
+
+    gTimer.start(getPrintTime());
 }
 
 void LinearTestMode::reset() {
-    m_currentRun = 1;
+    m_currentRun = 0;
 }
 
-void LinearTestMode::printLog() const {
+void LinearTestMode::printLog() {
     gDisplay[0] << "L Log ";
-    uint8_t id = 0;
-    bool canPrint = m_step == Step::run;
 
-    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
-        while (true) {
-            char str[DISPLAY_COLS + 1] = { 0 };
-            Time time = m_initTime + m_stepTime * id;
-            time.getFormatedTime(str, false);
-            if (!gDisplay[row].tryPrint(str, canPrint && m_currentRun - 1 == id))
-                break;
+    uint8_t id = printLogHelper(
+        [](void* this__, uint8_t id, bool& current, bool& end) -> Time {
+            auto this_ = reinterpret_cast<LinearTestMode*>(this__);
+            current = this_->m_step == Step::run && this_->m_currentRun == id;
 
-            gDisplay[row] << " ";
-            ++id;
-        }
-    }
+            return { this_->m_initTime + this_->m_stepTime * id };
+        },
+        this);
+
+    if (m_currentRun < id && m_step == Step::run)
+        processRun();
 }

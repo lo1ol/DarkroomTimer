@@ -21,14 +21,21 @@ void DisplayLine::concatInt(char* dst, int value) {
     concat(dst, str);
 }
 
-bool DisplayLine::tryPrint(const char* src, bool blink) {
+bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize) {
     uint8_t srclen = strlen(src);
     uint8_t dstlen = strlen(m_fwInfo);
-    if (srclen + dstlen > DISPLAY_COLS)
+
+    if (!alignSize)
+        alignSize = srclen;
+
+    if (alignSize + dstlen > DISPLAY_COLS)
         return false;
 
+    memset(m_fwInfo + dstlen, ' ', alignSize - srclen);
+    m_fwInfo[dstlen + alignSize - srclen] = 0;
+
     if (blink) {
-        m_blinkLength = srclen;
+        m_blinkLength = alignSize;
         m_blinkPos = dstlen;
     }
 

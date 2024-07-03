@@ -5,6 +5,7 @@
 PrintMode::PrintMode() {
     m_printTime = 80_ts;
     m_triggerByHold = false;
+    m_logSize = 0;
 }
 
 void PrintMode::switchMode() {
@@ -77,23 +78,18 @@ void PrintMode::appendPrintLog(const Time& time) {
     ++m_logSize;
 }
 
-void PrintMode::printLog() const {
+void PrintMode::printLog() {
     gDisplay[0] << "P Log ";
-    uint8_t id = 0;
 
-    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
-        while (true) {
-            if (id == m_logSize)
-                break;
+    printLogHelper(
+        [](void* this__, uint8_t id, bool& current, bool& end) -> Time {
+            auto this_ = reinterpret_cast<PrintMode*>(this__);
 
-            char str[DISPLAY_COLS + 1] = { 0 };
-            Time time = m_printLog[id];
-            time.getFormatedTime(str);
-            if (!gDisplay[row].tryPrint(str))
-                break;
+            end = id == this_->m_logSize;
+            if (end)
+                return {};
 
-            gDisplay[row] << " ";
-            ++id;
-        }
-    }
+            return { this_->m_printLog[id] };
+        },
+        this);
 }

@@ -93,9 +93,10 @@ void processView() {
 }
 
 void processMode() {
-    static bool gBlockedByThis = false;
-    // Only ModeProcessor can block timer
-    if (gBlocked && !gBlockedByThis)
+    static bool gBlockedByRun = false;
+    static bool gBlockedByLog = false;
+
+    if (gBlocked && !gBlockedByRun && !gBlockedByLog)
         return;
 
     if (gExtraBtn.hold()) {
@@ -103,25 +104,20 @@ void processMode() {
         gTimer.reset();
     }
 
-    if (gModeSwitchBtn.click() && gTimer.state() != Timer::RUNNING)
+    if ((!gBlockedByRun || gModeProcessor->supportPrintInLog()) && gExtraBtn.click())
+        gBlockedByLog = !gBlockedByLog;
+
+    if (!gBlocked && gModeSwitchBtn.click())
         gModeProcessor->switchMode();
 
-    gModeProcessor->process();
-
-    gBlocked = gBlockedByThis = gTimer.state() == Timer::RUNNING;
-}
-
-void processLogView() {
-    static bool gBlockedByThis = false;
-    // Only ModeProcessor can block timer
-    if (gBlocked && !gBlockedByThis)
-        return;
-
-    if (gBlockedByThis)
+    if (gBlockedByLog) {
         gModeProcessor->printLog();
+    } else {
+        gModeProcessor->process();
+        gBlockedByRun = gTimer.state() == Timer::RUNNING;
+    }
 
-    if (gExtraBtn.click())
-        gBlocked = gBlockedByThis = !gBlockedByThis;
+    gBlocked = gBlockedByRun || gBlockedByLog;
 }
 
 void setup() {
@@ -159,6 +155,5 @@ void loop() {
 
     processSettings();
     processView();
-    processLogView();
     processMode();
 }

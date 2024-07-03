@@ -19,7 +19,7 @@ public:
     DisplayLine& operator>>(const char* src);
     DisplayLine& operator>>(int value);
 
-    bool tryPrint(const char* src, bool blink = false);
+    bool tryPrint(const char* src, bool blink = false, uint8_t alignSize = 0);
 
 private:
     static void concat(char* dst, const char* src);

@@ -1,6 +1,5 @@
 #include "FStopTestMode.h"
 
-#include "../Config.h"
 #include "../Tools.h"
 
 namespace {
@@ -11,12 +10,12 @@ FStopTestMode::FStopTestMode() {
     m_initTime = 20_ts;
     m_FStopPartId = 5;
     m_step = Step::initTime;
-    m_currentRun = 1;
+    m_currentRun = 0;
 }
 
 void FStopTestMode::switchMode() {
     m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
-    m_currentRun = 1;
+    m_currentRun = 0;
     gTimer.reset();
 }
 
@@ -39,8 +38,7 @@ void FStopTestMode::process() {
         break;
     }
 
-    int run = m_currentRun - (gTimer.state() == Timer::RUNNING);
-    gDisplay[0] << "F Test#" << run << " T:" << gTimer.total();
+    gDisplay[0] << "F Test#" << m_currentRun + 1 << " T:" << gTimer.total();
 
     gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[m_FStopPartId];
 
@@ -49,44 +47,48 @@ void FStopTestMode::process() {
         return;
     }
 
-    Time printTime;
-    if (run == 1)
-        printTime = m_initTime;
-    else {
-        float stopPart = kFStopPartVarinatns[m_FStopPartId];
-        printTime = m_initTime * (pow(2, (run - 1) / stopPart) - pow(2, (run - 2) / stopPart));
-    }
+    gDisplay[1] << getPrintTime();
+    processRun();
+}
 
-    gDisplay[1] << printTime;
+Time FStopTestMode::getPrintTime() const {
+    if (m_currentRun == 0)
+        return m_initTime;
 
-    if (gStartBtn.click()) {
-        if (gTimer.state() == Timer::STOPPED) {
-            gTimer.start(printTime);
-            ++m_currentRun;
-        }
-    }
+    float stopPart = kFStopPartVarinatns[m_FStopPartId];
+    return m_initTime * (pow(2, m_currentRun / stopPart) - pow(2, (m_currentRun - 1) / stopPart));
+}
+
+void FStopTestMode::processRun() {
+    if (gTimer.stopped())
+        ++m_currentRun;
+
+    if (!gStartBtn.click())
+        return;
+
+    if (gTimer.state() != Timer::STOPPED)
+        return;
+
+    gTimer.start(getPrintTime());
 }
 
 void FStopTestMode::reset() {
-    m_currentRun = 1;
+    m_currentRun = 0;
 }
 
-void FStopTestMode::printLog() const {
+void FStopTestMode::printLog() {
     gDisplay[0] << "F Log ";
-    uint8_t id = 0;
-    float stopPart = kFStopPartVarinatns[m_FStopPartId];
-    bool canPrint = m_step == Step::run;
 
-    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
-        while (true) {
-            char str[DISPLAY_COLS + 1] = { 0 };
-            Time time = m_initTime * pow(2, id / stopPart);
-            time.getFormatedTime(str, false);
-            if (!gDisplay[row].tryPrint(str, canPrint && m_currentRun - 1 == id))
-                break;
+    uint8_t id = printLogHelper(
+        [](void* this__, uint8_t id, bool& current, bool& end) -> Time {
+            auto this_ = reinterpret_cast<FStopTestMode*>(this__);
+            float stopPart = kFStopPartVarinatns[this_->m_FStopPartId];
 
-            gDisplay[row] << " ";
-            ++id;
-        }
-    }
+            current = this_->m_step == Step::run && this_->m_currentRun == id;
+            return { this_->m_initTime * pow(2, id / stopPart) };
+        },
+        this);
+
+    if (m_currentRun < id && m_step == Step::run)
+        processRun();
 }

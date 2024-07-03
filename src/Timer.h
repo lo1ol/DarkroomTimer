@@ -21,6 +21,7 @@ public:
     void resume();
     void stop();
     uint32_t left() const;
+    bool lag() const;
 
     bool stopped() const { return m_justStopped; }
 
@@ -40,7 +41,6 @@ private:
     void updateAfterLastResume();
     uint32_t afterResume() const;
     uint32_t realStopTime() const;
-    bool reallyStarted() const;
 
     bool m_justStopped;
 

@@ -48,8 +48,7 @@ void MaskMode::process() {
         break;
     }
 
-    int run = (m_currentMask + 1 - (gTimer.state() == Timer::RUNNING));
-    gDisplay[0] << "Mask #" << run << " T:" << gTimer.total();
+    gDisplay[0] << "Mask #" << m_currentMask + 1 << " T:" << gTimer.total();
 
     if (gTimer.state() == Timer::RUNNING) {
         gTimer.printFormatedState();
@@ -60,12 +59,20 @@ void MaskMode::process() {
         gDisplay[1] << m_masks[m_currentMask];
     }
 
-    if (gStartBtn.click()) {
-        if (gTimer.state() == Timer::STOPPED) {
-            gTimer.start(m_masks[m_currentMask]);
-            ++m_currentMask;
-        }
-    }
+    processRun();
+}
+
+void MaskMode::processRun() {
+    if (gTimer.stopped())
+        ++m_currentMask;
+
+    if (!gStartBtn.click())
+        return;
+
+    if (gTimer.state() != Timer::STOPPED)
+        return;
+
+    gTimer.start(m_masks[m_currentMask]);
 }
 
 void MaskMode::reset() {
@@ -75,24 +82,22 @@ void MaskMode::reset() {
     m_currentMask = 0;
 }
 
-void MaskMode::printLog() const {
+void MaskMode::printLog() {
     gDisplay[0] << "M Log ";
-    uint8_t id = 0;
-    bool canPrint = m_step == Step::run;
 
-    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
-        while (true) {
-            if (id == m_numberOfMasks)
-                break;
+    uint8_t id = printLogHelper(
+        [](void* this__, uint8_t id, bool& current, bool& end) -> Time {
+            auto this_ = reinterpret_cast<MaskMode*>(this__);
 
-            char str[DISPLAY_COLS + 1] = { 0 };
-            Time time = m_masks[id];
-            time.getFormatedTime(str);
-            if (!gDisplay[row].tryPrint(str, canPrint && m_currentMask == id))
-                break;
+            current = this_->m_step == Step::run && this_->m_currentMask == id;
+            end = id == this_->m_numberOfMasks;
+            if (end)
+                return {};
 
-            gDisplay[row] << " ";
-            ++id;
-        }
-    }
+            return { this_->m_masks[id] };
+        },
+        this);
+
+    if (m_currentMask < id && m_step == Step::run)
+        processRun();
 }

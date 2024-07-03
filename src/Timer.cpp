@@ -17,6 +17,7 @@ void Timer::tick() {
         return;
 
     if (m_currentTime >= realStopTime()) {
+        m_justStopped = true;
         stop();
         return;
     }
@@ -47,7 +48,7 @@ bool Timer::pause() {
         m_status = PAUSED;
         digitalWrite(m_controlPin, LOW);
 
-        return reallyStarted();
+        return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
     }
 
     return false;
@@ -72,7 +73,6 @@ void Timer::stop() {
         m_status = STOPPED;
         m_leftTime = 0;
         digitalWrite(m_controlPin, LOW);
-        m_justStopped = reallyStarted();
     }
 }
 
@@ -142,10 +142,13 @@ void Timer::reset() {
     resetAfterLastResume();
 }
 
-bool Timer::reallyStarted() const {
-    return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
-}
-
 Timer::State Timer::state() const {
     return m_status;
+}
+
+bool Timer::lag() const {
+    if (m_status != RUNNING)
+        return false;
+
+    return afterResume() == 0;
 }
