@@ -32,29 +32,47 @@
 4. Buzzer that beep one time per 1 second. Usefull to print fast mask at dark
 5. Simple architecture of the project allows easily extend functionality
 
-## Components
+## How to assamble
 
-1. [Encoder EC11](https://sl.aliexpress.ru/p?key=1wDHs4W)
-2. [Buttons 12x12](https://sl.aliexpress.ru/p?key=8sDHsMU)
-3. [Button 6x6](https://sl.aliexpress.ru/p?key=TiDHsci)
-4. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
-5. [Buzzer](https://sl.aliexpress.ru/p?key=XcDHsAE)
-6. [SSR 5V](https://sl.aliexpress.ru/p?key=AWDHsN6)
-7. [Switch](https://sl.aliexpress.ru/p?key=7LDHstq)
-8. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok)
-9. Arduino nano: It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware
-10. Capacitor is used to prevent leakage from SSR. I used 1μF metal foil capacitor for 250V. If you are not planning to use LED lamps, just ignore it
-11. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
-12. Springs for the start btn could be taken from pen
-13. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
 
-## Circuit diagram
+### Circuit diagram
 
 ![Circuit](./Circuit.jpg)
 
-## Box
+### Coolest version
+
+My friend just create the coolest version of body for this project!!! You can find it [here](https://www.thingiverse.com/thing:6683466)
+
+#### Components
+
+1. [Encoder EC11](https://sl.aliexpress.ru/p?key=1wDHs4W)
+2. [Buttons](https://sl.aliexpress.ru/p?key=SoBfsmF)
+3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
+4. [Buzzer](https://sl.aliexpress.ru/p?key=XcDHsAE)
+5. [SSR 5V](https://sl.aliexpress.ru/p?key=AWDHsN6)
+6. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
+7. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok)
+8. Arduino nano: It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware
+9. Capacitor is used to prevent leakage from SSR. I used 1μF metal foil capacitor for 250V. If you are not planning to use LED lamps, just ignore it
+10. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
+11. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
+
+Box for this version has not enought space to keep transformer, capacitor and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
+
+### Simple version
 
 [3D model of the body](./TimerBox.stl)
+
+#### Components
+
+Everything the same except buttons, switches and springs:
+
+1. [Buttons 12x12](https://sl.aliexpress.ru/p?key=8sDHsMU)
+2. [Button 6x6](https://sl.aliexpress.ru/p?key=TiDHsci)
+3. [Switch](https://sl.aliexpress.ru/p?key=7LDHstq)
+4. Springs for the start btn could be taken from pen
+
+This version has enought space to keep transformer, SSR and capacitor inside. But I still recommend you to put it seperatly.
 
 ## Build and upload code to Arduino
 
