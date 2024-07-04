@@ -94,10 +94,10 @@ void processView() {
 
 void processMode() {
     static bool gBlockedByRun = false;
-    static bool gBlockedByLog = false;
+    static bool gInLog = false;
     static bool gWasRunnedInLog = false;
 
-    if (gBlocked && !gBlockedByRun && !gBlockedByLog)
+    if (gBlocked && !gBlockedByRun)
         return;
 
     if (gExtraBtn.hold()) {
@@ -105,18 +105,22 @@ void processMode() {
         gTimer.reset();
     }
 
-    if ((!gBlockedByRun || gModeProcessor->supportPrintInLog()) && gExtraBtn.click())
-        gBlockedByLog = !gBlockedByLog;
+    if ((!gBlockedByRun | gModeProcessor->supportPrintInLog()) && gExtraBtn.click())
+        gInLog = !gInLog;
 
-    if (!gBlocked && gModeSwitchBtn.click())
-        gModeProcessor->switchMode();
+    if (!gBlocked && gModeSwitchBtn.click()) {
+        if (gInLog)
+            gInLog = false;
+        else
+            gModeProcessor->switchMode();
+    }
 
-    if (gBlockedByLog) {
+    if (gInLog) {
         bool requestExit = false;
         gModeProcessor->printLog(requestExit);
         gWasRunnedInLog |= gBlockedByRun;
         if (gWasRunnedInLog)
-            gBlockedByLog = !requestExit;
+            gInLog = !requestExit;
     } else {
         gWasRunnedInLog = false;
         gModeProcessor->process();
@@ -124,7 +128,7 @@ void processMode() {
 
     gBlockedByRun = gTimer.state() == Timer::RUNNING;
 
-    gBlocked = gBlockedByRun || gBlockedByLog;
+    gBlocked = gBlockedByRun;
 }
 
 void setup() {
