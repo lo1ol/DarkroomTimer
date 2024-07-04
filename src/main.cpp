@@ -95,6 +95,7 @@ void processView() {
 void processMode() {
     static bool gBlockedByRun = false;
     static bool gBlockedByLog = false;
+    static bool gWasRunnedInLog = false;
 
     if (gBlocked && !gBlockedByRun && !gBlockedByLog)
         return;
@@ -111,11 +112,17 @@ void processMode() {
         gModeProcessor->switchMode();
 
     if (gBlockedByLog) {
-        gModeProcessor->printLog();
+        bool requestExit = false;
+        gModeProcessor->printLog(requestExit);
+        gWasRunnedInLog |= gBlockedByRun;
+        if (gWasRunnedInLog)
+            gBlockedByLog = !requestExit;
     } else {
+        gWasRunnedInLog = false;
         gModeProcessor->process();
-        gBlockedByRun = gTimer.state() == Timer::RUNNING;
     }
+
+    gBlockedByRun = gTimer.state() == Timer::RUNNING;
 
     gBlocked = gBlockedByRun || gBlockedByLog;
 }

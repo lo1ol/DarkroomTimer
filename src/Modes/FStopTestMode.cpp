@@ -76,7 +76,7 @@ void FStopTestMode::reset() {
     m_currentRun = 0;
 }
 
-void FStopTestMode::printLog() {
+void FStopTestMode::printLog(bool& requestExit) {
     gDisplay[0] << "F Log ";
 
     uint8_t id = printLogHelper(
@@ -89,6 +89,10 @@ void FStopTestMode::printLog() {
         },
         this);
 
-    if (m_currentRun < id && m_step == Step::run)
-        processRun();
+    if (m_step == Step::run) {
+        if (m_currentRun < id)
+            processRun();
+        else
+            requestExit = true;
+    }
 }

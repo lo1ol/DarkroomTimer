@@ -7,7 +7,7 @@ public:
     virtual ~ModeProcessor() {}
     virtual void process() = 0;
     virtual void reset() = 0;
-    virtual void printLog() = 0;
+    virtual void printLog(bool& requestExit) = 0;
     virtual void switchMode() = 0;
     virtual bool supportPrintInLog() const = 0;
 

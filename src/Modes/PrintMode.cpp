@@ -78,7 +78,7 @@ void PrintMode::appendPrintLog(const Time& time) {
     ++m_logSize;
 }
 
-void PrintMode::printLog() {
+void PrintMode::printLog(bool&) {
     gDisplay[0] << "P Log ";
 
     printLogHelper(

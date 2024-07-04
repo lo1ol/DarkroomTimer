@@ -9,7 +9,7 @@ public:
     PrintMode();
     void process() override;
     void reset() override;
-    void printLog() override;
+    void printLog(bool& requestExit) override;
     void switchMode() override;
     bool supportPrintInLog() const override { return false; }
 

@@ -82,7 +82,7 @@ void MaskMode::reset() {
     m_currentMask = 0;
 }
 
-void MaskMode::printLog() {
+void MaskMode::printLog(bool& requestExit) {
     gDisplay[0] << "M Log ";
 
     uint8_t id = printLogHelper(
@@ -98,6 +98,10 @@ void MaskMode::printLog() {
         },
         this);
 
-    if (m_currentMask < id && m_step == Step::run)
-        processRun();
+    if (m_step == Step::run) {
+        if (m_currentMask < id)
+            processRun();
+        else
+            requestExit = true;
+    }
 }

@@ -66,7 +66,7 @@ void LinearTestMode::reset() {
     m_currentRun = 0;
 }
 
-void LinearTestMode::printLog() {
+void LinearTestMode::printLog(bool& requestExit) {
     gDisplay[0] << "L Log ";
 
     uint8_t id = printLogHelper(
@@ -78,6 +78,10 @@ void LinearTestMode::printLog() {
         },
         this);
 
-    if (m_currentRun < id && m_step == Step::run)
-        processRun();
+    if (m_step == Step::run) {
+        if (m_currentRun < id)
+            processRun();
+        else
+            requestExit = true;
+    }
 }
