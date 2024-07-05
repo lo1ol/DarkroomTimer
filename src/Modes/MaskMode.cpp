@@ -9,6 +9,9 @@ MaskMode::MaskMode() {
     m_step = Step::setNum;
     m_view = RunView::common;
     m_currentMask = 0;
+
+    for (uint8_t i = 1; i != kMasksMaxNumber; ++i)
+        m_masks[i] = -1_ts;
 }
 
 void MaskMode::switchMode() {
@@ -16,7 +19,12 @@ void MaskMode::switchMode() {
 
     if (m_step != Step::setMasks) {
         m_step = ADD_TO_ENUM(Step, m_step, 1);
+
         m_currentMask = 0;
+
+        for (uint8_t i = m_numberOfMasks; i != kMasksMaxNumber; ++i)
+            m_masks[i] = -1_ts;
+
         return;
     }
 
@@ -27,10 +35,11 @@ void MaskMode::switchMode() {
     }
 
     ++m_currentMask;
-    if (m_currentMask == 0 || m_masks[m_currentMask])
+
+    if (m_currentMask == 0 || m_masks[m_currentMask] != -1_ts)
         return;
 
-    // let's guess mask values
+    // let's guess unknown masks
     if (m_currentMask == 1)
         m_masks[m_currentMask] = m_masks[0] / 4;
     else
@@ -41,7 +50,7 @@ void MaskMode::process() {
     switch (m_step) {
     case Step::setNum:
         gDisplay[0] << "Mask printing";
-        getInt(m_numberOfMasks, 2, gMasksMaxNumber);
+        getInt(m_numberOfMasks, 2, kMasksMaxNumber);
         gDisplay[1] << "Masks num: " << m_numberOfMasks;
         return;
     case Step::setMasks:
@@ -124,7 +133,11 @@ void MaskMode::printLog(bool& logOverFlowed) const {
             if (end)
                 return {};
 
-            return { this_->m_masks[id] };
+            Time time = this_->m_masks[id];
+            if (time == -1_ts)
+                return 0_ts;
+
+            return time;
         },
         this);
 

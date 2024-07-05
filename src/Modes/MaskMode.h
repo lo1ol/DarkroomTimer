@@ -22,12 +22,12 @@ public:
 private:
     void processRun();
 
-    static constexpr uint8_t gMasksMaxNumber = 10;
+    static constexpr uint8_t kMasksMaxNumber = 10;
 
     Step m_step;
     RunView m_view;
     uint8_t m_numberOfMasks;
     uint8_t m_currentMask;
 
-    Time m_masks[gMasksMaxNumber];
+    Time m_masks[kMasksMaxNumber];
 };
