@@ -12,25 +12,29 @@ MaskMode::MaskMode() {
 }
 
 void MaskMode::switchMode() {
-    if (m_step == Step::setMasks) {
-        if (m_currentMask + 1 == m_numberOfMasks) {
-            m_step = Step::run;
-            m_currentMask = 0;
-        } else {
-            ++m_currentMask;
-            if (m_currentMask > 0 && !m_masks[m_currentMask]) {
-                if (m_currentMask == 1)
-                    m_masks[m_currentMask] = m_masks[0] / 4;
-                else
-                    m_masks[m_currentMask] = m_masks[m_currentMask - 1];
-            }
-        }
-    } else {
+    gTimer.reset();
+
+    if (m_step != Step::setMasks) {
         m_step = ADD_TO_ENUM(Step, m_step, 1);
         m_currentMask = 0;
+        return;
     }
 
-    gTimer.reset();
+    if (m_currentMask + 1 == m_numberOfMasks) {
+        m_step = Step::run;
+        m_currentMask = 0;
+        return;
+    }
+
+    ++m_currentMask;
+    if (m_currentMask == 0 || m_masks[m_currentMask])
+        return;
+
+    // let's guess mask values
+    if (m_currentMask == 1)
+        m_masks[m_currentMask] = m_masks[0] / 4;
+    else
+        m_masks[m_currentMask] = m_masks[m_currentMask - 1];
 }
 
 void MaskMode::process() {
