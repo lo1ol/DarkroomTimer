@@ -82,13 +82,23 @@ void SettingsSetter::processStartWithSettings() {
 }
 
 void SettingsSetter::process() {
-    if (gModeSwitchBtn.click() && m_timer.state() != Timer::RUNNING) {
-        m_step = ADD_TO_ENUM(Step, m_step, 1);
+    if (m_timer.state() != Timer::RUNNING) {
+        int8_t shift = 0;
+        if (gModeSwitchBtn.click())
+            shift = 1;
+        else if (gModeSwitchBtn.pressing()) {
+            shift = getEncoderDir();
+        }
 
-        analogWrite(BEEPER, 0);
-        m_demoStartBeep = millis();
-        gSettings.lagTime = m_lagTime;
-        gSettings.updateEEPROM();
+        if (shift) {
+            gEncoder.clear();
+            m_step = ADD_TO_ENUM(Step, m_step, shift);
+
+            analogWrite(BEEPER, 0);
+            m_demoStartBeep = millis();
+            gSettings.lagTime = m_lagTime;
+            gSettings.updateEEPROM();
+        }
     }
 
     switch (m_step) {
