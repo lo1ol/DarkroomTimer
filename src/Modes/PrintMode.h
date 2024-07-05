@@ -9,9 +9,12 @@ public:
     PrintMode();
     void process() override;
     void reset() override;
-    void printLog(bool& requestExit) override;
     void switchMode() override;
-    bool supportPrintInLog() const override { return false; }
+
+    bool canSwitchView() const override { return false; }
+    void switchView() override {}
+
+    void printLog(bool& logOverFlowed) const override;
 
 private:
     void appendPrintLog(const Time&);

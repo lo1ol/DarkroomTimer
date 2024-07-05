@@ -11,7 +11,7 @@ public:
     DisplayLine(int line, LiquidCrystal& lcd) : m_line(line), m_lcd(lcd) {}
 
     void tick();
-    void flush() const;
+    void reset();
 
     DisplayLine& operator<<(const char* src);
     DisplayLine& operator<<(int value);

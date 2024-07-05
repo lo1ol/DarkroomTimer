@@ -12,6 +12,7 @@ public:
     DisplayLine* getLines() { return m_lines; }
 
     void tick();
+    void reset();
 
 private:
     LiquidCrystal m_lcd;

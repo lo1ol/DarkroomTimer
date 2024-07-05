@@ -3,8 +3,8 @@
 #include "Config.h"
 #include "Tools.h"
 
-uint8_t ModeProcessor::printLogHelper(Time (*timeGetter)(void* ctx, uint8_t id, bool& current, bool& end),
-                                      void* ctx) const {
+uint8_t ModeProcessor::printLogHelper(Time (*timeGetter)(const void* ctx, uint8_t id, bool& current, bool& end),
+                                      const void* ctx) const {
     uint8_t id = 0;
 
     for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
@@ -16,6 +16,7 @@ uint8_t ModeProcessor::printLogHelper(Time (*timeGetter)(void* ctx, uint8_t id, 
             uint8_t alignSize = 0;
 
             Time time = timeGetter(ctx, id, current, end);
+
             if (end)
                 return id;
 

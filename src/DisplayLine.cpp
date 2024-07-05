@@ -43,6 +43,12 @@ bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize) {
     return true;
 }
 
+void DisplayLine::reset() {
+    m_fwInfo[0] = 0;
+    m_bwInfo[0] = 0;
+    m_blinkLength = 0;
+}
+
 void DisplayLine::tick() {
     auto fwLen = strlen(m_fwInfo);
     memset(m_fwInfo + fwLen, ' ', DISPLAY_COLS - fwLen);
@@ -64,10 +70,7 @@ void DisplayLine::tick() {
 
     m_lcd.print(m_fwInfo);
 
-    m_fwInfo[0] = 0;
-    m_bwInfo[0] = 0;
-
-    m_blinkLength = 0;
+    reset();
 }
 
 DisplayLine& DisplayLine::operator<<(const char* src) {

@@ -8,3 +8,8 @@ void Display::tick() {
     for (auto&& line : m_lines)
         line.tick();
 }
+
+void Display::reset() {
+    for (auto&& line : m_lines)
+        line.reset();
+}

@@ -95,18 +95,22 @@ void processView() {
 void processMode() {
     static bool gBlockedByRun = false;
     static bool gInLog = false;
-    static bool gWasRunnedInLog = false;
 
     if (gBlocked && !gBlockedByRun)
         return;
 
     if (gExtraBtn.hold()) {
+        gInLog = false;
         gModeProcessor->reset();
         gTimer.reset();
     }
 
-    if ((!gBlockedByRun | gModeProcessor->supportPrintInLog()) && gExtraBtn.click())
-        gInLog = !gInLog;
+    if (gExtraBtn.click()) {
+        if (gModeProcessor->canSwitchView())
+            gModeProcessor->switchView();
+        else if (!gBlockedByRun)
+            gInLog = !gInLog;
+    }
 
     if (!gBlocked && gModeSwitchBtn.click()) {
         if (gInLog)
@@ -116,19 +120,13 @@ void processMode() {
     }
 
     if (gInLog) {
-        bool requestExit = false;
-        gModeProcessor->printLog(requestExit);
-        gWasRunnedInLog |= gBlockedByRun;
-        if (gWasRunnedInLog)
-            gInLog = !requestExit;
+        bool notUsed;
+        gModeProcessor->printLog(notUsed);
     } else {
-        gWasRunnedInLog = false;
         gModeProcessor->process();
     }
 
-    gBlockedByRun = gTimer.state() == Timer::RUNNING;
-
-    gBlocked = gBlockedByRun;
+    gBlocked = gBlockedByRun = gTimer.state() == Timer::RUNNING;
 }
 
 void setup() {
@@ -158,7 +156,7 @@ void loop() {
     if (!gBlocked && gModeSwitchBtn.pressing()) {
         int8_t dir = getEncoderDir();
         if (dir) {
-            setMode((ModeId)((uint8_t)((uint8_t)gModeId + dir) % (uint8_t)ModeId::last_));
+            setMode(ADD_TO_ENUM(ModeId, gModeId, dir));
             gEncoder.clear();
             gTimer.reset();
         }

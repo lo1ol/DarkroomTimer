@@ -7,6 +7,7 @@ MaskMode::MaskMode() {
     memset(m_masks, 0, sizeof(m_masks));
     m_masks[0] = 80_ts;
     m_step = Step::setNum;
+    m_view = RunView::common;
     m_currentMask = 0;
 }
 
@@ -25,7 +26,7 @@ void MaskMode::switchMode() {
             }
         }
     } else {
-        m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
+        m_step = ADD_TO_ENUM(Step, m_step, 1);
         m_currentMask = 0;
     }
 
@@ -48,15 +49,26 @@ void MaskMode::process() {
         break;
     }
 
-    gDisplay[0] << "Mask #" << m_currentMask + 1 << " T:" << gTimer.total();
+    switch (m_view) {
+    case RunView::common:
+        gDisplay[0] << "Mask #" << m_currentMask + 1 << " T:" << gTimer.total();
 
-    if (gTimer.state() == Timer::RUNNING) {
-        gTimer.printFormatedState();
-    } else if (m_currentMask == m_numberOfMasks) {
-        gDisplay[1] << "Finish";
-        return;
-    } else {
-        gDisplay[1] << m_masks[m_currentMask];
+        if (gTimer.state() == Timer::RUNNING) {
+            gTimer.printFormatedState();
+        } else if (m_currentMask == m_numberOfMasks) {
+            gDisplay[1] << "Finish";
+            return;
+        } else {
+            gDisplay[1] << m_masks[m_currentMask];
+        }
+
+        break;
+    case RunView::log: {
+        bool logOverFlow = false;
+        printLog(logOverFlow);
+        if (logOverFlow)
+            m_view = RunView::common;
+    } break;
     }
 
     processRun();
@@ -82,12 +94,26 @@ void MaskMode::reset() {
     m_currentMask = 0;
 }
 
-void MaskMode::printLog(bool& requestExit) {
+void MaskMode::switchView() {
+    m_view = ADD_TO_ENUM(RunView, m_view, 1);
+}
+
+bool MaskMode::canSwitchView() const {
+    if (m_step != Step::run)
+        return false;
+
+    bool overFlow = false;
+    printLog(overFlow);
+    gDisplay.reset();
+    return !overFlow;
+}
+
+void MaskMode::printLog(bool& logOverFlowed) const {
     gDisplay[0] << "M Log ";
 
     uint8_t id = printLogHelper(
-        [](void* this__, uint8_t id, bool& current, bool& end) -> Time {
-            auto this_ = reinterpret_cast<MaskMode*>(this__);
+        [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
+            auto this_ = reinterpret_cast<const MaskMode*>(this__);
 
             current = this_->m_step == Step::run && this_->m_currentMask == id;
             end = id == this_->m_numberOfMasks;
@@ -99,9 +125,9 @@ void MaskMode::printLog(bool& requestExit) {
         this);
 
     if (m_step == Step::run) {
-        if (m_currentMask < id)
-            processRun();
-        else
-            requestExit = true;
+        if (m_currentMask >= id && m_currentMask != m_numberOfMasks)
+            logOverFlowed = true;
+        else if (m_currentMask == m_numberOfMasks)
+            gDisplay[1] >> " Finish";
     }
 }

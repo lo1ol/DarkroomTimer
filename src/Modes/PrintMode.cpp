@@ -78,12 +78,12 @@ void PrintMode::appendPrintLog(const Time& time) {
     ++m_logSize;
 }
 
-void PrintMode::printLog(bool&) {
+void PrintMode::printLog(bool&) const {
     gDisplay[0] << "P Log ";
 
     printLogHelper(
-        [](void* this__, uint8_t id, bool& current, bool& end) -> Time {
-            auto this_ = reinterpret_cast<PrintMode*>(this__);
+        [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
+            auto this_ = reinterpret_cast<const PrintMode*>(this__);
 
             end = id == this_->m_logSize;
             if (end)

@@ -10,11 +10,12 @@ FStopTestMode::FStopTestMode() {
     m_initTime = 20_ts;
     m_FStopPartId = 5;
     m_step = Step::initTime;
+    m_view = RunView::common;
     m_currentRun = 0;
 }
 
 void FStopTestMode::switchMode() {
-    m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
+    m_step = ADD_TO_ENUM(Step, m_step, 1);
     m_currentRun = 0;
     gTimer.reset();
 }
@@ -38,16 +39,26 @@ void FStopTestMode::process() {
         break;
     }
 
-    gDisplay[0] << "F Test#" << m_currentRun + 1 << " T:" << gTimer.total();
+    switch (m_view) {
+    case RunView::common:
+        gDisplay[0] << "F Test#" << m_currentRun + 1 << " T:" << gTimer.total();
 
-    gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[m_FStopPartId];
+        gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[m_FStopPartId];
 
-    if (gTimer.state() == Timer::RUNNING) {
-        gTimer.printFormatedState();
-        return;
+        if (gTimer.state() == Timer::RUNNING) {
+            gTimer.printFormatedState();
+            return;
+        }
+        gDisplay[1] << getPrintTime();
+        break;
+    case RunView::log: {
+        bool logOverFlow = false;
+        printLog(logOverFlow);
+        if (logOverFlow)
+            m_view = RunView::common;
+    } break;
     }
 
-    gDisplay[1] << getPrintTime();
     processRun();
 }
 
@@ -76,12 +87,26 @@ void FStopTestMode::reset() {
     m_currentRun = 0;
 }
 
-void FStopTestMode::printLog(bool& requestExit) {
+void FStopTestMode::switchView() {
+    m_view = ADD_TO_ENUM(RunView, m_view, 1);
+}
+
+bool FStopTestMode::canSwitchView() const {
+    if (m_step != Step::run)
+        return false;
+
+    bool overFlow = false;
+    printLog(overFlow);
+    gDisplay.reset();
+    return !overFlow;
+}
+
+void FStopTestMode::printLog(bool& logOverFlowed) const {
     gDisplay[0] << "F Log ";
 
     uint8_t id = printLogHelper(
-        [](void* this__, uint8_t id, bool& current, bool& end) -> Time {
-            auto this_ = reinterpret_cast<FStopTestMode*>(this__);
+        [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
+            auto this_ = reinterpret_cast<const FStopTestMode*>(this__);
             float stopPart = kFStopPartVarinatns[this_->m_FStopPartId];
 
             current = this_->m_step == Step::run && this_->m_currentRun == id;
@@ -89,10 +114,6 @@ void FStopTestMode::printLog(bool& requestExit) {
         },
         this);
 
-    if (m_step == Step::run) {
-        if (m_currentRun < id)
-            processRun();
-        else
-            requestExit = true;
-    }
+    if (m_step == Step::run && m_currentRun >= id)
+        logOverFlowed = true;
 }

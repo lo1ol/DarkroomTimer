@@ -83,7 +83,7 @@ void SettingsSetter::processStartWithSettings() {
 
 void SettingsSetter::process() {
     if (gModeSwitchBtn.click() && m_timer.state() != Timer::RUNNING) {
-        m_step = (Step)(((int)m_step + 1) % (int)Step::last_);
+        m_step = ADD_TO_ENUM(Step, m_step, 1);
 
         analogWrite(BEEPER, 0);
         m_demoStartBeep = millis();

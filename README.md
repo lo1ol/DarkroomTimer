@@ -12,10 +12,11 @@
 1. Click view btn to turn on/off a lamp
 2. Hold mode btn and turn encoder, to switch mode
 3. Click mode btn to navigate inside mode
-4. Click extra btn to see a log
-5. Hold extra btn to reset current printing at any mode
-6. Click start btn to start printing at any mode
-7. Hold view btn and change mode btn to go in set settings mode (set lag time, LED Backlight, beep volume, auto finish view time and start with settings)
+4. Click extra btn when timer is not ready to run to see log
+5. Click extra btn when timer is ready to run to switch type of view
+6. Hold extra btn to reset current printing at any mode
+7. Click start btn to start printing at any mode
+8. Hold view btn and change mode btn to go in set settings mode (set lag time, LED Backlight, beep volume, auto finish view time and start with settings)
 
 ## Modes
 
