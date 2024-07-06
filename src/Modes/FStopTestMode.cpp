@@ -59,7 +59,11 @@ void FStopTestMode::process() {
     } break;
     }
 
-    processRun();
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
+        gTimer.start(getPrintTime());
+
+    if (gTimer.stopped())
+        ++m_currentRun;
 }
 
 Time FStopTestMode::getPrintTime() const {
@@ -68,19 +72,6 @@ Time FStopTestMode::getPrintTime() const {
 
     float stopPart = kFStopPartVarinatns[m_FStopPartId];
     return m_initTime * (pow(2, m_currentRun / stopPart) - pow(2, (m_currentRun - 1) / stopPart));
-}
-
-void FStopTestMode::processRun() {
-    if (gTimer.stopped())
-        ++m_currentRun;
-
-    if (!gStartBtn.click())
-        return;
-
-    if (gTimer.state() != Timer::STOPPED)
-        return;
-
-    gTimer.start(getPrintTime());
 }
 
 void FStopTestMode::reset() {

@@ -20,7 +20,6 @@ public:
     void printLog(bool& logOverFlowed) const override;
 
 private:
-    void processRun();
     Time getPrintTime() const;
 
     Step m_step;

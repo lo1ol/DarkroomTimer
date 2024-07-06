@@ -33,6 +33,11 @@ void Timer::tick() {
 }
 
 void Timer::start(Time time) {
+    if (time == 0_ts) {
+        m_justStopped = true;
+        return;
+    }
+
     m_leftTime = time.toMillis();
     m_resumeTime = m_currentTime;
     m_status = RUNNING;

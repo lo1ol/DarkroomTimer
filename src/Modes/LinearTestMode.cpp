@@ -51,7 +51,11 @@ void LinearTestMode::process() {
     } break;
     }
 
-    processRun();
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
+        gTimer.start(getPrintTime());
+
+    if (gTimer.stopped())
+        ++m_currentRun;
 }
 
 Time LinearTestMode::getPrintTime() const {
@@ -59,19 +63,6 @@ Time LinearTestMode::getPrintTime() const {
         return m_initTime;
 
     return m_stepTime;
-}
-
-void LinearTestMode::processRun() {
-    if (gTimer.stopped())
-        ++m_currentRun;
-
-    if (!gStartBtn.click())
-        return;
-
-    if (gTimer.state() != Timer::STOPPED)
-        return;
-
-    gTimer.start(getPrintTime());
 }
 
 void LinearTestMode::reset() {

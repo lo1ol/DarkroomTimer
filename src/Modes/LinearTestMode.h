@@ -21,7 +21,6 @@ public:
 
 private:
     Time getPrintTime() const;
-    void processRun();
 
     Step m_step;
     RunView m_view;

@@ -20,8 +20,6 @@ public:
     void printLog(bool& logOverFlowed) const override;
 
 private:
-    void processRun();
-
     static constexpr uint8_t kMasksMaxNumber = 10;
 
     Step m_step;

@@ -84,20 +84,11 @@ void MaskMode::process() {
     } break;
     }
 
-    processRun();
-}
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
+        gTimer.start(m_masks[m_currentMask]);
 
-void MaskMode::processRun() {
     if (gTimer.stopped())
         ++m_currentMask;
-
-    if (!gStartBtn.click())
-        return;
-
-    if (gTimer.state() != Timer::STOPPED)
-        return;
-
-    gTimer.start(m_masks[m_currentMask]);
 }
 
 void MaskMode::reset() {
