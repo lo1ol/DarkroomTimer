@@ -17,9 +17,10 @@ public:
     bool canSwitchView() const override;
     void switchView() override;
 
-    void printLog(bool& logOverFlowed) const override;
+    void printLog() const override;
 
 private:
+    void printLog(bool& logOverFlowed) const;
     Time getPrintTime() const;
 
     Step m_step;

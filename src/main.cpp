@@ -120,8 +120,7 @@ void processMode() {
     }
 
     if (gInLog) {
-        bool notUsed;
-        gModeProcessor->printLog(notUsed);
+        gModeProcessor->printLog();
     } else {
         gModeProcessor->process();
     }

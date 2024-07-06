@@ -44,6 +44,8 @@ void LinearTestMode::process() {
         gDisplay[1] << getPrintTime();
         break;
     case RunView::log: {
+        gDisplay[0] << "L Run ";
+
         bool logOverFlow = false;
         printLog(logOverFlow);
         if (logOverFlow)
@@ -77,6 +79,7 @@ bool LinearTestMode::canSwitchView() const {
     if (m_step != Step::run)
         return false;
 
+    gDisplay[0] << "L Run ";
     bool overFlow = false;
     printLog(overFlow);
     gDisplay.reset();
@@ -84,8 +87,6 @@ bool LinearTestMode::canSwitchView() const {
 }
 
 void LinearTestMode::printLog(bool& logOverFlowed) const {
-    gDisplay[0] << "L Log ";
-
     uint8_t id = printLogHelper(
         [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
             auto this_ = reinterpret_cast<const LinearTestMode*>(this__);
@@ -97,4 +98,11 @@ void LinearTestMode::printLog(bool& logOverFlowed) const {
 
     if (m_step == Step::run && m_currentRun >= id)
         logOverFlowed = true;
+}
+
+void LinearTestMode::printLog() const {
+    gDisplay[0] << "L Log ";
+
+    bool unused;
+    printLog(unused);
 }

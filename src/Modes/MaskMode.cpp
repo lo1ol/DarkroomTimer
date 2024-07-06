@@ -77,10 +77,15 @@ void MaskMode::process() {
 
         break;
     case RunView::log: {
+        gDisplay[0] << "M Run ";
+
         bool logOverFlow = false;
         printLog(logOverFlow);
         if (logOverFlow)
             m_view = RunView::common;
+
+        if (m_currentMask == m_numberOfMasks)
+            gDisplay[1] >> " Finish";
     } break;
     }
 
@@ -106,6 +111,7 @@ bool MaskMode::canSwitchView() const {
     if (m_step != Step::run)
         return false;
 
+    gDisplay[0] << "M Run ";
     bool overFlow = false;
     printLog(overFlow);
     gDisplay.reset();
@@ -113,8 +119,6 @@ bool MaskMode::canSwitchView() const {
 }
 
 void MaskMode::printLog(bool& logOverFlowed) const {
-    gDisplay[0] << "M Log ";
-
     uint8_t id = printLogHelper(
         [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
             auto this_ = reinterpret_cast<const MaskMode*>(this__);
@@ -135,7 +139,12 @@ void MaskMode::printLog(bool& logOverFlowed) const {
     if (m_step == Step::run) {
         if (m_currentMask >= id && m_currentMask != m_numberOfMasks)
             logOverFlowed = true;
-        else if (m_currentMask == m_numberOfMasks)
-            gDisplay[1] >> " Finish";
     }
+}
+
+void MaskMode::printLog() const {
+    gDisplay[0] << "M Log ";
+
+    bool unused;
+    printLog(unused);
 }

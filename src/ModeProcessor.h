@@ -12,7 +12,7 @@ public:
     virtual bool canSwitchView() const = 0;
     virtual void switchView() = 0;
 
-    virtual void printLog(bool& logOverFlowed) const = 0;
+    virtual void printLog() const = 0;
 
 protected:
     uint8_t printLogHelper(Time (*timeGetter)(const void* ctx, uint8_t id, bool& current, bool& end),

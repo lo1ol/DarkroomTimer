@@ -14,7 +14,7 @@ public:
     bool canSwitchView() const override { return false; }
     void switchView() override {}
 
-    void printLog(bool& logOverFlowed) const override;
+    void printLog() const override;
 
 private:
     void appendPrintLog(const Time&);

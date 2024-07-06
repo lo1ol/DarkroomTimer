@@ -52,6 +52,8 @@ void FStopTestMode::process() {
         gDisplay[1] << getPrintTime();
         break;
     case RunView::log: {
+        gDisplay[0] << "F Run ";
+
         bool logOverFlow = false;
         printLog(logOverFlow);
         if (logOverFlow)
@@ -86,6 +88,7 @@ bool FStopTestMode::canSwitchView() const {
     if (m_step != Step::run)
         return false;
 
+    gDisplay[0] << "F Run ";
     bool overFlow = false;
     printLog(overFlow);
     gDisplay.reset();
@@ -93,8 +96,6 @@ bool FStopTestMode::canSwitchView() const {
 }
 
 void FStopTestMode::printLog(bool& logOverFlowed) const {
-    gDisplay[0] << "F Log ";
-
     uint8_t id = printLogHelper(
         [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
             auto this_ = reinterpret_cast<const FStopTestMode*>(this__);
@@ -107,4 +108,11 @@ void FStopTestMode::printLog(bool& logOverFlowed) const {
 
     if (m_step == Step::run && m_currentRun >= id)
         logOverFlowed = true;
+}
+
+void FStopTestMode::printLog() const {
+    gDisplay[0] << "F Log ";
+
+    bool unused;
+    printLog(unused);
 }

@@ -17,9 +17,11 @@ public:
     bool canSwitchView() const override;
     void switchView() override;
 
-    void printLog(bool& logOverFlowed) const override;
+    void printLog() const override;
 
 private:
+    void printLog(bool& logOverFlowed) const;
+
     static constexpr uint8_t kMasksMaxNumber = 10;
 
     Step m_step;
