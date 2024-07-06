@@ -106,9 +106,10 @@ void processMode() {
     }
 
     if (gExtraBtn.click()) {
-        if (gModeProcessor->canSwitchView())
+        if (gModeProcessor->canSwitchView()) {
+            gDisplay.resetBlink();
             gModeProcessor->switchView();
-        else if (!gBlockedByRun)
+        } else if (!gBlockedByRun)
             gInLog = !gInLog;
     }
 

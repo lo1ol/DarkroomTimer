@@ -49,6 +49,11 @@ void DisplayLine::reset() {
     m_blinkLength = 0;
 }
 
+void DisplayLine::resetBlink() {
+    m_blinkTimer = millis();
+    m_blinkState = false;
+}
+
 void DisplayLine::tick() {
     auto fwLen = strlen(m_fwInfo);
     memset(m_fwInfo + fwLen, ' ', DISPLAY_COLS - fwLen);

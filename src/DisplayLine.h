@@ -12,6 +12,7 @@ public:
 
     void tick();
     void reset();
+    void resetBlink();
 
     DisplayLine& operator<<(const char* src);
     DisplayLine& operator<<(int value);

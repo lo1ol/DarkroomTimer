@@ -63,7 +63,7 @@ void MaskMode::process() {
 }
 
 void MaskMode::processSetMasks() {
-    getTime(m_masks[m_currentMask]);
+    bool changed = getTime(m_masks[m_currentMask]);
 
     switch (m_view) {
     case View::common:
@@ -71,6 +71,9 @@ void MaskMode::processSetMasks() {
         gDisplay[1] << m_masks[m_currentMask];
         break;
     case View::log: {
+        if (changed)
+            gDisplay.resetBlink();
+
         gDisplay[0] << "M Set ";
 
         bool logOverFlow = false;

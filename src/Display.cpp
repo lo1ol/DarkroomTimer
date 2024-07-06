@@ -13,3 +13,8 @@ void Display::reset() {
     for (auto&& line : m_lines)
         line.reset();
 }
+
+void Display::resetBlink() {
+    for (auto&& line : m_lines)
+        line.resetBlink();
+}
