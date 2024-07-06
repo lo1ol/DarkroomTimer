@@ -6,7 +6,7 @@ LinearTestMode::LinearTestMode() {
     m_initTime = 80_ts;
     m_stepTime = 20_ts;
     m_step = Step::initTime;
-    m_view = RunView::common;
+    m_view = gSettings.logViewInTests ? RunView::log : RunView::common;
     m_currentRun = 0;
 }
 

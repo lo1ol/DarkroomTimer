@@ -10,7 +10,7 @@ FStopTestMode::FStopTestMode() {
     m_initTime = 20_ts;
     m_FStopPartId = 5;
     m_step = Step::initTime;
-    m_view = RunView::common;
+    m_view = gSettings.logViewInTests ? RunView::log : RunView::common;
     m_currentRun = 0;
 }
 

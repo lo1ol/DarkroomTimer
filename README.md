@@ -16,7 +16,16 @@
 5. Click extra btn when timer is ready to run to switch type of view (inside mask mode you could switch view while set masks)
 6. Hold extra btn to reset current printing at any mode (inside mask mode you go to first mask while set masks)
 7. Click start btn to start printing at any mode
-8. Hold view btn and change mode btn to go in set settings mode (set lag time, LED Backlight, beep volume, auto finish view time and start with settings)
+8. Hold view btn and change mode btn to go in set settings mode
+
+## Settings
+
+1. Time of lamp turning on (Lag time)
+2. LED Backlight
+3. Beep volume
+4. Time of auto turn off a lamp in view mode
+5. Start with settings or not
+6. Default views in test and mask modes
 
 ## Modes
 

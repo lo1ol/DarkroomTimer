@@ -16,6 +16,8 @@ Settings::Settings() {
     GET_SETTING(backlight);
     GET_SETTING(autoFinishViewMinutes);
     GET_SETTING(startWithSettings);
+    GET_SETTING(logViewInTests);
+    GET_SETTING(logViewInMasks);
 
     uint32_t hash = crc32.finalize();
     uint32_t storedHash;
@@ -28,6 +30,8 @@ Settings::Settings() {
         backlight = 3 * 5;
         autoFinishViewMinutes = 3;
         startWithSettings = false;
+        logViewInTests = false;
+        logViewInMasks = true;
         updateEEPROM();
         return;
     }
@@ -46,6 +50,8 @@ void Settings::updateEEPROM() {
     PUT_SETTING(backlight);
     PUT_SETTING(autoFinishViewMinutes);
     PUT_SETTING(startWithSettings);
+    PUT_SETTING(logViewInTests);
+    PUT_SETTING(logViewInMasks);
     PUT_SETTING(crc32.finalize());
 #undef PUT_SETTING
 }

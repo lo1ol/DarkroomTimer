@@ -7,7 +7,7 @@ MaskMode::MaskMode() {
     memset(m_masks, 0, sizeof(m_masks));
     m_masks[0] = 80_ts;
     m_step = Step::setNum;
-    m_view = View::common;
+    m_view = gSettings.logViewInMasks ? View::log : View::common;
     m_currentMask = 0;
 
     for (uint8_t i = 1; i != kMasksMaxNumber; ++i)

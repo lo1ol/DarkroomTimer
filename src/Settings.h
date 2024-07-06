@@ -13,4 +13,6 @@ struct Settings {
     uint8_t backlight;
     uint8_t autoFinishViewMinutes;
     bool startWithSettings;
+    bool logViewInTests;
+    bool logViewInMasks;
 };

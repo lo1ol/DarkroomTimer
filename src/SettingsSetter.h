@@ -6,7 +6,16 @@
 
 class SettingsSetter final {
 public:
-    enum class Step { setLagTime, setBacklight, setBeepVolume, setAutoFinishView, setStartWithSettings, last_ };
+    enum class Step {
+        setLagTime,
+        setBacklight,
+        setBeepVolume,
+        setAutoFinishView,
+        setStartWithSettings,
+        setViewInTests,
+        setViewInMasks,
+        last_
+    };
 
     SettingsSetter();
     ~SettingsSetter();
@@ -21,6 +30,8 @@ private:
     void processSetBeepVolume();
     void processSetAutoFinishView();
     void processStartWithSettings();
+    void processSetViewInTests();
+    void processSetViewInMasks();
 
     Step m_step = Step::setLagTime;
     Time m_lagTime;
