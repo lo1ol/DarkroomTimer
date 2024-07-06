@@ -12,7 +12,6 @@ public:
 
     explicit operator bool() { return m_ts; }
     explicit operator int16_t() { return m_ts; }
-    explicit operator uint32_t() { return m_ts; }
 
     Time operator*(double x) const { return Time{ static_cast<int16_t>(lround(m_ts * x)) }; }
     Time operator*(int16_t x) const { return Time{ m_ts * x }; }

@@ -79,7 +79,7 @@ This version has enought space to keep transformer, SSR and capacitor inside. Bu
 
 If you want just upload code to your arduino without modification, then the simpliest way to do it is using of Arduino IDE
 1. Just install Arduino IDE
-2. Install dep libreries: EncButton and LiquidCrystals
+2. Install dep libreries: EncButton, LiquidCrystals and CRC32
 3. Clone this git project to any folder
 4. Open it from Arduino IDE
 5. Choose your board -- Arduino Nano and processor -- ATmega328P
