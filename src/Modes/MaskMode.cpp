@@ -7,7 +7,7 @@ MaskMode::MaskMode() {
     memset(m_masks, 0, sizeof(m_masks));
     m_masks[0] = 80_ts;
     m_step = Step::setNum;
-    m_view = RunView::common;
+    m_view = View::common;
     m_currentMask = 0;
 
     for (uint8_t i = 1; i != kMasksMaxNumber; ++i)
@@ -54,16 +54,36 @@ void MaskMode::process() {
         gDisplay[1] << "Masks num: " << m_numberOfMasks;
         return;
     case Step::setMasks:
-        gDisplay[0] << "Mask set: #" << (m_currentMask + 1);
-        getTime(m_masks[m_currentMask]);
-        gDisplay[1] << m_masks[m_currentMask];
+        processSetMasks();
         return;
     case Step::run:
-        break;
+        processRun();
+        return;
     }
+}
+
+void MaskMode::processSetMasks() {
+    getTime(m_masks[m_currentMask]);
 
     switch (m_view) {
-    case RunView::common:
+    case View::common:
+        gDisplay[0] << "Mask set: #" << (m_currentMask + 1);
+        gDisplay[1] << m_masks[m_currentMask];
+        break;
+    case View::log: {
+        gDisplay[0] << "M Set ";
+
+        bool logOverFlow = false;
+        printLog(logOverFlow);
+        if (logOverFlow)
+            m_view = View::common;
+    } break;
+    }
+}
+
+void MaskMode::processRun() {
+    switch (m_view) {
+    case View::common:
         gDisplay[0] << "Mask #" << m_currentMask + 1 << " T:" << gTimer.total();
 
         if (gTimer.state() == Timer::RUNNING) {
@@ -76,13 +96,13 @@ void MaskMode::process() {
         }
 
         break;
-    case RunView::log: {
+    case View::log: {
         gDisplay[0] << "M Run ";
 
         bool logOverFlow = false;
         printLog(logOverFlow);
         if (logOverFlow)
-            m_view = RunView::common;
+            m_view = View::common;
 
         if (m_currentMask == m_numberOfMasks)
             gDisplay[1] >> " Finish";
@@ -97,18 +117,15 @@ void MaskMode::process() {
 }
 
 void MaskMode::reset() {
-    if (m_step != Step::run)
-        return;
-
     m_currentMask = 0;
 }
 
 void MaskMode::switchView() {
-    m_view = ADD_TO_ENUM(RunView, m_view, 1);
+    m_view = ADD_TO_ENUM(View, m_view, 1);
 }
 
 bool MaskMode::canSwitchView() const {
-    if (m_step != Step::run)
+    if (m_step == Step::setNum)
         return false;
 
     gDisplay[0] << "M Run ";
@@ -123,7 +140,7 @@ void MaskMode::printLog(bool& logOverFlowed) const {
         [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
             auto this_ = reinterpret_cast<const MaskMode*>(this__);
 
-            current = this_->m_step == Step::run && this_->m_currentMask == id;
+            current = this_->m_step != Step::setNum && this_->m_currentMask == id;
             end = id == this_->m_numberOfMasks;
             if (end)
                 return {};
@@ -136,7 +153,7 @@ void MaskMode::printLog(bool& logOverFlowed) const {
         },
         this);
 
-    if (m_step == Step::run) {
+    if (m_step != Step::setNum) {
         if (m_currentMask >= id && m_currentMask != m_numberOfMasks)
             logOverFlowed = true;
     }
