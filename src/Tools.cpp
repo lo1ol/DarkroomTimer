@@ -50,8 +50,7 @@ bool getTime(Time& time, bool smooth) {
     if (!smooth && gEncoder.fast())
         shift *= 5;
 
-    if (shift == 0_ts)
-        return false;
+    Time oldTime = time;
 
     int16_t factor;
     if ((time + shift) < 50_ts)
@@ -68,15 +67,11 @@ bool getTime(Time& time, bool smooth) {
     time += shift * factor;
     time = Time((static_cast<int16_t>(time) / factor) * factor);
 
-    if (time < 0_ts) {
+    if (time < 0_ts)
         time = 0_ts;
-        return false;
-    }
 
-    if (time > 18000_ts) {
+    if (time > 18000_ts)
         time = 18000_ts;
-        return false;
-    }
 
-    return true;
+    return time != oldTime;
 }
