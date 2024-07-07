@@ -40,10 +40,7 @@ void MaskMode::switchMode() {
         return;
 
     // let's guess unknown masks
-    if (m_currentMask == 1)
-        m_masks[m_currentMask] = m_masks[0] / 4;
-    else
-        m_masks[m_currentMask] = m_masks[m_currentMask - 1];
+    m_masks[m_currentMask] = m_masks[m_currentMask - 1];
 }
 
 void MaskMode::process() {
