@@ -40,6 +40,7 @@ void setMode(ModeId modeId) {
 
 bool gBlocked = false;
 
+static bool gInLog = false;
 VirtButton gSettingBtn;
 
 void processModeSwitch() {
@@ -63,6 +64,7 @@ void processModeSwitch() {
         setMode(ADD_TO_ENUM(ModeId, gModeId, dir));
         gEncoder.clear();
         gTimer.reset();
+        gInLog = false;
     }
 
     if (gBlockedByPreview)
@@ -138,7 +140,6 @@ void processView() {
 
 void processMode() {
     static bool gBlockedByRun = false;
-    static bool gInLog = false;
 
     if (gBlocked && !gBlockedByRun)
         return;
