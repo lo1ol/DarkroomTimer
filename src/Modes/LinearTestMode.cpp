@@ -2,22 +2,28 @@
 
 #include "../Tools.h"
 
-LinearTestMode::LinearTestMode() {
+LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
+    m_baseTime = 20_ts;
     m_initTime = 80_ts;
     m_stepTime = 20_ts;
-    m_step = Step::initTime;
+    m_step = kSplit ? Step::baseTime : Step::initTime;
     m_view = gSettings.logViewInTests ? RunView::log : RunView::common;
-    m_currentRun = 0;
+    m_currentRun = kSplit ? 0 : 1;
 }
 
 void LinearTestMode::switchMode() {
     m_step = ADD_TO_ENUM(Step, m_step, 1);
-    m_currentRun = 0;
+    m_currentRun = kSplit ? 0 : 1;
     gTimer.reset();
 }
 
 void LinearTestMode::process() {
     switch (m_step) {
+    case Step::baseTime:
+        gDisplay[0] << preview();
+        getTime(m_baseTime);
+        gDisplay[1] << "Base t:" << m_baseTime;
+        return;
     case Step::initTime:
         gDisplay[0] << preview();
         getTime(m_initTime);
@@ -34,7 +40,10 @@ void LinearTestMode::process() {
 
     switch (m_view) {
     case RunView::common:
-        gDisplay[0] << "Test #" << m_currentRun + 1 << " T:" << gTimer.total();
+        if (m_currentRun == 0)
+            gDisplay[0] << "Base printing";
+        else
+            gDisplay[0] << "Test #" << m_currentRun << " T:" << gTimer.total();
 
         if (gTimer.state() == Timer::RUNNING) {
             gTimer.printFormatedState();
@@ -56,19 +65,25 @@ void LinearTestMode::process() {
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
         gTimer.start(getPrintTime());
 
-    if (gTimer.stopped())
+    if (gTimer.stopped()) {
+        if (m_currentRun == 0)
+            gTimer.reset();
         ++m_currentRun;
+    }
 }
 
 Time LinearTestMode::getPrintTime() const {
     if (m_currentRun == 0)
+        return m_baseTime;
+
+    if (m_currentRun == 1)
         return m_initTime;
 
     return m_stepTime;
 }
 
 void LinearTestMode::reset() {
-    m_currentRun = 0;
+    m_currentRun = kSplit ? 0 : 1;
 }
 
 void LinearTestMode::switchView() {
@@ -90,11 +105,21 @@ void LinearTestMode::printLog(bool& logOverFlowed) const {
     uint8_t id = printLogHelper(
         [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
             auto this_ = reinterpret_cast<const LinearTestMode*>(this__);
+
+            if (!this_->kSplit)
+                ++id;
+
             current = this_->m_step == Step::run && this_->m_currentRun == id;
 
-            return { this_->m_initTime + this_->m_stepTime * id };
+            if (id == 0)
+                return this_->m_baseTime;
+
+            return { this_->m_initTime + this_->m_stepTime * (id - 1) };
         },
         this);
+
+    if (!kSplit)
+        ++id;
 
     if (m_step == Step::run && m_currentRun >= id)
         logOverFlowed = true;
@@ -105,4 +130,10 @@ void LinearTestMode::printLog() const {
 
     bool unused;
     printLog(unused);
+}
+
+const char* LinearTestMode::preview() const {
+    if (kSplit)
+        return "Splt linear test";
+    return "Linear test";
 }

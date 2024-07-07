@@ -6,22 +6,32 @@ namespace {
 constexpr uint8_t kFStopPartVarinatns[] = { 6, 5, 4, 3, 2, 1 };
 } // namespace
 
-FStopTestMode::FStopTestMode() {
+FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {
+    m_baseTime = 20_ts;
     m_initTime = 20_ts;
     m_FStopPartId = 5;
-    m_step = Step::initTime;
+    m_step = kSplit ? Step::baseTime : Step::initTime;
     m_view = gSettings.logViewInTests ? RunView::log : RunView::common;
-    m_currentRun = 0;
+    m_currentRun = kSplit ? 0 : 1;
 }
 
 void FStopTestMode::switchMode() {
     m_step = ADD_TO_ENUM(Step, m_step, 1);
-    m_currentRun = 0;
+    if (m_step == Step::baseTime && !kSplit)
+        m_step = Step::initTime;
+
+    m_currentRun = kSplit ? 0 : 1;
     gTimer.reset();
 }
 
 void FStopTestMode::process() {
     switch (m_step) {
+    case Step::baseTime:
+        gDisplay[0] << preview();
+
+        getTime(m_baseTime);
+        gDisplay[1] << "Base t:" << m_baseTime;
+        return;
     case Step::initTime:
         gDisplay[0] << preview();
 
@@ -41,7 +51,10 @@ void FStopTestMode::process() {
 
     switch (m_view) {
     case RunView::common:
-        gDisplay[0] << "Test #" << m_currentRun + 1 << " T:" << gTimer.total();
+        if (m_currentRun == 0)
+            gDisplay[0] << "Base printing";
+        else
+            gDisplay[0] << "Test #" << m_currentRun << " T:" << gTimer.total();
 
         gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[m_FStopPartId];
 
@@ -64,20 +77,26 @@ void FStopTestMode::process() {
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
         gTimer.start(getPrintTime());
 
-    if (gTimer.stopped())
+    if (gTimer.stopped()) {
+        if (m_currentRun == 0) // don't take into account base time
+            gTimer.reset();
         ++m_currentRun;
+    }
 }
 
 Time FStopTestMode::getPrintTime() const {
     if (m_currentRun == 0)
+        return m_baseTime;
+
+    if (m_currentRun == 1)
         return m_initTime;
 
     float stopPart = kFStopPartVarinatns[m_FStopPartId];
-    return m_initTime * (pow(2, m_currentRun / stopPart) - pow(2, (m_currentRun - 1) / stopPart));
+    return m_initTime * (pow(2, (m_currentRun - 1) / stopPart) - pow(2, (m_currentRun - 2) / stopPart));
 }
 
 void FStopTestMode::reset() {
-    m_currentRun = 0;
+    m_currentRun = kSplit ? 0 : 1;
 }
 
 void FStopTestMode::switchView() {
@@ -101,10 +120,20 @@ void FStopTestMode::printLog(bool& logOverFlowed) const {
             auto this_ = reinterpret_cast<const FStopTestMode*>(this__);
             float stopPart = kFStopPartVarinatns[this_->m_FStopPartId];
 
+            if (!this_->kSplit)
+                ++id;
+
             current = this_->m_step == Step::run && this_->m_currentRun == id;
-            return { this_->m_initTime * pow(2, id / stopPart) };
+
+            if (id == 0)
+                return this_->m_baseTime;
+
+            return { this_->m_initTime * pow(2, (id - 1) / stopPart) };
         },
         this);
+
+    if (!kSplit)
+        ++id;
 
     if (m_step == Step::run && m_currentRun >= id)
         logOverFlowed = true;
@@ -115,4 +144,10 @@ void FStopTestMode::printLog() const {
 
     bool unused;
     printLog(unused);
+}
+
+const char* FStopTestMode::preview() const {
+    if (kSplit)
+        return "Splt F Stop test";
+    return "F Stop test";
 }

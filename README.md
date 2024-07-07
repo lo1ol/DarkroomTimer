@@ -33,6 +33,7 @@
 2. Linear test mode: simple mode for linear testing
 3. Print mode: ability to stop printing at any time. Usefull for getting fast masking values
 4. Mask mode: for printing with accurate masks
+4. Split grade test modes: the same as fstop and linear test modes, but allows to set base time
 
 ## Killer features:
 

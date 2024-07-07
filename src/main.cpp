@@ -11,7 +11,7 @@
 
 #include "SettingsSetter.h"
 
-enum class ModeId : uint8_t { testFStops, testLinear, print, mask, last_ };
+enum class ModeId : uint8_t { testFStops, testLinear, print, mask, splitFStops, splitLinear, last_ };
 
 ModeId gModeId;
 ModeProcessor* gModeProcessor = nullptr;
@@ -24,16 +24,22 @@ void setMode(ModeId modeId) {
 
     switch (gModeId) {
     case ModeId::testFStops:
-        gModeProcessor = new FStopTestMode();
+        gModeProcessor = new FStopTestMode(false);
         break;
     case ModeId::testLinear:
-        gModeProcessor = new LinearTestMode();
+        gModeProcessor = new LinearTestMode(false);
         break;
     case ModeId::print:
         gModeProcessor = new PrintMode();
         break;
     case ModeId::mask:
         gModeProcessor = new MaskMode();
+        break;
+    case ModeId::splitFStops:
+        gModeProcessor = new FStopTestMode(true);
+        break;
+    case ModeId::splitLinear:
+        gModeProcessor = new LinearTestMode(true);
         break;
     }
 }
