@@ -175,14 +175,15 @@ void processMode() {
 }
 
 void setup() {
-    gTimer.setup();
-
     setupEncoder();
+    gBeeper.setup();
 
     setMode(ModeId::testFStops);
 
     pinMode(BACKLIGHT, OUTPUT);
     analogWrite(BACKLIGHT, gSettings.backlight);
+    pinMode(RELAY, OUTPUT);
+    analogWrite(RELAY, 0);
 
     if (gSettings.startWithSettings)
         gSettingsSetter = new SettingsSetter;
@@ -190,6 +191,7 @@ void setup() {
 
 void loop() {
     gTimer.tick();
+    gBeeper.tick();
     gEncoder.tick();
     gStartBtn.tick();
     gExtraBtn.tick();

@@ -5,6 +5,7 @@
 
 #include <EncButton.h>
 
+#include "Beeper.h"
 #include "Display.h"
 #include "Settings.h"
 #include "Time.h"
@@ -27,3 +28,4 @@ extern Button gViewBtn;
 extern Timer gTimer;
 extern Settings gSettings;
 extern Display gDisplay;
+extern Beeper gBeeper;

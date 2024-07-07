@@ -35,6 +35,5 @@ private:
 
     Step m_step = Step::setLagTime;
     Time m_lagTime;
-    uint32_t m_demoStartBeep;
     Timer m_timer;
 };

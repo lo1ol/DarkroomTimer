@@ -7,10 +7,10 @@ namespace {
 constexpr Time kMaxLagTime = 20_ts;
 } // namespace
 
-SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime), m_demoStartBeep(millis()), m_timer(BEEPER, RELAY) {}
+SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime) {}
 
 SettingsSetter::~SettingsSetter() {
-    analogWrite(BEEPER, 0);
+    gBeeper.stop();
     gSettings.lagTime = m_lagTime;
     gSettings.updateEEPROM();
 }
@@ -39,14 +39,9 @@ void SettingsSetter::processSetBeepVolume() {
     gDisplay[0] << "Beep volume";
     uint8_t userVolume = min(gSettings.beepVolume, 30) / 3;
     if (getInt(userVolume, 1, 10))
-        m_demoStartBeep = millis();
+        gBeeper.start();
     gSettings.beepVolume = userVolume * 3;
     gDisplay[1] << userVolume;
-
-    if ((millis() - m_demoStartBeep) % 1000 < 100)
-        analogWrite(BEEPER, gSettings.beepVolume);
-    else
-        analogWrite(BEEPER, 0);
 }
 
 void SettingsSetter::processSetAutoFinishView() {
@@ -116,8 +111,11 @@ void SettingsSetter::process() {
             gEncoder.clear();
             m_step = ADD_TO_ENUM(Step, m_step, shift);
 
-            analogWrite(BEEPER, 0);
-            m_demoStartBeep = millis();
+            if (m_step == Step::setBeepVolume)
+                gBeeper.start();
+            else
+                gBeeper.stop();
+
             gSettings.lagTime = m_lagTime;
             gSettings.updateEEPROM();
         }

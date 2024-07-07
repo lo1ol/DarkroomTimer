@@ -10,9 +10,7 @@ class Timer {
 public:
     enum State { STOPPED, RUNNING, PAUSED };
 
-    Timer(uint8_t beepPin, uint8_t controlPin) : m_beepPin(beepPin), m_controlPin(controlPin) {}
-
-    void setup();
+    Timer() = default;
 
     void tick();
     void start(Time ms);
@@ -43,11 +41,9 @@ private:
     uint32_t realStopTime() const;
 
     bool m_justStopped;
+    bool m_lagPassed;
 
     State m_status = STOPPED;
-
-    uint8_t m_beepPin;
-    uint8_t m_controlPin;
 
     Time m_afterLastResume;
 

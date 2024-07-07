@@ -3,13 +3,6 @@
 #include "DisplayLine.h"
 #include "Tools.h"
 
-void Timer::setup() {
-    pinMode(m_beepPin, OUTPUT);
-    pinMode(m_controlPin, OUTPUT);
-    analogWrite(m_beepPin, 0);
-    analogWrite(m_controlPin, 0);
-}
-
 void Timer::tick() {
     m_currentTime = millis();
     m_justStopped = false;
@@ -24,34 +17,35 @@ void Timer::tick() {
 
     updateAfterLastResume();
 
-    // beep when we press start btn and every second
-    uint32_t passed = afterResume() / 100;
-    if ((m_currentTime - m_resumeTime <= 100) || (passed > 5 && !(passed % 10)))
-        analogWrite(m_beepPin, gSettings.beepVolume);
-    else
-        analogWrite(m_beepPin, 0);
+    if (!m_lagPassed && afterResume() / 100) {
+        m_lagPassed = true;
+        gBeeper.start(true);
+    }
 }
 
 void Timer::start(Time time) {
+    gBeeper.beep();
+
     if (time == 0_ts) {
         m_justStopped = true;
         return;
     }
 
+    m_lagPassed = false;
     m_leftTime = time.toMillis();
     m_resumeTime = m_currentTime;
     m_status = RUNNING;
-    digitalWrite(m_controlPin, HIGH);
+    digitalWrite(RELAY, HIGH);
 }
 
 bool Timer::pause() {
     if (m_status == RUNNING) {
-        analogWrite(m_beepPin, 0);
+        gBeeper.stop();
         updateAfterLastResume();
         m_total += afterResume();
         m_leftTime -= afterResume();
         m_status = PAUSED;
-        digitalWrite(m_controlPin, LOW);
+        digitalWrite(RELAY, LOW);
 
         return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
     }
@@ -61,15 +55,17 @@ bool Timer::pause() {
 
 void Timer::resume() {
     if (m_status == PAUSED) {
+        gBeeper.beep();
+        m_lagPassed = false;
         m_resumeTime = m_currentTime;
         m_status = RUNNING;
-        digitalWrite(m_controlPin, HIGH);
+        digitalWrite(RELAY, HIGH);
     }
 }
 
 void Timer::stop() {
     if (m_status != STOPPED) {
-        analogWrite(m_beepPin, 0);
+        gBeeper.stop();
         updateAfterLastResume();
         if (m_currentTime >= realStopTime())
             m_total += m_leftTime;
@@ -77,7 +73,7 @@ void Timer::stop() {
             m_total += afterResume();
         m_status = STOPPED;
         m_leftTime = 0;
-        digitalWrite(m_controlPin, LOW);
+        digitalWrite(RELAY, LOW);
     }
 }
 
