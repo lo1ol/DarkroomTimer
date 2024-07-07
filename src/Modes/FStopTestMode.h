@@ -19,6 +19,8 @@ public:
 
     void printLog() const override;
 
+    const char* preview() const override { return "F Stop test"; }
+
 private:
     void printLog(bool& logOverFlowed) const;
     Time getPrintTime() const;

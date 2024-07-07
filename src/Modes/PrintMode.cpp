@@ -79,7 +79,7 @@ void PrintMode::appendPrintLog(const Time& time) {
 }
 
 void PrintMode::printLog() const {
-    gDisplay[0] << "P Log ";
+    gDisplay[0] << "Log ";
 
     printLogHelper(
         [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {

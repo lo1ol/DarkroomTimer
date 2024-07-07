@@ -19,6 +19,8 @@ public:
 
     void printLog() const override;
 
+    const char* preview() const override { return "Mask printing"; }
+
 private:
     void processRun();
     void processSetMasks();

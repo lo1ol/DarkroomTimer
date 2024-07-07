@@ -46,9 +46,9 @@ void MaskMode::switchMode() {
 void MaskMode::process() {
     switch (m_step) {
     case Step::setNum:
-        gDisplay[0] << "Mask printing";
+        gDisplay[0] << preview();
         getInt(m_numberOfMasks, 2, kMasksMaxNumber);
-        gDisplay[1] << "Masks num: " << m_numberOfMasks;
+        gDisplay[1] << "Mask num: " << m_numberOfMasks;
         return;
     case Step::setMasks:
         processSetMasks();
@@ -71,7 +71,7 @@ void MaskMode::processSetMasks() {
         if (changed)
             gDisplay.resetBlink();
 
-        gDisplay[0] << "M Set ";
+        gDisplay[0] << "Set ";
 
         bool logOverFlow = false;
         printLog(logOverFlow);
@@ -97,7 +97,7 @@ void MaskMode::processRun() {
 
         break;
     case View::log: {
-        gDisplay[0] << "M Run ";
+        gDisplay[0] << "Run ";
 
         bool logOverFlow = false;
         printLog(logOverFlow);
@@ -128,7 +128,7 @@ bool MaskMode::canSwitchView() const {
     if (m_step == Step::setNum)
         return false;
 
-    gDisplay[0] << "M Run ";
+    gDisplay[0] << "Run ";
     bool overFlow = false;
     printLog(overFlow);
     gDisplay.reset();
@@ -160,7 +160,7 @@ void MaskMode::printLog(bool& logOverFlowed) const {
 }
 
 void MaskMode::printLog() const {
-    gDisplay[0] << "M Log ";
+    gDisplay[0] << "Log ";
 
     bool unused;
     printLog(unused);

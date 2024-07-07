@@ -23,13 +23,13 @@ void FStopTestMode::switchMode() {
 void FStopTestMode::process() {
     switch (m_step) {
     case Step::initTime:
-        gDisplay[0] << "Test F Stops";
+        gDisplay[0] << preview();
 
         getTime(m_initTime);
         gDisplay[1] << "Init t:" << m_initTime;
         return;
     case Step::fstopSet: {
-        gDisplay[0] << "Test F Stops";
+        gDisplay[0] << preview();
 
         getInt(m_FStopPartId, 0, sizeof(kFStopPartVarinatns) - 1);
         gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
@@ -41,7 +41,7 @@ void FStopTestMode::process() {
 
     switch (m_view) {
     case RunView::common:
-        gDisplay[0] << "F Test#" << m_currentRun + 1 << " T:" << gTimer.total();
+        gDisplay[0] << "Test #" << m_currentRun + 1 << " T:" << gTimer.total();
 
         gDisplay[1] >> "f 1/" >> kFStopPartVarinatns[m_FStopPartId];
 
@@ -52,7 +52,7 @@ void FStopTestMode::process() {
         gDisplay[1] << getPrintTime();
         break;
     case RunView::log: {
-        gDisplay[0] << "F Run ";
+        gDisplay[0] << "Run ";
 
         bool logOverFlow = false;
         printLog(logOverFlow);
@@ -88,7 +88,7 @@ bool FStopTestMode::canSwitchView() const {
     if (m_step != Step::run)
         return false;
 
-    gDisplay[0] << "F Run ";
+    gDisplay[0] << "Run ";
     bool overFlow = false;
     printLog(overFlow);
     gDisplay.reset();
@@ -111,7 +111,7 @@ void FStopTestMode::printLog(bool& logOverFlowed) const {
 }
 
 void FStopTestMode::printLog() const {
-    gDisplay[0] << "F Log ";
+    gDisplay[0] << "Log ";
 
     bool unused;
     printLog(unused);

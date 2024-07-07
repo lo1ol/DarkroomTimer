@@ -14,6 +14,8 @@ public:
 
     virtual void printLog() const = 0;
 
+    virtual const char* preview() const = 0;
+
 protected:
     uint8_t printLogHelper(Time (*timeGetter)(const void* ctx, uint8_t id, bool& current, bool& end),
                            const void* ctx) const;

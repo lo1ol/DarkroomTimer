@@ -41,6 +41,36 @@ void setMode(ModeId modeId) {
 bool gBlocked = false;
 
 VirtButton gSettingBtn;
+
+void processModeSwitch() {
+    static bool gBlockedByPreview = false;
+
+    if (gBlocked && !gBlockedByPreview)
+        return;
+
+    if (!gModeSwitchBtn.pressing()) {
+        gBlocked = gBlockedByPreview = false;
+        return;
+    }
+
+    if (gModeSwitchBtn.holding() && !gSettingBtn.pressing())
+        gBlockedByPreview = true;
+
+    int8_t dir = getEncoderDir();
+    if (dir) {
+        gBlocked = gBlockedByPreview = true;
+
+        setMode(ADD_TO_ENUM(ModeId, gModeId, dir));
+        gEncoder.clear();
+        gTimer.reset();
+    }
+
+    if (gBlockedByPreview)
+        gDisplay[0] << gModeProcessor->preview();
+
+    gBlocked = gBlockedByPreview;
+}
+
 SettingsSetter* gSettingsSetter = nullptr;
 
 void processSettings() {
@@ -167,15 +197,7 @@ void loop() {
     gSettingBtn.tick(gViewBtn, gModeSwitchBtn);
     gDisplay.tick();
 
-    if (!gBlocked && gModeSwitchBtn.pressing()) {
-        int8_t dir = getEncoderDir();
-        if (dir) {
-            setMode(ADD_TO_ENUM(ModeId, gModeId, dir));
-            gEncoder.clear();
-            gTimer.reset();
-        }
-    }
-
+    processModeSwitch();
     processSettings();
     processView();
     processMode();
