@@ -1,5 +1,7 @@
 #pragma once
 
+#include <assert.h>
+
 #define LCD_RS 12
 #define LCD_EN 11
 #define LCD_D4 9
@@ -21,3 +23,7 @@
 
 #define DISPLAY_ROWS 2
 #define DISPLAY_COLS 16
+
+#define MAX_BACKLIGHT 50
+
+static_assert(MAX_BACKLIGHT % 10 == 0);

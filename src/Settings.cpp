@@ -3,6 +3,8 @@
 #include <CRC32.h>
 #include <EEPROM.h>
 
+#include "Config.h"
+
 Settings::Settings() {
     int idx = 0;
     CRC32 crc32;
@@ -27,7 +29,7 @@ Settings::Settings() {
     if (hash != storedHash) {
         lagTime = 0_ts;
         beepVolume = 3 * 3;
-        backlight = 3 * 5;
+        backlight = (3 * MAX_BACKLIGHT) / 10;
         autoFinishViewMinutes = 3;
         startWithSettings = false;
         logViewInTests = false;
