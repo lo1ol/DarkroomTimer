@@ -35,7 +35,7 @@ public:
     bool operator!=(const Time& o) const { return m_ts != o.m_ts; }
 
     int32_t toMillis() const { return m_ts * 100L; }
-    static Time fromMillis(uint32_t ms) {
+    static Time fromMillis(int32_t ms) {
         int16_t ts = static_cast<int16_t>(ms / 100);
         return Time{ ts + (ms % 100 > 50) };
     }

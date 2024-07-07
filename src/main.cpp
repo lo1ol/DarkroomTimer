@@ -1,5 +1,7 @@
 #include "Tools.h"
 
+#include "Config.h"
+
 #include "ModeProcessor.h"
 
 #include "Modes/FStopTestMode.h"
@@ -80,16 +82,28 @@ void processView() {
         gViewModeTurnOffTime = millis() + gSettings.autoFinishViewMinutes * 60000L;
     }
 
-    if (gViewState == HIGH) {
-        if (gSettings.autoFinishViewMinutes != 0 && gViewModeTurnOffTime < millis()) {
-            gViewState = LOW;
-            digitalWrite(RELAY, gViewState);
-        }
+    gBlocked = gViewState;
 
-        gDisplay[0] << "View";
+    if (gViewState != HIGH)
+        return;
+
+    gDisplay[0] << "View";
+
+    if (!gSettings.autoFinishViewMinutes) {
+        gDisplay[1] << "Auto stop is off";
+        return;
     }
 
-    gBlocked = gViewState;
+    Time beforeStop = Time::fromMillis(gViewModeTurnOffTime - millis());
+
+    if (beforeStop < 0_ts) {
+        gBlocked = gViewState = LOW;
+        digitalWrite(RELAY, gViewState);
+    } else {
+        char str[DISPLAY_COLS] = "";
+        beforeStop.getFormatedTime(str, false);
+        gDisplay[1] << "Auto stop: " << str;
+    }
 }
 
 void processMode() {
