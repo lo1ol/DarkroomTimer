@@ -35,4 +35,5 @@ private:
     uint8_t m_currentMask;
 
     Time m_masks[kMasksMaxNumber];
+    uint16_t m_notifyMask;
 };

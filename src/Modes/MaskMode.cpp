@@ -9,6 +9,7 @@ MaskMode::MaskMode() {
     m_step = Step::setNum;
     m_view = gSettings.logViewInMasks ? View::log : View::common;
     m_currentMask = 0;
+    m_notifyMask = 0;
 
     for (uint8_t i = 1; i != kMasksMaxNumber; ++i)
         m_masks[i] = -1_ts;
@@ -22,6 +23,7 @@ void MaskMode::switchMode() {
 
         m_currentMask = 0;
 
+        m_notifyMask &= ~((~0) << m_notifyMask);
         for (uint8_t i = m_numberOfMasks; i != kMasksMaxNumber; ++i)
             m_masks[i] = -1_ts;
 
@@ -60,12 +62,19 @@ void MaskMode::process() {
 }
 
 void MaskMode::processSetMasks() {
+    if (gStartBtn.click()) {
+        m_notifyMask ^= 1 << m_currentMask;
+        gDisplay.resetBlink(true);
+    }
+
     bool changed = getTime(m_masks[m_currentMask]);
 
     switch (m_view) {
     case View::common:
         gDisplay[0] << "Mask set: #" << (m_currentMask + 1);
         gDisplay[1] << m_masks[m_currentMask];
+        if (m_notifyMask & (1 << m_currentMask))
+            gDisplay[1] >> "Notify";
         break;
     case View::log: {
         if (changed)
@@ -85,6 +94,9 @@ void MaskMode::processRun() {
     switch (m_view) {
     case View::common:
         gDisplay[0] << "Mask #" << m_currentMask + 1 << " T:" << gTimer.total();
+
+        if (m_notifyMask & (1 << m_currentMask))
+            gDisplay[1] >> "Notify";
 
         if (gTimer.state() == Timer::RUNNING) {
             gTimer.printFormatedState();
@@ -112,8 +124,11 @@ void MaskMode::processRun() {
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
         gTimer.start(m_masks[m_currentMask]);
 
-    if (gTimer.stopped())
+    if (gTimer.stopped()) {
+        if (m_notifyMask & (1 << m_currentMask))
+            gBeeper.melody();
         ++m_currentMask;
+    }
 }
 
 void MaskMode::reset() {
@@ -137,13 +152,16 @@ bool MaskMode::canSwitchView() const {
 
 void MaskMode::printLog(bool& logOverFlowed) const {
     uint8_t id = printLogHelper(
-        [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
+        [](const void* this__, uint8_t id, bool& current, bool& end, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const MaskMode*>(this__);
 
             current = this_->m_step != Step::setNum && this_->m_currentMask == id;
             end = id == this_->m_numberOfMasks;
             if (end)
                 return {};
+
+            if (this_->m_notifyMask & (1 << id))
+                mark = "ntf";
 
             Time time = this_->m_masks[id];
             if (time == -1_ts)

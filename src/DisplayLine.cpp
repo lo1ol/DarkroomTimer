@@ -21,7 +21,7 @@ void DisplayLine::concatInt(char* dst, int value) {
     concat(dst, str);
 }
 
-bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize) {
+bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize, const char* mark) {
     uint8_t srclen = strlen(src);
     uint8_t dstlen = strlen(m_fwInfo);
 
@@ -37,6 +37,9 @@ bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize) {
     if (blink) {
         m_blinkLength = alignSize;
         m_blinkPos = dstlen;
+
+        if (mark)
+            m_mark = mark;
     }
 
     concat(m_fwInfo, src);
@@ -47,11 +50,12 @@ void DisplayLine::reset() {
     m_fwInfo[0] = 0;
     m_bwInfo[0] = 0;
     m_blinkLength = 0;
+    m_mark = 0;
 }
 
-void DisplayLine::resetBlink() {
+void DisplayLine::resetBlink(bool state) {
     m_blinkTimer = millis();
-    m_blinkState = false;
+    m_blinkState = state;
 }
 
 void DisplayLine::tick() {
@@ -67,8 +71,14 @@ void DisplayLine::tick() {
             m_blinkTimer = millis();
         }
 
-        if (m_blinkState)
+        if (m_blinkState) {
             memset(m_fwInfo + m_blinkPos, ' ', m_blinkLength);
+
+            if (m_mark) {
+                uint8_t marklen = strlen(m_mark);
+                memcpy(m_fwInfo + m_blinkPos + m_blinkLength - marklen, m_mark, marklen);
+            }
+        }
     }
 
     m_lcd.setCursor(0, m_line);

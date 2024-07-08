@@ -118,7 +118,7 @@ bool FStopTestMode::canSwitchView() const {
 
 void FStopTestMode::printLog(bool& logOverFlowed) const {
     uint8_t id = printLogHelper(
-        [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
+        [](const void* this__, uint8_t id, bool& current, bool& end, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const FStopTestMode*>(this__);
             float stopPart = kFStopPartVarinatns[this_->m_FStopPartId];
 
@@ -127,8 +127,10 @@ void FStopTestMode::printLog(bool& logOverFlowed) const {
 
             current = this_->m_step == Step::run && this_->m_currentRun == id;
 
-            if (id == 0)
+            if (id == 0) {
+                mark = "ntf";
                 return this_->m_baseTime;
+            }
 
             return { this_->m_initTime * pow(2, (id - 1) / stopPart) };
         },

@@ -32,7 +32,7 @@
 1. F Stop test mode: ability to print tones and part tones of prints (decreasing f stop step). After that you can see the log
 2. Linear test mode: simple mode for linear testing
 3. Print mode: ability to stop printing at any time. Usefull for getting fast masking values
-4. Mask mode: for printing with accurate masks
+4. Mask mode: for printing with accurate masks. Hold extra btn while set mask to go back to first mask. Click start btn when set mask to play melody after printing this mask -- usefull, when you don't want to forgot to do something. For example, change filter.
 5. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
 
 ## Killer features:

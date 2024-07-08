@@ -82,7 +82,7 @@ void PrintMode::printLog() const {
     gDisplay[0] << "Log ";
 
     printLogHelper(
-        [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
+        [](const void* this__, uint8_t id, bool& current, bool& end, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const PrintMode*>(this__);
 
             end = id == this_->m_logSize;

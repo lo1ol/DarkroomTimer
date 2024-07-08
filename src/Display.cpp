@@ -14,7 +14,7 @@ void Display::reset() {
         line.reset();
 }
 
-void Display::resetBlink() {
+void Display::resetBlink(bool state) {
     for (auto&& line : m_lines)
-        line.resetBlink();
+        line.resetBlink(state);
 }

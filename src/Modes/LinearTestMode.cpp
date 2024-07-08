@@ -105,7 +105,7 @@ bool LinearTestMode::canSwitchView() const {
 
 void LinearTestMode::printLog(bool& logOverFlowed) const {
     uint8_t id = printLogHelper(
-        [](const void* this__, uint8_t id, bool& current, bool& end) -> Time {
+        [](const void* this__, uint8_t id, bool& current, bool& end, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const LinearTestMode*>(this__);
 
             if (!this_->kSplit)
@@ -113,8 +113,10 @@ void LinearTestMode::printLog(bool& logOverFlowed) const {
 
             current = this_->m_step == Step::run && this_->m_currentRun == id;
 
-            if (id == 0)
+            if (id == 0) {
+                mark = "ntf";
                 return this_->m_baseTime;
+            }
 
             return { this_->m_initTime + this_->m_stepTime * (id - 1) };
         },

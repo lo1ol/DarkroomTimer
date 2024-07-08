@@ -13,7 +13,7 @@ public:
 
     void tick();
     void reset();
-    void resetBlink();
+    void resetBlink(bool state = false);
 
 private:
     LiquidCrystal m_lcd;
