@@ -66,8 +66,10 @@ void LinearTestMode::process() {
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
-        if (m_currentRun == 0)
+        if (m_currentRun == 0) {
             gTimer.reset();
+            gBeeper.melody();
+        }
         ++m_currentRun;
     }
 }

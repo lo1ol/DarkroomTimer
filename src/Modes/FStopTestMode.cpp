@@ -78,8 +78,10 @@ void FStopTestMode::process() {
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
-        if (m_currentRun == 0) // don't take into account base time
+        if (m_currentRun == 0) { // don't take into account base time
             gTimer.reset();
+            gBeeper.melody();
+        }
         ++m_currentRun;
     }
 }
