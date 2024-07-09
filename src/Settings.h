@@ -15,4 +15,5 @@ struct Settings {
     bool startWithSettings;
     bool logViewInTests;
     bool logViewInMasks;
+    bool confirmAlarm;
 };

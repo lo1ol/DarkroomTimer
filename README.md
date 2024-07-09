@@ -26,6 +26,7 @@
 4. Time of auto turn off a lamp in view mode
 5. Start with settings or not
 6. Default views in test and mask modes
+7. Confirmation of notification -- you have to click start btn, to confirm notification
 
 ## Modes
 

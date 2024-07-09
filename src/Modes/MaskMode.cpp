@@ -126,7 +126,7 @@ void MaskMode::processRun() {
 
     if (gTimer.stopped()) {
         if (m_notifyMask & (1 << m_currentMask))
-            gBeeper.melody();
+            gBeeper.alarm("Notification");
         ++m_currentMask;
     }
 }

@@ -80,7 +80,7 @@ void FStopTestMode::process() {
     if (gTimer.stopped()) {
         if (m_currentRun == 0) { // don't take into account base time
             gTimer.reset();
-            gBeeper.melody();
+            gBeeper.alarm("Change filter");
         }
         ++m_currentRun;
     }

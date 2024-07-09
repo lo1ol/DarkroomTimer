@@ -10,6 +10,7 @@ public:
         setLagTime,
         setBacklight,
         setBeepVolume,
+        setConfirmAlarm,
         setAutoFinishView,
         setStartWithSettings,
         setViewInTests,
@@ -26,12 +27,13 @@ public:
 
 private:
     void processSetLagTime();
-    void processSetBacklight();
-    void processSetBeepVolume();
-    void processSetAutoFinishView();
-    void processStartWithSettings();
-    void processSetViewInTests();
-    void processSetViewInMasks();
+    void processSetBacklight() const;
+    void processSetBeepVolume() const;
+    void processSetAutoFinishView() const;
+    void processConfirmAlarm() const;
+    void processStartWithSettings() const;
+    void processSetViewInTests() const;
+    void processSetViewInMasks() const;
 
     Step m_step = Step::setLagTime;
     Time m_lagTime;

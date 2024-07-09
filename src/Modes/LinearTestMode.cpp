@@ -68,7 +68,7 @@ void LinearTestMode::process() {
     if (gTimer.stopped()) {
         if (m_currentRun == 0) {
             gTimer.reset();
-            gBeeper.melody();
+            gBeeper.alarm("Change filter");
         }
         ++m_currentRun;
     }

@@ -35,7 +35,7 @@ void SettingsSetter::processSetLagTime() {
         m_timer.start(m_lagTime);
 }
 
-void SettingsSetter::processSetBeepVolume() {
+void SettingsSetter::processSetBeepVolume() const {
     gDisplay[0] << "Beep volume";
     uint8_t userVolume = min(gSettings.beepVolume, 30) / 3;
     if (getInt(userVolume, 1, 10))
@@ -44,7 +44,7 @@ void SettingsSetter::processSetBeepVolume() {
     gDisplay[1] << userVolume;
 }
 
-void SettingsSetter::processSetAutoFinishView() {
+void SettingsSetter::processSetAutoFinishView() const {
     gDisplay[0] << "Auto finish view";
     getInt(gSettings.autoFinishViewMinutes, 0, 10);
 
@@ -56,7 +56,7 @@ void SettingsSetter::processSetAutoFinishView() {
     gDisplay[1] << gSettings.autoFinishViewMinutes << " minute" << (gSettings.autoFinishViewMinutes == 1 ? "" : "s");
 }
 
-void SettingsSetter::processSetBacklight() {
+void SettingsSetter::processSetBacklight() const {
     gDisplay[0] << "Backlight";
     uint8_t userBacklight = min(gSettings.backlight, MAX_BACKLIGHT) / (MAX_BACKLIGHT / 10);
     getInt(userBacklight, 1, 10);
@@ -65,7 +65,18 @@ void SettingsSetter::processSetBacklight() {
     analogWrite(BACKLIGHT, gSettings.backlight);
 }
 
-void SettingsSetter::processStartWithSettings() {
+void SettingsSetter::processConfirmAlarm() const {
+    gDisplay[0] << "Confirm notify";
+    uint8_t choice = gSettings.confirmAlarm;
+    getInt(choice, 0, 1);
+    gSettings.confirmAlarm = choice;
+    if (choice == 1)
+        gDisplay[1] << "Yes";
+    else
+        gDisplay[1] << "No";
+}
+
+void SettingsSetter::processStartWithSettings() const {
     gDisplay[0] << "Start with stngs";
     uint8_t choice = gSettings.startWithSettings;
     getInt(choice, 0, 1);
@@ -76,7 +87,7 @@ void SettingsSetter::processStartWithSettings() {
         gDisplay[1] << "Yes";
 }
 
-void SettingsSetter::processSetViewInTests() {
+void SettingsSetter::processSetViewInTests() const {
     gDisplay[0] << "Dflt test view";
     uint8_t choice = gSettings.logViewInTests;
     getInt(choice, 0, 1);
@@ -87,7 +98,7 @@ void SettingsSetter::processSetViewInTests() {
         gDisplay[1] << "Log";
 }
 
-void SettingsSetter::processSetViewInMasks() {
+void SettingsSetter::processSetViewInMasks() const {
     gDisplay[0] << "Dflt mask view";
     uint8_t choice = gSettings.logViewInMasks;
     getInt(choice, 0, 1);
@@ -133,6 +144,9 @@ void SettingsSetter::process() {
         break;
     case Step::setAutoFinishView:
         processSetAutoFinishView();
+        break;
+    case Step::setConfirmAlarm:
+        processConfirmAlarm();
         break;
     case Step::setStartWithSettings:
         processStartWithSettings();
