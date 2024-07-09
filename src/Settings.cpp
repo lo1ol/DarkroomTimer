@@ -34,7 +34,7 @@ Settings::Settings() {
         autoFinishViewMinutes = 3;
         confirmAlarm = false;
         startWithSettings = false;
-        logViewInTests = false;
+        logViewInTests = true;
         logViewInMasks = true;
         updateEEPROM();
         return;
