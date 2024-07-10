@@ -2,8 +2,6 @@
 
 #include "Tools.h"
 
-constexpr uint16_t kMelodySwitchTimes[] = { 250, 250, 125, 125, 60, 60, 400, 800 };
-
 void Beeper::tick() {
     uint32_t currentTime = millis();
     switch (m_state) {
@@ -35,6 +33,8 @@ void Beeper::tick() {
 void Beeper::setup() {
     pinMode(BEEPER, OUTPUT);
     analogWrite(BEEPER, 0);
+
+    m_melody = Melody::getMelody(Melody::nice);
 }
 
 void Beeper::beep() {
@@ -68,17 +68,15 @@ void Beeper::stop() {
 void Beeper::alarm(const char* notification) {
     m_state = State::alarm;
 
+    m_melody->init();
     m_notification = notification;
-    m_timer = millis() + kMelodySwitchTimes[0];
-    m_melodyPhase = 0;
-    m_pinState = true;
 
     processAlarm();
     processPin();
 }
 
 void Beeper::processAlarm() {
-    if (gSettings.confirmAlarm) {
+    if (blocking()) {
         gDisplay[0] << m_notification;
         gDisplay[1] << "Click start btn";
         // for safety support click on mode btn
@@ -90,27 +88,14 @@ void Beeper::processAlarm() {
         }
     }
 
-    uint32_t currentTime = millis();
-
-    if (m_timer > currentTime)
+    m_pinState = m_melody->tick();
+    if (!m_melody->end())
         return;
 
-    ++m_melodyPhase;
-
-    if (m_melodyPhase == sizeof(kMelodySwitchTimes) / sizeof(kMelodySwitchTimes[0])) {
-        if (gSettings.confirmAlarm) {
-            m_pinState = true;
-            m_melodyPhase = 0;
-            m_timer = currentTime + kMelodySwitchTimes[0];
-            return;
-        }
-
+    if (blocking())
+        m_melody->init();
+    else
         stop();
-        return;
-    }
-
-    m_pinState = !m_pinState;
-    m_timer = currentTime + kMelodySwitchTimes[m_melodyPhase];
 }
 
 void Beeper::processPin() const {
@@ -121,5 +106,12 @@ void Beeper::processPin() const {
 }
 
 bool Beeper::blocking() const {
-    return gSettings.confirmAlarm && m_state == State::alarm;
+    return m_notification && gSettings.confirmAlarm && m_state == State::alarm;
+}
+
+void Beeper::setMelody(Melody::Name melodyName) {
+    delete m_melody;
+    m_melody = Melody::getMelody(melodyName);
+    if (m_state == State::alarm)
+        alarm(m_notification);
 }
