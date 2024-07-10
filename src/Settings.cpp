@@ -21,6 +21,7 @@ Settings::Settings() {
     GET_SETTING(startWithSettings);
     GET_SETTING(logViewInTests);
     GET_SETTING(logViewInMasks);
+    GET_SETTING(melody);
 
     uint32_t hash = crc32.finalize();
     uint32_t storedHash;
@@ -36,6 +37,7 @@ Settings::Settings() {
         startWithSettings = false;
         logViewInTests = true;
         logViewInMasks = true;
+        melody = Melody::nice;
         updateEEPROM();
         return;
     }
@@ -57,6 +59,7 @@ void Settings::updateEEPROM() {
     PUT_SETTING(startWithSettings);
     PUT_SETTING(logViewInTests);
     PUT_SETTING(logViewInMasks);
+    PUT_SETTING(melody);
     PUT_SETTING(crc32.finalize());
 #undef PUT_SETTING
 }

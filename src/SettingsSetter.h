@@ -15,6 +15,7 @@ public:
         setStartWithSettings,
         setViewInTests,
         setViewInMasks,
+        setMelody,
         last_
     };
 
@@ -34,6 +35,7 @@ private:
     void processStartWithSettings() const;
     void processSetViewInTests() const;
     void processSetViewInMasks() const;
+    void processSetMelody() const;
 
     Step m_step = Step::setLagTime;
     Time m_lagTime;

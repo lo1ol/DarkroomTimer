@@ -63,6 +63,24 @@ private:
     uint32_t m_timer;
 };
 
-Melody* Melody::getMelody(Name) {
-    return new AlarmMelody;
+Melody* Melody::getMelody(Name name) {
+    switch (name) {
+    case Name::alarm:
+        return new AlarmMelody;
+    case Name::nice:
+        return new NiceMelody;
+    }
+
+    return nullptr;
+}
+
+const char* Melody::getMelodyName(Name name) {
+    switch (name) {
+    case Name::alarm:
+        return "alarm";
+    case Name::nice:
+        return "nice";
+    }
+
+    return nullptr;
 }

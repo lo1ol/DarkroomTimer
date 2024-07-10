@@ -109,6 +109,22 @@ void SettingsSetter::processSetViewInMasks() const {
         gDisplay[1] << "Log";
 }
 
+void SettingsSetter::processSetMelody() const {
+    gDisplay[0] << "Notify melody";
+    uint8_t choice = gSettings.melody;
+    bool changed = getInt(choice, 0, Melody::last_ - 1);
+
+    gDisplay[1] << Melody::getMelodyName(gSettings.melody);
+
+    if (!changed)
+        return;
+
+    gSettings.melody = static_cast<Melody::Name>(choice);
+
+    gBeeper.setMelody(gSettings.melody);
+    gBeeper.alarm();
+}
+
 void SettingsSetter::process() {
     if (m_timer.state() != Timer::RUNNING) {
         int8_t shift = 0;
@@ -124,6 +140,11 @@ void SettingsSetter::process() {
 
             if (m_step == Step::setBeepVolume)
                 gBeeper.start();
+            else
+                gBeeper.stop();
+
+            if (m_step == Step::setMelody)
+                gBeeper.alarm();
             else
                 gBeeper.stop();
 
@@ -156,6 +177,9 @@ void SettingsSetter::process() {
         break;
     case Step::setViewInMasks:
         processSetViewInMasks();
+        break;
+    case Step::setMelody:
+        processSetMelody();
         break;
     }
 }

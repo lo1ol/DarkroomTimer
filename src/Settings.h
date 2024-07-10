@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#include "Melody.h"
 #include "Time.h"
 
 struct Settings {
@@ -16,4 +17,5 @@ struct Settings {
     bool logViewInTests;
     bool logViewInMasks;
     bool confirmAlarm;
+    Melody::Name melody;
 };
