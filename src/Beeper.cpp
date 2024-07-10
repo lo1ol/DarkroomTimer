@@ -34,7 +34,7 @@ void Beeper::setup() {
     pinMode(BEEPER, OUTPUT);
     analogWrite(BEEPER, 0);
 
-    m_melody = Melody::getMelody(Melody::nice);
+    m_melody = Melody::getMelody(Melody::alarm);
 }
 
 void Beeper::beep() {

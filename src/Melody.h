@@ -4,7 +4,7 @@ class Melody {
 public:
     virtual ~Melody() {}
 
-    enum Name { nice, last_ };
+    enum Name { alarm, nice, last_ };
 
     static Melody* getMelody(Name);
 
