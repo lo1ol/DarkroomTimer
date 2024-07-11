@@ -27,12 +27,16 @@ void PrintMode::process() {
     gDisplay[1] >> gTimer.afterLastResume();
 
     if (!m_triggerByHold) {
-        if (gStartBtn.press()) {
+        if (gStartBtn.press() && gTimer.state() == Timer::RUNNING) {
+            if (gTimer.pause()) {
+                appendPrintLog(gTimer.afterLastResume());
+            }
+
+            gStartBtn.skipEvents();
+        }
+
+        if (gStartBtn.click()) {
             switch (gTimer.state()) {
-            case Timer::RUNNING:
-                if (gTimer.pause())
-                    appendPrintLog(gTimer.afterLastResume());
-                break;
             case Timer::PAUSED:
                 gTimer.resume();
                 break;
