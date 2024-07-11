@@ -65,6 +65,8 @@ void processModeSwitch() {
 
     int8_t dir = getEncoderDir();
     if (dir) {
+        gModeSwitchBtn.skipEvents();
+
         gBlocked = gBlockedByPreview = true;
 
         setMode(ADD_TO_ENUM(ModeId, gModeId, dir));

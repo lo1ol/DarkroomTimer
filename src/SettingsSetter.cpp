@@ -131,7 +131,8 @@ void SettingsSetter::process() {
         if (gModeSwitchBtn.click())
             shift = 1;
         else if (gModeSwitchBtn.pressing()) {
-            shift = getEncoderDir();
+            if ((shift = getEncoderDir()))
+                gModeSwitchBtn.skipEvents();
         }
 
         if (shift) {

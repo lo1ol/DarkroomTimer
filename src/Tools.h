@@ -3,11 +3,11 @@
 #include "SafeEncButton.h"
 
 #include "Beeper.h"
+#include "Config.h"
 #include "Display.h"
 #include "Settings.h"
 #include "Time.h"
 #include "Timer.h"
-#include "Config.h"
 
 #define ADD_TO_ENUM(enumName, current, num) \
     (enumName)(((uint8_t)(current) + (uint8_t)enumName::last_ + num) % (uint8_t)enumName::last_)
