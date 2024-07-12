@@ -4,7 +4,7 @@ class Melody {
 public:
     virtual ~Melody() {}
 
-    enum Name { alarm, nice, last_ };
+    enum Name { alarm, nice, hotline, last_ };
 
     static Melody* getMelody(Name);
     static const char* getMelodyName(Name);
