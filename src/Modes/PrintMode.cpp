@@ -3,7 +3,7 @@
 #include "../Tools.h"
 
 PrintMode::PrintMode() {
-    m_printTime = 80_ts;
+    m_printTime = 8_s;
     m_triggerByHold = false;
     m_logSize = 0;
 }

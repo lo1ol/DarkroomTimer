@@ -7,8 +7,8 @@ constexpr uint8_t kFStopPartVarinatns[] = { 6, 5, 4, 3, 2, 1 };
 } // namespace
 
 FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {
-    m_baseTime = 20_ts;
-    m_initTime = 20_ts;
+    m_baseTime = 2_s;
+    m_initTime = 2_s;
     m_FStopPartId = 5;
     m_step = kSplit ? Step::baseTime : Step::initTime;
     m_view = gSettings.logViewInTests ? RunView::log : RunView::common;

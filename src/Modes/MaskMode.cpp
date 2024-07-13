@@ -5,7 +5,7 @@
 MaskMode::MaskMode() {
     m_numberOfMasks = 3;
     memset(m_masks, 0, sizeof(m_masks));
-    m_masks[0] = 80_ts;
+    m_masks[0] = 8_s;
     m_step = Step::setNum;
     m_view = gSettings.logViewInMasks ? View::log : View::common;
     m_currentMask = 0;

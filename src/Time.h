@@ -59,3 +59,7 @@ DisplayLine& operator>>(DisplayLine&, const Time&);
 constexpr inline Time operator""_ts(unsigned long long ts) {
     return Time(ts);
 }
+
+constexpr inline Time operator""_s(unsigned long long s) {
+    return Time(s * 10L);
+}

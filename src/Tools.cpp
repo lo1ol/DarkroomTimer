@@ -54,14 +54,12 @@ bool getTime(Time& time, bool smooth) {
     Time oldTime = time;
 
     int16_t factor;
-    if ((time + shift) < 50_ts)
+    if ((time + shift) < 5_s)
         factor = 1;
-    else if ((time + shift) < 100_ts)
+    else if ((time + shift) < 10_s)
         factor = 5;
-    else if ((time + shift) < 1000_ts)
+    else if ((time + shift) < 100_s)
         factor = 10;
-    else if ((time + shift) < 1000_ts)
-        factor = 50;
     else
         factor = 100;
 
@@ -71,8 +69,8 @@ bool getTime(Time& time, bool smooth) {
     if (time < 0_ts)
         time = 0_ts;
 
-    if (time > 18000_ts)
-        time = 18000_ts;
+    if (time > 1800_s)
+        time = 1800_s;
 
     return time != oldTime;
 }

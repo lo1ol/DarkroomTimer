@@ -4,7 +4,7 @@
 #include "Tools.h"
 
 namespace {
-constexpr Time kMaxLagTime = 20_ts;
+constexpr Time kMaxLagTime = 2_s;
 } // namespace
 
 SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime) {}

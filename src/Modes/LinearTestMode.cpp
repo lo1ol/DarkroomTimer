@@ -3,9 +3,9 @@
 #include "../Tools.h"
 
 LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
-    m_baseTime = 20_ts;
-    m_initTime = 80_ts;
-    m_stepTime = 20_ts;
+    m_baseTime = 2_s;
+    m_initTime = 8_s;
+    m_stepTime = 2_s;
     m_step = kSplit ? Step::baseTime : Step::initTime;
     m_view = gSettings.logViewInTests ? RunView::log : RunView::common;
     m_currentRun = kSplit ? 0 : 1;
