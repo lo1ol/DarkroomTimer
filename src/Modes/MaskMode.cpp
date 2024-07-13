@@ -121,7 +121,7 @@ void MaskMode::processRun() {
     } break;
     }
 
-    if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentMask < m_numberOfMasks)
         gTimer.start(m_masks[m_currentMask]);
 
     if (gTimer.stopped()) {
