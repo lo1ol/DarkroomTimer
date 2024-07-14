@@ -24,6 +24,7 @@ public:
 private:
     void printLog(bool& logOverFlowed) const;
     Time getPrintTime() const;
+    Time getStepTotalTime(uint8_t step) const;
 
     bool kSplit;
     Step m_step;
