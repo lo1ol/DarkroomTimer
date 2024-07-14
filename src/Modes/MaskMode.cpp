@@ -12,7 +12,7 @@ MaskMode::MaskMode() {
     m_notifyMask = 0;
 
     for (uint8_t i = 1; i != kMasksMaxNumber; ++i)
-        m_masks[i] = -1_ts;
+        m_masks[i] = kBadTime;
 }
 
 void MaskMode::switchMode() {
@@ -25,7 +25,7 @@ void MaskMode::switchMode() {
 
         m_notifyMask &= ~((~0) << m_notifyMask);
         for (uint8_t i = m_numberOfMasks; i != kMasksMaxNumber; ++i)
-            m_masks[i] = -1_ts;
+            m_masks[i] = kBadTime;
 
         return;
     }
@@ -38,7 +38,7 @@ void MaskMode::switchMode() {
 
     ++m_currentMask;
 
-    if (m_currentMask == 0 || m_masks[m_currentMask] != -1_ts)
+    if (m_currentMask == 0 || m_masks[m_currentMask] != kBadTime)
         return;
 
     // let's guess unknown masks
@@ -152,22 +152,20 @@ bool MaskMode::canSwitchView() const {
 
 void MaskMode::printLog(bool& logOverFlowed) const {
     uint8_t id = printLogHelper(
-        [](const void* this__, uint8_t id, bool& current, bool& end, const char*& mark) -> Time {
+        [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const MaskMode*>(this__);
 
             current = this_->m_step != Step::setNum && this_->m_currentMask == id;
-            end = id == this_->m_numberOfMasks;
-            if (end)
-                return {};
+            if (id == this_->m_numberOfMasks)
+                return kBadTime;
 
             if (this_->m_notifyMask & (1 << id))
                 mark = "ntf";
 
-            Time time = this_->m_masks[id];
-            if (time == -1_ts)
+            if (this_->m_masks[id] == kBadTime)
                 return 0_ts;
 
-            return time;
+            return this_->m_masks[id];
         },
         this);
 

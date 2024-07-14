@@ -62,7 +62,11 @@ void FStopTestMode::process() {
             gTimer.printFormatedState();
             return;
         }
-        gDisplay[1] << getPrintTime();
+
+        if (getStepTotalTime(m_currentRun) == kBadTime)
+            gDisplay[1] << "Finish";
+        else
+            gDisplay[1] << getPrintTime();
         break;
     case RunView::log: {
         gDisplay[0] << "Run ";
@@ -74,7 +78,7 @@ void FStopTestMode::process() {
     } break;
     }
 
-    if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getStepTotalTime(m_currentRun) != kBadTime)
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
@@ -95,6 +99,14 @@ Time FStopTestMode::getPrintTime() const {
 
     float stopPart = kFStopPartVarinatns[m_FStopPartId];
     return m_initTime * (pow(2, (m_currentRun - 1) / stopPart) - pow(2, (m_currentRun - 2) / stopPart));
+}
+
+Time FStopTestMode::getStepTotalTime(uint8_t id) const {
+    if (id == 0)
+        return m_baseTime;
+
+    float stopPart = kFStopPartVarinatns[m_FStopPartId];
+    return m_initTime * pow(2, (id - 1) / stopPart);
 }
 
 void FStopTestMode::reset() {
@@ -118,21 +130,18 @@ bool FStopTestMode::canSwitchView() const {
 
 void FStopTestMode::printLog(bool& logOverFlowed) const {
     uint8_t id = printLogHelper(
-        [](const void* this__, uint8_t id, bool& current, bool& end, const char*& mark) -> Time {
+        [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const FStopTestMode*>(this__);
-            float stopPart = kFStopPartVarinatns[this_->m_FStopPartId];
 
             if (!this_->kSplit)
                 ++id;
 
             current = this_->m_step == Step::run && this_->m_currentRun == id;
 
-            if (id == 0) {
+            if (id == 0)
                 mark = "ntf";
-                return this_->m_baseTime;
-            }
 
-            return { this_->m_initTime * pow(2, (id - 1) / stopPart) };
+            return this_->getStepTotalTime(id);
         },
         this);
 

@@ -50,7 +50,10 @@ void LinearTestMode::process() {
             return;
         }
 
-        gDisplay[1] << getPrintTime();
+        if (getTotalTime(m_currentRun) == kBadTime)
+            gDisplay[1] << "Finish";
+        else
+            gDisplay[1] << getPrintTime();
         break;
     case RunView::log: {
         gDisplay[0] << "Run ";
@@ -62,7 +65,7 @@ void LinearTestMode::process() {
     } break;
     }
 
-    if (gTimer.state() == Timer::STOPPED && gStartBtn.click())
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime)
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
@@ -84,6 +87,16 @@ Time LinearTestMode::getPrintTime() const {
     return m_stepTime;
 }
 
+Time LinearTestMode::getTotalTime(uint8_t id) const {
+    if (id == 0)
+        return m_baseTime;
+
+    int32_t res = static_cast<int16_t>(m_stepTime);
+    res *= id - 1;
+    res += static_cast<int16_t>(m_initTime);
+
+    return Time{ res };
+}
 void LinearTestMode::reset() {
     m_currentRun = kSplit ? 0 : 1;
 }
@@ -105,7 +118,7 @@ bool LinearTestMode::canSwitchView() const {
 
 void LinearTestMode::printLog(bool& logOverFlowed) const {
     uint8_t id = printLogHelper(
-        [](const void* this__, uint8_t id, bool& current, bool& end, const char*& mark) -> Time {
+        [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const LinearTestMode*>(this__);
 
             if (!this_->kSplit)
@@ -113,12 +126,10 @@ void LinearTestMode::printLog(bool& logOverFlowed) const {
 
             current = this_->m_step == Step::run && this_->m_currentRun == id;
 
-            if (id == 0) {
+            if (id == 0)
                 mark = "ntf";
-                return this_->m_baseTime;
-            }
 
-            return { this_->m_initTime + this_->m_stepTime * (id - 1) };
+            return this_->getTotalTime(id);
         },
         this);
 

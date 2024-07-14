@@ -8,12 +8,18 @@ class DisplayLine;
 class Time {
 public:
     constexpr Time() : Time(0) {}
-    constexpr explicit Time(int16_t ts) : m_ts(ts) {}
+    constexpr explicit Time(int32_t ts) : m_ts(ts > INT16_MAX ? -1 : ts) {}
 
-    explicit operator bool() { return m_ts; }
-    explicit operator int16_t() { return m_ts; }
+    explicit operator bool() const { return m_ts; }
+    explicit operator int16_t() const { return m_ts; }
 
-    Time operator*(double x) const { return Time{ static_cast<int16_t>(lround(m_ts * x)) }; }
+    Time operator*(double x) const {
+        int32_t res = static_cast<int32_t>(lround(m_ts * x));
+        if (res > INT16_MAX)
+            return Time{ -1 };
+
+        return Time{ static_cast<int16_t>(res) };
+    }
     Time operator*(int16_t x) const { return Time{ m_ts * x }; }
     Time operator/(int n) const { return Time{ m_ts / n }; }
     Time operator+(const Time& o) const { return Time{ m_ts + o.m_ts }; }
@@ -30,6 +36,7 @@ public:
     }
 
     bool operator<(const Time& o) const { return m_ts < o.m_ts; }
+    bool operator<=(const Time& o) const { return m_ts < o.m_ts; }
     bool operator>(const Time& o) const { return m_ts > o.m_ts; }
     bool operator==(const Time& o) const { return m_ts == o.m_ts; }
     bool operator!=(const Time& o) const { return m_ts != o.m_ts; }
@@ -63,3 +70,6 @@ constexpr inline Time operator""_ts(unsigned long long ts) {
 constexpr inline Time operator""_s(unsigned long long s) {
     return Time(s * 10L);
 }
+
+constexpr Time kMaxTime{ INT16_MAX };
+constexpr Time kBadTime{ -1 };

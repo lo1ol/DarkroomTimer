@@ -130,7 +130,11 @@ uint32_t Timer::realStopTime() const {
 }
 
 Time Timer::total() const {
-    return Time::fromMillis(m_total + afterResume());
+    int32_t total = (m_total + afterResume()) / 100;
+    if (total > INT16_MAX)
+        return Time{ INT16_MAX };
+
+    return Time{ static_cast<int16_t>(total) };
 }
 
 void Timer::resetTotal() {
