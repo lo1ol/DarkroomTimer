@@ -13,6 +13,9 @@ LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
 
 void LinearTestMode::switchMode() {
     m_step = ADD_TO_ENUM(Step, m_step, 1);
+    if (m_step == Step::baseTime && !kSplit)
+        m_step = Step::initTime;
+
     m_currentRun = kSplit ? 0 : 1;
     gTimer.reset();
 }
