@@ -23,7 +23,7 @@ void MaskMode::switchMode() {
 
         m_currentMask = 0;
 
-        m_notifyMask &= ~((~0) << m_notifyMask);
+        m_notifyMask &= ~((~0) << m_numberOfMasks);
         for (uint8_t i = m_numberOfMasks; i != kMasksMaxNumber; ++i)
             m_masks[i] = kBadTime;
 
