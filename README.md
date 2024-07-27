@@ -65,11 +65,10 @@ My friend just create the coolest version of body for this project!!! You can fi
 6. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
 7. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok)
 8. Arduino nano: It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware
-9. Capacitor is used to prevent leakage from SSR. I used 1μF metal foil capacitor for 250V. If you are not planning to use LED lamps, just ignore it
-10. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
-11. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
+9. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
+10. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
 
-Box for this version has not enought space to keep transformer, capacitor and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
+Box for this version has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
 
 ### Simple version
 
@@ -84,7 +83,7 @@ Everything the same except buttons, switches and springs:
 3. [Switch](https://sl.aliexpress.ru/p?key=7LDHstq)
 4. Springs for the start btn could be taken from pen
 
-This version has enought space to keep transformer, SSR and capacitor inside. But I still recommend you to put it seperatly.
+This version has enought space to keep transformer and SSR inside. But I still recommend you to put it seperatly.
 
 ## Build and upload code to Arduino
 
