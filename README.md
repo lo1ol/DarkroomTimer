@@ -51,7 +51,7 @@
 
 ![Circuit](./Circuit.jpg)
 
-### Coolest version
+### Hardware and body
 
 My friend just create the coolest version of body for this project!!! You can find it [here](https://www.thingiverse.com/thing:6683466)
 
@@ -68,22 +68,11 @@ My friend just create the coolest version of body for this project!!! You can fi
 9. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
 10. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
 
-Box for this version has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
+This body has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
 
-### Simple version
+### Another versions of body
 
-[3D model of the body](./TimerBox.stl)
-
-#### Components
-
-Everything the same except buttons, switches and springs:
-
-1. [Buttons 12x12](https://sl.aliexpress.ru/p?key=8sDHsMU)
-2. [Button 6x6](https://sl.aliexpress.ru/p?key=TiDHsci)
-3. [Switch](https://sl.aliexpress.ru/p?key=7LDHstq)
-4. Springs for the start btn could be taken from pen
-
-This version has enought space to keep transformer and SSR inside. But I still recommend you to put it seperatly.
+I saw bodies created via electrical enclosure, pupular buttons and switches. You are free to create your version of body and use another components according to your budget
 
 ## Build and upload code to Arduino
 
