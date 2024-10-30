@@ -7,7 +7,6 @@ LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
     m_initTime = 8_s;
     m_stepTime = 2_s;
     m_step = kSplit ? Step::baseTime : Step::initTime;
-    m_view = gSettings.logViewInTests ? RunView::log : RunView::common;
     m_currentRun = kSplit ? 0 : 1;
 }
 
@@ -41,32 +40,8 @@ void LinearTestMode::process() {
         break;
     }
 
-    switch (m_view) {
-    case RunView::common:
-        if (m_currentRun == 0)
-            gDisplay[0] << "Base printing";
-        else
-            gDisplay[0] << "Test #" << m_currentRun << " T:" << gTimer.total();
-
-        if (gTimer.state() == Timer::RUNNING) {
-            gTimer.printFormatedState();
-            return;
-        }
-
-        if (getTotalTime(m_currentRun) == kBadTime)
-            gDisplay[1] << "Finish";
-        else
-            gDisplay[1] << getPrintTime();
-        break;
-    case RunView::log: {
-        gDisplay[0] << "Run ";
-
-        bool logOverFlow = false;
-        printLog(logOverFlow);
-        if (logOverFlow)
-            m_view = RunView::common;
-    } break;
-    }
+    gDisplay[0] << "Run ";
+    printTimes();
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime)
         gTimer.start(getPrintTime());
@@ -104,23 +79,8 @@ void LinearTestMode::reset() {
     m_currentRun = kSplit ? 0 : 1;
 }
 
-void LinearTestMode::switchView() {
-    m_view = ADD_TO_ENUM(RunView, m_view, 1);
-}
-
-bool LinearTestMode::canSwitchView() const {
-    if (m_step != Step::run)
-        return false;
-
-    gDisplay[0] << "Run ";
-    bool overFlow = false;
-    printLog(overFlow);
-    gDisplay.reset();
-    return !overFlow;
-}
-
-void LinearTestMode::printLog(bool& logOverFlowed) const {
-    uint8_t id = printLogHelper(
+void LinearTestMode::printTimes() const {
+    printTimeHelper(
         [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const LinearTestMode*>(this__);
 
@@ -135,19 +95,6 @@ void LinearTestMode::printLog(bool& logOverFlowed) const {
             return this_->getTotalTime(id);
         },
         this);
-
-    if (!kSplit)
-        ++id;
-
-    if (m_step == Step::run && m_currentRun >= id)
-        logOverFlowed = true;
-}
-
-void LinearTestMode::printLog() const {
-    gDisplay[0] << "Log ";
-
-    bool unused;
-    printLog(unused);
 }
 
 const char* LinearTestMode::preview() const {

@@ -87,28 +87,6 @@ void SettingsSetter::processStartWithSettings() const {
         gDisplay[1] << "Yes";
 }
 
-void SettingsSetter::processSetViewInTests() const {
-    gDisplay[0] << "Dflt test view";
-    uint8_t choice = gSettings.logViewInTests;
-    getInt(choice, 0, 1);
-    gSettings.logViewInTests = choice;
-    if (choice == 0)
-        gDisplay[1] << "Common";
-    else
-        gDisplay[1] << "Log";
-}
-
-void SettingsSetter::processSetViewInMasks() const {
-    gDisplay[0] << "Dflt mask view";
-    uint8_t choice = gSettings.logViewInMasks;
-    getInt(choice, 0, 1);
-    gSettings.logViewInMasks = choice;
-    if (choice == 0)
-        gDisplay[1] << "Common";
-    else
-        gDisplay[1] << "Log";
-}
-
 void SettingsSetter::processSetMelody() const {
     gDisplay[0] << "Notify melody";
     uint8_t choice = gSettings.melody;
@@ -172,12 +150,6 @@ void SettingsSetter::process() {
         break;
     case Step::setStartWithSettings:
         processStartWithSettings();
-        break;
-    case Step::setViewInTests:
-        processSetViewInTests();
-        break;
-    case Step::setViewInMasks:
-        processSetViewInMasks();
         break;
     case Step::setMelody:
         processSetMelody();

@@ -19,8 +19,6 @@ Settings::Settings() {
     GET_SETTING(autoFinishViewMinutes);
     GET_SETTING(confirmAlarm);
     GET_SETTING(startWithSettings);
-    GET_SETTING(logViewInTests);
-    GET_SETTING(logViewInMasks);
     GET_SETTING(melody);
 
     uint32_t hash = crc32.finalize();
@@ -35,8 +33,6 @@ Settings::Settings() {
         autoFinishViewMinutes = 3;
         confirmAlarm = false;
         startWithSettings = false;
-        logViewInTests = true;
-        logViewInMasks = true;
         melody = Melody::nice;
         updateEEPROM();
         return;
@@ -57,8 +53,6 @@ void Settings::updateEEPROM() {
     PUT_SETTING(autoFinishViewMinutes);
     PUT_SETTING(confirmAlarm);
     PUT_SETTING(startWithSettings);
-    PUT_SETTING(logViewInTests);
-    PUT_SETTING(logViewInMasks);
     PUT_SETTING(melody);
     PUT_SETTING(crc32.finalize());
 #undef PUT_SETTING

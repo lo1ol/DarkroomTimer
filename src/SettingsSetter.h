@@ -13,8 +13,6 @@ public:
         setConfirmAlarm,
         setAutoFinishView,
         setStartWithSettings,
-        setViewInTests,
-        setViewInMasks,
         setMelody,
         last_
     };
@@ -33,8 +31,6 @@ private:
     void processSetAutoFinishView() const;
     void processConfirmAlarm() const;
     void processStartWithSettings() const;
-    void processSetViewInTests() const;
-    void processSetViewInMasks() const;
     void processSetMelody() const;
 
     Step m_step = Step::setLagTime;

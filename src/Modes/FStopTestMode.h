@@ -6,7 +6,6 @@
 
 class FStopTestMode final : public ModeProcessor {
     enum class Step { baseTime, initTime, fstopSet, run, last_ };
-    enum class RunView { common, log, last_ };
 
 public:
     FStopTestMode(bool splitGrade);
@@ -14,21 +13,15 @@ public:
     void reset() override;
     void switchMode() override;
 
-    bool canSwitchView() const override;
-    void switchView() override;
-
-    void printLog() const override;
-
     const char* preview() const override;
 
 private:
-    void printLog(bool& logOverFlowed) const;
+    void printTimes() const;
     Time getPrintTime() const;
     Time getStepTotalTime(uint8_t step) const;
 
     bool kSplit;
     Step m_step;
-    RunView m_view;
     uint8_t m_currentRun;
     uint8_t m_FStopPartId;
     Time m_baseTime;

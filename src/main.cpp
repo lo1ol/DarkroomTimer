@@ -46,7 +46,6 @@ void setMode(ModeId modeId) {
 
 bool gBlocked = false;
 
-static bool gInLog = false;
 VirtButton gSettingBtn;
 
 void processModeSwitch() {
@@ -72,7 +71,6 @@ void processModeSwitch() {
         setMode(ADD_TO_ENUM(ModeId, gModeId, dir));
         gEncoder.clear();
         gTimer.reset();
-        gInLog = false;
     }
 
     if (gBlockedByPreview)
@@ -153,31 +151,14 @@ void processMode() {
         return;
 
     if (gExtraBtn.hold()) {
-        gInLog = false;
         gModeProcessor->reset();
         gTimer.reset();
     }
 
-    if (gExtraBtn.click()) {
-        if (gModeProcessor->canSwitchView()) {
-            gDisplay.resetBlink();
-            gModeProcessor->switchView();
-        } else if (!gBlockedByRun)
-            gInLog = !gInLog;
-    }
+    if (!gBlocked && gModeSwitchBtn.click())
+        gModeProcessor->switchMode();
 
-    if (!gBlocked && gModeSwitchBtn.click()) {
-        if (gInLog)
-            gInLog = false;
-        else
-            gModeProcessor->switchMode();
-    }
-
-    if (gInLog) {
-        gModeProcessor->printLog();
-    } else {
-        gModeProcessor->process();
-    }
+    gModeProcessor->process();
 
     gBlocked = gBlockedByRun = gTimer.state() == Timer::RUNNING;
 }

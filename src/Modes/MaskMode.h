@@ -6,7 +6,6 @@
 
 class MaskMode final : public ModeProcessor {
     enum class Step { setNum, setMasks, run, last_ };
-    enum class View { common, log, last_ };
 
 public:
     MaskMode();
@@ -14,23 +13,17 @@ public:
     void reset() override;
     void switchMode() override;
 
-    bool canSwitchView() const override;
-    void switchView() override;
-
-    void printLog() const override;
-
     const char* preview() const override { return "Mask printing"; }
 
 private:
     void processRun();
     void processSetMasks();
 
-    void printLog(bool& logOverFlowed) const;
+    void printTimes() const;
 
     static constexpr uint8_t kMasksMaxNumber = 10;
 
     Step m_step;
-    View m_view;
     uint8_t m_numberOfMasks;
     uint8_t m_currentMask;
 

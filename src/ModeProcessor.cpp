@@ -3,7 +3,7 @@
 #include "Config.h"
 #include "Tools.h"
 
-uint8_t ModeProcessor::printLogHelper(Time (*timeGetter)(const void* ctx, uint8_t id, bool& current, const char*& mark),
+void ModeProcessor::printTimeHelper(Time (*timeGetter)(const void* ctx, uint8_t id, bool& current, const char*& mark),
                                       const void* ctx) const {
     uint8_t id = 0;
 
@@ -18,7 +18,7 @@ uint8_t ModeProcessor::printLogHelper(Time (*timeGetter)(const void* ctx, uint8_
             Time time = timeGetter(ctx, id, current, mark);
 
             if (time == kBadTime)
-                return id;
+                return;
 
             time.getFormatedTime(str, current, current);
 
@@ -39,6 +39,4 @@ uint8_t ModeProcessor::printLogHelper(Time (*timeGetter)(const void* ctx, uint8_
             ++id;
         }
     }
-
-    return id;
 }

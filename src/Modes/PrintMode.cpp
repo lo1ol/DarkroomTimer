@@ -85,7 +85,7 @@ void PrintMode::appendPrintLog(const Time& time) {
 void PrintMode::printLog() const {
     gDisplay[0] << "Log ";
 
-    printLogHelper(
+    printTimeHelper(
         [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
             auto this_ = reinterpret_cast<const PrintMode*>(this__);
 

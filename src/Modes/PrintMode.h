@@ -11,10 +11,7 @@ public:
     void reset() override;
     void switchMode() override;
 
-    bool canSwitchView() const override { return false; }
-    void switchView() override {}
-
-    void printLog() const override;
+    void printLog() const;
 
     const char* preview() const override { return "Printing"; }
 
