@@ -4,6 +4,8 @@
 
 #include <LiquidCrystal.h>
 
+#include "Tools.h"
+
 void DisplayLine::concat(char* dst, const char* src) {
     int srcLen = strlen(src);
     int shift = strlen(dst);
@@ -31,6 +33,8 @@ bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize, const
     if (alignSize + dstlen > DISPLAY_COLS)
         return false;
 
+    m_needRepaint = true;
+
     memset(m_fwInfo + dstlen, ' ', alignSize - srclen);
     m_fwInfo[dstlen + alignSize - srclen] = 0;
 
@@ -47,6 +51,7 @@ bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize, const
 }
 
 void DisplayLine::reset() {
+    m_needRepaint = true;
     m_fwInfo[0] = 0;
     m_bwInfo[0] = 0;
     m_blinkLength = 0;
@@ -59,11 +64,18 @@ void DisplayLine::resetBlink(bool state) {
 }
 
 void DisplayLine::tick() {
+    if (!m_needRepaint && !m_blinkLength)
+        return;
+    m_needRepaint = false;
+
+    char printBuf[DISPLAY_COLS + 1];
+
     auto fwLen = strlen(m_fwInfo);
-    memset(m_fwInfo + fwLen, ' ', DISPLAY_COLS - fwLen);
+    memcpy(printBuf, m_fwInfo, fwLen);
+    memset(printBuf + fwLen, ' ', DISPLAY_COLS - fwLen);
 
     auto bwLen = strlen(m_bwInfo);
-    memcpy(m_fwInfo + DISPLAY_COLS - bwLen, m_bwInfo, bwLen);
+    memcpy(printBuf + DISPLAY_COLS - bwLen, m_bwInfo, bwLen);
 
     if (m_blinkLength) {
         if (millis() - m_blinkTimer > 500) {
@@ -72,38 +84,39 @@ void DisplayLine::tick() {
         }
 
         if (m_blinkState) {
-            memset(m_fwInfo + m_blinkPos, ' ', m_blinkLength);
+            memset(printBuf + m_blinkPos, ' ', m_blinkLength);
 
             if (m_mark) {
                 uint8_t marklen = strlen(m_mark);
-                memcpy(m_fwInfo + m_blinkPos + m_blinkLength - marklen, m_mark, marklen);
+                memcpy(printBuf + m_blinkPos + m_blinkLength - marklen, m_mark, marklen);
             }
         }
     }
 
     m_lcd.setCursor(0, m_line);
-
-    m_lcd.print(m_fwInfo);
-
-    reset();
+    m_lcd.print(printBuf);
 }
 
 DisplayLine& DisplayLine::operator<<(const char* src) {
+    m_needRepaint = true;
     concat(m_fwInfo, src);
     return *this;
 }
 
 DisplayLine& DisplayLine::operator<<(int value) {
+    m_needRepaint = true;
     concatInt(m_fwInfo, value);
     return *this;
 }
 
 DisplayLine& DisplayLine::operator>>(const char* src) {
+    m_needRepaint = true;
     concat(m_bwInfo, src);
     return *this;
 }
 
 DisplayLine& DisplayLine::operator>>(int value) {
+    m_needRepaint = true;
     concatInt(m_bwInfo, value);
     return *this;
 }

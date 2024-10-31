@@ -12,6 +12,8 @@ MaskMode::MaskMode() {
 
     for (uint8_t i = 1; i != kMasksMaxNumber; ++i)
         m_masks[i] = kBadTime;
+
+    repaint();
 }
 
 void MaskMode::switchMode() {
@@ -26,30 +28,34 @@ void MaskMode::switchMode() {
         for (uint8_t i = m_numberOfMasks; i != kMasksMaxNumber; ++i)
             m_masks[i] = kBadTime;
 
+        repaint();
         return;
     }
 
     if (m_currentMask + 1 == m_numberOfMasks) {
         m_step = Step::run;
         m_currentMask = 0;
+        repaint();
         return;
     }
 
     ++m_currentMask;
 
-    if (m_currentMask == 0 || m_masks[m_currentMask] != kBadTime)
+    if (m_currentMask == 0 || m_masks[m_currentMask] != kBadTime) {
+        repaint();
         return;
+    }
 
     // let's guess unknown masks
     m_masks[m_currentMask] = m_masks[m_currentMask - 1];
+    repaint();
 }
 
 void MaskMode::process() {
     switch (m_step) {
     case Step::setNum:
-        gDisplay[0] << preview();
-        getInt(m_numberOfMasks, 2, kMasksMaxNumber);
-        gDisplay[1] << "Mask num: " << m_numberOfMasks;
+        if (getInt(m_numberOfMasks, 2, kMasksMaxNumber))
+            repaint();
         return;
     case Step::setMasks:
         processSetMasks();
@@ -66,23 +72,15 @@ void MaskMode::processSetMasks() {
         gDisplay.resetBlink(true);
     }
 
-    bool changed = getTime(m_masks[m_currentMask]);
-
-    if (changed)
+    if (getTime(m_masks[m_currentMask])) {
+        repaint();
         gDisplay.resetBlink();
-
-    gDisplay[0] << "Set ";
-
-    printTimes();
+    }
 }
 
 void MaskMode::processRun() {
-    gDisplay[0] << "Run ";
-
-    printTimes();
-
-    if (m_currentMask == m_numberOfMasks)
-        gDisplay[1] >> " Finish";
+    if (gTimer.state() == Timer::RUNNING)
+        repaint();
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentMask < m_numberOfMasks)
         gTimer.start(m_masks[m_currentMask]);
@@ -91,6 +89,28 @@ void MaskMode::processRun() {
         if (m_notifyMask & (1 << m_currentMask))
             gBeeper.alarm("Notification");
         ++m_currentMask;
+        repaint();
+    }
+}
+
+void MaskMode::repaint() const {
+    gDisplay.reset();
+
+    switch (m_step) {
+    case Step::setNum:
+        gDisplay[0] << preview();
+        gDisplay[1] << "Mask num: " << m_numberOfMasks;
+        return;
+    case Step::setMasks:
+        gDisplay[0] << "Set ";
+        printTimes();
+        return;
+    case Step::run:
+        gDisplay[0] << "Run ";
+        printTimes();
+        if (m_currentMask == m_numberOfMasks)
+            gDisplay[1] >> " Finish";
+        return;
     }
 }
 

@@ -55,6 +55,8 @@ void processModeSwitch() {
         return;
 
     if (!gModeSwitchBtn.pressing()) {
+        if (gBlockedByPreview)
+            gModeProcessor->repaint();
         gBlocked = gBlockedByPreview = false;
         return;
     }
@@ -73,8 +75,10 @@ void processModeSwitch() {
         gTimer.reset();
     }
 
-    if (gBlockedByPreview)
+    if (gBlockedByPreview) {
+        gDisplay.reset();
         gDisplay[0] << gModeProcessor->preview();
+    }
 
     gBlocked = gBlockedByPreview;
 }
@@ -95,6 +99,7 @@ void processSettings() {
                 return;
             delete gSettingsSetter;
             gSettingsSetter = nullptr;
+            gModeProcessor->repaint();
         } else {
             gSettingsSetter = new SettingsSetter;
         }
@@ -118,6 +123,9 @@ void processView() {
         gViewState = !gViewState;
         digitalWrite(RELAY, gViewState);
         gViewModeTurnOffTime = millis() + gSettings.autoFinishViewMinutes * 60000L;
+
+        if (gViewState == LOW)
+            gModeProcessor->repaint();
     }
 
     gBlocked = gViewState;
@@ -125,6 +133,7 @@ void processView() {
     if (gViewState != HIGH)
         return;
 
+    gDisplay.reset();
     gDisplay[0] << "View";
 
     if (!gSettings.autoFinishViewMinutes) {
@@ -153,6 +162,7 @@ void processMode() {
     if (gExtraBtn.hold()) {
         gModeProcessor->reset();
         gTimer.reset();
+        gModeProcessor->repaint();
     }
 
     if (!gBlocked && gModeSwitchBtn.click())

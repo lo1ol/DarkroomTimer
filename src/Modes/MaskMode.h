@@ -15,6 +15,8 @@ public:
 
     const char* preview() const override { return "Mask printing"; }
 
+    void repaint() const override;
+
 private:
     void processRun();
     void processSetMasks();

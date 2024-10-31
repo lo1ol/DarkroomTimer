@@ -8,6 +8,8 @@ LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
     m_stepTime = 2_s;
     m_step = kSplit ? Step::baseTime : Step::initTime;
     m_currentRun = kSplit ? 0 : 1;
+
+    repaint();
 }
 
 void LinearTestMode::switchMode() {
@@ -17,31 +19,30 @@ void LinearTestMode::switchMode() {
 
     m_currentRun = kSplit ? 0 : 1;
     gTimer.reset();
+
+    repaint();
 }
 
 void LinearTestMode::process() {
     switch (m_step) {
     case Step::baseTime:
-        gDisplay[0] << preview();
-        getTime(m_baseTime);
-        gDisplay[1] << "Base t:" << m_baseTime;
+        if (getTime(m_baseTime))
+            repaint();
         return;
     case Step::initTime:
-        gDisplay[0] << preview();
-        getTime(m_initTime);
-        gDisplay[1] << "Init t:" << m_initTime;
+        if (getTime(m_initTime))
+            repaint();
         return;
     case Step::stepTime:
-        gDisplay[0] << preview();
-        getTime(m_stepTime);
-        gDisplay[1] << "Step t:" << m_stepTime;
+        if (getTime(m_stepTime))
+            repaint();
         return;
     case Step::run:
         break;
     }
 
-    gDisplay[0] << "Run ";
-    printTimes();
+    if (gTimer.state() == Timer::RUNNING)
+        repaint();
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime)
         gTimer.start(getPrintTime());
@@ -52,6 +53,30 @@ void LinearTestMode::process() {
             gBeeper.alarm("Change filter");
         }
         ++m_currentRun;
+        repaint();
+    }
+}
+
+void LinearTestMode::repaint() const {
+    gDisplay.reset();
+
+    switch (m_step) {
+    case Step::baseTime:
+        gDisplay[0] << preview();
+        gDisplay[1] << "Base t:" << m_baseTime;
+        return;
+    case Step::initTime:
+        gDisplay[0] << preview();
+        gDisplay[1] << "Init t:" << m_initTime;
+        return;
+    case Step::stepTime:
+        gDisplay[0] << preview();
+        gDisplay[1] << "Step t:" << m_stepTime;
+        return;
+    case Step::run:
+        gDisplay[0] << "Run ";
+        printTimes();
+        break;
     }
 }
 

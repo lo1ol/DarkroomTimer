@@ -4,7 +4,7 @@
 #include "Tools.h"
 
 void ModeProcessor::printTimeHelper(Time (*timeGetter)(const void* ctx, uint8_t id, bool& current, const char*& mark),
-                                      const void* ctx) const {
+                                    const void* ctx) const {
     uint8_t id = 0;
 
     for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {

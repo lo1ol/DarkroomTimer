@@ -11,7 +11,9 @@ public:
 
     virtual const char* preview() const = 0;
 
+    virtual void repaint() const = 0;
+
 protected:
     void printTimeHelper(Time (*timeGetter)(const void* ctx, uint8_t id, bool& current, const char*& mark),
-                           const void* ctx) const;
+                         const void* ctx) const;
 };

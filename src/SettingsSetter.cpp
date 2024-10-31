@@ -104,6 +104,8 @@ void SettingsSetter::processSetMelody() const {
 }
 
 void SettingsSetter::process() {
+    gDisplay.reset();
+
     if (m_timer.state() != Timer::RUNNING) {
         int8_t shift = 0;
         if (gModeSwitchBtn.click())

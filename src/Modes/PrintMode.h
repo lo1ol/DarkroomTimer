@@ -15,6 +15,8 @@ public:
 
     const char* preview() const override { return "Printing"; }
 
+    void repaint() const override;
+
 private:
     void appendPrintLog(const Time&);
     void resetPrintInfo();

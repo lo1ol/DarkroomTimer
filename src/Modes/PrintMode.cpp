@@ -6,13 +6,18 @@ PrintMode::PrintMode() {
     m_printTime = 8_s;
     m_triggerByHold = false;
     m_logSize = 0;
+
+    repaint();
 }
 
 void PrintMode::switchMode() {
     m_triggerByHold = !m_triggerByHold;
+    repaint();
 }
 
 void PrintMode::process() {
+    gDisplay.reset();
+
     gDisplay[0] << "Prnt " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
 
     if (gTimer.stopped())
@@ -60,6 +65,10 @@ void PrintMode::process() {
         if (gTimer.pause())
             appendPrintLog(gTimer.afterLastResume());
     }
+}
+
+void PrintMode::repaint() const {
+    // TODO
 }
 
 void PrintMode::reset() {

@@ -15,6 +15,8 @@ public:
 
     const char* preview() const override;
 
+    void repaint() const override;
+
 private:
     void printTimes() const;
     Time getPrintTime() const;

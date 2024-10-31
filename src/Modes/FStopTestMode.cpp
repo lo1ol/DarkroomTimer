@@ -12,6 +12,8 @@ FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {
     m_FStopPartId = 5;
     m_step = kSplit ? Step::baseTime : Step::initTime;
     m_currentRun = kSplit ? 0 : 1;
+
+    repaint();
 }
 
 void FStopTestMode::switchMode() {
@@ -21,35 +23,30 @@ void FStopTestMode::switchMode() {
 
     m_currentRun = kSplit ? 0 : 1;
     gTimer.reset();
+
+    repaint();
 }
 
 void FStopTestMode::process() {
     switch (m_step) {
     case Step::baseTime:
-        gDisplay[0] << preview();
-
-        getTime(m_baseTime);
-        gDisplay[1] << "Base t:" << m_baseTime;
+        if (getTime(m_baseTime))
+            repaint();
         return;
     case Step::initTime:
-        gDisplay[0] << preview();
-
-        getTime(m_initTime);
-        gDisplay[1] << "Init t:" << m_initTime;
+        if (getTime(m_initTime))
+            repaint();
         return;
-    case Step::fstopSet: {
-        gDisplay[0] << preview();
-
-        getInt(m_FStopPartId, 0, sizeof(kFStopPartVarinatns) - 1);
-        gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
-    }
+    case Step::fstopSet:
+        if (getInt(m_FStopPartId, 0, sizeof(kFStopPartVarinatns) - 1))
+            repaint();
         return;
     case Step::run:
         break;
     }
 
-    gDisplay[0] << "Run ";
-    printTimes();
+    if (gTimer.state() == Timer::RUNNING)
+        repaint();
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getStepTotalTime(m_currentRun) != kBadTime)
         gTimer.start(getPrintTime());
@@ -60,6 +57,30 @@ void FStopTestMode::process() {
             gBeeper.alarm("Change filter");
         }
         ++m_currentRun;
+        repaint();
+    }
+}
+
+void FStopTestMode::repaint() const {
+    gDisplay.reset();
+
+    switch (m_step) {
+    case Step::baseTime:
+        gDisplay[0] << preview();
+        gDisplay[1] << "Base t:" << m_baseTime;
+        return;
+    case Step::initTime:
+        gDisplay[0] << preview();
+        gDisplay[1] << "Init t:" << m_initTime;
+        return;
+    case Step::fstopSet:
+        gDisplay[0] << preview();
+        gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
+        return;
+    case Step::run:
+        gDisplay[0] << "Run ";
+        printTimes();
+        return;
     }
 }
 

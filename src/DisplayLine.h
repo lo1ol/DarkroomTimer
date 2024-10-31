@@ -26,6 +26,7 @@ private:
     static void concat(char* dst, const char* src);
     static void concatInt(char* dst, int value);
 
+    bool m_needRepaint = false;
     int m_line;
     LiquidCrystal& m_lcd;
 
