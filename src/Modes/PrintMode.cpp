@@ -3,9 +3,11 @@
 #include "../Tools.h"
 
 PrintMode::PrintMode() {
+    gTimeTable.printBadAsZero(false);
+    gTimeTable.empty();
+
     m_printTime = 8_s;
     m_triggerByHold = false;
-    m_logSize = 0;
 
     repaint();
 }
@@ -77,31 +79,20 @@ void PrintMode::reset() {
 
 void PrintMode::resetPrintInfo() {
     gTimer.reset();
-    m_logSize = 0;
+    gTimeTable.empty();
 }
 
 void PrintMode::appendPrintLog(const Time& time) {
     if (time == 0_ts)
         return;
 
-    if (m_logSize == sizeof(m_printLog) / sizeof(m_printLog[0]))
+    if (m_logSize == TimeTable::kTimeTableSize)
         return;
 
-    m_printLog[m_logSize] = time;
+    gTimeTable.setTime(m_logSize, time);
     ++m_logSize;
 }
 
 void PrintMode::printLog() const {
-    gDisplay[0] << "Log ";
-
-    printTimeHelper(
-        [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
-            auto this_ = reinterpret_cast<const PrintMode*>(this__);
-
-            if (id == this_->m_logSize)
-                return kBadTime;
-
-            return { this_->m_printLog[id] };
-        },
-        this);
+    gTimeTable.paint();
 }

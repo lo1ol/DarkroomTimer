@@ -7,6 +7,7 @@
 #include "Display.h"
 #include "Settings.h"
 #include "Time.h"
+#include "TimeTable.h"
 #include "Timer.h"
 
 #define ADD_TO_ENUM(enumName, current, num) \
@@ -27,3 +28,4 @@ extern Timer gTimer;
 extern Settings gSettings;
 extern Display gDisplay;
 extern Beeper gBeeper;
+extern TimeTable gTimeTable;

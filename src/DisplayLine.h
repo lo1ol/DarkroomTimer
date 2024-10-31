@@ -20,7 +20,10 @@ public:
     DisplayLine& operator>>(const char* src);
     DisplayLine& operator>>(int value);
 
-    bool tryPrint(const char* src, bool blink = false, uint8_t alignSize = 0, const char* mark = nullptr);
+    void print(const char* src, bool blink = false, uint8_t alignSize = 0, const char* mark = nullptr);
+
+    void fastRepaint(const char* src, uint8_t shift);
+    void restore();
 
 private:
     static void concat(char* dst, const char* src);
@@ -35,6 +38,7 @@ private:
     uint32_t m_blinkTimer = 0;
     bool m_blinkState = 0;
     const char* m_mark;
+    bool m_hasFastChanges = false;
 
     char m_fwInfo[DISPLAY_COLS + 1] = "";
     char m_bwInfo[DISPLAY_COLS + 1] = "";

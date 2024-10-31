@@ -24,5 +24,4 @@ private:
     bool m_triggerByHold;
     Time m_printTime;
     uint8_t m_logSize = 0;
-    Time m_printLog[13];
 };

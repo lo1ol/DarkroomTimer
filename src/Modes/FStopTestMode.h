@@ -18,7 +18,7 @@ public:
     void repaint() const override;
 
 private:
-    void printTimes() const;
+    void setTimeTable() const;
     Time getPrintTime() const;
     Time getStepTotalTime(uint8_t step) const;
 

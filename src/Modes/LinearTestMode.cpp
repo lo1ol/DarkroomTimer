@@ -3,6 +3,8 @@
 #include "../Tools.h"
 
 LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
+    gTimeTable.printBadAsZero(false);
+
     m_baseTime = 2_s;
     m_initTime = 8_s;
     m_stepTime = 2_s;
@@ -17,7 +19,12 @@ void LinearTestMode::switchMode() {
     if (m_step == Step::baseTime && !kSplit)
         m_step = Step::initTime;
 
-    m_currentRun = kSplit ? 0 : 1;
+    m_currentRun = 0;
+    if (m_step == Step::run) {
+        setTimeTable();
+        gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
+    }
+
     gTimer.reset();
 
     repaint();
@@ -41,20 +48,19 @@ void LinearTestMode::process() {
         break;
     }
 
-    if (gTimer.state() == Timer::RUNNING)
-        repaint();
-
-    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime)
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime &&
+        gTimeTable.currentIsPrinted())
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
-        if (m_currentRun == 0) {
+        if (m_currentRun == 0 && kSplit) { // don't take into account base time
             gTimer.reset();
             gBeeper.alarm("Change filter");
         }
-        ++m_currentRun;
-        repaint();
+        gTimeTable.setCurrent(++m_currentRun);
     }
+
+    gTimeTable.paint();
 }
 
 void LinearTestMode::repaint() const {
@@ -74,52 +80,56 @@ void LinearTestMode::repaint() const {
         gDisplay[1] << "Step t:" << m_stepTime;
         return;
     case Step::run:
-        gDisplay[0] << "Run ";
-        printTimes();
+        gTimeTable.forcePaint();
         break;
     }
 }
 
 Time LinearTestMode::getPrintTime() const {
-    if (m_currentRun == 0)
+    uint8_t realStep = m_currentRun;
+    if (!kSplit)
+        ++realStep;
+
+    if (realStep == 0)
         return m_baseTime;
 
-    if (m_currentRun == 1)
+    if (realStep == 1)
         return m_initTime;
 
     return m_stepTime;
 }
 
 Time LinearTestMode::getTotalTime(uint8_t id) const {
-    if (id == 0)
+    uint8_t realId = id;
+    if (!kSplit)
+        ++realId;
+
+    if (realId == 0)
         return m_baseTime;
 
     int32_t res = static_cast<int16_t>(m_stepTime);
-    res *= id - 1;
+    res *= realId - 1;
     res += static_cast<int16_t>(m_initTime);
 
     return Time{ res };
 }
 void LinearTestMode::reset() {
-    m_currentRun = kSplit ? 0 : 1;
+    m_currentRun = 0;
+    gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
 }
 
-void LinearTestMode::printTimes() const {
-    printTimeHelper(
-        [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
-            auto this_ = reinterpret_cast<const LinearTestMode*>(this__);
-
-            if (!this_->kSplit)
-                ++id;
-
-            current = this_->m_step == Step::run && this_->m_currentRun == id;
-
-            if (id == 0)
-                mark = "ntf";
-
-            return this_->getTotalTime(id);
-        },
-        this);
+void LinearTestMode::setTimeTable() const {
+    gTimeTable.empty();
+    gTimeTable.setPrefix("Run ");
+    uint8_t id = 0;
+    while (true) {
+        if (id == TimeTable::kTimeTableSize)
+            break;
+        Time time = getTotalTime(id);
+        if (time == kBadTime)
+            break;
+        gTimeTable.setTime(id++, time);
+    }
 }
 
 const char* LinearTestMode::preview() const {

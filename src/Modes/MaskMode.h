@@ -21,14 +21,11 @@ private:
     void processRun();
     void processSetMasks();
 
-    void printTimes() const;
-
-    static constexpr uint8_t kMasksMaxNumber = 10;
+    void setCurrentMask(uint8_t);
 
     Step m_step;
     uint8_t m_numberOfMasks;
-    uint8_t m_currentMask;
+    uint32_t m_currentMask;
 
-    Time m_masks[kMasksMaxNumber];
     uint16_t m_notifyMask;
 };

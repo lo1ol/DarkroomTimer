@@ -4,6 +4,7 @@
 
 #include "Config.h"
 #include "DisplayLine.h"
+#include "TimeTable.h"
 
 class Display {
 public:

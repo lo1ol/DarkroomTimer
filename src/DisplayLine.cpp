@@ -23,15 +23,12 @@ void DisplayLine::concatInt(char* dst, int value) {
     concat(dst, str);
 }
 
-bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize, const char* mark) {
+void DisplayLine::print(const char* src, bool blink, uint8_t alignSize, const char* mark) {
     uint8_t srclen = strlen(src);
     uint8_t dstlen = strlen(m_fwInfo);
 
     if (!alignSize)
         alignSize = srclen;
-
-    if (alignSize + dstlen > DISPLAY_COLS)
-        return false;
 
     m_needRepaint = true;
 
@@ -47,7 +44,6 @@ bool DisplayLine::tryPrint(const char* src, bool blink, uint8_t alignSize, const
     }
 
     concat(m_fwInfo, src);
-    return true;
 }
 
 void DisplayLine::reset() {
@@ -66,7 +62,12 @@ void DisplayLine::resetBlink(bool state) {
 void DisplayLine::tick() {
     if (!m_needRepaint && !m_blinkLength)
         return;
+
+    if (!m_needRepaint && m_hasFastChanges)
+        return;
+
     m_needRepaint = false;
+    m_hasFastChanges = false;
 
     char printBuf[DISPLAY_COLS + 1];
 
@@ -97,6 +98,10 @@ void DisplayLine::tick() {
     m_lcd.print(printBuf);
 }
 
+void DisplayLine::restore() {
+    m_needRepaint = true;
+}
+
 DisplayLine& DisplayLine::operator<<(const char* src) {
     m_needRepaint = true;
     concat(m_fwInfo, src);
@@ -119,4 +124,10 @@ DisplayLine& DisplayLine::operator>>(int value) {
     m_needRepaint = true;
     concatInt(m_bwInfo, value);
     return *this;
+}
+
+void DisplayLine::fastRepaint(const char* src, uint8_t shift) {
+    m_lcd.setCursor(shift, m_line);
+    m_lcd.print(src);
+    m_hasFastChanges = true;
 }

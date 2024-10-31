@@ -3,15 +3,17 @@
 #include "../Tools.h"
 
 MaskMode::MaskMode() {
+    gTimeTable.empty();
+    gTimeTable.printBadAsZero(true);
+
     m_numberOfMasks = 3;
-    memset(m_masks, 0, sizeof(m_masks));
-    m_masks[0] = 8_s;
+    gTimeTable.setTime(0, 8_s);
     m_step = Step::setNum;
     m_currentMask = 0;
     m_notifyMask = 0;
 
-    for (uint8_t i = 1; i != kMasksMaxNumber; ++i)
-        m_masks[i] = kBadTime;
+    for (uint8_t i = 1; i != TimeTable::kTimeTableSize; ++i)
+        gTimeTable.setTime(i, kBadTime);
 
     repaint();
 }
@@ -22,11 +24,13 @@ void MaskMode::switchMode() {
     if (m_step != Step::setMasks) {
         m_step = ADD_TO_ENUM(Step, m_step, 1);
 
-        m_currentMask = 0;
-
         m_notifyMask &= ~((~0) << m_numberOfMasks);
-        for (uint8_t i = m_numberOfMasks; i != kMasksMaxNumber; ++i)
-            m_masks[i] = kBadTime;
+        for (uint8_t i = m_numberOfMasks; i != TimeTable::kTimeTableSize; ++i)
+            gTimeTable.setTime(i, kBadTime);
+
+        gTimeTable.resize(m_numberOfMasks);
+
+        setCurrentMask(0);
 
         repaint();
         return;
@@ -34,27 +38,31 @@ void MaskMode::switchMode() {
 
     if (m_currentMask + 1 == m_numberOfMasks) {
         m_step = Step::run;
-        m_currentMask = 0;
-        repaint();
-        return;
-    }
-
-    ++m_currentMask;
-
-    if (m_currentMask == 0 || m_masks[m_currentMask] != kBadTime) {
+        setCurrentMask(0);
         repaint();
         return;
     }
 
     // let's guess unknown masks
-    m_masks[m_currentMask] = m_masks[m_currentMask - 1];
+    gTimeTable.setTime(m_currentMask + 1, gTimeTable.getTime(m_currentMask));
+    setCurrentMask(m_currentMask + 1);
+    repaint();
+}
+
+void MaskMode::setCurrentMask(uint8_t id) {
+    m_currentMask = id;
+    if (id == m_numberOfMasks)
+        gTimeTable.setCurrent(-1);
+    else
+        gTimeTable.setCurrent(id, ((m_notifyMask & (1 << id)) ? "ntf" : nullptr));
+
     repaint();
 }
 
 void MaskMode::process() {
     switch (m_step) {
     case Step::setNum:
-        if (getInt(m_numberOfMasks, 2, kMasksMaxNumber))
+        if (getInt(m_numberOfMasks, 2, TimeTable::kTimeTableSize))
             repaint();
         return;
     case Step::setMasks:
@@ -69,28 +77,31 @@ void MaskMode::process() {
 void MaskMode::processSetMasks() {
     if (gStartBtn.click()) {
         m_notifyMask ^= 1 << m_currentMask;
+        setCurrentMask(m_currentMask);
         gDisplay.resetBlink(true);
     }
 
-    if (getTime(m_masks[m_currentMask])) {
-        repaint();
+    auto time = gTimeTable.getTime(m_currentMask);
+    if (getTime(time)) {
+        gTimeTable.setTime(m_currentMask, time);
         gDisplay.resetBlink();
     }
+
+    gTimeTable.paint();
 }
 
 void MaskMode::processRun() {
-    if (gTimer.state() == Timer::RUNNING)
-        repaint();
-
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentMask < m_numberOfMasks)
-        gTimer.start(m_masks[m_currentMask]);
+        gTimer.start(gTimeTable.getTime(m_currentMask));
 
     if (gTimer.stopped()) {
         if (m_notifyMask & (1 << m_currentMask))
             gBeeper.alarm("Notification");
-        ++m_currentMask;
-        repaint();
+
+        setCurrentMask(1 + m_currentMask);
     }
+
+    gTimeTable.paint();
 }
 
 void MaskMode::repaint() const {
@@ -102,38 +113,18 @@ void MaskMode::repaint() const {
         gDisplay[1] << "Mask num: " << m_numberOfMasks;
         return;
     case Step::setMasks:
-        gDisplay[0] << "Set ";
-        printTimes();
+        gTimeTable.setPrefix("Set ");
+        gTimeTable.forcePaint();
         return;
     case Step::run:
-        gDisplay[0] << "Run ";
-        printTimes();
+        gTimeTable.setPrefix("Run ");
+        gTimeTable.forcePaint();
         if (m_currentMask == m_numberOfMasks)
-            gDisplay[1] >> " Finish";
+            gDisplay[DISPLAY_ROWS - 1] >> "Finished";
         return;
     }
 }
 
 void MaskMode::reset() {
-    m_currentMask = 0;
-}
-
-void MaskMode::printTimes() const {
-    printTimeHelper(
-        [](const void* this__, uint8_t id, bool& current, const char*& mark) -> Time {
-            auto this_ = reinterpret_cast<const MaskMode*>(this__);
-
-            current = this_->m_step != Step::setNum && this_->m_currentMask == id;
-            if (id == this_->m_numberOfMasks)
-                return kBadTime;
-
-            if (this_->m_notifyMask & (1 << id))
-                mark = "ntf";
-
-            if (this_->m_masks[id] == kBadTime)
-                return 0_ts;
-
-            return this_->m_masks[id];
-        },
-        this);
+    setCurrentMask(0);
 }
