@@ -16,6 +16,25 @@ enum class ModeId : uint8_t { testFStops, testLinear, print, mask, splitFStops, 
 ModeId gModeId;
 ModeProcessor* gModeProcessor = nullptr;
 
+const char* getPreview(ModeId modeId) {
+    switch (modeId) {
+    case ModeId::testFStops:
+        return "F Stop test";
+    case ModeId::testLinear:
+        return "Linear test";
+    case ModeId::print:
+        return "Printing";
+    case ModeId::mask:
+        return "Mask printing";
+    case ModeId::splitFStops:
+        return "Splt F Stop test";
+    case ModeId::splitLinear:
+        return "Splt linear test";
+    }
+
+    return "";
+}
+
 void setMode(ModeId modeId) {
     if (gModeProcessor)
         delete (gModeProcessor);
@@ -50,13 +69,18 @@ VirtButton gSettingBtn;
 
 void processModeSwitch() {
     static bool gBlockedByPreview = false;
+    static ModeId gNewMode = gModeId;
 
     if (gBlocked && !gBlockedByPreview)
         return;
 
     if (!gModeSwitchBtn.pressing()) {
-        if (gBlockedByPreview)
-            gModeProcessor->repaint();
+        if (gBlockedByPreview) {
+            if (gNewMode != gModeId)
+                setMode(gNewMode);
+            else
+                gModeProcessor->repaint();
+        }
         gBlocked = gBlockedByPreview = false;
         return;
     }
@@ -70,14 +94,14 @@ void processModeSwitch() {
 
         gBlocked = gBlockedByPreview = true;
 
-        setMode(ADD_TO_ENUM(ModeId, gModeId, dir));
+        gNewMode = ADD_TO_ENUM(ModeId, gNewMode, dir);
         gEncoder.clear();
         gTimer.reset();
     }
 
     if (gBlockedByPreview) {
         gDisplay.reset();
-        gDisplay[0] << gModeProcessor->preview();
+        gDisplay[0] << getPreview(gNewMode);
     }
 
     gBlocked = gBlockedByPreview;

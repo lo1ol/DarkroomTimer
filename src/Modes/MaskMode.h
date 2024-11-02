@@ -13,7 +13,7 @@ public:
     void reset() override;
     void switchMode() override;
 
-    const char* preview() const override { return "Mask printing"; }
+    const char* preview() const { return "Mask printing"; }
 
     void repaint() const override;
 

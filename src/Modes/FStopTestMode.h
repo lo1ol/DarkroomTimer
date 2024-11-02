@@ -13,7 +13,7 @@ public:
     void reset() override;
     void switchMode() override;
 
-    const char* preview() const override;
+    const char* preview() const;
 
     void repaint() const override;
 

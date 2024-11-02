@@ -13,8 +13,6 @@ public:
 
     void printLog() const;
 
-    const char* preview() const override { return "Printing"; }
-
     void repaint() const override;
 
 private:
