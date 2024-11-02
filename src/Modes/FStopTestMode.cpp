@@ -64,6 +64,9 @@ void FStopTestMode::process() {
         gTimeTable.setCurrent(++m_currentRun);
     }
 
+    if (gTimer.state() == Timer::STOPPED)
+        gTimeTable.scroll();
+
     gTimeTable.paint();
 }
 

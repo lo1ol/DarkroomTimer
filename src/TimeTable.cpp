@@ -6,6 +6,7 @@
 
 void TimeTable::empty() {
     m_size = 0;
+    m_fistPrintedLine = 0;
     m_changed = true;
 }
 
@@ -35,27 +36,64 @@ void TimeTable::printBadAsZero(bool val) {
 void TimeTable::setCurrent(uint8_t id, const char* mark) {
     m_currentId = id;
     m_currentMark = mark;
+    m_currentShift = -1;
+    m_currentLine = -1;
+    m_changed = true;
+
+    if (m_currentId != -1)
+        m_needGoToCurrent = true;
+}
+
+void TimeTable::scroll() {
+    if (gTimer.state() == Timer::RUNNING)
+        return;
+
+    auto dir = getEncoderDir();
+    if (!dir)
+        return;
+
+    if (m_maxLineNum <= DISPLAY_ROWS)
+        return;
+
+    if (m_fistPrintedLine == 0 && dir == -1)
+        return;
+
+    if (m_fistPrintedLine + DISPLAY_ROWS >= m_maxLineNum && dir == 1)
+        return;
+
+    m_fistPrintedLine += dir;
     m_changed = true;
 }
 
 void TimeTable::forcePaint() {
+tryAgain:
     m_changed = false;
     gDisplay.reset();
 
-    m_currentShift = -1;
-    m_currentLine = -1;
+    m_currentDisplayLine = -1;
     uint8_t id = 0;
+    uint8_t lineId = 0;
 
-    for (uint8_t row = 0; row != DISPLAY_ROWS; ++row) {
+    while (true) {
+        int8_t printedDisplayLine = -1;
+        if (lineId >= m_fistPrintedLine && lineId - m_fistPrintedLine < DISPLAY_ROWS)
+            printedDisplayLine = lineId - m_fistPrintedLine;
+
+        bool exit = false;
+
         uint8_t lineLen = 0;
-        if (row == 0) {
-            gDisplay[0] << m_prefix;
+        if (lineId == 0) {
+            if (printedDisplayLine != -1)
+                gDisplay[printedDisplayLine] << m_prefix;
+
             lineLen = strlen(m_prefix);
         }
 
         while (true) {
-            if (id == m_size)
-                return;
+            if (id == m_size) {
+                exit = true;
+                break;
+            }
 
             char str[DISPLAY_COLS + 1] = { 0 };
             bool current = id == m_currentId;
@@ -67,8 +105,10 @@ void TimeTable::forcePaint() {
             if (time == kBadTime) {
                 if (m_printBadAsZero)
                     time = 0_s;
-                else
-                    return;
+                else {
+                    exit = true;
+                    break;
+                }
             }
 
             time.getFormatedTime(str, current, current);
@@ -82,33 +122,65 @@ void TimeTable::forcePaint() {
             if (lineLen + timeLen > DISPLAY_COLS)
                 break;
 
-            gDisplay[row].print(str, current, alignSize, mark);
+            if (printedDisplayLine != -1)
+                gDisplay[printedDisplayLine].print(str, current, alignSize, mark);
+
             if (current) {
-                m_currentLine = row;
+                m_currentDisplayLine = printedDisplayLine;
+                m_currentLine = lineId;
                 m_currentShift = lineLen;
+                if (m_needGoToCurrent && m_currentDisplayLine == -1) {
+                    m_needGoToCurrent = false;
+                    if (lineId < m_fistPrintedLine)
+                        m_fistPrintedLine = lineId;
+                    else
+                        m_fistPrintedLine = lineId + 1 - DISPLAY_ROWS;
+
+                    goto tryAgain;
+                }
             }
 
             lineLen += timeLen + 1;
 
-            gDisplay[row] << " ";
+            if (printedDisplayLine != -1)
+                gDisplay[printedDisplayLine] << " ";
             ++id;
         }
+
+        if (!exit) {
+            ++lineId;
+            continue;
+        }
+
+        m_maxLineNum = lineId + 1;
+        if (!lineLen)
+            --m_maxLineNum;
+
+        return;
     }
 }
 void TimeTable::paint() {
-    if (!m_changed)
-        paintUnchanged();
-    else
+    if (m_changed)
         forcePaint();
+    else
+        paintUnchanged();
 }
 
-void TimeTable::paintUnchanged() const {
+void TimeTable::paintUnchanged() {
     if (!currentIsPrinted())
         return;
 
+    if (m_currentDisplayLine == -1) {
+        if (gTimer.state() == Timer::RUNNING) {
+            m_needGoToCurrent = true;
+            m_changed = true;
+        }
+        return;
+    }
+
     if (gTimer.state() != Timer::RUNNING) {
         if (gTimer.stopped())
-            gDisplay[m_currentLine].restore();
+            gDisplay[m_currentDisplayLine].restore();
         return;
     }
 
@@ -126,6 +198,6 @@ void TimeTable::paintUnchanged() const {
     uint8_t len = strlen(str);
     strcpy(alignedStr + m_currentAlign - len, str);
 
-    gDisplay[m_currentLine].resetBlink();
-    gDisplay[m_currentLine].fastRepaint(alignedStr, m_currentShift);
+    gDisplay[m_currentDisplayLine].resetBlink();
+    gDisplay[m_currentDisplayLine].fastRepaint(alignedStr, m_currentShift);
 }

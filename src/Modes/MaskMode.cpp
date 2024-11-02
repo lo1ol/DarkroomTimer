@@ -115,6 +115,9 @@ void MaskMode::processRun() {
         setCurrentMask(1 + m_currentMask);
     }
 
+    if (gTimer.state() == Timer::STOPPED && m_currentMask != m_numberOfMasks)
+        gTimeTable.scroll();
+
     gTimeTable.paint();
 }
 
