@@ -25,7 +25,6 @@ private:
 
     Step m_step;
     uint8_t m_numberOfMasks;
-    uint32_t m_currentMask;
-
-    uint16_t m_notifyMask;
+    uint32_t m_notifyMask;
+    uint8_t m_currentMask;
 };

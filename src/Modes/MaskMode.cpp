@@ -21,31 +21,16 @@ MaskMode::MaskMode() {
 void MaskMode::switchMode() {
     gTimer.reset();
 
-    if (m_step != Step::setMasks) {
-        m_step = ADD_TO_ENUM(Step, m_step, 1);
-
+    if (m_step == Step::setNum) {
         m_notifyMask &= ~((~0) << m_numberOfMasks);
         for (uint8_t i = m_numberOfMasks; i != TimeTable::kTimeTableSize; ++i)
             gTimeTable.setTime(i, kBadTime);
 
         gTimeTable.resize(m_numberOfMasks);
-
-        setCurrentMask(0);
-
-        repaint();
-        return;
     }
 
-    if (m_currentMask + 1 == m_numberOfMasks) {
-        m_step = Step::run;
-        setCurrentMask(0);
-        repaint();
-        return;
-    }
-
-    // let's guess unknown masks
-    gTimeTable.setTime(m_currentMask + 1, gTimeTable.getTime(m_currentMask));
-    setCurrentMask(m_currentMask + 1);
+    m_step = ADD_TO_ENUM(Step, m_step, 1);
+    setCurrentMask(0);
     repaint();
 }
 
@@ -75,6 +60,30 @@ void MaskMode::process() {
 }
 
 void MaskMode::processSetMasks() {
+    if (gExtraBtn.pressing()) {
+        uint8_t currentMask = m_currentMask;
+        if (getInt(currentMask, 0, m_numberOfMasks - 1)) {
+            gExtraBtn.skipEvents();
+            setCurrentMask(currentMask);
+            gDisplay.resetBlink(true);
+        }
+
+        gTimeTable.paint();
+        return;
+    }
+
+    if (gExtraBtn.click()) {
+        uint8_t newMask = m_currentMask + 1;
+        if (newMask == m_numberOfMasks)
+            newMask = 0;
+        // let's guess unknown masks
+        if (gTimeTable.getTime(newMask) == kBadTime)
+            gTimeTable.setTime(newMask, gTimeTable.getTime(m_currentMask));
+
+        setCurrentMask(newMask);
+        gDisplay.resetBlink(true);
+    }
+
     if (gStartBtn.click()) {
         m_notifyMask ^= 1 << m_currentMask;
         setCurrentMask(m_currentMask);
@@ -91,8 +100,13 @@ void MaskMode::processSetMasks() {
 }
 
 void MaskMode::processRun() {
-    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentMask < m_numberOfMasks)
-        gTimer.start(gTimeTable.getTime(m_currentMask));
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentMask < m_numberOfMasks) {
+        auto time = gTimeTable.getTime(m_currentMask);
+        if (time == kBadTime)
+            time = 0_s;
+
+        gTimer.start(time);
+    }
 
     if (gTimer.stopped()) {
         if (m_notifyMask & (1 << m_currentMask))
@@ -126,5 +140,6 @@ void MaskMode::repaint() const {
 }
 
 void MaskMode::reset() {
-    setCurrentMask(0);
+    if (m_step == Step::run)
+        setCurrentMask(0);
 }
