@@ -12,11 +12,12 @@
 1. Click view btn to turn on/off a lamp
 2. Hold mode btn and turn encoder, to switch mode
 3. Click mode btn to navigate inside mode
-4. Click extra btn when timer is not ready to run to see log
-5. Click extra btn when timer is ready to run to switch type of view (inside mask mode you could switch view while set masks)
-6. Hold extra btn to reset current printing at any mode (inside mask mode you go to first mask while set masks)
-7. Click start btn to start printing at any mode
-8. Hold view btn and change mode btn to go in set settings mode
+4. Hold extra btn to reset current printing at any mode (inside mask mode you can fast travel between masks)
+5. Turn encoder inside during run to scroll time table
+6. Click start btn to start printing at any mode
+7. Hold view btn and change mode btn to go in set settings mode
+
+> **_Main idea:_** You prepare everything in light and click only Start btn diring printing
 
 ## Settings
 
@@ -33,7 +34,7 @@
 1. F Stop test mode: ability to print tones and part tones of prints (decreasing f stop step). After that you can see the log
 2. Linear test mode: simple mode for linear testing
 3. Print mode: ability to stop printing at any time. Usefull for getting fast masking values
-4. Mask mode: for printing with accurate masks. Hold extra btn while set mask to go back to first mask. Click start btn when set mask to play melody after printing this mask -- usefull, when you don't want to forgot to do something. For example, change filter.
+4. Mask mode: for printing with accurate masks. Click extra btn to go to the next mask. Hold extra btn and turn encoder to fast travel between masks. Click start btn when set mask to play melody after printing this mask -- usefull, when you don't want to forgot to do something. For example, change filter.
 5. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
 
 ## Killer features:
