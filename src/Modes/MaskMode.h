@@ -27,4 +27,5 @@ private:
     uint8_t m_numberOfMasks;
     uint32_t m_notifyMask;
     uint8_t m_currentMask;
+    bool m_showLog = false;
 };

@@ -11,8 +11,6 @@ public:
     void reset() override;
     void switchMode() override;
 
-    void printLog() const;
-
     void repaint() const override;
 
 private:
@@ -22,4 +20,5 @@ private:
     bool m_triggerByHold;
     Time m_printTime;
     uint8_t m_logSize = 0;
+    bool m_showLog = false;
 };

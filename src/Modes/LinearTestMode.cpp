@@ -15,6 +15,12 @@ LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
 }
 
 void LinearTestMode::switchMode() {
+    if (m_showLog) {
+        m_showLog = false;
+        repaint();
+        return;
+    }
+
     m_step = ADD_TO_ENUM(Step, m_step, 1);
     if (m_step == Step::baseTime && !kSplit)
         m_step = Step::initTime;
@@ -47,6 +53,15 @@ void LinearTestMode::process() {
     case Step::run:
         break;
     }
+
+    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+        m_showLog = !m_showLog;
+        repaint();
+        return;
+    }
+
+    if (m_showLog)
+        return;
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime &&
         gTimeTable.currentIsPrinted())
@@ -83,7 +98,14 @@ void LinearTestMode::repaint() const {
         gDisplay[1] << "Step t:" << m_stepTime;
         return;
     case Step::run:
-        gTimeTable.forcePaint();
+        if (m_showLog) {
+            if (kSplit && m_currentRun == 0)
+                gDisplay[1] << "Print base";
+            else
+                gDisplay[1] << "Run #" << (m_currentRun + !kSplit);
+        } else {
+            gTimeTable.forcePaint();
+        }
         break;
     }
 }

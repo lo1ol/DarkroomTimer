@@ -19,6 +19,12 @@ MaskMode::MaskMode() {
 }
 
 void MaskMode::switchMode() {
+    if (m_showLog) {
+        m_showLog = false;
+        repaint();
+        return;
+    }
+
     gTimer.reset();
 
     if (m_step == Step::setNum) {
@@ -100,6 +106,15 @@ void MaskMode::processSetMasks() {
 }
 
 void MaskMode::processRun() {
+    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+        m_showLog = !m_showLog;
+        repaint();
+        return;
+    }
+
+    if (m_showLog)
+        return;
+
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentMask < m_numberOfMasks) {
         auto time = gTimeTable.getTime(m_currentMask);
         if (time == kBadTime)
@@ -134,10 +149,19 @@ void MaskMode::repaint() const {
         gTimeTable.forcePaint();
         return;
     case Step::run:
-        gTimeTable.setPrefix("Run ");
-        gTimeTable.forcePaint();
-        if (m_currentMask == m_numberOfMasks)
-            gDisplay[DISPLAY_ROWS - 1] >> "Finished";
+        if (m_showLog) {
+            gDisplay[0] << "Total: " << gTimer.total();
+            if (m_currentMask == m_numberOfMasks)
+                gDisplay[DISPLAY_ROWS - 1] << "Finished";
+            else
+                gDisplay[1] << "Mask #" << m_currentMask + 1;
+        } else {
+            gTimeTable.setPrefix("Run ");
+            gTimeTable.forcePaint();
+            if (m_currentMask == m_numberOfMasks)
+                gDisplay[DISPLAY_ROWS - 1] >> "Finished";
+        }
+
         return;
     }
 }

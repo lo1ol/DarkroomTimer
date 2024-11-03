@@ -7,6 +7,7 @@
 void TimeTable::empty() {
     m_size = 0;
     m_fistPrintedLine = 0;
+    setCurrent(-1);
     m_changed = true;
 }
 

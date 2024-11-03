@@ -28,4 +28,5 @@ private:
     Time m_baseTime;
     Time m_initTime;
     Time m_stepTime;
+    bool m_showLog = false;
 };

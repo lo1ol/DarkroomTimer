@@ -19,6 +19,12 @@ FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {
 }
 
 void FStopTestMode::switchMode() {
+    if (m_showLog) {
+        m_showLog = false;
+        repaint();
+        return;
+    }
+
     m_step = ADD_TO_ENUM(Step, m_step, 1);
     if (m_step == Step::baseTime && !kSplit)
         m_step = Step::initTime;
@@ -51,6 +57,15 @@ void FStopTestMode::process() {
     case Step::run:
         break;
     }
+
+    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+        m_showLog = !m_showLog;
+        repaint();
+        return;
+    }
+
+    if (m_showLog)
+        return;
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getStepTotalTime(m_currentRun) != kBadTime &&
         gTimeTable.currentIsPrinted())
@@ -87,7 +102,15 @@ void FStopTestMode::repaint() const {
         gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
         return;
     case Step::run:
-        gTimeTable.forcePaint();
+        if (m_showLog) {
+            gDisplay[0] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
+            if (kSplit && m_currentRun == 0)
+                gDisplay[1] << "Print base";
+            else
+                gDisplay[1] << "Run #" << (m_currentRun + !kSplit);
+        } else {
+            gTimeTable.forcePaint();
+        }
         return;
     }
 }

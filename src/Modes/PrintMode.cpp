@@ -4,6 +4,7 @@
 
 PrintMode::PrintMode() {
     gTimeTable.printBadAsZero(false);
+    gTimeTable.setPrefix("Log ");
     gTimeTable.empty();
 
     m_printTime = 8_s;
@@ -13,11 +14,29 @@ PrintMode::PrintMode() {
 }
 
 void PrintMode::switchMode() {
+    if (m_showLog) {
+        m_showLog = false;
+        repaint();
+        return;
+    }
+
     m_triggerByHold = !m_triggerByHold;
     repaint();
 }
 
 void PrintMode::process() {
+    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+        m_showLog = !m_showLog;
+        repaint();
+        return;
+    }
+
+    if (m_showLog) {
+        gTimeTable.scroll();
+        gTimeTable.paint();
+        return;
+    }
+
     gDisplay.reset();
 
     gDisplay[0] << "Prnt " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
@@ -70,7 +89,10 @@ void PrintMode::process() {
 }
 
 void PrintMode::repaint() const {
-    // TODO
+    if (m_showLog) {
+        gTimeTable.forcePaint();
+        return;
+    }
 }
 
 void PrintMode::reset() {
@@ -80,6 +102,7 @@ void PrintMode::reset() {
 void PrintMode::resetPrintInfo() {
     gTimer.reset();
     gTimeTable.empty();
+    m_logSize = 0;
 }
 
 void PrintMode::appendPrintLog(const Time& time) {
@@ -91,8 +114,4 @@ void PrintMode::appendPrintLog(const Time& time) {
 
     gTimeTable.setTime(m_logSize, time);
     ++m_logSize;
-}
-
-void PrintMode::printLog() const {
-    gTimeTable.paint();
 }

@@ -28,4 +28,5 @@ private:
     uint8_t m_FStopPartId;
     Time m_baseTime;
     Time m_initTime;
+    bool m_showLog = false;
 };
