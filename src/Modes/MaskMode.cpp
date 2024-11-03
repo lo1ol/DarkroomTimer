@@ -64,11 +64,10 @@ void MaskMode::processSetMasks() {
         uint8_t currentMask = m_currentMask;
         if (getInt(currentMask, 0, m_numberOfMasks - 1)) {
             gExtraBtn.skipEvents();
-            setCurrentMask(currentMask);
             gDisplay.resetBlink(true);
+            setCurrentMask(currentMask);
         }
 
-        gTimeTable.paint();
         return;
     }
 
@@ -93,10 +92,9 @@ void MaskMode::processSetMasks() {
     auto time = gTimeTable.getTime(m_currentMask);
     if (getTime(time)) {
         gTimeTable.setTime(m_currentMask, time);
+        setCurrentMask(m_currentMask);
         gDisplay.resetBlink();
     }
-
-    gTimeTable.paint();
 }
 
 void MaskMode::processRun() {
@@ -116,9 +114,9 @@ void MaskMode::processRun() {
     }
 
     if (gTimer.state() == Timer::STOPPED && m_currentMask != m_numberOfMasks)
-        gTimeTable.scroll();
+        gScrollableContent.scroll();
 
-    gTimeTable.paint();
+    gScrollableContent.paint();
 }
 
 void MaskMode::repaint() const {
@@ -131,11 +129,13 @@ void MaskMode::repaint() const {
         return;
     case Step::setMasks:
         gTimeTable.setPrefix("Set ");
-        gTimeTable.forcePaint();
+        gTimeTable.flush(true);
+        gScrollableContent.paint();
         return;
     case Step::run:
         gTimeTable.setPrefix("Run ");
-        gTimeTable.forcePaint();
+        gTimeTable.flush(true);
+        gScrollableContent.paint();
         if (m_currentMask == m_numberOfMasks)
             gDisplay[DISPLAY_ROWS - 1] >> "Finished";
         return;

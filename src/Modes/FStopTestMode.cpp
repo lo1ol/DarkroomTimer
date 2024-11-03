@@ -53,7 +53,7 @@ void FStopTestMode::process() {
     }
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getStepTotalTime(m_currentRun) != kBadTime &&
-        gTimeTable.currentIsPrinted())
+        gScrollableContent.currentIsPrinted())
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
@@ -62,12 +62,13 @@ void FStopTestMode::process() {
             gBeeper.alarm("Change filter");
         }
         gTimeTable.setCurrent(++m_currentRun);
+        gTimeTable.flush();
     }
 
     if (gTimer.state() == Timer::STOPPED)
-        gTimeTable.scroll();
+        gScrollableContent.scroll();
 
-    gTimeTable.paint();
+    gScrollableContent.paint();
 }
 
 void FStopTestMode::repaint() const {
@@ -87,7 +88,8 @@ void FStopTestMode::repaint() const {
         gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
         return;
     case Step::run:
-        gTimeTable.forcePaint();
+        gTimeTable.flush(true);
+        gScrollableContent.paint();
         return;
     }
 }
@@ -122,6 +124,7 @@ Time FStopTestMode::getStepTotalTime(uint8_t id) const {
 void FStopTestMode::reset() {
     m_currentRun = 0;
     gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
+    repaint();
 }
 
 void FStopTestMode::setTimeTable() const {

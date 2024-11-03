@@ -49,7 +49,7 @@ void LinearTestMode::process() {
     }
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime &&
-        gTimeTable.currentIsPrinted())
+        gScrollableContent.currentIsPrinted())
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
@@ -58,12 +58,13 @@ void LinearTestMode::process() {
             gBeeper.alarm("Change filter");
         }
         gTimeTable.setCurrent(++m_currentRun);
+        gTimeTable.flush();
     }
 
     if (gTimer.state() == Timer::STOPPED)
-        gTimeTable.scroll();
+        gScrollableContent.scroll();
 
-    gTimeTable.paint();
+    gScrollableContent.paint();
 }
 
 void LinearTestMode::repaint() const {
@@ -83,7 +84,8 @@ void LinearTestMode::repaint() const {
         gDisplay[1] << "Step t:" << m_stepTime;
         return;
     case Step::run:
-        gTimeTable.forcePaint();
+        gTimeTable.flush(true);
+        gScrollableContent.paint();
         break;
     }
 }
@@ -119,6 +121,7 @@ Time LinearTestMode::getTotalTime(uint8_t id) const {
 void LinearTestMode::reset() {
     m_currentRun = 0;
     gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
+    repaint();
 }
 
 void LinearTestMode::setTimeTable() const {

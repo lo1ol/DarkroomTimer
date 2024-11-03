@@ -32,8 +32,8 @@ void PrintMode::process() {
     }
 
     if (m_showLog) {
-        gTimeTable.scroll();
-        gTimeTable.paint();
+        gScrollableContent.scroll();
+        gScrollableContent.paint();
         return;
     }
 
@@ -90,7 +90,8 @@ void PrintMode::process() {
 
 void PrintMode::repaint() const {
     if (m_showLog) {
-        gTimeTable.forcePaint();
+        gTimeTable.flush(true);
+        gScrollableContent.paint();
         return;
     }
 }

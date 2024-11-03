@@ -5,6 +5,7 @@
 #include "Beeper.h"
 #include "Config.h"
 #include "Display.h"
+#include "ScrollableContent.h"
 #include "Settings.h"
 #include "Time.h"
 #include "TimeTable.h"
@@ -29,3 +30,4 @@ extern Settings gSettings;
 extern Display gDisplay;
 extern Beeper gBeeper;
 extern TimeTable gTimeTable;
+extern ScrollableContent gScrollableContent;
