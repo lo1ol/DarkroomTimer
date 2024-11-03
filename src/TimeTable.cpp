@@ -65,7 +65,7 @@ void TimeTable::flush(bool force) {
                 return;
             }
 
-            char str[DISPLAY_COLS + 1] = { 0 };
+            char str[DISPLAY_COLS + 1];
             bool current = id == m_currentId;
             const char* mark = nullptr;
 
@@ -93,7 +93,7 @@ void TimeTable::flush(bool force) {
             lineLen += timeLen;
             ++id;
 
-            if (lineLen + timeLen + 1 > DISPLAY_COLS)
+            if (lineLen + 1 > DISPLAY_COLS)
                 break;
 
             gScrollableContent.print(" ");

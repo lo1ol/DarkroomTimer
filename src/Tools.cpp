@@ -10,6 +10,7 @@ Settings gSettings;
 Display gDisplay(LiquidCrystal(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7));
 Beeper gBeeper(BEEPER);
 TimeTable gTimeTable;
+RelTimeTable gRelTimeTable[2];
 ScrollableContent gScrollableContent;
 
 void isr() {
@@ -75,4 +76,20 @@ bool getTime(Time& time, bool smooth) {
         time = 1800_s;
 
     return time != oldTime;
+}
+
+bool getRelTime(RelTime& time) {
+    uint8_t relTimeId = time.getId();
+    bool res = getInt(relTimeId, 0, kMaxRelTime.getId());
+
+    time = RelTime(relTimeId);
+    return res;
+}
+
+void alignStr(char* buf, uint8_t align) {
+    char alignedStr[DISPLAY_COLS + 1];
+    memset(alignedStr, ' ', align);
+    uint8_t len = strlen(buf);
+    strcpy(alignedStr + align - len, buf);
+    strcpy(buf, alignedStr);
 }

@@ -23,24 +23,16 @@ void DisplayLine::concatInt(char* dst, int value) {
     concat(dst, str);
 }
 
-void DisplayLine::print(const char* src, bool blink, uint8_t alignSize, const char* mark) {
+void DisplayLine::print(const char* src, bool current, const char* mark) {
     uint8_t srclen = strlen(src);
     uint8_t dstlen = strlen(m_fwInfo);
 
-    if (!alignSize)
-        alignSize = srclen;
-
     m_needRepaint = true;
 
-    memset(m_fwInfo + dstlen, ' ', alignSize - srclen);
-    m_fwInfo[dstlen + alignSize - srclen] = 0;
-
-    if (blink) {
-        m_blinkLength = alignSize;
+    if (current) {
+        m_blinkLength = srclen;
         m_blinkPos = dstlen;
-
-        if (mark)
-            m_mark = mark;
+        m_mark = mark;
     }
 
     concat(m_fwInfo, src);

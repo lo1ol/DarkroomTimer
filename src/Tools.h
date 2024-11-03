@@ -5,6 +5,7 @@
 #include "Beeper.h"
 #include "Config.h"
 #include "Display.h"
+#include "RelTimeTable.h"
 #include "ScrollableContent.h"
 #include "Settings.h"
 #include "Time.h"
@@ -17,6 +18,9 @@
 int8_t getEncoderDir();
 bool getInt(uint8_t& choosen, uint8_t min, uint8_t max);
 bool getTime(Time& time, bool smooth = false);
+bool getRelTime(RelTime& time);
+
+void alignStr(char* buf, uint8_t align);
 
 void setupEncoder();
 
@@ -30,4 +34,5 @@ extern Settings gSettings;
 extern Display gDisplay;
 extern Beeper gBeeper;
 extern TimeTable gTimeTable;
+extern RelTimeTable gRelTimeTable[2];
 extern ScrollableContent gScrollableContent;

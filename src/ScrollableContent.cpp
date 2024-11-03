@@ -91,7 +91,7 @@ void ScrollableContent::forcePaint() {
         symBackup = m_lines[lineId][m_currentShift + m_currentAlign];
         m_lines[lineId][m_currentShift + m_currentAlign] = 0;
 
-        gDisplay[displayLine].print(m_lines[lineId] + m_currentShift, true, m_currentAlign, m_currentMark);
+        gDisplay[displayLine].print(m_lines[lineId] + m_currentShift, true, m_currentMark);
 
         m_lines[lineId][m_currentShift + m_currentAlign] = symBackup;
         gDisplay[displayLine] << (m_lines[lineId] + m_currentShift + m_currentAlign);
@@ -125,13 +125,10 @@ void ScrollableContent::paintUnchanged() {
         time.getFormatedTime(str, true, true);
     }
 
-    char alignedStr[DISPLAY_COLS + 1];
-    memset(alignedStr, ' ', m_currentAlign);
-    uint8_t len = strlen(str);
-    strcpy(alignedStr + m_currentAlign - len, str);
+    alignStr(str, m_currentAlign);
 
     gDisplay[m_currentDisplayLine].resetBlink();
-    gDisplay[m_currentDisplayLine].fastRepaint(alignedStr, m_currentShift);
+    gDisplay[m_currentDisplayLine].fastRepaint(str, m_currentShift);
 }
 
 void ScrollableContent::paint() {

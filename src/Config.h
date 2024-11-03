@@ -24,6 +24,6 @@
 #define DISPLAY_ROWS 2
 #define DISPLAY_COLS 16
 
-#define MAX_BACKLIGHT 50
+#define MAX_BACKLIGHT 250
 
 static_assert(MAX_BACKLIGHT % 10 == 0);

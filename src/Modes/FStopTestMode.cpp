@@ -3,7 +3,7 @@
 #include "../Tools.h"
 
 namespace {
-constexpr uint8_t kFStopPartVarinatns[] = { 6, 5, 4, 3, 2, 1 };
+constexpr uint8_t kFStopPartVarinatns[] = { 12, 6, 4, 3, 2, 1 };
 } // namespace
 
 FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {

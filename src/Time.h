@@ -23,6 +23,7 @@ public:
     Time operator*(int16_t x) const { return Time{ m_ts * x }; }
     Time operator/(int n) const { return Time{ m_ts / n }; }
     Time operator+(const Time& o) const { return Time{ m_ts + o.m_ts }; }
+    Time operator-(const Time& o) const { return Time{ m_ts - o.m_ts }; }
     Time operator-() const { return Time{ -m_ts }; }
 
     Time& operator*=(const int16_t x) {

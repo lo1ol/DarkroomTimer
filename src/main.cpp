@@ -8,10 +8,21 @@
 #include "Modes/LinearTestMode.h"
 #include "Modes/MaskMode.h"
 #include "Modes/PrintMode.h"
+#include "Modes/RelMaskMode.h"
 
 #include "SettingsSetter.h"
 
-enum class ModeId : uint8_t { testFStops, testLinear, print, mask, splitFStops, splitLinear, last_ };
+enum class ModeId : uint8_t {
+    testFStops,
+    testLinear,
+    print,
+    mask,
+    relMask,
+    splitFStops,
+    splitLinear,
+    splitRelMask,
+    last_
+};
 
 ModeId gModeId;
 ModeProcessor* gModeProcessor = nullptr;
@@ -26,10 +37,14 @@ const char* getPreview(ModeId modeId) {
         return "Printing";
     case ModeId::mask:
         return "Mask printing";
+    case ModeId::relMask:
+        return "Rel mask print";
     case ModeId::splitFStops:
         return "Splt F Stop test";
     case ModeId::splitLinear:
         return "Splt linear test";
+    case ModeId::splitRelMask:
+        return "Splt rel mask";
     }
 
     return "";
@@ -54,11 +69,17 @@ void setMode(ModeId modeId) {
     case ModeId::mask:
         gModeProcessor = new MaskMode();
         break;
+    case ModeId::relMask:
+        gModeProcessor = new RelMaskMode(1);
+        break;
     case ModeId::splitFStops:
         gModeProcessor = new FStopTestMode(true);
         break;
     case ModeId::splitLinear:
         gModeProcessor = new LinearTestMode(true);
+        break;
+    case ModeId::splitRelMask:
+        gModeProcessor = new RelMaskMode(2);
         break;
     }
 }
