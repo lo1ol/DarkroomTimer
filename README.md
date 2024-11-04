@@ -26,8 +26,7 @@
 3. Beep volume
 4. Time of auto turn off a lamp in view mode
 5. Start with settings or not
-6. Default views in test and mask modes
-7. Confirmation of notification -- you have to click start btn, to confirm notification
+6. Confirmation of notification -- you have to click start btn, to confirm notification
 
 ## Modes
 
@@ -35,7 +34,9 @@
 2. Linear test mode: simple mode for linear testing
 3. Print mode: ability to stop printing at any time. Usefull for getting fast masking values
 4. Mask mode: for printing with accurate masks. Click extra btn to go to the next mask. Hold extra btn and turn encoder to fast travel between masks. Click start btn when set mask to play melody after printing this mask -- usefull, when you don't want to forgot to do something. For example, change filter.
-5. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
+5. Rel mask mode: the same as mask mode, but operates with relative times: you set base time and relative times (in stops) to it. Notification system is disabled. To see real time in seconds: click on encoder during run
+6. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
+7. Split mask and rel mask modes: the same as mask and rel mask modes, but allows to set mask for two several filtres (0 and 5). Notification system is disabled.
 
 ## Killer features:
 
@@ -46,7 +47,6 @@
 5. Simple architecture of the project allows easily extend functionality
 
 ## How to assamble
-
 
 ### Circuit diagram
 
