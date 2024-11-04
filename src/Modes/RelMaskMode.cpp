@@ -18,6 +18,7 @@ RelMaskMode::RelMaskMode(uint8_t filterNum) {
     m_numberOfMasks[1] = 1;
     m_currentMask = 0;
     m_currentFilter = 0;
+    m_viewSecs = false;
 
     for (auto& relTimeTable : gRelTimeTable) {
         relTimeTable.empty();
@@ -31,6 +32,8 @@ RelMaskMode::RelMaskMode(uint8_t filterNum) {
 
 void RelMaskMode::switchMode() {
     gTimer.reset();
+
+    m_viewSecs = false;
 
     if (m_step == Step::setNum && m_currentFilter + 1 < m_filterNum) {
         ++m_currentFilter;
@@ -139,6 +142,11 @@ void RelMaskMode::processSetMasks() {
 }
 
 void RelMaskMode::processRun() {
+    if (gExtraBtn.click()) {
+        m_viewSecs = !m_viewSecs;
+        repaint();
+    }
+
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentFilter != m_filterNum)
         gTimer.start(getStepTime());
 
@@ -188,6 +196,11 @@ void RelMaskMode::repaint() const {
         gScrollableContent.paint();
         return;
     case Step::run:
+        if (m_viewSecs) {
+            printTimeExplicit();
+            return;
+        }
+
         gScrollableContent.reset();
         if (m_filterNum == 1) {
             gRelTimeTable[0].setPrefix("Run ");
@@ -204,6 +217,39 @@ void RelMaskMode::repaint() const {
             gDisplay[DISPLAY_ROWS - 1] >> "Finished";
         return;
     }
+}
+
+void RelMaskMode::printTimeExplicit() const {
+    for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
+        gTimeTable[filter].empty();
+
+        for (uint8_t mask = 0; mask != m_numberOfMasks[filter] + 1; ++mask) {
+            Time baseTime = gRelTimeTable[filter].getBaseTime();
+            if (mask == 0)
+                gTimeTable[filter].setTime(mask, baseTime);
+            else
+                gTimeTable[filter].setTime(mask, gRelTimeTable[filter].getRelTime(mask) ^ baseTime);
+        }
+    }
+
+    if (m_currentFilter != m_filterNum)
+        gTimeTable[m_currentFilter].setCurrent(m_currentMask);
+
+    gScrollableContent.reset();
+    if (m_filterNum == 1) {
+        gTimeTable[0].setPrefix("Run ");
+        gTimeTable[0].flush(true);
+    } else {
+        for (uint8_t filter; filter != m_filterNum; ++filter) {
+            gTimeTable[filter].setPrefix(kRunPrefixes[filter]);
+            gTimeTable[filter].flush(true);
+        }
+    }
+
+    gScrollableContent.paint();
+    if (m_currentFilter == m_filterNum)
+        gDisplay[DISPLAY_ROWS - 1] >> "Finished";
+    return;
 }
 
 void RelMaskMode::reset() {

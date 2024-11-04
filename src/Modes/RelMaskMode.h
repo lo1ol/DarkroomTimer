@@ -22,6 +22,8 @@ private:
     void setCurrentMask(uint8_t filter, uint8_t mask);
     void moveCurrentMask(int8_t dir);
 
+    void printTimeExplicit() const;
+
     Time getStepTime();
 
     Step m_step;
@@ -29,4 +31,6 @@ private:
     uint8_t m_currentMask;
     uint8_t m_currentFilter;
     uint8_t m_filterNum;
+
+    bool m_viewSecs;
 };
