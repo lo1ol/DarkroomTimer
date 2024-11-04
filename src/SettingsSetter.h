@@ -10,7 +10,6 @@ public:
         setLagTime,
         setBacklight,
         setBeepVolume,
-        setConfirmAlarm,
         setAutoFinishView,
         setStartWithSettings,
         setMelody,
@@ -29,7 +28,6 @@ private:
     void processSetBacklight() const;
     void processSetBeepVolume() const;
     void processSetAutoFinishView() const;
-    void processConfirmAlarm() const;
     void processStartWithSettings() const;
     void processSetMelody() const;
 

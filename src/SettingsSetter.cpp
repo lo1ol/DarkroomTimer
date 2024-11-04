@@ -65,17 +65,6 @@ void SettingsSetter::processSetBacklight() const {
     analogWrite(BACKLIGHT, gSettings.backlight);
 }
 
-void SettingsSetter::processConfirmAlarm() const {
-    gDisplay[0] << "Confirm notify";
-    uint8_t choice = gSettings.confirmAlarm;
-    getInt(choice, 0, 1);
-    gSettings.confirmAlarm = choice;
-    if (choice == 1)
-        gDisplay[1] << "Yes";
-    else
-        gDisplay[1] << "No";
-}
-
 void SettingsSetter::processStartWithSettings() const {
     gDisplay[0] << "Start with stngs";
     uint8_t choice = gSettings.startWithSettings;
@@ -146,9 +135,6 @@ void SettingsSetter::process() {
         break;
     case Step::setAutoFinishView:
         processSetAutoFinishView();
-        break;
-    case Step::setConfirmAlarm:
-        processConfirmAlarm();
         break;
     case Step::setStartWithSettings:
         processStartWithSettings();

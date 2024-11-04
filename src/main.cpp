@@ -250,9 +250,6 @@ void loop() {
     gSettingBtn.tick(gViewBtn, gModeSwitchBtn);
     gDisplay.tick();
 
-    if (gBeeper.blocking())
-        return;
-
     processModeSwitch();
     processSettings();
     processView();

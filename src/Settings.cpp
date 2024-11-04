@@ -17,7 +17,6 @@ Settings::Settings() {
     GET_SETTING(beepVolume);
     GET_SETTING(backlight);
     GET_SETTING(autoFinishViewMinutes);
-    GET_SETTING(confirmAlarm);
     GET_SETTING(startWithSettings);
     GET_SETTING(melody);
 
@@ -31,7 +30,6 @@ Settings::Settings() {
         beepVolume = 3 * 3;
         backlight = (3 * MAX_BACKLIGHT) / 10;
         autoFinishViewMinutes = 3;
-        confirmAlarm = false;
         startWithSettings = false;
         melody = Melody::nice;
         updateEEPROM();
@@ -51,7 +49,6 @@ void Settings::updateEEPROM() {
     PUT_SETTING(beepVolume);
     PUT_SETTING(backlight);
     PUT_SETTING(autoFinishViewMinutes);
-    PUT_SETTING(confirmAlarm);
     PUT_SETTING(startWithSettings);
     PUT_SETTING(melody);
     PUT_SETTING(crc32.finalize());

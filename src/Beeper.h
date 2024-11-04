@@ -13,8 +13,6 @@ public:
     void beep();
     void alarm(const char* notification = nullptr);
 
-    bool blocking() const;
-
     // start beep every second
     void start(bool silentStart = false);
     void stop();

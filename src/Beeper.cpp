@@ -76,26 +76,11 @@ void Beeper::alarm(const char* notification) {
 }
 
 void Beeper::processAlarm() {
-    if (blocking()) {
-        gDisplay[0] << m_notification;
-        gDisplay[1] << "Click start btn";
-        // for safety support click on mode btn
-        if (gStartBtn.click() || gModeSwitchBtn.click()) {
-            stop();
-            gStartBtn.clear();
-            gModeSwitchBtn.clear();
-            return;
-        }
-    }
-
     m_pinState = m_melody->tick();
     if (!m_melody->end())
         return;
 
-    if (blocking())
-        m_melody->init();
-    else
-        stop();
+    stop();
 }
 
 void Beeper::processPin() const {
@@ -103,10 +88,6 @@ void Beeper::processPin() const {
         analogWrite(m_pin, gSettings.beepVolume);
     else
         analogWrite(m_pin, 0);
-}
-
-bool Beeper::blocking() const {
-    return m_notification && gSettings.confirmAlarm && m_state == State::alarm;
 }
 
 void Beeper::setMelody(Melody::Name melodyName) {

@@ -26,7 +26,6 @@
 3. Beep volume
 4. Time of auto turn off a lamp in view mode
 5. Start with settings or not
-6. Confirmation of notification -- you have to click start btn, to confirm notification
 
 ## Modes
 
