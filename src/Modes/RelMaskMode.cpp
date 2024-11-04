@@ -167,13 +167,12 @@ void RelMaskMode::repaint() const {
 
     switch (m_step) {
     case Step::setNum:
-        if (m_filterNum == 1) {
+        if (m_filterNum == 1)
             gDisplay[0] << "Rel mask print";
-            gDisplay[1] << "Mask num: " << m_numberOfMasks[m_currentFilter];
-        } else {
+        else
             gDisplay[0] << "Filter " << m_currentFilter + 1;
-            gDisplay[1] << "Mask num: " << m_numberOfMasks[m_currentFilter];
-        }
+
+        gDisplay[1] << "Mask num: " << m_numberOfMasks[m_currentFilter];
         return;
     case Step::setMasks:
         gScrollableContent.reset();

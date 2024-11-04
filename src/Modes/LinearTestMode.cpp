@@ -3,7 +3,7 @@
 #include "../Tools.h"
 
 LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
-    gTimeTable.printBadAsZero(false);
+    gTimeTable[0].printBadAsZero(false);
 
     m_baseTime = 2_s;
     m_initTime = 8_s;
@@ -22,7 +22,7 @@ void LinearTestMode::switchMode() {
     m_currentRun = 0;
     if (m_step == Step::run) {
         setTimeTable();
-        gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
+        gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
     }
 
     gTimer.reset();
@@ -57,8 +57,8 @@ void LinearTestMode::process() {
             gTimer.reset();
             gBeeper.alarm("Change filter");
         }
-        gTimeTable.setCurrent(++m_currentRun);
-        gTimeTable.flush();
+        gTimeTable[0].setCurrent(++m_currentRun);
+        repaint();
     }
 
     if (gTimer.state() == Timer::STOPPED)
@@ -84,7 +84,8 @@ void LinearTestMode::repaint() const {
         gDisplay[1] << "Step t:" << m_stepTime;
         return;
     case Step::run:
-        gTimeTable.flush(true);
+        gScrollableContent.reset();
+        gTimeTable[0].flush(true);
         gScrollableContent.paint();
         break;
     }
@@ -120,13 +121,13 @@ Time LinearTestMode::getTotalTime(uint8_t id) const {
 }
 void LinearTestMode::reset() {
     m_currentRun = 0;
-    gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
+    gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
     repaint();
 }
 
 void LinearTestMode::setTimeTable() const {
-    gTimeTable.empty();
-    gTimeTable.setPrefix("Run ");
+    gTimeTable[0].empty();
+    gTimeTable[0].setPrefix("Run ");
     uint8_t id = 0;
     while (true) {
         if (id == TimeTable::kTimeTableSize)
@@ -134,7 +135,7 @@ void LinearTestMode::setTimeTable() const {
         Time time = getTotalTime(id);
         if (time == kBadTime)
             break;
-        gTimeTable.setTime(id++, time);
+        gTimeTable[0].setTime(id++, time);
     }
 }
 

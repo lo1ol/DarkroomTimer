@@ -20,6 +20,7 @@ enum class ModeId : uint8_t {
     relMask,
     splitFStops,
     splitLinear,
+    splitMask,
     splitRelMask,
     last_
 };
@@ -43,6 +44,8 @@ const char* getPreview(ModeId modeId) {
         return "Splt F Stop test";
     case ModeId::splitLinear:
         return "Splt linear test";
+    case ModeId::splitMask:
+        return "Splt mask";
     case ModeId::splitRelMask:
         return "Splt rel mask";
     }
@@ -67,7 +70,7 @@ void setMode(ModeId modeId) {
         gModeProcessor = new PrintMode();
         break;
     case ModeId::mask:
-        gModeProcessor = new MaskMode();
+        gModeProcessor = new MaskMode(1);
         break;
     case ModeId::relMask:
         gModeProcessor = new RelMaskMode(1);
@@ -77,6 +80,9 @@ void setMode(ModeId modeId) {
         break;
     case ModeId::splitLinear:
         gModeProcessor = new LinearTestMode(true);
+        break;
+    case ModeId::splitMask:
+        gModeProcessor = new MaskMode(2);
         break;
     case ModeId::splitRelMask:
         gModeProcessor = new RelMaskMode(2);

@@ -7,7 +7,7 @@ constexpr uint8_t kFStopPartVarinatns[] = { 12, 6, 4, 3, 2, 1 };
 } // namespace
 
 FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {
-    gTimeTable.printBadAsZero(false);
+    gTimeTable[0].printBadAsZero(false);
 
     m_baseTime = 2_s;
     m_initTime = 2_s;
@@ -26,7 +26,7 @@ void FStopTestMode::switchMode() {
     m_currentRun = 0;
     if (m_step == Step::run) {
         setTimeTable();
-        gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
+        gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
     }
 
     gTimer.reset();
@@ -61,8 +61,8 @@ void FStopTestMode::process() {
             gTimer.reset();
             gBeeper.alarm("Change filter");
         }
-        gTimeTable.setCurrent(++m_currentRun);
-        gTimeTable.flush();
+        gTimeTable[0].setCurrent(++m_currentRun);
+        repaint();
     }
 
     if (gTimer.state() == Timer::STOPPED)
@@ -88,7 +88,8 @@ void FStopTestMode::repaint() const {
         gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
         return;
     case Step::run:
-        gTimeTable.flush(true);
+        gScrollableContent.reset();
+        gTimeTable[0].flush(true);
         gScrollableContent.paint();
         return;
     }
@@ -123,13 +124,13 @@ Time FStopTestMode::getStepTotalTime(uint8_t id) const {
 
 void FStopTestMode::reset() {
     m_currentRun = 0;
-    gTimeTable.setCurrent(0, kSplit ? "ntf" : nullptr);
+    gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
     repaint();
 }
 
 void FStopTestMode::setTimeTable() const {
-    gTimeTable.empty();
-    gTimeTable.setPrefix("Run ");
+    gTimeTable[0].empty();
+    gTimeTable[0].setPrefix("Run ");
     uint8_t id = 0;
     while (true) {
         if (id == TimeTable::kTimeTableSize)
@@ -137,7 +138,7 @@ void FStopTestMode::setTimeTable() const {
         Time time = getStepTotalTime(id);
         if (time == kBadTime)
             break;
-        gTimeTable.setTime(id++, time);
+        gTimeTable[0].setTime(id++, time);
     }
 }
 

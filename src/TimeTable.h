@@ -5,7 +5,7 @@
 // class for effective keep and printing time table
 class TimeTable {
 public:
-    static constexpr uint8_t kTimeTableSize = 32;
+    static constexpr uint8_t kTimeTableSize = 16;
 
     void setPrefix(const char* prefix);
 

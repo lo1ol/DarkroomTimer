@@ -44,7 +44,6 @@ void TimeTable::flush(bool force) {
         return;
 
     m_changed = false;
-    gScrollableContent.reset();
 
     uint8_t id = 0;
     bool firstLine = true;

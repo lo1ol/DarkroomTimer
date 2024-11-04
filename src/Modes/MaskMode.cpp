@@ -2,18 +2,31 @@
 
 #include "../Tools.h"
 
-MaskMode::MaskMode() {
-    gTimeTable.empty();
-    gTimeTable.printBadAsZero(true);
+namespace {
 
-    m_numberOfTimes = 3;
-    gTimeTable.setTime(0, 8_s);
+constexpr const char* kSetPrefixes[] = { "S F1 ", "S F2 " };
+
+constexpr const char* kRunPrefixes[] = { "R F1 ", "R F2 " };
+
+} // namespace
+
+MaskMode::MaskMode(uint8_t filterNum) {
+    m_filterNum = filterNum;
+
     m_step = Step::setNum;
-    m_currentMask = 0;
+    m_numberOfMasks[0] = 1;
+    m_numberOfMasks[1] = 1;
     m_notifyMask = 0;
+    m_currentMask = 0;
+    m_currentFilter = 0;
 
-    for (uint8_t i = 1; i != TimeTable::kTimeTableSize; ++i)
-        gTimeTable.setTime(i, kBadTime);
+    for (auto& timeTable : gTimeTable) {
+        timeTable.printBadAsZero(true);
+        timeTable.empty();
+        timeTable.setTime(0, 8_s);
+        for (uint8_t i = 1; i != TimeTable::kTimeTableSize; ++i)
+            timeTable.setTime(i, kBadTime);
+    }
 
     repaint();
 }
@@ -21,33 +34,72 @@ MaskMode::MaskMode() {
 void MaskMode::switchMode() {
     gTimer.reset();
 
-    if (m_step == Step::setNum) {
-        m_notifyMask &= ~((~0) << m_numberOfTimes);
-        for (uint8_t i = m_numberOfTimes; i != TimeTable::kTimeTableSize; ++i)
-            gTimeTable.setTime(i, kBadTime);
+    if (m_step == Step::setNum && m_currentFilter + 1 < m_filterNum) {
+        ++m_currentFilter;
+        m_step = Step::setNum;
+        repaint();
+        return;
+    }
 
-        gTimeTable.resize(m_numberOfTimes);
+    if (m_step == Step::setNum) {
+        if (m_filterNum == 1)
+            m_notifyMask &= ~((~0) << m_numberOfMasks[0]);
+
+        for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
+            for (uint8_t i = m_numberOfMasks[filter] + 1; i != TimeTable::kTimeTableSize; ++i)
+                gTimeTable[filter].setTime(i, kBadTime);
+
+            gTimeTable[filter].resize(m_numberOfMasks[filter] + 1);
+        }
     }
 
     m_step = ADD_TO_ENUM(Step, m_step, 1);
-    setCurrentMask(0);
+
+    setCurrentMask(0, 0);
+}
+
+void MaskMode::setCurrentMask(uint8_t filter, uint8_t mask) {
+    if (filter == m_filterNum) {
+        for (auto& timeTable : gTimeTable)
+            timeTable.setCurrent(-1);
+    } else {
+        gTimeTable[m_currentFilter].setCurrent(-1);
+        gTimeTable[filter].setCurrent(mask);
+        gTimeTable[0].setCurrent(mask, ((m_notifyMask & (1 << mask)) ? "ntf" : nullptr));
+    }
+
+    m_currentFilter = filter;
+    m_currentMask = mask;
+
     repaint();
 }
 
-void MaskMode::setCurrentMask(uint8_t id) {
-    m_currentMask = id;
-    if (id == m_numberOfTimes)
-        gTimeTable.setCurrent(-1);
-    else
-        gTimeTable.setCurrent(id, ((m_notifyMask & (1 << id)) ? "ntf" : nullptr));
+void MaskMode::moveCurrentMask(int8_t dir) {
+    auto newFilter = m_currentFilter;
+    auto newMask = m_currentMask;
+    if (m_currentMask == 0 && dir == -1) {
+        if (m_currentFilter == 0)
+            newFilter = m_filterNum - 1;
+        else
+            --newFilter;
+        newMask = m_numberOfMasks[newFilter];
+    } else if (m_currentMask == m_numberOfMasks[m_currentFilter] && dir == 1) {
+        newMask = 0;
+        if (m_currentFilter + 1 == m_filterNum)
+            newFilter = m_step == Step::run ? m_filterNum : 0;
+        else
+            ++newFilter;
+    } else {
+        newMask += dir;
+    }
 
-    repaint();
+    setCurrentMask(newFilter, newMask);
 }
 
 void MaskMode::process() {
     switch (m_step) {
     case Step::setNum:
-        if (getInt(m_numberOfTimes, 2, TimeTable::kTimeTableSize))
+        if (getInt(m_numberOfMasks[m_currentFilter], 0, TimeTable::kTimeTableSize - 1))
             repaint();
         return;
     case Step::setMasks:
@@ -61,45 +113,43 @@ void MaskMode::process() {
 
 void MaskMode::processSetMasks() {
     if (gExtraBtn.pressing()) {
-        uint8_t currentMask = m_currentMask;
-        if (getInt(currentMask, 0, m_numberOfTimes - 1)) {
+        if (int8_t dir = getEncoderDir()) {
             gExtraBtn.skipEvents();
             gDisplay.resetBlink(true);
-            setCurrentMask(currentMask);
+            moveCurrentMask(dir);
         }
 
         return;
     }
 
     if (gExtraBtn.click()) {
-        uint8_t newMask = m_currentMask + 1;
-        if (newMask == m_numberOfTimes)
-            newMask = 0;
         // let's guess unknown masks
-        if (gTimeTable.getTime(newMask) == kBadTime)
-            gTimeTable.setTime(newMask, gTimeTable.getTime(m_currentMask));
+        Time prevTime = gTimeTable[m_currentFilter].getTime(m_currentMask);
+        moveCurrentMask(1);
+        if (gTimeTable[m_currentFilter].getTime(m_currentMask) == kBadTime)
+            gTimeTable[m_currentFilter].setTime(m_currentMask, prevTime);
 
-        setCurrentMask(newMask);
+        repaint();
         gDisplay.resetBlink(true);
     }
 
-    if (gStartBtn.click()) {
-        m_notifyMask ^= 1 << m_currentMask;
-        setCurrentMask(m_currentMask);
-        gDisplay.resetBlink(true);
-    }
-
-    auto time = gTimeTable.getTime(m_currentMask);
+    auto time = gTimeTable[m_currentFilter].getTime(m_currentMask);
     if (getTime(time)) {
-        gTimeTable.setTime(m_currentMask, time);
-        setCurrentMask(m_currentMask);
+        gTimeTable[m_currentFilter].setTime(m_currentMask, time);
+        setCurrentMask(m_currentFilter, m_currentMask);
         gDisplay.resetBlink();
+    }
+
+    if (m_filterNum == 1 && gStartBtn.click()) {
+        m_notifyMask ^= 1 << m_currentMask;
+        setCurrentMask(m_currentFilter, m_currentMask);
+        gDisplay.resetBlink(true);
     }
 }
 
 void MaskMode::processRun() {
-    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentMask < m_numberOfTimes) {
-        auto time = gTimeTable.getTime(m_currentMask);
+    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentFilter != m_filterNum) {
+        auto time = gTimeTable[0].getTime(m_currentMask);
         if (time == kBadTime)
             time = 0_s;
 
@@ -107,13 +157,15 @@ void MaskMode::processRun() {
     }
 
     if (gTimer.stopped()) {
+        moveCurrentMask(1);
         if (m_notifyMask & (1 << m_currentMask))
             gBeeper.alarm("Notification");
 
-        setCurrentMask(1 + m_currentMask);
+        if (m_currentMask == 0 && m_currentFilter != m_filterNum)
+            gBeeper.alarm("Change filter");
     }
 
-    if (gTimer.state() == Timer::STOPPED && m_currentMask != m_numberOfTimes)
+    if (gTimer.state() == Timer::STOPPED && m_currentFilter != m_filterNum)
         gScrollableContent.scroll();
 
     gScrollableContent.paint();
@@ -124,19 +176,40 @@ void MaskMode::repaint() const {
 
     switch (m_step) {
     case Step::setNum:
-        gDisplay[0] << preview();
-        gDisplay[1] << "Time num: " << m_numberOfTimes;
+        if (m_filterNum == 1)
+            gDisplay[0] << "Mask printing";
+        else
+            gDisplay[0] << "Filter " << m_currentFilter + 1;
+
+        gDisplay[1] << "Mask num: " << m_numberOfMasks[m_currentFilter];
         return;
     case Step::setMasks:
-        gTimeTable.setPrefix("Set ");
-        gTimeTable.flush(true);
+        gScrollableContent.reset();
+        if (m_filterNum == 1) {
+            gTimeTable[0].setPrefix("Set ");
+            gTimeTable[0].flush(true);
+        } else {
+            for (uint8_t filter; filter != m_filterNum; ++filter) {
+                gTimeTable[filter].setPrefix(kSetPrefixes[filter]);
+                gTimeTable[filter].flush(true);
+            }
+        }
         gScrollableContent.paint();
         return;
     case Step::run:
-        gTimeTable.setPrefix("Run ");
-        gTimeTable.flush(true);
+        gScrollableContent.reset();
+        if (m_filterNum == 1) {
+            gTimeTable[0].setPrefix("Run ");
+            gTimeTable[0].flush(true);
+        } else {
+            for (uint8_t filter; filter != m_filterNum; ++filter) {
+                gTimeTable[filter].setPrefix(kRunPrefixes[filter]);
+                gTimeTable[filter].flush(true);
+            }
+        }
+
         gScrollableContent.paint();
-        if (m_currentMask == m_numberOfTimes)
+        if (m_currentFilter == m_filterNum)
             gDisplay[DISPLAY_ROWS - 1] >> "Finished";
         return;
     }
@@ -144,5 +217,5 @@ void MaskMode::repaint() const {
 
 void MaskMode::reset() {
     if (m_step == Step::run)
-        setCurrentMask(0);
+        setCurrentMask(0, 0);
 }

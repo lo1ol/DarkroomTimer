@@ -3,9 +3,9 @@
 #include "../Tools.h"
 
 PrintMode::PrintMode() {
-    gTimeTable.printBadAsZero(false);
-    gTimeTable.setPrefix("Log ");
-    gTimeTable.empty();
+    gTimeTable[0].printBadAsZero(false);
+    gTimeTable[0].setPrefix("Log ");
+    gTimeTable[0].empty();
 
     m_printTime = 8_s;
     m_triggerByHold = false;
@@ -90,7 +90,8 @@ void PrintMode::process() {
 
 void PrintMode::repaint() const {
     if (m_showLog) {
-        gTimeTable.flush(true);
+        gScrollableContent.reset();
+        gTimeTable[0].flush(true);
         gScrollableContent.paint();
         return;
     }
@@ -102,8 +103,9 @@ void PrintMode::reset() {
 
 void PrintMode::resetPrintInfo() {
     gTimer.reset();
-    gTimeTable.empty();
+    gTimeTable[0].empty();
     m_logSize = 0;
+    repaint();
 }
 
 void PrintMode::appendPrintLog(const Time& time) {
@@ -113,6 +115,6 @@ void PrintMode::appendPrintLog(const Time& time) {
     if (m_logSize == TimeTable::kTimeTableSize)
         return;
 
-    gTimeTable.setTime(m_logSize, time);
+    gTimeTable[0].setTime(m_logSize, time);
     ++m_logSize;
 }
