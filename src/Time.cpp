@@ -8,7 +8,7 @@ void Time::getFormatedTime(char* buf, bool accurate, bool addZero) const {
     int16_t sec = secs();
     uint8_t dec = tenth();
 
-    if (!accurate && sec > 9) {
+    if (!accurate && sec > 19) {
         itoa(sec + (dec > 4), buf, 10);
         return;
     }

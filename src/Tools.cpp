@@ -56,15 +56,22 @@ bool getTime(Time& time, bool smooth) {
 
     Time oldTime = time;
 
+    // Values are changing with accuracy 1/12 stop
+    // You can check accuracy range by this formule:
+    // t*(2**(1/12)-1)
     int16_t factor;
-    if ((time + shift) < 5_s)
+    if ((time + shift) < 10_s)
         factor = 1;
-    else if ((time + shift) < 10_s)
+    else if ((time + shift) < 20_s)
         factor = 5;
     else if ((time + shift) < 100_s)
         factor = 10;
-    else
+    else if ((time + shift) < 200_s)
+        factor = 50;
+    else if ((time + shift) < 1000_s)
         factor = 100;
+    else
+        factor = 500;
 
     time += shift * factor;
     time = Time((static_cast<int16_t>(time) / factor) * factor);
