@@ -26,13 +26,13 @@ private:
     const char* m_currentMark = nullptr;
     int8_t m_currentDisplayLine = -1;
     int8_t m_currentLine = -1;
-    int8_t m_currentShift;
-    int8_t m_currentAlign;
+    int8_t m_currentShift = 0;
+    int8_t m_currentAlign = 0;
     bool m_changed = true;
     bool m_printBadAsZero = false;
 
     uint8_t m_fistPrintedLine = 0;
     bool m_needGoToCurrent = false;
 
-    char m_lines[DISPLAY_COLS + 1][16];
+    char m_lines[DISPLAY_COLS + 1][16] = {};
 };

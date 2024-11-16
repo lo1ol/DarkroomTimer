@@ -37,7 +37,7 @@ private:
     uint8_t m_blinkLength = 0;
     uint32_t m_blinkTimer = 0;
     bool m_blinkState = 0;
-    const char* m_mark;
+    const char* m_mark = nullptr;
     bool m_hasFastChanges = false;
 
     char m_fwInfo[DISPLAY_COLS + 1] = "";

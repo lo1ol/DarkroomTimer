@@ -70,8 +70,6 @@ void RelTimeTable::flush(bool force) {
             if (id == 0) {
                 m_base.getFormatedTime(str, current, current);
                 strLen = strlen(str);
-                if (current)
-                    strLen = strLen;
             } else {
                 if (current) {
                     (m_relTimes[id - 1] ^ m_base).getFormatedTime(str, current, current);

@@ -29,6 +29,6 @@ private:
     bool m_pinState = false;
     State m_state = State::off;
     uint8_t m_pin;
-    uint32_t m_timer;
-    Melody* m_melody;
+    uint32_t m_timer = 0;
+    Melody* m_melody = nullptr;
 };

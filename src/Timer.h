@@ -40,15 +40,15 @@ private:
     uint32_t afterResume() const;
     uint32_t realStopTime() const;
 
-    bool m_justStopped;
-    bool m_lagPassed;
+    bool m_justStopped = false;
+    bool m_lagPassed = false;
 
     State m_status = STOPPED;
 
     Time m_afterLastResume;
 
-    uint32_t m_currentTime;
-    uint32_t m_resumeTime;
-    uint32_t m_leftTime;
+    uint32_t m_currentTime = 0;
+    uint32_t m_resumeTime = 0;
+    uint32_t m_leftTime = 0;
     uint32_t m_total = 0;
 };

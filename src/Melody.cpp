@@ -31,8 +31,8 @@ public:
 private:
     const uint16_t* m_melody;
     uint8_t m_size;
-    uint8_t m_melodyPhase;
-    uint32_t m_timer;
+    uint8_t m_melodyPhase = 0;
+    uint32_t m_timer = 0;
 };
 
 class AlarmMelody : public Melody {

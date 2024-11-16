@@ -37,7 +37,6 @@ public:
     }
 
     bool operator<(const Time& o) const { return m_ts < o.m_ts; }
-    bool operator<=(const Time& o) const { return m_ts < o.m_ts; }
     bool operator>(const Time& o) const { return m_ts > o.m_ts; }
     bool operator==(const Time& o) const { return m_ts == o.m_ts; }
     bool operator!=(const Time& o) const { return m_ts != o.m_ts; }

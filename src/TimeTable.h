@@ -23,7 +23,7 @@ public:
     void scroll();
 
 private:
-    const char* m_prefix;
+    const char* m_prefix = nullptr;
     uint8_t m_size = 0;
     int8_t m_currentId = -1;
     const char* m_currentMark = nullptr;

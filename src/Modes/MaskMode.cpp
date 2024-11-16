@@ -43,7 +43,7 @@ void MaskMode::switchMode() {
 
     if (m_step == Step::setNum) {
         if (m_filterNum == 1)
-            m_notifyMask &= ~((~0) << m_numberOfMasks[0]);
+            m_notifyMask &= ~((~0ULL) << m_numberOfMasks[0]);
 
         for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
             for (uint8_t i = m_numberOfMasks[filter] + 1; i != TimeTable::kTimeTableSize; ++i)

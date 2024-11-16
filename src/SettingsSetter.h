@@ -33,5 +33,5 @@ private:
 
     Step m_step = Step::setLagTime;
     Time m_lagTime;
-    Timer m_timer;
+    Timer m_timer{};
 };
