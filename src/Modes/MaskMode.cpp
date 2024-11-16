@@ -149,7 +149,7 @@ void MaskMode::processSetMasks() {
 
 void MaskMode::processRun() {
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentFilter != m_filterNum) {
-        auto time = gTimeTable[0].getTime(m_currentMask);
+        auto time = gTimeTable[m_currentFilter].getTime(m_currentMask);
         if (time == kBadTime)
             time = 0_s;
 
