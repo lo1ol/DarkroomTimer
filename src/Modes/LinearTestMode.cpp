@@ -55,7 +55,7 @@ void LinearTestMode::process() {
     if (gTimer.stopped()) {
         if (m_currentRun == 0 && kSplit) { // don't take into account base time
             gTimer.reset();
-            gBeeper.alarm("Change filter");
+            gBeeper.alarm();
         }
         gTimeTable[0].setCurrent(++m_currentRun);
         repaint();

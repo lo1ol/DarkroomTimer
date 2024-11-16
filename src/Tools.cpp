@@ -52,7 +52,7 @@ bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) {
 bool getTime(Time& time, bool smooth) {
     Time shift{ getEncoderDir() };
     if (!smooth && gEncoder.fast())
-        shift *= 5;
+        shift *= 8;
 
     Time oldTime = time;
 

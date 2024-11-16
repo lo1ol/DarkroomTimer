@@ -153,7 +153,7 @@ void RelMaskMode::processRun() {
     if (gTimer.stopped()) {
         moveCurrentMask(1);
         if (m_currentMask == 0 && m_currentFilter != m_filterNum)
-            gBeeper.alarm("Change filter");
+            gBeeper.alarm();
     }
 
     if (gTimer.state() == Timer::STOPPED && m_currentFilter != m_filterNum)

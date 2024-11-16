@@ -65,11 +65,10 @@ void Beeper::stop() {
     processPin();
 }
 
-void Beeper::alarm(const char* notification) {
+void Beeper::alarm() {
     m_state = State::alarm;
 
     m_melody->init();
-    m_notification = notification;
 
     processAlarm();
     processPin();
@@ -94,5 +93,5 @@ void Beeper::setMelody(Melody::Name melodyName) {
     delete m_melody;
     m_melody = Melody::getMelody(melodyName);
     if (m_state == State::alarm)
-        alarm(m_notification);
+        alarm();
 }

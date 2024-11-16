@@ -11,7 +11,7 @@ public:
     enum class State { off, on, single, alarm };
 
     void beep();
-    void alarm(const char* notification = nullptr);
+    void alarm();
 
     // start beep every second
     void start(bool silentStart = false);
@@ -30,6 +30,5 @@ private:
     State m_state = State::off;
     uint8_t m_pin;
     uint32_t m_timer;
-    const char* m_notification;
     Melody* m_melody;
 };
