@@ -157,10 +157,10 @@ void MaskMode::processRun() {
     }
 
     if (gTimer.stopped()) {
-        moveCurrentMask(1);
-
         if (m_notifyMask & (1 << m_currentMask))
             gBeeper.alarm();
+
+        moveCurrentMask(1);
 
         if (m_currentMask == 0 && m_currentFilter != m_filterNum)
             gBeeper.alarm();
