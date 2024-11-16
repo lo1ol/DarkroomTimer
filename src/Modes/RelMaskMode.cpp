@@ -188,7 +188,7 @@ void RelMaskMode::repaint() const {
             gRelTimeTable[0].setPrefix("Set ");
             gRelTimeTable[0].flush(true);
         } else {
-            for (uint8_t filter; filter != m_filterNum; ++filter) {
+            for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 gRelTimeTable[filter].setPrefix(kSetPrefixes[filter]);
                 gRelTimeTable[filter].flush(true);
             }
@@ -206,7 +206,7 @@ void RelMaskMode::repaint() const {
             gRelTimeTable[0].setPrefix("Run ");
             gRelTimeTable[0].flush(true);
         } else {
-            for (uint8_t filter; filter != m_filterNum; ++filter) {
+            for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 gRelTimeTable[filter].setPrefix(kRunPrefixes[filter]);
                 gRelTimeTable[filter].flush(true);
             }
@@ -240,7 +240,7 @@ void RelMaskMode::printTimeExplicit() const {
         gTimeTable[0].setPrefix("Run ");
         gTimeTable[0].flush(true);
     } else {
-        for (uint8_t filter; filter != m_filterNum; ++filter) {
+        for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
             gTimeTable[filter].setPrefix(kRunPrefixes[filter]);
             gTimeTable[filter].flush(true);
         }

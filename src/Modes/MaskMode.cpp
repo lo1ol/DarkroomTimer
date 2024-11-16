@@ -59,14 +59,11 @@ void MaskMode::switchMode() {
 }
 
 void MaskMode::setCurrentMask(uint8_t filter, uint8_t mask) {
-    if (filter == m_filterNum) {
-        for (auto& timeTable : gTimeTable)
-            timeTable.setCurrent(-1);
-    } else {
-        gTimeTable[m_currentFilter].setCurrent(-1);
-        gTimeTable[filter].setCurrent(mask);
-        gTimeTable[0].setCurrent(mask, ((m_notifyMask & (1 << mask)) ? "ntf" : nullptr));
-    }
+    for (auto& timeTable : gTimeTable)
+        timeTable.setCurrent(-1);
+
+    if (filter != m_filterNum)
+        gTimeTable[filter].setCurrent(mask, ((m_notifyMask & (1 << mask)) ? "ntf" : nullptr));
 
     m_currentFilter = filter;
     m_currentMask = mask;
@@ -136,14 +133,14 @@ void MaskMode::processSetMasks() {
     auto time = gTimeTable[m_currentFilter].getTime(m_currentMask);
     if (getTime(time)) {
         gTimeTable[m_currentFilter].setTime(m_currentMask, time);
-        setCurrentMask(m_currentFilter, m_currentMask);
         gDisplay.resetBlink();
+        setCurrentMask(m_currentFilter, m_currentMask);
     }
 
     if (m_filterNum == 1 && gStartBtn.click()) {
         m_notifyMask ^= 1 << m_currentMask;
-        setCurrentMask(m_currentFilter, m_currentMask);
         gDisplay.resetBlink(true);
+        setCurrentMask(m_currentFilter, m_currentMask);
     }
 }
 
@@ -190,7 +187,7 @@ void MaskMode::repaint() const {
             gTimeTable[0].setPrefix("Set ");
             gTimeTable[0].flush(true);
         } else {
-            for (uint8_t filter; filter != m_filterNum; ++filter) {
+            for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 gTimeTable[filter].setPrefix(kSetPrefixes[filter]);
                 gTimeTable[filter].flush(true);
             }
@@ -203,7 +200,7 @@ void MaskMode::repaint() const {
             gTimeTable[0].setPrefix("Run ");
             gTimeTable[0].flush(true);
         } else {
-            for (uint8_t filter; filter != m_filterNum; ++filter) {
+            for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 gTimeTable[filter].setPrefix(kRunPrefixes[filter]);
                 gTimeTable[filter].flush(true);
             }
