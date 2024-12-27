@@ -109,3 +109,15 @@ pio run -t build
 # upload to device
 pio run -t upload
 ```
+
+## Поддержка
+
+Если есть вопросы, проблемы и предложения, то можете писать нам:)
+
+Богдан (дизайн, 3D печать):<br>
+tg: [@bogdanbogvzyan](http://t.me/bogdanbogvzyan)<br>
+email: [panasyukbv@yandex.ru](mailto:panasyukbv@yandex.ru?subject=Darkroom%20timer)
+
+Петя (код, сборка):<br>
+tg: [@lo1ol](http://t.me/lo1ol)<br>
+email: [myprettycapybara@gmail.com](mailto:myprettycapybara@gmail.com?subject=Darkroom%20timer)
