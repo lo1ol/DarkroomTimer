@@ -28,7 +28,7 @@ Settings::Settings() {
     if (hash != storedHash) {
         lagTime = 0_ts;
         beepVolume = 3 * 3;
-        backlight = (3 * MAX_BACKLIGHT) / 10;
+        backlight = 3 * MAX_BACKLIGHT;
         autoFinishViewMinutes = 3;
         startWithSettings = false;
         melody = Melody::nice;

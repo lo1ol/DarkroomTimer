@@ -95,6 +95,23 @@ pio run -t build
 pio run -t upload
 ```
 
+### Firmware configuration
+
+You can configure the firmware by your needs. For this, you have to change macroses in [Config.h](DarkroomTimer/src/Config.h) file:
+* `LCD_*` -- pin and arduino to `*` pin on display
+* `MODE_SWITCH_BTN` -- pin to mode button
+* `VIEW_BTN` -- pin to view button
+* `START_BTN` -- pin to start button
+* `EXTRA_BTN` -- pin to button on encoder
+* `ENCODER_DT` -- pin to DT(S1) pin on encoder (UNRECOMMENDED TO CHANGE)
+* `ENCODER_CLK` -- pin to CLK(S2) pin on encoder (UNRECOMMENDED TO CHANGE)
+* `BEEPER` -- pin to buzzer (UNRECOMMENDED TO CHANGE)
+* `BACKLIGHT` -- pin to backlight control pin on display (marked as `A` on display)
+* `RELAY` -- pin to SSR
+* `MAX_BACKLIGHT` -- maximum backlight value (maximum value is 25)
+
+> NB: Swapping of ENCODER_DT with ENCODER_CLK change direction of encoder
+
 ## Support
 
 If you have any questions, problems or suggestions, you are welcome to write us:)

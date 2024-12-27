@@ -58,9 +58,9 @@ void SettingsSetter::processSetAutoFinishView() const {
 
 void SettingsSetter::processSetBacklight() const {
     gDisplay[0] << "Backlight";
-    uint8_t userBacklight = min(gSettings.backlight, MAX_BACKLIGHT) / (MAX_BACKLIGHT / 10);
+    uint8_t userBacklight = min(gSettings.backlight, MAX_BACKLIGHT * 10) / MAX_BACKLIGHT;
     getInt(userBacklight, 1, 10);
-    gSettings.backlight = userBacklight * (MAX_BACKLIGHT / 10);
+    gSettings.backlight = userBacklight * MAX_BACKLIGHT;
     gDisplay[1] << userBacklight;
     analogWrite(BACKLIGHT, gSettings.backlight);
 }
