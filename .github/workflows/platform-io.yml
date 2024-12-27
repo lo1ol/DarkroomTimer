@@ -10,4 +10,4 @@ jobs:
       - uses: actions/checkout@v2
       - uses: docker://shaguarger/platformio:latest
         with:
-          args: pio run
+          args: pio run -d DarkroomTimer/

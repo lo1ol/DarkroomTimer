@@ -78,9 +78,9 @@ I saw bodies created via electrical enclosure, pupular buttons and switches. You
 
 If you want just upload code to your arduino without modification, then the simpliest way to do it is using of Arduino IDE
 1. Just install Arduino IDE
-2. Install dep libreries: EncButton, LiquidCrystals and CRC32
+2. Install dep libreries (`Tools` -> `Manage Libraries...`): EncButton, LiquidCrystals and CRC32 (by Crystopher Baker)
 3. Clone this git project to any folder
-4. Open it from Arduino IDE
+4. Open it from Arduino IDE (`File`->`Open...`->`path to .ino` file)
 5. Choose your board -- Arduino Nano and processor -- ATmega328P
 6. Click Upload button
 
@@ -88,6 +88,7 @@ If you want to modify this code, then I recomment to use PlatfromIO
 
 ```bash
 # build from command line
+cd DarkroomTimer/
 pio run -t build
 
 # upload to device

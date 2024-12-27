@@ -93,9 +93,9 @@
 
 Если вы хотите просто собрать прошивку и залить ее без изменений, то самый простой способ сделать это -- использовать Arduino IDE
 1. Просто поставте Arduino IDE
-2. Установите зависимости проекта: EncButton, LiquidCrystals и CRC32
-3. Склонируйе этот git проект в любую из диреткорий
-4. Откройте его через Arduino IDE
+2. Установите зависимости проекта (`Tools` -> `Manage Libraries...`): EncButton, LiquidCrystals и CRC32
+3. Склонируйе этот git проект в любую из директорий
+4. Откройте его через Arduino IDE (`File`->`Open...`->`path to .ino` file)
 5. Выберете board -- Arduino Nano и processor --  ATmega328P
 6. Нажмите на кнопку Upload
 
@@ -103,6 +103,7 @@
 
 ```bash
 # build from command line
+cd DarkroomTimer/
 pio run -t build
 
 # upload to device
