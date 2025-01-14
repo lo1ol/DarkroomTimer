@@ -57,14 +57,14 @@ My friend just create the coolest version of body for this project!!! You can fi
 
 #### Components
 
-1. [Encoder EC11](https://sl.aliexpress.ru/p?key=1wDHs4W)
+1. [Encoder](https://sl.aliexpress.ru/p?key=d3DhGvG)
 2. [Buttons](https://sl.aliexpress.ru/p?key=SoBfsmF)
 3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
 4. [Buzzer](https://sl.aliexpress.ru/p?key=XcDHsAE)
-5. [SSR 5V](https://sl.aliexpress.ru/p?key=AWDHsN6)
+5. [SSR 5V](https://sl.aliexpress.ru/p?key=wXDhGqU)
 6. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
-7. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok)
-8. Arduino nano: It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware
+7. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok). Also you can [try this](https://sl.aliexpress.ru/p?key=5RdhGtS), but I still don't check it properly
+8. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
 9. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
 10. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
 
