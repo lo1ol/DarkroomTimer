@@ -7,10 +7,6 @@
 ![PlatformIO](https://github.com/lo1ol/DarkroomTimer/actions/workflows/platform-io.yml/badge.svg)
 ![clang-format](https://github.com/lo1ol/DarkroomTimer/actions/workflows/clang-format.yml/badge.svg)
 
-## TODO
-
-Add support of LED lamps
-
 ## Manual
 
 1. Click view btn to turn on/off a lamp
@@ -65,7 +61,12 @@ My friend just create the coolest version of body for this project!!! You can fi
 2. [Buttons](https://sl.aliexpress.ru/p?key=SoBfsmF)
 3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
 4. [Buzzer](https://sl.aliexpress.ru/p?key=XcDHsAE)
-5. [SSR 5V](https://sl.aliexpress.ru/p?key=wXDhGqU). This SSR doesn't work with LED lamps. I still search compact and proper for it
+5. SSR:
+   * If you want to use Timer with any lamp (LED, halogen):
+    - [D3803HK/D3805HK/D3808HK](https://sl.aliexpress.ru/p?key=xlW6GV3)
+    - [BERM BRM-D480-5A](https://sl.aliexpress.ru/p?key=KyW6GRj)
+    - [SSR-41FDA](https://sl.aliexpress.ru/p?key=oBW6G3x)
+   * If you don't want to use Timer with Low Wattage lamps (LED): you can buy [this popular SSR](https://sl.aliexpress.ru/p?key=wXDhGqU).
 6. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
 7. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok). Also you can [try this](https://sl.aliexpress.ru/p?key=5RdhGtS), but I still don't check it properly
 8. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
