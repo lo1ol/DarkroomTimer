@@ -4,6 +4,8 @@
 
 > This project is inspired by [this one](https://github.com/nikonov1101/kafstop-timer), but improve it and extend functions
 
+> [3D Model of the body](https://www.thingiverse.com/thing:6683466)
+
 ![PlatformIO](https://github.com/lo1ol/DarkroomTimer/actions/workflows/platform-io.yml/badge.svg)
 ![clang-format](https://github.com/lo1ol/DarkroomTimer/actions/workflows/clang-format.yml/badge.svg)
 
@@ -13,9 +15,9 @@
 2. Hold mode btn and turn encoder, to switch mode
 3. Click mode btn to navigate inside mode
 4. Hold extra btn to reset current printing at any mode (inside mask mode you can fast travel between masks)
-5. Turn encoder inside during run to scroll time table
+5. Turn encoder in time table to scroll it
 6. Click start btn to start printing at any mode
-7. Hold view btn and change mode btn to go in set settings mode
+7. Hold view and change mode btns to go to settings
 
 > **_Main idea:_** You prepare everything in light and click only Start btn diring printing
 
@@ -40,7 +42,7 @@
 ## Killer features:
 
 1. Ability to stop any mode, while it is running, by holding extra button. Usefull to get stop process if you forget something
-2. Ability to set lag time: time of turning on a lamp. It's could be usefull to get accurate results. To set it hold view and change mode buttons. To detect lag time. Go to lag time set mode, choose minimum time and click start btn. Increase the time till the moment of seeing that lamp is actually turn on
+2. Ability to set lag time: lamp's heatup time. It's could be usefull to get accurate results. To set it go to settings. To detect lag time: choose minimum lag time and click start btn. Increase the time till the moment of seeing that lamp is actually turn on
 3. Ability to set time of automatical stopping view. It could preserve lamp on your enlarger if you forgot to turn off it
 4. Buzzer that beep one time per 1 second. Usefull to print fast mask at dark
 5. Simple architecture of the project allows easily extend functionality
@@ -62,11 +64,11 @@ My friend just create the coolest version of body for this project!!! You can fi
 3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
 4. [Buzzer](https://sl.aliexpress.ru/p?key=XcDHsAE)
 5. SSR:
-   * If you want to use Timer with any lamp (LED, halogen):
-    - [D3803HK/D3805HK/D3808HK](https://sl.aliexpress.ru/p?key=xlW6GV3)
-    - [BERM BRM-D480-5A](https://sl.aliexpress.ru/p?key=KyW6GRj)
-    - [SSR-41FDA](https://sl.aliexpress.ru/p?key=oBW6G3x)
-   * If you don't want to use Timer with Low Wattage lamps (LED): you can buy [this popular SSR](https://sl.aliexpress.ru/p?key=wXDhGqU).
+    * If you want to use Timer with any lamp (LED, halogen). You can buy any of it:
+        - [D3803HK/D3805HK/D3808HK](https://sl.aliexpress.ru/p?key=xlW6GV3)
+        - [BERM BRM-D480-5A](https://sl.aliexpress.ru/p?key=KyW6GRj)
+        - [SSR-41FDA](https://sl.aliexpress.ru/p?key=oBW6G3x)
+    * If you don't want to use Timer with Low Wattage lamps (LED): you can buy [this popular SSR](https://sl.aliexpress.ru/p?key=wXDhGqU).
 6. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
 7. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok). Also you can [try this](https://sl.aliexpress.ru/p?key=5RdhGtS), but I still don't check it properly
 8. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
@@ -82,14 +84,17 @@ I saw bodies created via electrical enclosure, pupular buttons and switches. You
 ## Build and upload code to Arduino
 
 If you want just upload code to your arduino without modification, then the simpliest way to do it is using of Arduino IDE
-1. Just install Arduino IDE
-2. Install dep libreries (`Tools` -> `Manage Libraries...`): EncButton, LiquidCrystals and CRC32 (by Crystopher Baker)
-3. Clone this git project to any folder
-4. Open it from Arduino IDE (`File`->`Open...`->`path to .ino` file)
+1. Install Arduino IDE
+2. Clone this git project to any folder
+3. Open ino file from Arduino IDE (`File`->`Open...`->`path to .ino` file)
+4. Install dep libreries (`Tools` -> `Manage Libraries...`):
+   * EncButton
+   * LiquidCrystals
+   * CRC32 (by Crystopher Baker)
 5. Choose your board -- Arduino Nano and processor -- ATmega328P
 6. Click Upload button
 
-If you want to modify this code, then I recomment to use PlatfromIO
+If you want to modify this code, then I recomment to use PlatfromIO:
 
 ```bash
 # build from command line
