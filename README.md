@@ -62,7 +62,7 @@ My friend just create the coolest version of body for this project!!! You can fi
 1. [Encoder](https://sl.aliexpress.ru/p?key=d3DhGvG)
 2. [Buttons](https://sl.aliexpress.ru/p?key=SoBfsmF)
 3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
-4. [Buzzer](https://sl.aliexpress.ru/p?key=XcDHsAE)
+4. [Buzzer](https://sl.aliexpress.ru/p?key=iXIeG78)
 5. SSR:
     * If you want to use Timer with any lamp (LED, halogen). You can buy any of it:
         - [D3803HK/D3805HK/D3808HK](https://sl.aliexpress.ru/p?key=xlW6GV3)

@@ -58,7 +58,7 @@
 1. [Энкодер](https://sl.aliexpress.ru/p?key=d3DhGvG)
 2. [Кнопки](https://sl.aliexpress.ru/p?key=SoBfsmF)
 3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
-4. [Пассивный зумер](https://sl.aliexpress.ru/p?key=XcDHsAE)
+4. [Пассивный зумер](https://sl.aliexpress.ru/p?key=iXIeG78)
 5. [Переключатель](https://sl.aliexpress.ru/p?key=f3PfsRC)
 6. Трансформатор на 5V -- вы можете просто разобрать любую USB зарядку для телефона (5V, 2.4A должно быть достаточно). Можете попробовать еще поставить [такой](https://sl.aliexpress.ru/p?key=5RdhGtS), он компактный и работает, но полноценно я его пока не проверял
 7. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): советую взять именно версию с процессором ATmega 328P. Версии с ATmega 168 могут иметь недостаточно памяти, для прошивки. Обратите внимание, что нужна ардуино с разъемом mini usb
