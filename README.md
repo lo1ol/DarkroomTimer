@@ -78,6 +78,17 @@ My friend just create the coolest version of body for this project!!! You can fi
 
 This body has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
 
+Body extra components:
+
+1. [XLR](https://sl.aliexpress.ru/p?key=bFaeGJn) -- is used to connect main part with power block
+2. [Acrilic black glass](https://sl.aliexpress.ru/p?key=tvaeGQb) -- cover display
+3. [Power block sockets](https://sl.aliexpress.ru/p?key=xoaeGXb)
+4. [Rocket switcher for power block](https://sl.aliexpress.ru/p?key=moaeG8T)
+5. [M2 screws](https://sl.aliexpress.ru/p?key=rRaeGCg)
+6. M3 screw and nuts also needed but you could buy it everywhere you want
+7. Any AC plug you want
+8. 3 wire cablels: you need thin (between power block and main part) and thick ones (between power block and socket)™
+
 ### Another versions of body
 
 I saw bodies created via electrical enclosure, pupular buttons and switches. You are free to create your version of body and use another components according to your budget
