@@ -74,6 +74,7 @@ My friend just create the coolest version of body for this project!!! You can fi
 8. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
 9. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
 10. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
+11. [Jack 6.35](https://sl.aliexpress.ru/p?key=W4aeGRp)
 
 This body has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
 
