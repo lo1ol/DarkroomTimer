@@ -197,8 +197,10 @@ void processView() {
     if (beforeStop < 0_ts) {
         gBlocked = gViewState = LOW;
         digitalWrite(RELAY, gViewState);
+        gModeProcessor->repaint();
     } else {
         char str[DISPLAY_COLS] = "";
+        beforeStop = (beforeStop / 10) * 10 + 10_ts;
         beforeStop.getFormatedTime(str, false);
         gDisplay[1] << "Auto stop: " << str;
     }
