@@ -2,27 +2,27 @@
 
 #include "../Tools.h"
 
-LinearTestMode::LinearTestMode(bool splitGrade) : kSplit(splitGrade) {
+LinearTestMode::LinearTestMode(SubMode subMode) : kSubMode(subMode) {
     gTimeTable[0].printBadAsZero(false);
 
     m_baseTime = 2_s;
     m_initTime = 8_s;
     m_stepTime = 2_s;
-    m_step = kSplit ? Step::baseTime : Step::initTime;
-    m_currentRun = kSplit ? 0 : 1;
+    m_step = subMode == SplitGrade ? Step::baseTime : Step::initTime;
+    m_currentRun = subMode == SplitGrade ? 0 : 1;
 
     repaint();
 }
 
 void LinearTestMode::switchMode() {
     m_step = ADD_TO_ENUM(Step, m_step, 1);
-    if (m_step == Step::baseTime && !kSplit)
+    if (m_step == Step::baseTime && kSubMode != SplitGrade)
         m_step = Step::initTime;
 
     m_currentRun = 0;
     if (m_step == Step::run) {
         setTimeTable();
-        gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
+        gTimeTable[0].setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
     }
 
     gTimer.reset();
@@ -53,7 +53,7 @@ void LinearTestMode::process() {
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
-        if (m_currentRun == 0 && kSplit) { // don't take into account base time
+        if (m_currentRun == 0 && kSubMode == SplitGrade) { // don't take into account base time
             gTimer.reset();
             gBeeper.alarm();
         }
@@ -93,7 +93,7 @@ void LinearTestMode::repaint() const {
 
 Time LinearTestMode::getPrintTime() const {
     uint8_t realStep = m_currentRun;
-    if (!kSplit)
+    if (kSubMode != SplitGrade)
         ++realStep;
 
     if (realStep == 0)
@@ -102,12 +102,15 @@ Time LinearTestMode::getPrintTime() const {
     if (realStep == 1)
         return m_initTime;
 
-    return m_stepTime;
+    if (kSubMode == Local)
+        return m_initTime + m_stepTime * (realStep - 1);
+    else
+        return m_stepTime;
 }
 
 Time LinearTestMode::getTotalTime(uint8_t id) const {
     uint8_t realId = id;
-    if (!kSplit)
+    if (kSubMode != SplitGrade)
         ++realId;
 
     if (realId == 0)
@@ -121,7 +124,7 @@ Time LinearTestMode::getTotalTime(uint8_t id) const {
 }
 void LinearTestMode::reset() {
     m_currentRun = 0;
-    gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
+    gTimeTable[0].setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
     repaint();
 }
 
@@ -140,7 +143,9 @@ void LinearTestMode::setTimeTable() const {
 }
 
 const char* LinearTestMode::preview() const {
-    if (kSplit)
+    if (kSubMode == SplitGrade)
         return "Splt linear test";
+    if (kSubMode == Local)
+        return "Locl linear test";
     return "Linear test";
 }

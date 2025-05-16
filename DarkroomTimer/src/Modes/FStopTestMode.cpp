@@ -6,13 +6,13 @@ namespace {
 constexpr uint8_t kFStopPartVarinatns[] = { 12, 6, 4, 3, 2, 1 };
 } // namespace
 
-FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {
+FStopTestMode::FStopTestMode(SubMode subMode) : kSubMode(subMode) {
     gTimeTable[0].printBadAsZero(false);
 
     m_baseTime = 2_s;
     m_initTime = 2_s;
     m_FStopPartId = 5;
-    m_step = kSplit ? Step::baseTime : Step::initTime;
+    m_step = kSubMode == SplitGrade ? Step::baseTime : Step::initTime;
     m_currentRun = 0;
 
     repaint();
@@ -20,13 +20,13 @@ FStopTestMode::FStopTestMode(bool splitGrade) : kSplit(splitGrade) {
 
 void FStopTestMode::switchMode() {
     m_step = ADD_TO_ENUM(Step, m_step, 1);
-    if (m_step == Step::baseTime && !kSplit)
+    if (m_step == Step::baseTime && kSubMode != SplitGrade)
         m_step = Step::initTime;
 
     m_currentRun = 0;
     if (m_step == Step::run) {
         setTimeTable();
-        gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
+        gTimeTable[0].setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
     }
 
     gTimer.reset();
@@ -57,7 +57,7 @@ void FStopTestMode::process() {
         gTimer.start(getPrintTime());
 
     if (gTimer.stopped()) {
-        if (m_currentRun == 0 && kSplit) { // don't take into account base time
+        if (m_currentRun == 0 && kSubMode == SplitGrade) { // don't take into account base time
             gTimer.reset();
             gBeeper.alarm();
         }
@@ -97,7 +97,7 @@ void FStopTestMode::repaint() const {
 
 Time FStopTestMode::getPrintTime() const {
     uint8_t realStep = m_currentRun;
-    if (!kSplit)
+    if (kSubMode != SplitGrade)
         ++realStep;
 
     if (realStep == 0)
@@ -107,12 +107,15 @@ Time FStopTestMode::getPrintTime() const {
         return m_initTime;
 
     float stopPart = kFStopPartVarinatns[m_FStopPartId];
-    return m_initTime * (pow(2, (realStep - 1) / stopPart) - pow(2, (realStep - 2) / stopPart));
+    if (kSubMode == Local)
+        return m_initTime * pow(2, (realStep - 1) / stopPart);
+    else
+        return m_initTime * (pow(2, (realStep - 1) / stopPart) - pow(2, (realStep - 2) / stopPart));
 }
 
 Time FStopTestMode::getStepTotalTime(uint8_t id) const {
     uint8_t realId = id;
-    if (!kSplit)
+    if (kSubMode != SplitGrade)
         ++realId;
 
     if (realId == 0)
@@ -124,7 +127,7 @@ Time FStopTestMode::getStepTotalTime(uint8_t id) const {
 
 void FStopTestMode::reset() {
     m_currentRun = 0;
-    gTimeTable[0].setCurrent(0, kSplit ? "ntf" : nullptr);
+    gTimeTable[0].setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
     repaint();
 }
 
@@ -143,8 +146,10 @@ void FStopTestMode::setTimeTable() const {
 }
 
 const char* FStopTestMode::preview() const {
-    if (kSplit)
+    if (kSubMode == SplitGrade)
         return "Splt F Stop test";
+    if (kSubMode == Local)
+        return "Locl F Stop test";
     return "F Stop test";
 }
 

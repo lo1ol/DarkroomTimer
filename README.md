@@ -38,6 +38,7 @@
 5. Rel mask mode: the same as mask mode, but operates with relative times: you set base time and relative times (in stops) to it. Notification system is disabled. To see real time in seconds: click on encoder during run
 6. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
 7. Split mask and rel mask modes: the same as mask and rel mask modes, but allows to set mask for two several filtres (0 and 5). Notification system is disabled.
+8. Localized test modes the same as fstop and linear test modes, but used to test the same region on photo. The time you see -- it's whole printing test time
 
 ## Killer features:
 

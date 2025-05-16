@@ -22,6 +22,8 @@ enum class ModeId : uint8_t {
     splitLinear,
     splitMask,
     splitRelMask,
+    localFStops,
+    localLinear,
     last_
 };
 
@@ -48,6 +50,10 @@ const char* getPreview(ModeId modeId) {
         return "Splt mask";
     case ModeId::splitRelMask:
         return "Splt rel mask";
+    case ModeId::localFStops:
+        return "Locl F Stop test";
+    case ModeId::localLinear:
+        return "Locl linear test";
     }
 
     return "";
@@ -61,10 +67,10 @@ void setMode(ModeId modeId) {
 
     switch (gModeId) {
     case ModeId::testFStops:
-        gModeProcessor = new FStopTestMode(false);
+        gModeProcessor = new FStopTestMode(FStopTestMode::Generic);
         break;
     case ModeId::testLinear:
-        gModeProcessor = new LinearTestMode(false);
+        gModeProcessor = new LinearTestMode(LinearTestMode::Generic);
         break;
     case ModeId::print:
         gModeProcessor = new PrintMode();
@@ -76,16 +82,22 @@ void setMode(ModeId modeId) {
         gModeProcessor = new RelMaskMode(1);
         break;
     case ModeId::splitFStops:
-        gModeProcessor = new FStopTestMode(true);
+        gModeProcessor = new FStopTestMode(FStopTestMode::SplitGrade);
         break;
     case ModeId::splitLinear:
-        gModeProcessor = new LinearTestMode(true);
+        gModeProcessor = new LinearTestMode(LinearTestMode::SplitGrade);
         break;
     case ModeId::splitMask:
         gModeProcessor = new MaskMode(2);
         break;
     case ModeId::splitRelMask:
         gModeProcessor = new RelMaskMode(2);
+        break;
+    case ModeId::localFStops:
+        gModeProcessor = new FStopTestMode(FStopTestMode::Local);
+        break;
+    case ModeId::localLinear:
+        gModeProcessor = new LinearTestMode(LinearTestMode::Local);
         break;
     }
 }
