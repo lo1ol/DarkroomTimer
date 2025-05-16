@@ -8,7 +8,13 @@ class LinearTestMode final : public ModeProcessor {
     enum class Step { baseTime, initTime, stepTime, run, last_ };
 
 public:
-    LinearTestMode(bool splitGrade);
+    enum SubMode {
+        Generic,
+        SplitGrade,
+        Local,
+    };
+
+    LinearTestMode(SubMode subMode);
     void process() override;
     void reset() override;
     void switchMode() override;
@@ -22,7 +28,7 @@ private:
     Time getPrintTime() const;
     Time getTotalTime(uint8_t id) const;
 
-    bool kSplit;
+    const SubMode kSubMode;
     Step m_step;
     uint8_t m_currentRun;
     Time m_baseTime;

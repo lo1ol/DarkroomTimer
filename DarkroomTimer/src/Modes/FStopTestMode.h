@@ -8,7 +8,13 @@ class FStopTestMode final : public ModeProcessor {
     enum class Step { baseTime, initTime, fstopSet, run, last_ };
 
 public:
-    FStopTestMode(bool splitGrade);
+    enum SubMode {
+        Generic,
+        SplitGrade,
+        Local,
+    };
+
+    FStopTestMode(SubMode subMode);
     void process() override;
     void reset() override;
     void switchMode() override;
@@ -22,7 +28,7 @@ private:
     Time getPrintTime() const;
     Time getStepTotalTime(uint8_t step) const;
 
-    bool kSplit;
+    const SubMode kSubMode;
     Step m_step;
     uint8_t m_currentRun;
     uint8_t m_FStopPartId;
