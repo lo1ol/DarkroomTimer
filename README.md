@@ -1,10 +1,12 @@
-# Powerfull darkroom timer with a lot of features
+# Advanced darkroom timer (KAF Red_Ray Timer RR-1)
 
 > [Инструкция на русском](./README_RU.md)
 
 > This project is inspired by [this one](https://github.com/nikonov1101/kafstop-timer), but improve it and extend functions
 
 > [3D Model of the body](https://www.thingiverse.com/thing:6683466)
+
+> **Main idea:** You prepare everything in light and click only Start btn during printing
 
 ![PlatformIO](https://github.com/lo1ol/DarkroomTimer/actions/workflows/platform-io.yml/badge.svg)
 ![clang-format](https://github.com/lo1ol/DarkroomTimer/actions/workflows/clang-format.yml/badge.svg)
@@ -19,33 +21,31 @@
 6. Click start btn to start printing at any mode
 7. Hold view and change mode btns to go to settings
 
-> **_Main idea:_** You prepare everything in light and click only Start btn diring printing
-
 ## Settings
 
-1. Time of lamp turning on (Lag time)
+1. Lamp's heatup time (Lag time)
 2. LED Backlight
 3. Beep volume
-4. Time of auto turn off a lamp in view mode
+4. Auto turn off lamp time in view mode
 5. Start with settings or not
 
 ## Modes
 
-1. F Stop test mode: ability to print tones and part tones of prints (decreasing f stop step). After that you can see the log
+1. F Stop test mode: increae testing time in stops
 2. Linear test mode: simple mode for linear testing
-3. Print mode: ability to stop printing at any time. Usefull for getting fast masking values
+3. Print mode: ability to pause printing at any time. It's creative mode and usefull for thoughtless printing
 4. Mask mode: for printing with accurate masks. Click extra btn to go to the next mask. Hold extra btn and turn encoder to fast travel between masks. Click start btn when set mask to play melody after printing this mask -- usefull, when you don't want to forgot to do something. For example, change filter.
 5. Rel mask mode: the same as mask mode, but operates with relative times: you set base time and relative times (in stops) to it. Notification system is disabled. To see real time in seconds: click on encoder during run
 6. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
-7. Split mask and rel mask modes: the same as mask and rel mask modes, but allows to set mask for two several filtres (0 and 5). Notification system is disabled.
+7. Split mask and rel mask modes: the same as mask and rel mask modes, but allows to set mask for two filtres (0 and 5). Notification system is disabled.
 8. Localized test modes the same as fstop and linear test modes, but used to test the same region on photo. The time you see -- it's whole printing test time
 
 ## Killer features:
 
-1. Ability to stop any mode, while it is running, by holding extra button. Usefull to get stop process if you forget something
-2. Ability to set lag time: lamp's heatup time. It's could be usefull to get accurate results. To set it go to settings. To detect lag time: choose minimum lag time and click start btn. Increase the time till the moment of seeing that lamp is actually turn on
-3. Ability to set time of automatical stopping view. It could preserve lamp on your enlarger if you forgot to turn off it
-4. Buzzer that beep one time per 1 second. Usefull to print fast mask at dark
+1. Ability to stop any mode, during printing. Just hold extra button. Usefull to stop process, if you forgot something
+2. Ability to set lag time: lamp. It's could be usefull to get accurate results. To find it go to settings, choose minimum lag time and click start btn. Increase it till the moment of seeing that lamp is actually turn on
+3. Autoturn off in view mode. It could preserve lamp on your enlarger if you forgot to turn off it
+4. Buzzer that beep every second. Usefull to control the process, not looking at display
 5. Simple architecture of the project allows easily extend functionality
 
 ## How to assamble
@@ -64,18 +64,20 @@ My friend just create the coolest version of body for this project!!! You can fi
 2. [Buttons](https://sl.aliexpress.ru/p?key=SoBfsmF)
 3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
 4. [Buzzer](https://sl.aliexpress.ru/p?key=iXIeG78)
-5. SSR:
-    * If you want to use Timer with any lamp (LED, halogen). You can buy any of it:
+5. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
+6. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok). Also you can [try this](https://sl.aliexpress.ru/p?key=5RdhGtS), but I still don't check it properly
+7. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
+8. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
+9. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
+10. [Jack 6.35](https://sl.aliexpress.ru/p?key=W4aeGRp)
+11. SSR:
+    * If you want to use timer with any lamp (LED, halogen). You can buy any of it:
         - [D3803HK/D3805HK/D3808HK](https://sl.aliexpress.ru/p?key=xlW6GV3)
         - [BERM BRM-D480-5A](https://sl.aliexpress.ru/p?key=KyW6GRj)
         - [SSR-41FDA](https://sl.aliexpress.ru/p?key=oBW6G3x)
-    * If you don't want to use Timer with Low Wattage lamps (LED): you can buy [this popular SSR](https://sl.aliexpress.ru/p?key=wXDhGqU).
-6. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
-7. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok). Also you can [try this](https://sl.aliexpress.ru/p?key=5RdhGtS), but I still don't check it properly
-8. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
-9. Two resistos are used. First one to set brightness of backlight (160 Om) and another one to set contrast on screen (2.2 kOm). Yours values could differ.
-10. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
-11. [Jack 6.35](https://sl.aliexpress.ru/p?key=W4aeGRp)
+    * If you don't want to use timer with low wattage lamps (LED): you can buy [this popular SSR](https://sl.aliexpress.ru/p?key=wXDhGqU). This one has leakage in turned off state, and it's enough to power on the lamp
+
+> **WARNING**: Don't use solenoid relays. It can lead to hieroglyphs on the display and even kill Arduino
 
 This body has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
 
@@ -88,9 +90,9 @@ Body extra components:
 5. [M2 screws](https://sl.aliexpress.ru/p?key=rRaeGCg)
 6. M3 screw and nuts also needed but you could buy it everywhere you want
 7. Any AC plug you want
-8. 3 wire cablels: you need thin (between power block and main part) and thick ones (between power block and socket)™
+8. 3 wire cablels: you need thin (between power block and main part) and thick ones (between power block and socket)
 
-### Another versions of body
+### Other versions of body
 
 I saw bodies created via electrical enclosure, pupular buttons and switches. You are free to create your version of body and use another components according to your budget
 
