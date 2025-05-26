@@ -8,6 +8,8 @@
 
 > **Main idea:** You prepare everything in light and click only Start btn during printing
 
+> [Online simulator](https://wokwi.com/projects/432833785679137793). Note, you can use keyboard to control timer
+
 ![PlatformIO](https://github.com/lo1ol/DarkroomTimer/actions/workflows/platform-io.yml/badge.svg)
 ![clang-format](https://github.com/lo1ol/DarkroomTimer/actions/workflows/clang-format.yml/badge.svg)
 
