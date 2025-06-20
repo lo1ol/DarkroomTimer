@@ -54,7 +54,16 @@
 
 ### Circuit diagram
 
-![Circuit](./Circuit.jpg)
+#### Main part
+
+> Note: Dashed part is power supply block. It's not a part of main body. The datailed scheme of power supply is shown lower
+
+![Main body circuit](./MainBodyCircuit.jpg)
+
+#### Power supply
+
+![Power supply circuit](./PowerSupplyCircuit.jpg)
+
 
 ### Hardware and body
 
