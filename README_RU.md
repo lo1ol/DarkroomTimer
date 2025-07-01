@@ -160,6 +160,8 @@ You can configure the firmware by your needs. For this, you have to change macro
 * `BACKLIGHT` -- пин до пина регулировки подсветки на дисплее (помечен как `A` на дисплее)
 * `RELAY` -- пин до твердотельного реле
 * `MAX_BACKLIGHT` -- максимальное значение яркости (максимальное значение 25)
+* `MIN_BEEP_VOLUME` -- минимальный уровень громкости. Может отличаться на разных зуммерах
+* `BEEP_VOLUME_STEP` -- шаг громкости зуммера
 
 > NB: смена пина ENCODER_DT на ENCODER_CLK меняет направление энкодера
 

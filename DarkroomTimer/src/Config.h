@@ -24,6 +24,14 @@
 #define DISPLAY_ROWS 2
 #define DISPLAY_COLS 16
 
+#define MIN_BEEP_VOLUME 27
+#define BEEP_VOLUME_STEP 2
 #define MAX_BACKLIGHT 25
 
+// On some buzzers it's better to set 1 instead of 0 for silence
+// Setting volume to 0 can produce some sound noize and cracks
+#define BEEP_VOLUME_SILENT (MIN_BEEP_VOLUME < 8 ? 0 : 1)
+#define MAX_BEEP_VOLUME MIN_BEEP_VOLUME + (BEEP_VOLUME_STEP * 9)
+
+static_assert(MAX_BEEP_VOLUME <= 255);
 static_assert(MAX_BACKLIGHT <= 25);

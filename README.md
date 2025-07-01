@@ -145,6 +145,8 @@ You can configure the firmware by your needs. For this, you have to change macro
 * `BACKLIGHT` -- pin to backlight control pin on display (marked as `A` on display)
 * `RELAY` -- pin to SSR
 * `MAX_BACKLIGHT` -- maximum backlight value (maximum value is 25)
+* `MIN_BEEP_VOLUME` -- minimum buzzer volume (can be different on different buzzers)
+* `BEEP_VOLUME_STEP` -- step size of buzzer valume
 
 > NB: Swapping of ENCODER_DT with ENCODER_CLK change direction of encoder
 

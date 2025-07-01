@@ -27,7 +27,7 @@ Settings::Settings() {
 
     if (hash != storedHash) {
         lagTime = 0_ts;
-        beepVolume = 3 * 3;
+        beepVolume = MIN_BEEP_VOLUME + 3 * BEEP_VOLUME_STEP;
         backlight = 3 * MAX_BACKLIGHT;
         autoFinishViewMinutes = 3;
         startWithSettings = false;

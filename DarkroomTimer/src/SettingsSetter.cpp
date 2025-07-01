@@ -37,11 +37,19 @@ void SettingsSetter::processSetLagTime() {
 
 void SettingsSetter::processSetBeepVolume() const {
     gDisplay[0] << "Beep volume";
-    uint8_t userVolume = min(gSettings.beepVolume, 30) / 3;
-    if (getInt(userVolume, 1, 10))
+
+    if (gSettings.beepVolume < MIN_BEEP_VOLUME)
+        gSettings.beepVolume = MIN_BEEP_VOLUME;
+
+    if (gSettings.beepVolume > MAX_BEEP_VOLUME)
+        gSettings.beepVolume = MAX_BEEP_VOLUME;
+
+    uint8_t userVolume = (gSettings.beepVolume - MIN_BEEP_VOLUME) / BEEP_VOLUME_STEP;
+    if (getInt(userVolume, 0, 9))
         gBeeper.start();
-    gSettings.beepVolume = userVolume * 3;
-    gDisplay[1] << userVolume;
+
+    gSettings.beepVolume = MIN_BEEP_VOLUME + userVolume * BEEP_VOLUME_STEP;
+    gDisplay[1] << (userVolume + 1);
 }
 
 void SettingsSetter::processSetAutoFinishView() const {

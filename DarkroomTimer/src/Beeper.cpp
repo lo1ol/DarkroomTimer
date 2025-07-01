@@ -31,8 +31,8 @@ void Beeper::tick() {
 }
 
 void Beeper::setup() {
-    pinMode(BEEPER, OUTPUT);
-    analogWrite(BEEPER, 0);
+    pinMode(m_pin, OUTPUT);
+    analogWrite(m_pin, BEEP_VOLUME_SILENT);
 
     m_melody = Melody::getMelody(gSettings.melody);
 }
@@ -86,7 +86,8 @@ void Beeper::processPin() const {
     if (m_pinState)
         analogWrite(m_pin, gSettings.beepVolume);
     else
-        analogWrite(m_pin, 0);
+        // setting volume to BEEP_VOLUME_SILENT instead of 0 reduce bad noise on low volumes
+        analogWrite(m_pin, BEEP_VOLUME_SILENT);
 }
 
 void Beeper::setMelody(Melody::Name melodyName) {
