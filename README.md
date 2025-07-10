@@ -79,7 +79,7 @@ My friend just create the coolest version of body for this project!!! You can fi
 6. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok). Also you can [try this](https://sl.aliexpress.ru/p?key=5RdhGtS), but I still don't check it properly
 7. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
 8. Only one resistor is used to set contrast of screen: 2.2 kOm. Your value could differ.
-9. You could buy any sustain pedal. I bought "Cherub wtb-006" and it's more than ok
+9. You could buy sustain pedal as footswitch. It has to be normally-open or has polarity switch. We use "Cherub wtb-006" and it's more than ok
 10. [Jack 6.35](https://sl.aliexpress.ru/p?key=W4aeGRp)
 11. SSR:
     * If you want to use timer with any lamp (LED, halogen). You can buy any of it:
