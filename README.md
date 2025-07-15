@@ -76,7 +76,7 @@ My friend just create the coolest version of body for this project!!! You can fi
 3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
 4. [Buzzer](https://sl.aliexpress.ru/p?key=iXIeG78)
 5. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
-6. 5V Transformer -- just disassamble any USB phone adapter (5V, 2.4A is ok). Also you can [try this](https://sl.aliexpress.ru/p?key=5RdhGtS), but I still don't check it properly
+6. [5V Transformer](https://sl.aliexpress.ru/p?key=5RdhGtS) (still don't check it properly). Also you can just disassamble any 5V USB phone adapter
 7. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
 8. Only one resistor is used to set contrast of screen: 2.2 kOm. Your value could differ.
 9. You could buy sustain pedal as footswitch. It has to be normally-open or has polarity switch. We use "Cherub wtb-006" and it's more than ok
@@ -100,8 +100,10 @@ Body extra components:
 4. [Rocket switcher for power block](https://sl.aliexpress.ru/p?key=moaeG8T)
 5. [M2 screws](https://sl.aliexpress.ru/p?key=rRaeGCg)
 6. M3 screw and nuts also needed but you could buy it everywhere you want
-7. Any AC plug you want
-8. 3 wire cablels: you need thin (between power block and main part) and thick ones (between power block and socket)
+7. [3 wire cabel 0.75 with AC Plug](https://sl.aliexpress.ru/p?key=Y0zn3DN) (Not tested)
+8. [32AWG cabel 6 color set (5 meters each)](https://sl.aliexpress.ru/p?key=lsNn3rZ) (Not tested)
+9. [Heat shrink tube 2 meters](https://sl.aliexpress.ru/p?key=ChNn3Wr) (Not tested)
+10. [Transparent two sides tape](https://sl.aliexpress.ru/p?key=pbNn3xt)
 
 ### Other versions of body
 
