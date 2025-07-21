@@ -6,6 +6,8 @@
 
 > [3D Model of the body](https://www.thingiverse.com/thing:6683466)
 
+> [Youtube playlist with assembling manual (in Russian)](https://www.youtube.com/watch?v=XjmDx0XmCiA&list=PLLB8YXu4D8PvZlZFQPj_stn8mG01y7iiN&pp=gAQB)
+
 > **Main idea:** You prepare everything in light and click only Start btn during printing
 
 > [Online simulator](https://wokwi.com/projects/432833785679137793). Note, you can use keyboard to control timer
