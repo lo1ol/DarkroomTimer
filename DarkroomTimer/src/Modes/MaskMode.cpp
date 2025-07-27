@@ -4,9 +4,9 @@
 
 namespace {
 
-constexpr const char* kSetPrefixes[] = { "S F1 ", "S F2 " };
+constexpr const char* kSetPrefixes[] = { "S F1", "S F2" };
 
-constexpr const char* kRunPrefixes[] = { "R F1 ", "R F2 " };
+constexpr const char* kRunPrefixes[] = { "R F1", "R F2" };
 
 } // namespace
 
@@ -184,7 +184,7 @@ void MaskMode::repaint() const {
     case Step::setMasks:
         gScrollableContent.reset();
         if (m_filterNum == 1) {
-            gTimeTable[0].setPrefix("Set ");
+            gTimeTable[0].setPrefix("Set");
             gTimeTable[0].flush(true);
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
@@ -197,7 +197,7 @@ void MaskMode::repaint() const {
     case Step::run:
         gScrollableContent.reset();
         if (m_filterNum == 1) {
-            gTimeTable[0].setPrefix("Run ");
+            gTimeTable[0].setPrefix("Run");
             gTimeTable[0].flush(true);
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {

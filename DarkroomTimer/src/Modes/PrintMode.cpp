@@ -4,7 +4,7 @@
 
 PrintMode::PrintMode() {
     gTimeTable[0].printBadAsZero(false);
-    gTimeTable[0].setPrefix("Log ");
+    gTimeTable[0].setPrefix("Log");
     gTimeTable[0].empty();
 
     m_printTime = 8_s;

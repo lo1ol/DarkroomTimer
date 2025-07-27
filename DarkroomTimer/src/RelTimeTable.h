@@ -25,7 +25,6 @@ private:
     const char* m_prefix = nullptr;
     uint8_t m_size = 0;
     int8_t m_currentId = -1;
-    int8_t m_currentAlign = 0;
     bool m_changed = true;
 
     Time m_base;

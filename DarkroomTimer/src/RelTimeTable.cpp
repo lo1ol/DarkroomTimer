@@ -44,58 +44,29 @@ void RelTimeTable::flush(bool force) {
 
     m_changed = false;
 
+    gScrollableContent.startNewLine();
+    gScrollableContent.print(m_prefix);
+
     uint8_t id = 0;
-    bool firstLine = true;
+    while (id != m_size) {
+        char str[DISPLAY_COLS + 1];
+        bool current = id == m_currentId;
 
-    while (true) {
-        gScrollableContent.startNewLine();
-
-        uint8_t lineLen = 0;
-        if (firstLine) {
-            firstLine = false;
-            gScrollableContent.print(m_prefix);
-
-            lineLen = strlen(m_prefix);
-        }
-
-        while (true) {
-            if (id == m_size) {
-                return;
+        if (id == 0) {
+            m_base.getFormatedTime(str, current, current);
+        } else {
+            int8_t alignSize;
+            if (current) {
+                (m_relTimes[id - 1] ^ m_base).getFormatedTime(str, current, current);
+                alignSize = strlen(str);
             }
 
-            char str[DISPLAY_COLS + 1];
-            uint8_t strLen;
-            bool current = id == m_currentId;
-
-            if (id == 0) {
-                m_base.getFormatedTime(str, current, current);
-                strLen = strlen(str);
-            } else {
-                if (current) {
-                    (m_relTimes[id - 1] ^ m_base).getFormatedTime(str, current, current);
-                    int alignSize = strlen(str);
-                    strLen = m_relTimes[id - 1].toStr(str);
-                    if (strLen < alignSize) {
-                        strLen = alignSize;
-                        alignStr(str, strLen);
-                    }
-                } else {
-                    strLen = m_relTimes[id - 1].toStr(str);
-                }
-            }
-
-            if (lineLen + strLen > DISPLAY_COLS)
-                break;
-
-            gScrollableContent.print(str, current);
-            lineLen += strLen;
-            ++id;
-
-            if (lineLen + 1 > DISPLAY_COLS)
-                break;
-
-            gScrollableContent.print(" ");
-            ++lineLen;
+            auto strLen = m_relTimes[id - 1].toStr(str);
+            if (current && strLen < alignSize)
+                alignStr(str, alignSize);
         }
+
+        gScrollableContent.print(str, current);
+        ++id;
     }
 }

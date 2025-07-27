@@ -133,7 +133,7 @@ void FStopTestMode::reset() {
 
 void FStopTestMode::setTimeTable() const {
     gTimeTable[0].empty();
-    gTimeTable[0].setPrefix("Run ");
+    gTimeTable[0].setPrefix("Run");
     uint8_t id = 0;
     while (true) {
         if (id == TimeTable::kTimeTableSize)

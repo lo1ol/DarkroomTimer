@@ -30,7 +30,5 @@ private:
     bool m_changed = true;
     bool m_printBadAsZero = false;
 
-    uint8_t m_maxLineNum = 0;
-
     Time m_times[kTimeTableSize];
 };

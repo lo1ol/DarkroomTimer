@@ -45,59 +45,28 @@ void TimeTable::flush(bool force) {
 
     m_changed = false;
 
+    gScrollableContent.startNewLine();
+    gScrollableContent.print(m_prefix);
+
     uint8_t id = 0;
-    bool firstLine = true;
 
-    while (true) {
-        gScrollableContent.startNewLine();
+    while (id != m_size) {
+        char str[DISPLAY_COLS + 1];
+        bool current = id == m_currentId;
+        const char* mark = current ? m_currentMark : nullptr;
 
-        uint8_t lineLen = 0;
-        if (firstLine) {
-            firstLine = false;
-            gScrollableContent.print(m_prefix);
+        auto time = m_times[id];
 
-            lineLen = strlen(m_prefix);
-        }
-
-        while (true) {
-            if (id == m_size) {
+        if (time == kBadTime) {
+            if (m_printBadAsZero)
+                time = 0_s;
+            else
                 return;
-            }
-
-            char str[DISPLAY_COLS + 1];
-            bool current = id == m_currentId;
-            const char* mark = nullptr;
-
-            auto time = m_times[id];
-
-            if (time == kBadTime) {
-                if (m_printBadAsZero)
-                    time = 0_s;
-                else
-                    return;
-            }
-
-            time.getFormatedTime(str, current, current);
-
-            auto timeLen = strlen(str);
-            if (current) {
-                mark = m_currentMark;
-            }
-
-            if (lineLen + timeLen > DISPLAY_COLS)
-                break;
-
-            gScrollableContent.print(str, current, mark);
-
-            lineLen += timeLen;
-            ++id;
-
-            if (lineLen + 1 > DISPLAY_COLS)
-                break;
-
-            gScrollableContent.print(" ");
-            ++lineLen;
         }
+
+        time.getFormatedTime(str, current, current);
+        gScrollableContent.print(str, current, mark);
+        ++id;
     }
 }
 
