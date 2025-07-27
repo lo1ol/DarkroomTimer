@@ -1,0 +1,16 @@
+name: Check version
+on: [push]
+jobs:
+  clang-format-checking:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # fetch-tags didn't work without setting fetch-depth
+          # https://github.com/actions/checkout/issues/1471
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Check version in Config.h
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          grep "^#define TIMER_FIRMWARE_VERSION \"$LATEST_TAG\"$" "DarkroomTimer/src/Config.h"

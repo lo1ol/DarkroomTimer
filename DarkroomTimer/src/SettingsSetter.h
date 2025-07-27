@@ -13,6 +13,7 @@ public:
         setAutoFinishView,
         setStartWithSettings,
         setMelody,
+        checkVersion,
         last_
     };
 
@@ -30,6 +31,7 @@ private:
     void processSetAutoFinishView() const;
     void processStartWithSettings() const;
     void processSetMelody() const;
+    void processCheckVersion() const;
 
     Step m_step = Step::setLagTime;
     Time m_lagTime;

@@ -35,3 +35,5 @@
 
 static_assert(MAX_BEEP_VOLUME <= 255);
 static_assert(MAX_BACKLIGHT <= 25);
+
+#define TIMER_FIRMWARE_VERSION "0.4.3"

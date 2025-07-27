@@ -100,6 +100,11 @@ void SettingsSetter::processSetMelody() const {
     gBeeper.alarm();
 }
 
+void SettingsSetter::processCheckVersion() const {
+    gDisplay[0] << "Version";
+    gDisplay[1] << TIMER_FIRMWARE_VERSION;
+}
+
 void SettingsSetter::process() {
     gDisplay.reset();
 
@@ -149,6 +154,9 @@ void SettingsSetter::process() {
         break;
     case Step::setMelody:
         processSetMelody();
+        break;
+    case Step::checkVersion:
+        processCheckVersion();
         break;
     }
 }
