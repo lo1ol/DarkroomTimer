@@ -5,11 +5,11 @@
 // class for effective keep and printing time table
 class TimeTable {
 public:
-    static constexpr uint8_t kTimeTableSize = 16;
+    void setBuffer(void* buf, uint8_t size);
 
     void setPrefix(const char* prefix);
 
-    void flush(bool force = false);
+    void flush(bool force = false) const;
     void reset();
     void resize(uint8_t);
 
@@ -22,13 +22,16 @@ public:
 
     void scroll();
 
+    uint8_t capacity() const { return m_capacity; }
+
 private:
+    Time* m_times = nullptr;
+    uint8_t m_capacity = 0;
+
     const char* m_prefix = nullptr;
     uint8_t m_size = 0;
     int8_t m_currentId = -1;
     const char* m_currentMark = nullptr;
-    bool m_changed = true;
+    mutable bool m_changed = true;
     bool m_printBadAsZero = false;
-
-    Time m_times[kTimeTableSize];
 };

@@ -9,8 +9,7 @@ Timer gTimer;
 Settings gSettings;
 Display gDisplay(LiquidCrystal(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7));
 Beeper gBeeper(BEEPER);
-TimeTable gTimeTable[2];
-RelTimeTable gRelTimeTable[2];
+uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
 
 void isr() {

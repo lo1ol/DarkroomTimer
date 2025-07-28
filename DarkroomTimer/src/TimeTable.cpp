@@ -4,6 +4,12 @@
 
 #include "Tools.h"
 
+void TimeTable::setBuffer(void* buf, uint8_t size) {
+    m_times = reinterpret_cast<Time*>(buf);
+    m_capacity = size / sizeof(Time);
+    reset();
+}
+
 void TimeTable::reset() {
     m_size = 0;
     m_currentId = -1;
@@ -21,7 +27,7 @@ void TimeTable::setPrefix(const char* prefix) {
 }
 
 void TimeTable::setTime(uint8_t id, Time time) {
-    assert(id < kTimeTableSize);
+    assert(id < m_capacity);
     if (id >= m_size)
         m_size = id + 1;
     m_times[id] = time;
@@ -39,7 +45,7 @@ void TimeTable::setCurrent(uint8_t id, const char* mark) {
     m_changed = true;
 }
 
-void TimeTable::flush(bool force) {
+void TimeTable::flush(bool force) const {
     if (!m_changed && !force)
         return;
 

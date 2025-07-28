@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#include "../RelTimeTable.h"
 #include "../Time.h"
 
 class RelMaskMode final : public ModeProcessor {
@@ -13,7 +14,7 @@ public:
     void reset() override;
     void switchMode() override;
 
-    void repaint() const override;
+    void repaint() override;
 
 private:
     void processRun();
@@ -31,4 +32,6 @@ private:
     int8_t m_currentMask;
     uint8_t m_currentFilter;
     uint8_t m_filterNum;
+
+    RelTimeTable m_relTimeTable[2];
 };

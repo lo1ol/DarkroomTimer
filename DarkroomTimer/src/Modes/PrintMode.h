@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "../Time.h"
+#include "../TimeTable.h"
 
 class PrintMode final : public ModeProcessor {
 public:
@@ -11,7 +12,7 @@ public:
     void reset() override;
     void switchMode() override;
 
-    void repaint() const override;
+    void repaint() override;
 
 private:
     void appendPrintLog(const Time&);
@@ -21,4 +22,6 @@ private:
     Time m_printTime;
     uint8_t m_logSize = 0;
     bool m_showLog = false;
+
+    TimeTable m_timeTable;
 };

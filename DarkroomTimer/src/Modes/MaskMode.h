@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "../Time.h"
+#include "../TimeTable.h"
 
 class MaskMode final : public ModeProcessor {
     enum class Step { setNum, setMasks, run, last_ };
@@ -13,7 +14,7 @@ public:
     void reset() override;
     void switchMode() override;
 
-    void repaint() const override;
+    void repaint() override;
 
 private:
     void processRun();
@@ -28,4 +29,6 @@ private:
     uint8_t m_currentFilter;
     uint32_t m_notifyMask;
     uint8_t m_currentMask;
+
+    TimeTable m_timeTable[2];
 };

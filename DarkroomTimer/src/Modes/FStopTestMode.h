@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "../Time.h"
+#include "../TimeTable.h"
 
 class FStopTestMode final : public ModeProcessor {
     enum class Step { baseTime, initTime, fstopSet, run, last_ };
@@ -21,10 +22,10 @@ public:
 
     const char* preview() const;
 
-    void repaint() const override;
+    void repaint() override;
 
 private:
-    void setTimeTable() const;
+    void setTimeTable();
     Time getPrintTime() const;
     Time getStepTotalTime(uint8_t step) const;
 
@@ -34,4 +35,6 @@ private:
     uint8_t m_FStopPartId;
     Time m_baseTime;
     Time m_initTime;
+
+    TimeTable m_timeTable;
 };

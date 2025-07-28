@@ -7,7 +7,8 @@ constexpr uint8_t kFStopPartVarinatns[] = { 12, 6, 4, 3, 2, 1 };
 } // namespace
 
 FStopTestMode::FStopTestMode(SubMode subMode) : kSubMode(subMode) {
-    gTimeTable[0].printBadAsZero(false);
+    m_timeTable.setBuffer(gModesCache, sizeof(gModesCache));
+    m_timeTable.printBadAsZero(false);
 
     m_baseTime = 2_s;
     m_initTime = 2_s;
@@ -26,7 +27,7 @@ void FStopTestMode::switchMode() {
     m_currentRun = 0;
     if (m_step == Step::run) {
         setTimeTable();
-        gTimeTable[0].setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
+        m_timeTable.setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
     }
 
     gTimer.reset();
@@ -61,7 +62,7 @@ void FStopTestMode::process() {
             gTimer.reset();
             gBeeper.alarm();
         }
-        gTimeTable[0].setCurrent(++m_currentRun);
+        m_timeTable.setCurrent(++m_currentRun);
         repaint();
     }
 
@@ -71,7 +72,7 @@ void FStopTestMode::process() {
     gScrollableContent.paint();
 }
 
-void FStopTestMode::repaint() const {
+void FStopTestMode::repaint() {
     gDisplay.reset();
 
     switch (m_step) {
@@ -89,7 +90,7 @@ void FStopTestMode::repaint() const {
         return;
     case Step::run:
         gScrollableContent.reset();
-        gTimeTable[0].flush(true);
+        m_timeTable.flush(true);
         gScrollableContent.paint();
         return;
     }
@@ -127,21 +128,21 @@ Time FStopTestMode::getStepTotalTime(uint8_t id) const {
 
 void FStopTestMode::reset() {
     m_currentRun = 0;
-    gTimeTable[0].setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
+    m_timeTable.setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
     repaint();
 }
 
-void FStopTestMode::setTimeTable() const {
-    gTimeTable[0].reset();
-    gTimeTable[0].setPrefix("Run");
+void FStopTestMode::setTimeTable() {
+    m_timeTable.reset();
+    m_timeTable.setPrefix("Run");
     uint8_t id = 0;
     while (true) {
-        if (id == TimeTable::kTimeTableSize)
+        if (id == m_timeTable.capacity())
             break;
         Time time = getStepTotalTime(id);
         if (time == kBadTime)
             break;
-        gTimeTable[0].setTime(id++, time);
+        m_timeTable.setTime(id++, time);
     }
 }
 

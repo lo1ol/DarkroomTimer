@@ -33,6 +33,5 @@ extern Timer gTimer;
 extern Settings gSettings;
 extern Display gDisplay;
 extern Beeper gBeeper;
-extern TimeTable gTimeTable[2];
-extern RelTimeTable gRelTimeTable[2];
+extern uint8_t gModesCache[32];
 extern ScrollableContent gScrollableContent;

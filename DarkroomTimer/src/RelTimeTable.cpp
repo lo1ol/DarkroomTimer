@@ -4,6 +4,12 @@
 
 #include "Tools.h"
 
+void RelTimeTable::setBuffer(void* buf, uint8_t size) {
+    m_relTimes = reinterpret_cast<RelTime*>(buf);
+    m_capacity = size / sizeof(RelTime);
+    reset();
+}
+
 void RelTimeTable::reset() {
     m_size = 0;
     m_currentId = -2;
@@ -27,7 +33,7 @@ void RelTimeTable::setBaseTime(Time time) {
 }
 
 void RelTimeTable::setRelTime(uint8_t id, RelTime time) {
-    assert(id < kTableSize);
+    assert(id < m_capacity);
     if (id >= m_size)
         m_size = id + 1;
     m_relTimes[id] = time;
@@ -57,7 +63,7 @@ void RelTimeTable::setCurrent(uint8_t id) {
     m_changed = true;
 }
 
-void RelTimeTable::flush(bool force) {
+void RelTimeTable::flush(bool force) const {
     if (!m_changed && !force)
         return;
 

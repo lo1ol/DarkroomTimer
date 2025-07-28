@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "../Time.h"
+#include "../TimeTable.h"
 
 class LinearTestMode final : public ModeProcessor {
     enum class Step { baseTime, initTime, stepTime, run, last_ };
@@ -21,10 +22,10 @@ public:
 
     const char* preview() const;
 
-    void repaint() const override;
+    void repaint() override;
 
 private:
-    void setTimeTable() const;
+    void setTimeTable();
     Time getPrintTime() const;
     Time getTotalTime(uint8_t id) const;
 
@@ -34,4 +35,6 @@ private:
     Time m_baseTime;
     Time m_initTime;
     Time m_stepTime;
+
+    TimeTable m_timeTable;
 };

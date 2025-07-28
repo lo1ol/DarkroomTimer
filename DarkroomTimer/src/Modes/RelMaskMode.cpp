@@ -12,17 +12,18 @@ constexpr const char* kRunPrefixes[] = { "R F1", "R F2" };
 
 RelMaskMode::RelMaskMode(uint8_t filterNum) {
     m_filterNum = filterNum;
-
     m_step = Step::setNum;
-    m_numberOfMasks[0] = 1;
-    m_numberOfMasks[1] = 1;
     m_currentMask = -1;
     m_currentFilter = 0;
 
-    for (auto& relTimeTable : gRelTimeTable) {
+    auto tableCacheSize = sizeof(gModesCache) / filterNum;
+    for (uint8_t filter = 0; filter != filterNum; ++filter) {
+        auto& relTimeTable = m_relTimeTable[filter];
+        m_numberOfMasks[filter] = 1;
+        relTimeTable.setBuffer(gModesCache + filter * tableCacheSize, tableCacheSize);
         relTimeTable.reset();
         relTimeTable.setBaseTime(8_s);
-        for (uint8_t i = 0; i != RelTimeTable::kTableSize; ++i)
+        for (uint8_t i = 0; i != relTimeTable.capacity(); ++i)
             relTimeTable.setRelTime(i, RelTime());
     }
 
@@ -41,11 +42,13 @@ void RelMaskMode::switchMode() {
 
     if (m_step == Step::setNum) {
         for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
-            for (uint8_t i = m_numberOfMasks[filter]; i != m_numberOfMasks[filter]; ++i)
-                gRelTimeTable[filter].setRelTime(i, RelTime());
+            auto numberOfMasks = m_numberOfMasks[filter];
+            auto& relTimeTable = m_relTimeTable[filter];
+            for (uint8_t i = numberOfMasks; i < numberOfMasks; ++i)
+                relTimeTable.setRelTime(i, RelTime());
 
-            gRelTimeTable[filter].resize(m_numberOfMasks[filter]);
-            gRelTimeTable[filter].setSecView(false);
+            relTimeTable.resize(numberOfMasks);
+            relTimeTable.setSecView(false);
         }
     }
 
@@ -56,11 +59,11 @@ void RelMaskMode::switchMode() {
 
 void RelMaskMode::setCurrentMask(uint8_t filter, uint8_t mask) {
     if (filter == m_filterNum) {
-        for (auto& relTimeTable : gRelTimeTable)
+        for (auto& relTimeTable : m_relTimeTable)
             relTimeTable.setCurrent(-2);
     } else {
-        gRelTimeTable[m_currentFilter].setCurrent(-2);
-        gRelTimeTable[filter].setCurrent(mask);
+        m_relTimeTable[m_currentFilter].setCurrent(-2);
+        m_relTimeTable[filter].setCurrent(mask);
     }
 
     m_currentFilter = filter;
@@ -94,7 +97,7 @@ void RelMaskMode::moveCurrentMask(int8_t dir) {
 void RelMaskMode::process() {
     switch (m_step) {
     case Step::setNum:
-        if (getInt(m_numberOfMasks[m_currentFilter], 0, RelTimeTable::kTableSize))
+        if (getInt(m_numberOfMasks[m_currentFilter], 0, m_relTimeTable[0].capacity()))
             repaint();
         return;
     case Step::setMasks:
@@ -124,15 +127,15 @@ void RelMaskMode::processSetMasks() {
 
     bool changed = false;
     if (m_currentMask == -1) {
-        auto time = gRelTimeTable[m_currentFilter].getBaseTime();
+        auto time = m_relTimeTable[m_currentFilter].getBaseTime();
         changed = getTime(time);
         if (changed)
-            gRelTimeTable[m_currentFilter].setBaseTime(time);
+            m_relTimeTable[m_currentFilter].setBaseTime(time);
     } else {
-        auto relTime = gRelTimeTable[m_currentFilter].getRelTime(m_currentMask);
+        auto relTime = m_relTimeTable[m_currentFilter].getRelTime(m_currentMask);
         changed = getRelTime(relTime);
         if (changed)
-            gRelTimeTable[m_currentFilter].setRelTime(m_currentMask, relTime);
+            m_relTimeTable[m_currentFilter].setRelTime(m_currentMask, relTime);
     }
 
     if (changed) {
@@ -143,7 +146,7 @@ void RelMaskMode::processSetMasks() {
 
 void RelMaskMode::processRun() {
     if (gExtraBtn.click()) {
-        for (auto& relTimeTable : gRelTimeTable)
+        for (auto& relTimeTable : m_relTimeTable)
             relTimeTable.toggleSecView();
         repaint();
     }
@@ -164,10 +167,10 @@ void RelMaskMode::processRun() {
 }
 
 Time RelMaskMode::getStepTime() {
-    return gRelTimeTable[m_currentFilter].getTime(m_currentMask);
+    return m_relTimeTable[m_currentFilter].getTime(m_currentMask);
 }
 
-void RelMaskMode::repaint() const {
+void RelMaskMode::repaint() {
     gDisplay.reset();
 
     switch (m_step) {
@@ -182,12 +185,12 @@ void RelMaskMode::repaint() const {
     case Step::setMasks:
         gScrollableContent.reset();
         if (m_filterNum == 1) {
-            gRelTimeTable[0].setPrefix("Set");
-            gRelTimeTable[0].flush(true);
+            m_relTimeTable[0].setPrefix("Set");
+            m_relTimeTable[0].flush(true);
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
-                gRelTimeTable[filter].setPrefix(kSetPrefixes[filter]);
-                gRelTimeTable[filter].flush(true);
+                m_relTimeTable[filter].setPrefix(kSetPrefixes[filter]);
+                m_relTimeTable[filter].flush(true);
             }
         }
         gScrollableContent.paint();
@@ -195,12 +198,12 @@ void RelMaskMode::repaint() const {
     case Step::run:
         gScrollableContent.reset();
         if (m_filterNum == 1) {
-            gRelTimeTable[0].setPrefix("Run");
-            gRelTimeTable[0].flush(true);
+            m_relTimeTable[0].setPrefix("Run");
+            m_relTimeTable[0].flush(true);
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
-                gRelTimeTable[filter].setPrefix(kRunPrefixes[filter]);
-                gRelTimeTable[filter].flush(true);
+                m_relTimeTable[filter].setPrefix(kRunPrefixes[filter]);
+                m_relTimeTable[filter].flush(true);
             }
         }
 

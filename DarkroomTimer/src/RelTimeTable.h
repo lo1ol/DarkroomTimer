@@ -5,11 +5,11 @@
 // class for effective keep and printing time table
 class RelTimeTable {
 public:
-    static constexpr uint8_t kTableSize = 10;
+    void setBuffer(void* buf, uint8_t size);
 
     void setPrefix(const char* prefix);
 
-    void flush(bool force = false);
+    void flush(bool force = false) const;
     void reset();
     void resize(uint8_t);
     uint8_t size() const { return m_size; }
@@ -25,13 +25,17 @@ public:
     void toggleSecView();
     void setSecView(bool);
 
+    uint8_t capacity() const { return m_capacity; }
+
 private:
+    RelTime* m_relTimes;
+    uint8_t m_capacity;
+
     const char* m_prefix = nullptr;
     uint8_t m_size = 0;
     int8_t m_currentId = -2; // -1 is used to identify base
-    bool m_changed = true;
+    mutable bool m_changed = true;
     bool m_secView = false;
 
     Time m_base;
-    RelTime m_relTimes[kTableSize];
 };
