@@ -5,7 +5,7 @@
 PrintMode::PrintMode() {
     gTimeTable[0].printBadAsZero(false);
     gTimeTable[0].setPrefix("Log");
-    gTimeTable[0].empty();
+    gTimeTable[0].reset();
 
     m_printTime = 8_s;
     m_triggerByHold = false;
@@ -103,7 +103,7 @@ void PrintMode::reset() {
 
 void PrintMode::resetPrintInfo() {
     gTimer.reset();
-    gTimeTable[0].empty();
+    gTimeTable[0].reset();
     m_logSize = 0;
     repaint();
 }

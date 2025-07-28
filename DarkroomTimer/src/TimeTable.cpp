@@ -4,7 +4,7 @@
 
 #include "Tools.h"
 
-void TimeTable::empty() {
+void TimeTable::reset() {
     m_size = 0;
     m_currentId = -1;
     m_changed = true;

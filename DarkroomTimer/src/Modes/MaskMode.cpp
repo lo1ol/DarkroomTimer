@@ -22,7 +22,7 @@ MaskMode::MaskMode(uint8_t filterNum) {
 
     for (auto& timeTable : gTimeTable) {
         timeTable.printBadAsZero(true);
-        timeTable.empty();
+        timeTable.reset();
         timeTable.setTime(0, 8_s);
         for (uint8_t i = 1; i != TimeTable::kTimeTableSize; ++i)
             timeTable.setTime(i, kBadTime);

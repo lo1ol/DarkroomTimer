@@ -28,9 +28,7 @@ private:
 
     Step m_step;
     uint8_t m_numberOfMasks[2];
-    uint8_t m_currentMask;
+    int8_t m_currentMask;
     uint8_t m_currentFilter;
     uint8_t m_filterNum;
-
-    bool m_viewSecs;
 };

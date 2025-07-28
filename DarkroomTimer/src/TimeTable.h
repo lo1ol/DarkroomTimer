@@ -10,7 +10,7 @@ public:
     void setPrefix(const char* prefix);
 
     void flush(bool force = false);
-    void empty();
+    void reset();
     void resize(uint8_t);
 
     void printBadAsZero(bool);
