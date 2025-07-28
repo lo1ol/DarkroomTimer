@@ -34,4 +34,5 @@ private:
     uint8_t m_filterNum;
 
     RelTimeTable m_relTimeTable[2];
+    uint16_t m_maxMasksNumber;
 };

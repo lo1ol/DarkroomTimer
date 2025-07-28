@@ -31,4 +31,5 @@ private:
     uint8_t m_currentMask;
 
     TimeTable m_timeTable[2];
+    uint16_t m_maxMasksNumber;
 };

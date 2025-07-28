@@ -27,6 +27,11 @@ RelMaskMode::RelMaskMode(uint8_t filterNum) {
             relTimeTable.setRelTime(i, RelTime());
     }
 
+    if (filterNum == 1)
+        m_maxMasksNumber = min(15, m_relTimeTable[0].capacity() - 1);
+    else
+        m_maxMasksNumber = min(7, m_relTimeTable[0].capacity() - 1);
+
     repaint();
 }
 
@@ -44,7 +49,7 @@ void RelMaskMode::switchMode() {
         for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
             auto numberOfMasks = m_numberOfMasks[filter];
             auto& relTimeTable = m_relTimeTable[filter];
-            for (uint8_t i = numberOfMasks; i < numberOfMasks; ++i)
+            for (uint8_t i = numberOfMasks; i < m_maxMasksNumber; ++i)
                 relTimeTable.setRelTime(i, RelTime());
 
             relTimeTable.resize(numberOfMasks);
@@ -97,7 +102,7 @@ void RelMaskMode::moveCurrentMask(int8_t dir) {
 void RelMaskMode::process() {
     switch (m_step) {
     case Step::setNum:
-        if (getInt(m_numberOfMasks[m_currentFilter], 0, m_relTimeTable[0].capacity()))
+        if (getInt(m_numberOfMasks[m_currentFilter], 0, m_maxMasksNumber))
             repaint();
         return;
     case Step::setMasks:

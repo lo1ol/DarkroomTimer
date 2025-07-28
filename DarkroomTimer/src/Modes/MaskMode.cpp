@@ -30,6 +30,11 @@ MaskMode::MaskMode(uint8_t filterNum) {
             timeTable.setTime(i, kBadTime);
     }
 
+    if (filterNum == 1)
+        m_maxMasksNumber = min(15, m_timeTable[0].capacity() - 1);
+    else
+        m_maxMasksNumber = min(7, m_timeTable[0].capacity() - 1);
+
     repaint();
 }
 
@@ -50,8 +55,8 @@ void MaskMode::switchMode() {
         for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
             auto numberOfMasks = m_numberOfMasks[filter];
             auto& timeTable = m_timeTable[filter];
-            for (uint8_t i = numberOfMasks + 1; i < timeTable.capacity(); ++i)
-                timeTable.setTime(i, kBadTime);
+            for (uint8_t i = numberOfMasks; i < m_maxMasksNumber; ++i)
+                timeTable.setTime(i + 1, kBadTime);
 
             timeTable.resize(numberOfMasks + 1);
         }
@@ -101,7 +106,7 @@ void MaskMode::process() {
     switch (m_step) {
     case Step::setNum:
         // table capacities are equal
-        if (getInt(m_numberOfMasks[m_currentFilter], 0, m_timeTable[0].capacity()) - 1)
+        if (getInt(m_numberOfMasks[m_currentFilter], 0, m_maxMasksNumber))
             repaint();
         return;
     case Step::setMasks:
