@@ -13,4 +13,4 @@ jobs:
       - name: Check version in Config.h
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0)
-          grep "^#define TIMER_FIRMWARE_VERSION \"$LATEST_TAG\"$" "DarkroomTimer/src/Config.h"
+          grep "^#define TIMER_FIRMWARE_VERSION \"$LATEST_TAG\"$" "DarkroomTimer/src/lib/DarkroomTimer/Config.h"

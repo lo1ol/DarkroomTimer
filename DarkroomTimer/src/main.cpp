@@ -1,16 +1,16 @@
-#include "Tools.h"
+#include "lib/DarkroomTimer/Tools.h"
 
-#include "Config.h"
+#include "lib/DarkroomTimer/Config.h"
 
-#include "ModeProcessor.h"
+#include "lib/DarkroomTimer/ModeProcessor.h"
 
-#include "Modes/FStopTestMode.h"
-#include "Modes/LinearTestMode.h"
-#include "Modes/MaskMode.h"
-#include "Modes/PrintMode.h"
-#include "Modes/RelMaskMode.h"
+#include "lib/DarkroomTimer/Modes/FStopTestMode.h"
+#include "lib/DarkroomTimer/Modes/LinearTestMode.h"
+#include "lib/DarkroomTimer/Modes/MaskMode.h"
+#include "lib/DarkroomTimer/Modes/PrintMode.h"
+#include "lib/DarkroomTimer/Modes/RelMaskMode.h"
 
-#include "SettingsSetter.h"
+#include "lib/DarkroomTimer/SettingsSetter.h"
 
 enum class ModeId : uint8_t {
     testFStops,
