@@ -10,7 +10,7 @@ public:
     Time operator^(Time) const;
     uint8_t toStr(char* buf) const;
 
-    uint8_t getId() const { return m_id; }
+    constexpr uint8_t getId() const { return m_id; }
 
 private:
     uint8_t m_id;
