@@ -93,6 +93,9 @@ bool getRelTime(RelTime& time) {
 }
 
 void alignStr(char* buf, uint8_t align) {
+    if (!align)
+        return;
+
     char alignedStr[DISPLAY_COLS + 1];
     memset(alignedStr, ' ', align);
     uint8_t len = strlen(buf);
