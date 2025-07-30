@@ -2,8 +2,7 @@
 
 #include <Arduino.h>
 
-#include <LiquidCrystal.h>
-
+#include "LiquidCrystalWrap.h"
 #include "Tools.h"
 
 void DisplayLine::concat(char* dst, const char* src) {
@@ -66,6 +65,7 @@ void DisplayLine::tick() {
     auto fwLen = strlen(m_fwInfo);
     memcpy(printBuf, m_fwInfo, fwLen);
     memset(printBuf + fwLen, ' ', DISPLAY_COLS - fwLen);
+    printBuf[DISPLAY_COLS] = 0;
 
     auto bwLen = strlen(m_bwInfo);
     memcpy(printBuf + DISPLAY_COLS - bwLen, m_bwInfo, bwLen);
@@ -86,8 +86,8 @@ void DisplayLine::tick() {
         }
     }
 
-    m_lcd.setCursor(0, m_line);
-    m_lcd.print(printBuf);
+    m_lcd->setCursor(0, m_line);
+    m_lcd->print(printBuf);
 }
 
 void DisplayLine::restore() {
@@ -119,7 +119,7 @@ DisplayLine& DisplayLine::operator>>(int value) {
 }
 
 void DisplayLine::fastRepaint(const char* src, uint8_t shift) {
-    m_lcd.setCursor(shift, m_line);
-    m_lcd.print(src);
+    m_lcd->setCursor(shift, m_line);
+    m_lcd->print(src);
     m_hasFastChanges = true;
 }

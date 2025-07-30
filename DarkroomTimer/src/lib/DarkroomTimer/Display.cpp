@@ -1,8 +1,8 @@
 #include "Display.h"
 
-Display::Display(LiquidCrystal&& lcd) : m_lcd(lcd), m_lines({ DisplayLine(0, m_lcd), DisplayLine(1, m_lcd) }) {
-    m_lcd.begin(DISPLAY_COLS, DISPLAY_ROWS);
-}
+#include "LiquidCrystalWrap.h"
+
+Display::Display(LiquidCrystalWrap* lcd) : m_lcd(lcd), m_lines({ DisplayLine(0, m_lcd), DisplayLine(1, m_lcd) }) {}
 
 void Display::tick() {
     for (auto&& line : m_lines)

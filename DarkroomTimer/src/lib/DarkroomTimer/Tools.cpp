@@ -1,5 +1,8 @@
 #include "Tools.h"
 
+#include <LiquidCrystal.h>
+#include <LiquidCrystalWrap.h>
+
 EncButton gEncoder(ENCODER_DT, ENCODER_CLK);
 ButtonT<MODE_SWITCH_BTN> gModeSwitchBtn;
 ButtonT<START_BTN> gStartBtn;
@@ -7,7 +10,9 @@ ButtonT<EXTRA_BTN> gExtraBtn;
 ButtonT<VIEW_BTN> gViewBtn;
 Timer gTimer;
 Settings gSettings;
-Display gDisplay(LiquidCrystal(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7));
+LiquidCrystal gLcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+LiquidCrystalWrap gLcdWrap(&gLcd);
+Display gDisplay(&gLcdWrap);
 Beeper gBeeper(BEEPER);
 uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;

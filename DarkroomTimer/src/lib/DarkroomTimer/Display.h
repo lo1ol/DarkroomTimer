@@ -1,14 +1,14 @@
 #pragma once
 
-#include <LiquidCrystal.h>
-
 #include "Config.h"
 #include "DisplayLine.h"
 #include "TimeTable.h"
 
+class LiquidCrystalWrap;
+
 class Display {
 public:
-    Display(LiquidCrystal&& lcd);
+    Display(LiquidCrystalWrap* lcd);
     DisplayLine& operator[](uint8_t n) { return m_lines[n]; }
     DisplayLine* getLines() { return m_lines; }
 
@@ -17,6 +17,6 @@ public:
     void resetBlink(bool state = false);
 
 private:
-    LiquidCrystal m_lcd;
+    LiquidCrystalWrap* m_lcd;
     DisplayLine m_lines[DISPLAY_ROWS];
 };

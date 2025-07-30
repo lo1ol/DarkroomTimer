@@ -3,12 +3,11 @@
 #include <stdint.h>
 
 #include "Config.h"
-
-class LiquidCrystal;
+class LiquidCrystalWrap;
 
 class DisplayLine {
 public:
-    DisplayLine(int line, LiquidCrystal& lcd) : m_line(line), m_lcd(lcd) {}
+    DisplayLine(int line, LiquidCrystalWrap* lcd) : m_line(line), m_lcd(lcd) {}
 
     void tick();
     void reset();
@@ -31,7 +30,7 @@ private:
 
     bool m_needRepaint = false;
     int m_line;
-    LiquidCrystal& m_lcd;
+    LiquidCrystalWrap* m_lcd;
 
     uint8_t m_blinkPos = 0;
     uint8_t m_blinkLength = 0;
