@@ -1,6 +1,5 @@
 #include "Timer.h"
 
-#include "DisplayLine.h"
 #include "Tools.h"
 
 void Timer::tick() {
@@ -35,46 +34,48 @@ void Timer::start(Time time) {
     m_leftTime = time.toMillis();
     m_resumeTime = m_currentTime;
     m_status = RUNNING;
+    updateAfterLastResume();
     gDigitalWrite(RELAY, HIGH);
 }
 
 bool Timer::pause() {
-    if (m_status == RUNNING) {
-        gBeeper.stop();
-        updateAfterLastResume();
-        m_total += afterResume();
-        m_leftTime -= afterResume();
-        m_status = PAUSED;
-        gDigitalWrite(RELAY, LOW);
+    if (m_status != RUNNING)
+        return false;
 
-        return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
-    }
+    gBeeper.stop();
+    updateAfterLastResume();
+    m_total += afterResume();
+    m_leftTime -= afterResume();
+    m_status = PAUSED;
+    gDigitalWrite(RELAY, LOW);
 
-    return false;
+    return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
 }
 
 void Timer::resume() {
-    if (m_status == PAUSED) {
-        gBeeper.beep();
-        m_lagPassed = false;
-        m_resumeTime = m_currentTime;
-        m_status = RUNNING;
-        gDigitalWrite(RELAY, HIGH);
-    }
+    if (m_status != PAUSED)
+        return;
+
+    gBeeper.beep();
+    m_lagPassed = false;
+    m_resumeTime = m_currentTime;
+    m_status = RUNNING;
+    gDigitalWrite(RELAY, HIGH);
 }
 
 void Timer::stop() {
-    if (m_status != STOPPED) {
-        gBeeper.stop();
-        updateAfterLastResume();
-        if (m_currentTime >= realStopTime())
-            m_total += m_leftTime;
-        else
-            m_total += afterResume();
-        m_status = STOPPED;
-        m_leftTime = 0;
-        gDigitalWrite(RELAY, LOW);
-    }
+    if (m_status == STOPPED)
+        return;
+
+    gBeeper.stop();
+    updateAfterLastResume();
+    if (m_currentTime >= realStopTime())
+        m_total += m_leftTime;
+    else
+        m_total += afterResume();
+    m_status = STOPPED;
+    m_leftTime = 0;
+    gDigitalWrite(RELAY, LOW);
 }
 
 uint32_t Timer::left() const {
@@ -93,13 +94,12 @@ void Timer::updateAfterLastResume() {
         m_afterLastResume = Time::fromMillis(lastResume);
 }
 
-void Timer::resetAfterLastResume() {
-    m_afterLastResume = 0_ts;
-}
-
 uint32_t Timer::afterResume() const {
     if (m_status != RUNNING)
         return 0;
+
+    if (m_currentTime > realStopTime())
+        return m_leftTime;
 
     uint32_t realAfterResume = m_currentTime - m_resumeTime;
 
@@ -107,22 +107,6 @@ uint32_t Timer::afterResume() const {
         return 0;
 
     return realAfterResume - static_cast<uint16_t>(gSettings.lagTime.toMillis());
-}
-
-void Timer::printFormatedState() const {
-    switch (m_status) {
-    case RUNNING:
-        if (afterResume() == 0) {
-            gDisplay[1] << "Lag";
-        } else {
-            gDisplay[1] << Time::fromMillis(left());
-        }
-        break;
-    case PAUSED:
-        gDisplay[1] << Time::fromMillis(left()) << " PAUSE";
-    case STOPPED:
-        break;
-    }
 }
 
 uint32_t Timer::realStopTime() const {
@@ -144,7 +128,7 @@ void Timer::resetTotal() {
 void Timer::reset() {
     stop();
     resetTotal();
-    resetAfterLastResume();
+    m_afterLastResume = 0_ts;
 }
 
 Timer::State Timer::state() const {

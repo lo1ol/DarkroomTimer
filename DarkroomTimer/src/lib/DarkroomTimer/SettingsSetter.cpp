@@ -25,7 +25,7 @@ void SettingsSetter::processSetLagTime() {
         m_lagTime = kMaxLagTime;
 
     if (m_timer.state() != Timer::STOPPED) {
-        m_timer.printFormatedState();
+        gDisplay[1] << m_timer.afterLastResume();
         return;
     }
 

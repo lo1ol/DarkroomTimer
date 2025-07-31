@@ -38,20 +38,22 @@ void PrintMode::process() {
         return;
     }
 
-    gDisplay.reset();
-
-    gDisplay[0] << "Prnt " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
-
-    if (gTimer.stopped())
+    if (gTimer.stopped()) {
         appendPrintLog(gTimer.afterLastResume());
-
-    if (gTimer.state() == Timer::STOPPED) {
-        getTime(m_printTime);
-        gDisplay[1] << m_printTime;
-    } else {
-        gTimer.printFormatedState();
+        repaint();
     }
-    gDisplay[1] >> gTimer.afterLastResume();
+
+    switch (gTimer.state()) {
+    case Timer::STOPPED:
+        if (getTime(m_printTime))
+            repaint();
+        break;
+    case Timer::RUNNING:
+        repaint();
+        break;
+    case Timer::PAUSED:
+        break;
+    }
 
     if (!m_triggerByHold) {
         if (gStartBtn.press() && gTimer.state() == Timer::RUNNING) {
@@ -60,6 +62,7 @@ void PrintMode::process() {
             }
 
             gStartBtn.skipEvents();
+            repaint();
         }
 
         if (gStartBtn.click()) {
@@ -72,6 +75,7 @@ void PrintMode::process() {
                 gTimer.start(m_printTime);
                 break;
             }
+            repaint();
         }
 
         return;
@@ -81,21 +85,42 @@ void PrintMode::process() {
         resetPrintInfo();
         gTimer.start(m_printTime);
     }
-    if (gStartBtn.pressing())
+    if (gStartBtn.pressing()) {
         gTimer.resume();
-    else {
+    } else {
         if (gTimer.pause())
             appendPrintLog(gTimer.afterLastResume());
     }
+    repaint();
 }
 
 void PrintMode::repaint() {
+    gDisplay.reset();
+
     if (m_showLog) {
         gScrollableContent.reset();
         m_timeTable.flush(true);
         gScrollableContent.paint();
         return;
     }
+
+    gDisplay[0] << "Prnt " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
+
+    switch (gTimer.state()) {
+    case Timer::STOPPED:
+        gDisplay[1] << m_printTime;
+        break;
+    case Timer::RUNNING:
+        if (gTimer.lag())
+            gDisplay[1] << "Lag";
+        else
+            gDisplay[1] << Time::fromMillis(gTimer.left());
+        break;
+    case Timer::PAUSED:
+        gDisplay[1] << Time::fromMillis(gTimer.left()) << " PAUSE";
+        break;
+    }
+    gDisplay[1] >> gTimer.afterLastResume();
 }
 
 void PrintMode::reset() {

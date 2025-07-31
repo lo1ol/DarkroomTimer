@@ -4,8 +4,6 @@
 
 #include "Time.h"
 
-class DisplayLine;
-
 class Timer {
 public:
     enum State { STOPPED, RUNNING, PAUSED };
@@ -23,9 +21,6 @@ public:
 
     bool stopped() const { return m_justStopped; }
 
-    void printFormatedState() const;
-
-    void resetAfterLastResume();
     Time afterLastResume() const;
 
     Time total() const;
