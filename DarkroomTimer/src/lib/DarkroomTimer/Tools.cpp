@@ -1,5 +1,7 @@
 #include "Tools.h"
 
+#include <Arduino.h>
+
 #include <LiquidCrystal.h>
 #include <LiquidCrystalWrap.h>
 
@@ -16,6 +18,10 @@ Display gDisplay(&gLcdWrap);
 Beeper gBeeper(BEEPER);
 uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
+
+decltype(&millis) gMillis = millis;
+decltype(&digitalWrite) gDigitalWrite = digitalWrite;
+decltype(&analogWrite) gAnalogWrite = analogWrite;
 
 void isr() {
     gEncoder.tickISR();

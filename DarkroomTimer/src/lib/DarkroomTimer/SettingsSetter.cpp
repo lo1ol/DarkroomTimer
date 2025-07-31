@@ -70,7 +70,7 @@ void SettingsSetter::processSetBacklight() const {
     getInt(userBacklight, 1, 10);
     gSettings.backlight = userBacklight * MAX_BACKLIGHT;
     gDisplay[1] << userBacklight;
-    analogWrite(BACKLIGHT, gSettings.backlight);
+    gAnalogWrite(BACKLIGHT, gSettings.backlight);
 }
 
 void SettingsSetter::processStartWithSettings() const {

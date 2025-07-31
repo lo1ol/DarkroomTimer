@@ -4,7 +4,7 @@
 #include "Tools.h"
 
 void Timer::tick() {
-    m_currentTime = millis();
+    m_currentTime = gMillis();
     m_justStopped = false;
     if (m_status != RUNNING)
         return;
@@ -35,7 +35,7 @@ void Timer::start(Time time) {
     m_leftTime = time.toMillis();
     m_resumeTime = m_currentTime;
     m_status = RUNNING;
-    digitalWrite(RELAY, HIGH);
+    gDigitalWrite(RELAY, HIGH);
 }
 
 bool Timer::pause() {
@@ -45,7 +45,7 @@ bool Timer::pause() {
         m_total += afterResume();
         m_leftTime -= afterResume();
         m_status = PAUSED;
-        digitalWrite(RELAY, LOW);
+        gDigitalWrite(RELAY, LOW);
 
         return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
     }
@@ -59,7 +59,7 @@ void Timer::resume() {
         m_lagPassed = false;
         m_resumeTime = m_currentTime;
         m_status = RUNNING;
-        digitalWrite(RELAY, HIGH);
+        gDigitalWrite(RELAY, HIGH);
     }
 }
 
@@ -73,7 +73,7 @@ void Timer::stop() {
             m_total += afterResume();
         m_status = STOPPED;
         m_leftTime = 0;
-        digitalWrite(RELAY, LOW);
+        gDigitalWrite(RELAY, LOW);
     }
 }
 

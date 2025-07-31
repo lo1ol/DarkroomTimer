@@ -3,7 +3,7 @@
 #include "Tools.h"
 
 void Beeper::tick() {
-    uint32_t currentTime = millis();
+    uint32_t currentTime = gMillis();
     switch (m_state) {
     case State::off:
         break;
@@ -32,7 +32,7 @@ void Beeper::tick() {
 
 void Beeper::setup() {
     pinMode(m_pin, OUTPUT);
-    analogWrite(m_pin, BEEP_VOLUME_SILENT);
+    gAnalogWrite(m_pin, BEEP_VOLUME_SILENT);
 
     m_melody = Melody::getMelody(gSettings.melody);
 }
@@ -41,7 +41,7 @@ void Beeper::beep() {
     m_state = State::single;
 
     m_pinState = true;
-    m_timer = millis() + 100;
+    m_timer = gMillis() + 100;
     processPin();
 }
 
@@ -50,10 +50,10 @@ void Beeper::start(bool silentStart) {
 
     if (silentStart) {
         m_pinState = false;
-        m_timer = millis() + 1000;
+        m_timer = gMillis() + 1000;
     } else {
         m_pinState = true;
-        m_timer = millis() + 100;
+        m_timer = gMillis() + 100;
     }
 
     processPin();
@@ -84,10 +84,10 @@ void Beeper::processAlarm() {
 
 void Beeper::processPin() const {
     if (m_pinState)
-        analogWrite(m_pin, gSettings.beepVolume);
+        gAnalogWrite(m_pin, gSettings.beepVolume);
     else
         // setting volume to BEEP_VOLUME_SILENT instead of 0 reduce bad noise on low volumes
-        analogWrite(m_pin, BEEP_VOLUME_SILENT);
+        gAnalogWrite(m_pin, BEEP_VOLUME_SILENT);
 }
 
 void Beeper::setMelody(Melody::Name melodyName) {

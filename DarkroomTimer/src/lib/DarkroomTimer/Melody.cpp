@@ -1,6 +1,6 @@
 #include "Melody.h"
 
-#include <Arduino.h>
+#include "Tools.h"
 
 class MelodyPlayer : public Melody {
 public:
@@ -8,11 +8,11 @@ public:
 
     void init() override {
         m_melodyPhase = 0;
-        m_timer = millis() + m_melody[0];
+        m_timer = gMillis() + m_melody[0];
     }
 
     bool tick() override {
-        uint32_t currentTime = millis();
+        uint32_t currentTime = gMillis();
 
         if (m_timer <= currentTime) {
             ++m_melodyPhase;
@@ -39,11 +39,11 @@ class AlarmMelody : public Melody {
 public:
     void init() override {
         m_melodyPhase = 0;
-        m_timer = millis() + 60;
+        m_timer = gMillis() + 60;
     }
 
     bool tick() override {
-        uint32_t currentTime = millis();
+        uint32_t currentTime = gMillis();
 
         if (m_timer < currentTime) {
             ++m_melodyPhase;

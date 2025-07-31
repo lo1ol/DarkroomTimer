@@ -184,8 +184,8 @@ void processView() {
 
     if (gViewBtn.click()) {
         gViewState = !gViewState;
-        digitalWrite(RELAY, gViewState);
-        gViewModeTurnOffTime = millis() + gSettings.autoFinishViewMinutes * 60000L;
+        gDigitalWrite(RELAY, gViewState);
+        gViewModeTurnOffTime = gMillis() + gSettings.autoFinishViewMinutes * 60000L;
 
         if (gViewState == LOW)
             gModeProcessor->repaint();
@@ -204,11 +204,11 @@ void processView() {
         return;
     }
 
-    Time beforeStop = Time::fromMillis(gViewModeTurnOffTime - millis());
+    Time beforeStop = Time::fromMillis(gViewModeTurnOffTime - gMillis());
 
     if (beforeStop < 0_ts) {
         gBlocked = gViewState = LOW;
-        digitalWrite(RELAY, gViewState);
+        gDigitalWrite(RELAY, gViewState);
         gModeProcessor->repaint();
     } else {
         char str[DISPLAY_COLS] = "";
@@ -245,9 +245,9 @@ void setup() {
     setMode(ModeId::testFStops);
 
     pinMode(BACKLIGHT, OUTPUT);
-    analogWrite(BACKLIGHT, gSettings.backlight);
+    gAnalogWrite(BACKLIGHT, gSettings.backlight);
     pinMode(RELAY, OUTPUT);
-    analogWrite(RELAY, 0);
+    gAnalogWrite(RELAY, 0);
 
     if (gSettings.startWithSettings)
         gSettingsSetter = new SettingsSetter;

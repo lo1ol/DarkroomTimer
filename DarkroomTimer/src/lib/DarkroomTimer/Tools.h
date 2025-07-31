@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 #include "SafeEncButton.h"
 
 #include "Beeper.h"
@@ -35,3 +37,7 @@ extern Display gDisplay;
 extern Beeper gBeeper;
 extern uint8_t gModesCache[32];
 extern ScrollableContent gScrollableContent;
+
+extern decltype(&millis) gMillis;
+extern decltype(&digitalWrite) gDigitalWrite;
+extern decltype(&analogWrite) gAnalogWrite;

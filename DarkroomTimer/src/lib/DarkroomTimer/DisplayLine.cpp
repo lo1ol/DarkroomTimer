@@ -46,7 +46,7 @@ void DisplayLine::reset() {
 }
 
 void DisplayLine::resetBlink(bool state) {
-    m_blinkTimer = millis();
+    m_blinkTimer = gMillis();
     m_blinkState = state;
 }
 
@@ -71,9 +71,9 @@ void DisplayLine::tick() {
     memcpy(printBuf + DISPLAY_COLS - bwLen, m_bwInfo, bwLen);
 
     if (m_blinkLength) {
-        if (millis() - m_blinkTimer > 500) {
+        if (gMillis() - m_blinkTimer > 500) {
             m_blinkState = !m_blinkState;
-            m_blinkTimer = millis();
+            m_blinkTimer = gMillis();
         }
 
         if (m_blinkState) {
