@@ -13,4 +13,6 @@ void initVirtEnv() {
     gDisplay = Display{ &gLcdWrapMock };
     gCurrentTime = 0;
     gMillis = &myMillis;
+    gSettings.lagTime = 0_ts;
+    gTimer = Timer{};
 }
