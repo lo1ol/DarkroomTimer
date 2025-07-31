@@ -2,145 +2,152 @@
 #include "unity.h"
 
 #include <Display.h>
+#include <Tools.h>
 
-#include "../LiquidCrystalWrapMock.h"
+#include "../VirtEnv.h"
 
-void setUp() {}
+void setUp() {
+    initVirtEnv();
+}
 
 void tearDown() {}
 
 void checkDisplay() {
-    LiquidCrystalWrapMock lcdWrapMock;
-    Display d{ &lcdWrapMock };
-    d.reset();
-    d.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", lcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", lcdWrapMock.getLine(1));
+    gDisplay.reset();
+    gDisplay.tick();
+    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(1));
 
-    d[0] << "kek";
-    d[1] >> "kek";
+    gDisplay[0] << "kek";
+    gDisplay[1] >> "kek";
 
-    TEST_ASSERT_EQUAL_STRING("                ", lcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", lcdWrapMock.getLine(1));
-    d.tick();
-    TEST_ASSERT_EQUAL_STRING("kek             ", lcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("             kek", lcdWrapMock.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(1));
+    gDisplay.tick();
+    TEST_ASSERT_EQUAL_STRING("kek             ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("             kek", gLcdWrapMock.getLine(1));
 
-    d.reset();
-    TEST_ASSERT_EQUAL_STRING("kek             ", lcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("             kek", lcdWrapMock.getLine(1));
-    d.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", lcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", lcdWrapMock.getLine(1));
-    d.tick();
+    gDisplay.reset();
+    TEST_ASSERT_EQUAL_STRING("kek             ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("             kek", gLcdWrapMock.getLine(1));
+    gDisplay.tick();
+    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(1));
+    gDisplay.tick();
 }
 
 void checkDisplayLineGeneric() {
-    LiquidCrystalWrapMock lcdWrapMock;
-    DisplayLine dl{ 0, &lcdWrapMock };
     // clang-format off
-    dl << "kek1 " << "kek2" >> "kek3";
+    gDisplay[0] << "kek1 " << "kek2" >> "kek3";
     // clang-format on
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2   kek3", lcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2   kek3", gLcdWrapMock.getLine(0));
 
-    dl.reset();
+    gDisplay[0].reset();
     // clang-format off
-    dl << "kek1 " << "kek2 " << "kek3 " << "kek4 ";
+    gDisplay[0] << "kek1 " << "kek2 " << "kek3 " << "kek4 ";
     // clang-format on
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3 k", lcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3 k", gLcdWrapMock.getLine(0));
 
-    dl.reset();
+    gDisplay[0].reset();
     // clang-format off
-    dl << "kek1 " << "kek2 " << "kek3 " >> "kek4 ";
+    gDisplay[0] << "kek1 " << "kek2 " << "kek3 " >> "kek4 ";
     // clang-format on
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kkek4 ", lcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kkek4 ", gLcdWrapMock.getLine(0));
 
-    dl.reset();
+    gDisplay[0].reset();
     // clang-format off
-    dl >> "kek4 " << "kek1 " << "kek2 " << "kek3 ";
+    gDisplay[0] >> "kek4 " << "kek1 " << "kek2 " << "kek3 ";
     // clang-format on
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kkek4 ", lcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kkek4 ", gLcdWrapMock.getLine(0));
 }
 
 void checkDisplayLineFastRepaint() {
-    LiquidCrystalWrapMock lcdWrapMock;
-    DisplayLine dl{ 0, &lcdWrapMock };
-    dl.reset();
-    dl << "0123456789abcdef";
-    dl.tick();
+    gDisplay[0] << "0123456789abcdef";
+    gDisplay[0].tick();
 
-    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", lcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
 
-    dl.fastRepaint("kek", 3);
-    TEST_ASSERT_EQUAL_STRING("012kek6789abcdef", lcdWrapMock.getLine(0));
+    gDisplay[0].fastRepaint("kek", 3);
+    TEST_ASSERT_EQUAL_STRING("012kek6789abcdef", gLcdWrapMock.getLine(0));
 
-    dl.fastRepaint("lol", 9);
-    TEST_ASSERT_EQUAL_STRING("012kek678lolcdef", lcdWrapMock.getLine(0));
+    gDisplay[0].fastRepaint("lol", 9);
+    TEST_ASSERT_EQUAL_STRING("012kek678lolcdef", gLcdWrapMock.getLine(0));
 
-    dl.restore();
-    TEST_ASSERT_EQUAL_STRING("012kek678lolcdef", lcdWrapMock.getLine(0));
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", lcdWrapMock.getLine(0));
+    gDisplay[0].restore();
+    TEST_ASSERT_EQUAL_STRING("012kek678lolcdef", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
 }
 
 void checkDisplayLineBlink() {
-    LiquidCrystalWrapMock lcdWrapMock;
-    DisplayLine dl{ 0, &lcdWrapMock };
-    dl.reset();
-    dl << "lol";
-    dl.print("kek", true);
-    dl.resetBlink(true);
-    dl << "cheburek";
+    gDisplay[0] << "lol";
+    gDisplay[0].print("kek", true);
+    gDisplay[0].resetBlink(true);
+    gDisplay[0] << "cheburek";
 
-    dl.tick();
+    gDisplay[0].tick();
 
-    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", lcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
 
-    dl.resetBlink(false);
-    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", lcdWrapMock.getLine(0));
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", lcdWrapMock.getLine(0));
+    gDisplay[0].resetBlink(false);
+    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", gLcdWrapMock.getLine(0));
 
-    dl.fastRepaint("lol", 3);
-    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", lcdWrapMock.getLine(0));
-    dl.resetBlink(false);
-    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", lcdWrapMock.getLine(0));
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", lcdWrapMock.getLine(0));
-    dl.restore();
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", lcdWrapMock.getLine(0));
+    gDisplay[0].fastRepaint("lol", 3);
+    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].resetBlink(false);
+    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].restore();
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", gLcdWrapMock.getLine(0));
 
-    dl.resetBlink(true);
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", lcdWrapMock.getLine(0));
-    dl.fastRepaint("lol", 3);
-    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", lcdWrapMock.getLine(0));
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", lcdWrapMock.getLine(0));
-    dl.resetBlink(true);
-    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", lcdWrapMock.getLine(0));
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", lcdWrapMock.getLine(0));
-    dl.restore();
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", lcdWrapMock.getLine(0));
+    gDisplay[0].resetBlink(true);
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].fastRepaint("lol", 3);
+    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].resetBlink(true);
+    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].restore();
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
 
-    dl.reset();
-    dl << "lol";
-    dl.print("kek", true, "ha");
-    dl.resetBlink(true);
-    dl << "cheburek";
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lol hacheburek  ", lcdWrapMock.getLine(0));
-    dl.resetBlink(false);
-    TEST_ASSERT_EQUAL_STRING("lol hacheburek  ", lcdWrapMock.getLine(0));
-    dl.tick();
-    TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", lcdWrapMock.getLine(0));
+    gDisplay[0].reset();
+    gDisplay[0] << "lol";
+    gDisplay[0].print("kek", true, "ha");
+    gDisplay[0].resetBlink(true);
+    gDisplay[0] << "cheburek";
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lol hacheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].resetBlink(false);
+    TEST_ASSERT_EQUAL_STRING("lol hacheburek  ", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", gLcdWrapMock.getLine(0));
+
+    gDisplay[0].reset();
+    gDisplay[0] << "lol";
+    gDisplay[0].print("kek", true);
+    gDisplay[0].resetBlink(true);
+    gDisplay[0] << "cheburek";
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
+    gCurrentTime += 501;
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", gLcdWrapMock.getLine(0));
+    gCurrentTime += 501;
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
 }
 
 int main() {
