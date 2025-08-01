@@ -6,7 +6,13 @@
 #include "../VirtEnv.h"
 
 void setUp() {
-    initVirtEnv();
+    gLcdWrapMock = LiquidCrystalWrapMock{};
+    gDisplay = Display{ &gLcdWrapMock };
+    gMillis = &mockMillis;
+
+    gCurrentTime = 0;
+    gSettings.lagTime = 0_ts;
+    gTimer = Timer{};
 }
 
 void tearDown() {}

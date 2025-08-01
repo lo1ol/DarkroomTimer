@@ -9,7 +9,7 @@ public:
 
     void setPrefix(const char* prefix);
 
-    void flush(bool force = false) const;
+    void flush() const;
     void reset();
     void resize(uint8_t);
 
@@ -30,6 +30,5 @@ private:
     uint8_t m_size = 0;
     int8_t m_currentId = -1;
     const char* m_currentMark = nullptr;
-    mutable bool m_changed = true;
     bool m_printBadAsZero = false;
 };

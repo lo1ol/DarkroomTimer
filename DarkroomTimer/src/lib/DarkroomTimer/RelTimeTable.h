@@ -9,7 +9,7 @@ public:
 
     void setPrefix(const char* prefix);
 
-    void flush(bool force = false) const;
+    void flush() const;
     void reset();
     void resize(uint8_t);
     uint8_t size() const { return m_size; }
@@ -34,7 +34,6 @@ private:
     const char* m_prefix = nullptr;
     uint8_t m_size = 0;
     int8_t m_currentId = -2; // -1 is used to identify base
-    mutable bool m_changed = true;
     bool m_secView = false;
 
     Time m_base;

@@ -195,11 +195,11 @@ void MaskMode::repaint() {
         gScrollableContent.reset();
         if (m_filterNum == 1) {
             m_timeTable[0].setPrefix("Set");
-            m_timeTable[0].flush(true);
+            m_timeTable[0].flush();
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 m_timeTable[filter].setPrefix(kSetPrefixes[filter]);
-                m_timeTable[filter].flush(true);
+                m_timeTable[filter].flush();
             }
         }
         gScrollableContent.paint();
@@ -208,11 +208,11 @@ void MaskMode::repaint() {
         gScrollableContent.reset();
         if (m_filterNum == 1) {
             m_timeTable[0].setPrefix("Run");
-            m_timeTable[0].flush(true);
+            m_timeTable[0].flush();
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 m_timeTable[filter].setPrefix(kRunPrefixes[filter]);
-                m_timeTable[filter].flush(true);
+                m_timeTable[filter].flush();
             }
         }
 

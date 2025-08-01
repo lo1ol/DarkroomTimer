@@ -14,22 +14,22 @@ void RelTimeTable::reset() {
     m_size = 0;
     m_currentId = -2;
     m_secView = false;
-    m_changed = true;
+    m_prefix = nullptr;
 }
 
 void RelTimeTable::resize(uint8_t size) {
     m_size = size;
-    m_changed = true;
+
+    if (m_currentId >= m_size)
+        m_currentId = -2;
 }
 
 void RelTimeTable::setPrefix(const char* prefix) {
     m_prefix = prefix;
-    m_changed = true;
 }
 
 void RelTimeTable::setBaseTime(Time time) {
     m_base = time;
-    m_changed = true;
 }
 
 void RelTimeTable::setRelTime(uint8_t id, RelTime time) {
@@ -37,7 +37,6 @@ void RelTimeTable::setRelTime(uint8_t id, RelTime time) {
     if (id >= m_size)
         m_size = id + 1;
     m_relTimes[id] = time;
-    m_changed = true;
 }
 
 Time RelTimeTable::getTime(int8_t id) const {
@@ -50,27 +49,20 @@ Time RelTimeTable::getTime(int8_t id) const {
 
 void RelTimeTable::toggleSecView() {
     m_secView = !m_secView;
-    m_changed = true;
 }
 
 void RelTimeTable::setSecView(bool val) {
     m_secView = val;
-    m_changed = true;
 }
 
 void RelTimeTable::setCurrent(uint8_t id) {
     m_currentId = id;
-    m_changed = true;
 }
 
-void RelTimeTable::flush(bool force) const {
-    if (!m_changed && !force)
-        return;
-
-    m_changed = false;
-
+void RelTimeTable::flush() const {
     gScrollableContent.startNewLine();
-    gScrollableContent.print(m_prefix);
+    if (m_prefix && m_prefix[0])
+        gScrollableContent.print(m_prefix);
 
     int8_t id = -1;
     while (id != m_size) {

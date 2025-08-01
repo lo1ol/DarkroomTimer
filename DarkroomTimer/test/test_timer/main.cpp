@@ -4,7 +4,14 @@
 #include "../VirtEnv.h"
 
 void setUp() {
-    initVirtEnv();
+    gMillis = &mockMillis;
+    gDigitalWrite = &mockDigitalWrite;
+
+    gCurrentTime = 0;
+    gRelayVal = 0;
+    gSettings.lagTime = 0_ts;
+    gTimer = Timer{};
+    gBeeper.stop();
 }
 
 void tearDown() {}

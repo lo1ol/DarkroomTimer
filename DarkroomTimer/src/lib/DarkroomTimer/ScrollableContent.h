@@ -8,6 +8,8 @@ int8_t getEncoderDir();
 
 class ScrollableContent {
 public:
+    static constexpr uint8_t kMaxLineCnt = 16;
+
     void reset();
     void paint();
     void forcePaint();
@@ -35,5 +37,19 @@ private:
     uint8_t m_firstPrintedLine = 0;
     bool m_needGoToCurrent = false;
 
-    char m_lines[DISPLAY_COLS + 1][16] = {};
+    char(m_lines[kMaxLineCnt])[DISPLAY_COLS + 1] = {};
+
+#ifdef PIO_UNIT_TESTING
+public:
+    struct Desc {
+        bool operator==(const Desc& o) const;
+        const char* lines[kMaxLineCnt];
+        int8_t currentLine;
+        int8_t currentShift;
+        int8_t currentAlign;
+        const char* currentMark;
+    };
+
+    Desc getDesc() const;
+#endif
 };

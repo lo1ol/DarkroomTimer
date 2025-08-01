@@ -99,7 +99,7 @@ void PrintMode::repaint() {
 
     if (m_showLog) {
         gScrollableContent.reset();
-        m_timeTable.flush(true);
+        m_timeTable.flush();
         gScrollableContent.paint();
         return;
     }

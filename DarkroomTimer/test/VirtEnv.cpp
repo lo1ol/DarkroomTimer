@@ -7,11 +7,11 @@ bool gRelayVal = 0;
 
 decltype(gMillis()) gCurrentTime = 0;
 
-decltype(gMillis()) myMillis() {
+decltype(gMillis()) mockMillis() {
     return gCurrentTime;
 }
 
-void myAnalogWrite(uint8_t pin, int val) {
+void mockAnalogWrite(uint8_t pin, int val) {
     switch (pin) {
     case BEEPER:
         gBuzzerVal = val;
@@ -22,7 +22,7 @@ void myAnalogWrite(uint8_t pin, int val) {
     return;
 }
 
-void myDigitalWrite(uint8_t pin, uint8_t val) {
+void mockDigitalWrite(uint8_t pin, uint8_t val) {
     switch (pin) {
     case RELAY:
         gRelayVal = val;
@@ -31,19 +31,4 @@ void myDigitalWrite(uint8_t pin, uint8_t val) {
 
     assert(false);
     return;
-}
-
-void initVirtEnv() {
-    gLcdWrapMock = LiquidCrystalWrapMock{};
-    gDisplay = Display{ &gLcdWrapMock };
-    gMillis = &myMillis;
-    gAnalogWrite = &myAnalogWrite;
-    gDigitalWrite = &myDigitalWrite;
-
-    gCurrentTime = 0;
-    gRelayVal = 0;
-    gBuzzerVal = 0;
-    gSettings.lagTime = 0_ts;
-    gTimer = Timer{};
-    gBeeper.stop();
 }

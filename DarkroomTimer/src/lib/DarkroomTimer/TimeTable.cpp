@@ -13,17 +13,17 @@ void TimeTable::setBuffer(void* buf, uint8_t size) {
 void TimeTable::reset() {
     m_size = 0;
     m_currentId = -1;
-    m_changed = true;
+    m_prefix = nullptr;
 }
 
 void TimeTable::resize(uint8_t size) {
     m_size = size;
-    m_changed = true;
+    if (m_currentId >= m_size)
+        m_currentId = -1;
 }
 
 void TimeTable::setPrefix(const char* prefix) {
     m_prefix = prefix;
-    m_changed = true;
 }
 
 void TimeTable::setTime(uint8_t id, Time time) {
@@ -31,28 +31,21 @@ void TimeTable::setTime(uint8_t id, Time time) {
     if (id >= m_size)
         m_size = id + 1;
     m_times[id] = time;
-    m_changed = true;
 }
 
 void TimeTable::printBadAsZero(bool val) {
     m_printBadAsZero = val;
-    m_changed = true;
 }
 
 void TimeTable::setCurrent(uint8_t id, const char* mark) {
     m_currentId = id;
     m_currentMark = mark;
-    m_changed = true;
 }
 
-void TimeTable::flush(bool force) const {
-    if (!m_changed && !force)
-        return;
-
-    m_changed = false;
-
+void TimeTable::flush() const {
     gScrollableContent.startNewLine();
-    gScrollableContent.print(m_prefix);
+    if (m_prefix && m_prefix[0])
+        gScrollableContent.print(m_prefix);
 
     uint8_t id = 0;
 

@@ -191,11 +191,11 @@ void RelMaskMode::repaint() {
         gScrollableContent.reset();
         if (m_filterNum == 1) {
             m_relTimeTable[0].setPrefix("Set");
-            m_relTimeTable[0].flush(true);
+            m_relTimeTable[0].flush();
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 m_relTimeTable[filter].setPrefix(kSetPrefixes[filter]);
-                m_relTimeTable[filter].flush(true);
+                m_relTimeTable[filter].flush();
             }
         }
         gScrollableContent.paint();
@@ -204,11 +204,11 @@ void RelMaskMode::repaint() {
         gScrollableContent.reset();
         if (m_filterNum == 1) {
             m_relTimeTable[0].setPrefix("Run");
-            m_relTimeTable[0].flush(true);
+            m_relTimeTable[0].flush();
         } else {
             for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
                 m_relTimeTable[filter].setPrefix(kRunPrefixes[filter]);
-                m_relTimeTable[filter].flush(true);
+                m_relTimeTable[filter].flush();
             }
         }
 

@@ -90,7 +90,7 @@ void FStopTestMode::repaint() {
         return;
     case Step::run:
         gScrollableContent.reset();
-        m_timeTable.flush(true);
+        m_timeTable.flush();
         gScrollableContent.paint();
         return;
     }
