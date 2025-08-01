@@ -211,6 +211,91 @@ void checkTimerRelay() {
     TEST_ASSERT_EQUAL(gRelayVal, false);
 }
 
+void checkTimerBeeper() {
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    gTimer.start(0_s);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+    gTimer.reset();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+
+    gTimer.start(2_s);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+    gTimer.reset();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+
+    gTimer.start(2_s);
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+    gCurrentTime += 950;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    gCurrentTime += 50;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+    gCurrentTime += 800;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+    gTimer.tick();
+    gBeeper.tick();
+
+    gCurrentTime += 199;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+    gCurrentTime += 1;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
+
+    gSettings.lagTime = 1_s;
+    gTimer.start(0_s);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+    gTimer.reset();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+
+    gTimer.start(2_s);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+    gTimer.tick();
+    gBeeper.tick();
+
+    gCurrentTime += 950;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+
+    gCurrentTime += 50;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+
+    gCurrentTime += 950;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+
+    gCurrentTime += 50;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+    gCurrentTime += 950;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+    gCurrentTime += 50;
+    gTimer.tick();
+    gBeeper.tick();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkTimerStart);
@@ -219,5 +304,6 @@ int main() {
     RUN_TEST(checkTimerTotal);
     RUN_TEST(checkTimerLag);
     RUN_TEST(checkTimerRelay);
+    RUN_TEST(checkTimerBeeper);
     UNITY_END();
 }

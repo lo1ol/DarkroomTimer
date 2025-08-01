@@ -45,4 +45,5 @@ void initVirtEnv() {
     gBuzzerVal = 0;
     gSettings.lagTime = 0_ts;
     gTimer = Timer{};
+    gBeeper.stop();
 }

@@ -67,10 +67,12 @@ void Timer::resume() {
 }
 
 void Timer::stop() {
+    gBeeper.stop();
+    gDigitalWrite(RELAY, LOW);
+
     if (m_status == STOPPED)
         return;
 
-    gBeeper.stop();
     updateAfterLastResume();
     if (m_currentTime >= realStopTime())
         m_total += m_leftTime;
@@ -78,7 +80,6 @@ void Timer::stop() {
         m_total += afterResume();
     m_status = STOPPED;
     m_leftTime = 0;
-    gDigitalWrite(RELAY, LOW);
 }
 
 uint32_t Timer::left() const {
