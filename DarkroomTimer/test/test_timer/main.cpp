@@ -165,6 +165,52 @@ void checkTimerLag() {
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
 }
 
+void checkTimerRelay() {
+    gTimer.start(0_s);
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+
+    gTimer.start(2_s);
+    TEST_ASSERT_EQUAL(gRelayVal, true);
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, true);
+
+    gCurrentTime += 2000;
+    TEST_ASSERT_EQUAL(gRelayVal, true);
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+
+    gTimer.start(2_s);
+    gTimer.tick();
+    gCurrentTime += 950;
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, true);
+    gTimer.pause();
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+
+    gCurrentTime += 3000;
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+
+    gTimer.resume();
+    TEST_ASSERT_EQUAL(gRelayVal, true);
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, true);
+
+    gCurrentTime += 799;
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, true);
+
+    gCurrentTime += 251;
+    gTimer.tick();
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+    gTimer.pause();
+    TEST_ASSERT_EQUAL(gRelayVal, false);
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkTimerStart);
@@ -172,5 +218,6 @@ int main() {
     RUN_TEST(checkTimerStop);
     RUN_TEST(checkTimerTotal);
     RUN_TEST(checkTimerLag);
+    RUN_TEST(checkTimerRelay);
     UNITY_END();
 }

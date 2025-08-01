@@ -6,5 +6,7 @@
 
 extern LiquidCrystalWrapMock gLcdWrapMock;
 extern decltype(gMillis()) gCurrentTime;
+extern int gBuzzerVal;
+extern bool gRelayVal;
 
 void initVirtEnv();
