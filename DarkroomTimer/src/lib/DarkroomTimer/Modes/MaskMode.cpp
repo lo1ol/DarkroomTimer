@@ -163,7 +163,7 @@ void MaskMode::processRun() {
         gTimer.start(time);
     }
 
-    if (gTimer.stopped()) {
+    if (gTimer.justFinished()) {
         if (m_notifyMask & (1 << m_currentMask))
             gBeeper.alarm();
 

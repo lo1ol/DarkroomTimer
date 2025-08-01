@@ -11,7 +11,7 @@ void tearDown() {}
 
 void checkTimerStart() {
     gTimer.start(1_s);
-    TEST_ASSERT_EQUAL(false, gTimer.stopped());
+    TEST_ASSERT_EQUAL(false, gTimer.justFinished());
     TEST_ASSERT_EQUAL(Timer::State::RUNNING, gTimer.state());
     gTimer.tick();
     TEST_ASSERT_EQUAL(Timer::State::RUNNING, gTimer.state());
@@ -22,14 +22,14 @@ void checkTimerStart() {
     gCurrentTime += 1;
     gTimer.tick();
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
-    TEST_ASSERT_EQUAL(true, gTimer.stopped());
+    TEST_ASSERT_EQUAL(true, gTimer.justFinished());
 
     gTimer.start(0_s);
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
-    TEST_ASSERT_EQUAL(true, gTimer.stopped());
+    TEST_ASSERT_EQUAL(true, gTimer.justFinished());
     gTimer.tick();
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
-    TEST_ASSERT_EQUAL(false, gTimer.stopped());
+    TEST_ASSERT_EQUAL(false, gTimer.justFinished());
 }
 
 void checkTimerPauseResume() {
@@ -73,7 +73,7 @@ void checkTimerPauseResume() {
     gTimer.tick();
     gTimer.pause();
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
-    TEST_ASSERT_EQUAL(true, gTimer.stopped());
+    TEST_ASSERT_EQUAL(true, gTimer.justFinished());
     // we are not paused
     TEST_ASSERT_EQUAL(1000, gTimer.afterLastResume().toMillis());
 }
@@ -84,10 +84,10 @@ void checkTimerStop() {
     gTimer.tick();
     gTimer.stop();
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
-    TEST_ASSERT_EQUAL(false, gTimer.stopped());
+    TEST_ASSERT_EQUAL(false, gTimer.justFinished());
     gTimer.tick();
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
-    TEST_ASSERT_EQUAL(false, gTimer.stopped());
+    TEST_ASSERT_EQUAL(false, gTimer.justFinished());
 }
 
 void checkTimerTotal() {

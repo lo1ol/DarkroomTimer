@@ -11,6 +11,9 @@ void ScrollableContent::reset() {
 }
 
 void ScrollableContent::scroll(int8_t dir) {
+    if (gTimer.state() != Timer::STOPPED)
+        return;
+
     if (!dir)
         return;
 
@@ -115,7 +118,7 @@ void ScrollableContent::paintUnchanged() {
     }
 
     if (gTimer.state() != Timer::RUNNING) {
-        if (gTimer.stopped())
+        if (gTimer.justStopped())
             gDisplay[m_currentDisplayLine].restore();
         return;
     }

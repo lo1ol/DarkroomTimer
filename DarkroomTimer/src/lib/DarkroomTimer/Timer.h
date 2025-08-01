@@ -19,7 +19,8 @@ public:
     uint32_t left() const;
     bool lag() const;
 
-    bool stopped() const { return m_justStopped; }
+    bool justFinished() const { return m_justFinished; }
+    bool justStopped() const { return m_justStopped; }
 
     Time afterLastResume() const;
 
@@ -35,6 +36,7 @@ private:
     uint32_t afterResume() const;
     uint32_t realStopTime() const;
 
+    bool m_justFinished = false;
     bool m_justStopped = false;
     bool m_lagPassed = false;
 

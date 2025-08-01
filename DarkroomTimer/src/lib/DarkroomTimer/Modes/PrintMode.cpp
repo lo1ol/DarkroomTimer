@@ -38,7 +38,7 @@ void PrintMode::process() {
         return;
     }
 
-    if (gTimer.stopped()) {
+    if (gTimer.justFinished()) {
         appendPrintLog(gTimer.afterLastResume());
         repaint();
     }

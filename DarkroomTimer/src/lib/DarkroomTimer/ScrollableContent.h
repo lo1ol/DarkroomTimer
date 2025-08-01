@@ -17,7 +17,7 @@ public:
     void startNewLine();
     void print(const char* src, bool current = false, const char* mark = nullptr);
 
-    bool currentIsPrinted() const { return m_currentLine != -1; }
+    bool currentIsPrinted() const { return m_currentDisplayLine != -1; }
     uint8_t lineCnt() const { return m_line + static_cast<bool>(m_lastLineLength); }
 
 private:

@@ -159,7 +159,7 @@ void RelMaskMode::processRun() {
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentFilter != m_filterNum)
         gTimer.start(getStepTime());
 
-    if (gTimer.stopped()) {
+    if (gTimer.justFinished()) {
         moveCurrentMask(1);
         if (m_currentMask == -1 && m_currentFilter != m_filterNum)
             gBeeper.alarm();

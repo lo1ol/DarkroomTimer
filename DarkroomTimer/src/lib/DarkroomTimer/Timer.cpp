@@ -5,11 +5,13 @@
 void Timer::tick() {
     m_currentTime = gMillis();
     m_justStopped = false;
+    m_justFinished = false;
+
     if (m_status != RUNNING)
         return;
 
     if (m_currentTime >= realStopTime()) {
-        m_justStopped = true;
+        m_justFinished = true;
         stop();
         return;
     }
@@ -29,6 +31,7 @@ void Timer::start(Time time) {
     gBeeper.beep();
 
     if (time == 0_ts) {
+        m_justFinished = true;
         m_justStopped = true;
         return;
     }
@@ -72,6 +75,8 @@ void Timer::stop() {
 
     if (m_status == STOPPED)
         return;
+
+    m_justStopped = true;
 
     updateAfterLastResume();
     if (m_currentTime >= realStopTime())

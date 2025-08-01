@@ -57,7 +57,7 @@ void FStopTestMode::process() {
         gScrollableContent.currentIsPrinted())
         gTimer.start(getPrintTime());
 
-    if (gTimer.stopped()) {
+    if (gTimer.justFinished()) {
         if (m_currentRun == 0 && kSubMode == SplitGrade) { // don't take into account base time
             gTimer.reset();
             gBeeper.alarm();
