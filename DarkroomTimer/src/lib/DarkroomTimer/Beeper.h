@@ -14,13 +14,15 @@ public:
     void alarm();
 
     // start beep every second
-    void start(bool silentStart = false);
+    void start();
     void stop();
 
     void setup();
     void tick();
 
     void setMelody(Melody::Name);
+
+    State state() const { return m_state; }
 
 private:
     void processAlarm();

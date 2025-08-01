@@ -45,16 +45,10 @@ void Beeper::beep() {
     processPin();
 }
 
-void Beeper::start(bool silentStart) {
+void Beeper::start() {
     m_state = State::on;
-
-    if (silentStart) {
-        m_pinState = false;
-        m_timer = gMillis() + 1000;
-    } else {
-        m_pinState = true;
-        m_timer = gMillis() + 100;
-    }
+    m_pinState = true;
+    m_timer = gMillis() + 100;
 
     processPin();
 }

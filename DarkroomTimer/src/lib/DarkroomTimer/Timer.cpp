@@ -16,9 +16,12 @@ void Timer::tick() {
 
     updateAfterLastResume();
 
-    if (!m_lagPassed && afterResume() / 100) {
-        m_lagPassed = true;
-        gBeeper.start(true);
+    if (gBeeper.state() != Beeper::State::on) {
+        auto passedTime = afterResume();
+        if (!m_lagPassed && passedTime)
+            m_lagPassed = true;
+        if (passedTime >= 1000)
+            gBeeper.start();
     }
 }
 
