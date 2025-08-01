@@ -20,8 +20,6 @@ public:
 
     void setCurrent(uint8_t id, const char* mark = nullptr);
 
-    void scroll();
-
     uint8_t capacity() const { return m_capacity; }
 
 private:

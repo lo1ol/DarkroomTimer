@@ -4,13 +4,15 @@
 
 #include <stdint.h>
 
+int8_t getEncoderDir();
+
 class ScrollableContent {
 public:
     void reset();
     void paint();
     void forcePaint();
 
-    void scroll();
+    void scroll(int8_t dir = getEncoderDir());
 
     void startNewLine();
     void print(const char* src, bool current = false, const char* mark = nullptr);

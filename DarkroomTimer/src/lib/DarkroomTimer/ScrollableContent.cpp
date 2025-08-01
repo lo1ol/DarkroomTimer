@@ -10,11 +10,7 @@ void ScrollableContent::reset() {
     m_changed = true;
 }
 
-void ScrollableContent::scroll() {
-    if (gTimer.state() == Timer::RUNNING)
-        return;
-
-    auto dir = getEncoderDir();
+void ScrollableContent::scroll(int8_t dir) {
     if (!dir)
         return;
 
