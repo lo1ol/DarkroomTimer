@@ -15,7 +15,7 @@ public:
         Local,
     };
 
-    LinearTestMode(SubMode subMode);
+    explicit LinearTestMode(SubMode subMode);
     void process() override;
     void reset() override;
     void switchMode() override;

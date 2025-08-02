@@ -15,7 +15,7 @@ public:
         Local,
     };
 
-    FStopTestMode(SubMode subMode);
+    explicit FStopTestMode(SubMode subMode);
     void process() override;
     void reset() override;
     void switchMode() override;

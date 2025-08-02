@@ -13,7 +13,7 @@ class LiquidCrystal;
 
 class LiquidCrystalWrap {
 public:
-    LiquidCrystalWrap(LiquidCrystal* lcd = nullptr);
+    explicit LiquidCrystalWrap(LiquidCrystal* lcd = nullptr);
     DT_VIRTUAL ~LiquidCrystalWrap() = default;
 
     DT_VIRTUAL void setCursor(uint8_t, uint8_t);

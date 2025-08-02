@@ -28,8 +28,8 @@ public:
     uint8_t capacity() const { return m_capacity; }
 
 private:
-    RelTime* m_relTimes;
-    uint8_t m_capacity;
+    RelTime* m_relTimes = nullptr;
+    uint8_t m_capacity = 0;
 
     const char* m_prefix = nullptr;
     uint8_t m_size = 0;

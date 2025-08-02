@@ -23,14 +23,11 @@ void DisplayLine::concatInt(char* dst, int value) {
 }
 
 void DisplayLine::print(const char* src, bool current, const char* mark) {
-    uint8_t srclen = strlen(src);
-    uint8_t dstlen = strlen(m_fwInfo);
-
     m_needRepaint = true;
 
     if (current) {
-        m_currentLength = srclen;
-        m_currentPos = dstlen;
+        m_currentLength = strlen(src);
+        m_currentPos = strlen(m_fwInfo);
         m_currentMark = mark;
     }
 

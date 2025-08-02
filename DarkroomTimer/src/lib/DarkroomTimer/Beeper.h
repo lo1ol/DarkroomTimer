@@ -6,7 +6,7 @@
 
 class Beeper {
 public:
-    Beeper(uint8_t pin) : m_pin(pin) {}
+    explicit Beeper(uint8_t pin) : m_pin(pin) {}
 
     enum class State { off, on, single, alarm };
 

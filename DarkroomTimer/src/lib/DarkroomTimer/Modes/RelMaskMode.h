@@ -9,7 +9,7 @@ class RelMaskMode final : public ModeProcessor {
     enum class Step { setNum, setMasks, run, last_ };
 
 public:
-    RelMaskMode(uint8_t filterNum);
+    explicit RelMaskMode(uint8_t filterNum);
     void process() override;
     void reset() override;
     void switchMode() override;

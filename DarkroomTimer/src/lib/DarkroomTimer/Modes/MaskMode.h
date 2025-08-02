@@ -9,7 +9,7 @@ class MaskMode final : public ModeProcessor {
     enum class Step { setNum, setMasks, run, last_ };
 
 public:
-    MaskMode(uint8_t filterNum);
+    explicit MaskMode(uint8_t filterNum);
     void process() override;
     void reset() override;
     void switchMode() override;

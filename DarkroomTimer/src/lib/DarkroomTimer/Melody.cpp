@@ -59,8 +59,8 @@ public:
     bool end() const override { return m_melodyPhase >= 20; }
 
 private:
-    uint8_t m_melodyPhase;
-    uint32_t m_timer;
+    uint8_t m_melodyPhase = 0;
+    uint32_t m_timer = 0;
 };
 
 constexpr uint16_t kNiceMelody[] = { 250, 250, 120, 120, 60, 60, 400, 800 };
