@@ -11,7 +11,7 @@ void ScrollableContent::reset() {
 }
 
 void ScrollableContent::scroll(int8_t dir) {
-    if (gTimer.state() != Timer::STOPPED)
+    if (gTimer.state() == Timer::RUNNING)
         return;
 
     if (!dir)
@@ -106,13 +106,11 @@ void ScrollableContent::forcePaint() {
 }
 
 void ScrollableContent::paintUnchanged() {
-    if (!currentIsPrinted())
-        return;
-
-    if (m_currentDisplayLine == -1) {
+    if (!currentIsPrinted()) {
         if (gTimer.state() == Timer::RUNNING) {
             m_needGoToCurrent = true;
             m_changed = true;
+            forcePaint();
         }
         return;
     }

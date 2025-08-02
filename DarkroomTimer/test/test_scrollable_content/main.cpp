@@ -21,9 +21,11 @@ void checkScrollableContentGeneric() {
     gDisplay.reset();
 
     ScrollableContent sc;
+    TEST_ASSERT(!sc.m_changed);
     TEST_ASSERT_EQUAL(0, sc.lineCnt());
     sc.print("kek1");
     TEST_ASSERT_EQUAL(1, sc.lineCnt());
+    TEST_ASSERT(sc.m_changed);
     sc.print("kek2");
     TEST_ASSERT_EQUAL(1, sc.lineCnt());
     sc.print("kek3");
@@ -229,7 +231,9 @@ void checkScrollableContentStartNewLine() {
     gDisplay.reset();
 
     ScrollableContent sc;
+    TEST_ASSERT(!sc.m_changed);
     sc.startNewLine();
+    TEST_ASSERT(sc.m_changed);
     TEST_ASSERT_EQUAL(0, sc.lineCnt());
     sc.startNewLine();
     TEST_ASSERT_EQUAL(0, sc.lineCnt());
@@ -442,6 +446,27 @@ void checkScrollableContentCurrent() {
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("     kek5 kek6  ", gLcdWrapMock.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
+
+    // don't need a croll after printing current
+    sc.reset();
+    sc.print("kek1");
+    sc.print("kek2");
+    sc.print("kek3");
+    sc.print("kek4");
+    sc.print("kek5");
+    sc.print("kek6");
+    TEST_ASSERT(!sc.m_needGoToCurrent);
+    sc.print("kek7", true);
+    TEST_ASSERT(sc.m_needGoToCurrent);
+    TEST_ASSERT(sc.m_changed);
+    sc.print("kek8");
+    sc.paint();
+    TEST_ASSERT(!sc.m_needGoToCurrent);
+    TEST_ASSERT(!sc.m_changed);
+    gDisplay.tick();
+
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("     kek8       ", gLcdWrapMock.getLine(1));
 }
 
 void checkScrollableContentTimer() {
@@ -483,7 +508,9 @@ void checkScrollableContentTimer() {
     sc.print("kek7");
     gTimer.tick();
     gTimer.start(2_s);
+    TEST_ASSERT(sc.m_changed);
     sc.paint();
+    TEST_ASSERT(!sc.m_changed);
     gDisplay.tick();
 
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
@@ -569,6 +596,45 @@ void checkScrollableContentTimer() {
     sc.paint();
     gDisplay.tick();
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
+
+    // check we auto scroll after gTimer started
+    sc.reset();
+    sc.print("kek1");
+    sc.print("kek2");
+    TEST_ASSERT(!sc.m_needGoToCurrent);
+    sc.print("kek3", true);
+    TEST_ASSERT(sc.m_needGoToCurrent);
+    sc.print("kek4");
+    sc.print("kek5");
+    sc.print("kek6");
+    sc.print("kek7");
+    sc.paint();
+    TEST_ASSERT(!sc.m_needGoToCurrent);
+    TEST_ASSERT(!sc.m_changed);
+    sc.scroll(1);
+    sc.paint();
+    gDisplay.tick();
+
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek7            ", gLcdWrapMock.getLine(1));
+    TEST_ASSERT(!sc.currentIsPrinted());
+
+    gTimer.start(2_s);
+    sc.paint();
+    gDisplay.tick();
+    TEST_ASSERT(!sc.m_needGoToCurrent);
+    TEST_ASSERT(!sc.m_changed);
+    TEST_ASSERT(sc.currentIsPrinted());
+
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
+
+    sc.paint();
+    gDisplay.tick();
+    TEST_ASSERT(!sc.m_needGoToCurrent);
+    TEST_ASSERT(!sc.m_changed);
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2  Lag  ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
 }
 

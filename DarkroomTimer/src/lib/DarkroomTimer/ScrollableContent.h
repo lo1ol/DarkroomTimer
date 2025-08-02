@@ -25,6 +25,9 @@ public:
 private:
     void paintUnchanged();
 
+#ifdef PIO_UNIT_TESTING
+public:
+#endif
     uint8_t m_lastLineLength = 0;
     uint8_t m_line = 0;
     const char* m_currentMark = nullptr;
@@ -32,7 +35,7 @@ private:
     int8_t m_currentLine = -1;
     int8_t m_currentShift = 0;
     int8_t m_currentAlign = 0;
-    bool m_changed = true;
+    bool m_changed = false;
 
     uint8_t m_firstPrintedLine = 0;
     bool m_needGoToCurrent = false;
