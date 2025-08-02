@@ -163,10 +163,10 @@ void checkDisplayLineBlink() {
     gDisplay[0] << "cheburek";
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
-    gCurrentTime += 501;
+    gCurrentTime += 500;
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", gLcdWrapMock.getLine(0));
-    gCurrentTime += 501;
+    gCurrentTime += 500;
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
 }

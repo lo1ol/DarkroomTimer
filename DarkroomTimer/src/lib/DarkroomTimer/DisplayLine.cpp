@@ -45,9 +45,10 @@ void DisplayLine::reset() {
     m_currentMark = nullptr;
 }
 
-void DisplayLine::resetBlink(bool state) {
-    m_blinkTimer = gMillis();
-    m_blinkState = state;
+void DisplayLine::resetBlink(bool startBlinked) {
+    m_baseBlinkTime = gMillis();
+    m_startBlinkState = startBlinked;
+    m_currentBlinkState = !startBlinked;
 }
 
 void DisplayLine::tick() {
@@ -77,25 +78,27 @@ void DisplayLine::tick() {
     }
 
     if (m_currentLength && !m_hasCurrentFastRepaint) {
-        if (gMillis() - m_blinkTimer > 500) {
-            m_blinkState = !m_blinkState;
-            m_blinkTimer = gMillis();
-        }
+        bool newBlinkState = ((gMillis() - m_baseBlinkTime) / 500) % 2;
+        newBlinkState ^= m_startBlinkState;
 
-        if (m_blinkState) {
-            memset(printBuf, ' ', m_currentLength);
+        if (newBlinkState != m_currentBlinkState) {
+            m_currentBlinkState = newBlinkState;
 
-            if (m_currentMark) {
-                uint8_t marklen = strlen(m_currentMark);
-                memcpy(printBuf + m_currentLength - marklen, m_currentMark, marklen);
+            if (newBlinkState) {
+                memset(printBuf, ' ', m_currentLength);
+
+                if (m_currentMark) {
+                    uint8_t marklen = strlen(m_currentMark);
+                    memcpy(printBuf + m_currentLength - marklen, m_currentMark, marklen);
+                }
+            } else {
+                memcpy(printBuf, m_fwInfo + m_currentPos, m_currentLength);
             }
-        } else {
-            memcpy(printBuf, m_fwInfo + m_currentPos, m_currentLength);
-        }
 
-        printBuf[m_currentLength] = 0;
-        m_lcd->setCursor(m_currentPos, m_line);
-        m_lcd->print(printBuf);
+            printBuf[m_currentLength] = 0;
+            m_lcd->setCursor(m_currentPos, m_line);
+            m_lcd->print(printBuf);
+        }
     }
 }
 

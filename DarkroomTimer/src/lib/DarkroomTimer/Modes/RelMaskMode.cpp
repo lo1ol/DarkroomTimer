@@ -118,7 +118,6 @@ void RelMaskMode::processSetMasks() {
     if (gExtraBtn.pressing()) {
         if (int8_t dir = getEncoderDir()) {
             gExtraBtn.skipEvents();
-            gDisplay.resetBlink(true);
             moveCurrentMask(dir);
         }
 
@@ -127,7 +126,6 @@ void RelMaskMode::processSetMasks() {
 
     if (gExtraBtn.click()) {
         moveCurrentMask(1);
-        gDisplay.resetBlink(true);
     }
 
     bool changed = false;
@@ -145,7 +143,7 @@ void RelMaskMode::processSetMasks() {
 
     if (changed) {
         setCurrentMask(m_currentFilter, m_currentMask);
-        gDisplay.resetBlink();
+        gDisplay.resetBlink(false);
     }
 }
 

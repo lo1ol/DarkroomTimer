@@ -122,7 +122,6 @@ void MaskMode::processSetMasks() {
     if (gExtraBtn.pressing()) {
         if (int8_t dir = getEncoderDir()) {
             gExtraBtn.skipEvents();
-            gDisplay.resetBlink(true);
             moveCurrentMask(dir);
         }
 
@@ -137,19 +136,17 @@ void MaskMode::processSetMasks() {
             m_timeTable[m_currentFilter].setTime(m_currentMask, prevTime);
 
         repaint();
-        gDisplay.resetBlink(true);
     }
 
     auto time = m_timeTable[m_currentFilter].getTime(m_currentMask);
     if (getTime(time)) {
         m_timeTable[m_currentFilter].setTime(m_currentMask, time);
-        gDisplay.resetBlink();
         setCurrentMask(m_currentFilter, m_currentMask);
+        gDisplay.resetBlink(false);
     }
 
     if (m_filterNum == 1 && gStartBtn.click()) {
         m_notifyMask ^= 1 << m_currentMask;
-        gDisplay.resetBlink(true);
         setCurrentMask(m_currentFilter, m_currentMask);
     }
 }

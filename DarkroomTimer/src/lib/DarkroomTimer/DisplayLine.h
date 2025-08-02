@@ -11,7 +11,7 @@ public:
 
     void tick();
     void reset();
-    void resetBlink(bool state = false);
+    void resetBlink(bool showBlinked);
 
     DisplayLine& operator<<(const char* src);
     DisplayLine& operator<<(int value);
@@ -33,8 +33,9 @@ private:
     int m_line;
     LiquidCrystalWrap* m_lcd;
 
-    uint32_t m_blinkTimer = 0;
-    bool m_blinkState = 0;
+    uint32_t m_baseBlinkTime = 0;
+    bool m_startBlinkState = false;
+    bool m_currentBlinkState = false;
 
     uint8_t m_currentPos = 0;
     uint8_t m_currentLength = 0;

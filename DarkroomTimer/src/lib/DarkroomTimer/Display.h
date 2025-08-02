@@ -14,7 +14,7 @@ public:
 
     void tick();
     void reset();
-    void resetBlink(bool state = false);
+    void resetBlink(bool showBlinked);
 
 private:
     LiquidCrystalWrap* m_lcd;

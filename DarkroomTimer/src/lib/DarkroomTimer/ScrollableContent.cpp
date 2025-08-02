@@ -99,6 +99,7 @@ void ScrollableContent::forcePaint() {
         m_lines[lineId][m_currentShift + m_currentAlign] = 0;
 
         gDisplay[displayLine].print(m_lines[lineId] + m_currentShift, true, m_currentMark);
+        gDisplay[displayLine].resetBlink(true);
 
         m_lines[lineId][m_currentShift + m_currentAlign] = symBackup;
         gDisplay[displayLine] << (m_lines[lineId] + m_currentShift + m_currentAlign);
