@@ -151,12 +151,12 @@ pio run -t upload
 
 ### Конфигурирование прошивки
 
-You can configure the firmware by your needs. For this, you have to change macroses in [Config.h](DarkroomTimer/src/Config.h) file:
+Вы можете сконфигурировать прошивку под ваши нужды. Для этого вам нужно изменить значения макросов в файле [Config.h](DarkroomTimer/src/lib/DarkroomTimer/Config.h):
 * `LCD_*` -- пин до `*` пина на дисплее
-* `MODE_SWITCH_BTN` -- пин до кнопки смены режима
+* `MODE_BTN` -- пин до кнопки смены режима
 * `VIEW_BTN` -- пин до кнопки просмотра
 * `START_BTN` -- пин до кнопки старта
-* `EXTRA_BTN` -- пин до кнопки на энкодере
+* `ENCODER_BTN` -- пин до кнопки на энкодере
 * `ENCODER_DT` -- пин до пина DT(S1) на энкодере (МЕНЯТЬ НЕ РЕКОМЕНДУЕТСЯ)
 * `ENCODER_CLK` -- пин до пина CLK(S2) на энкодере (МЕНЯТЬ НЕ РЕКОМЕНДУЕТСЯ)
 * `BEEPER` -- пин до зумера (МЕНЯТЬ НЕ РЕКОМЕНДУЕТСЯ)

@@ -110,11 +110,11 @@ void SettingsSetter::process() {
 
     if (m_timer.state() != Timer::RUNNING) {
         int8_t shift = 0;
-        if (gModeSwitchBtn.click())
+        if (gModeBtn.click())
             shift = 1;
-        else if (gModeSwitchBtn.pressing()) {
+        else if (gModeBtn.pressing()) {
             if ((shift = gEncoder.getDir()))
-                gModeSwitchBtn.skipEvents();
+                gModeBtn.skipEvents();
         }
 
         if (shift) {

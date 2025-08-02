@@ -26,7 +26,7 @@ void PrintMode::switchMode() {
 }
 
 void PrintMode::process() {
-    if (gExtraBtn.click() && gTimer.state() != Timer::RUNNING) {
+    if (gEncoderBtn.click() && gTimer.state() != Timer::RUNNING) {
         m_showLog = !m_showLog;
         repaint();
         return;

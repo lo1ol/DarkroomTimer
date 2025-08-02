@@ -21,9 +21,9 @@
 void alignStr(char* buf, uint8_t align);
 
 extern EncoderWrap gEncoder;
-extern ButtonT<MODE_SWITCH_BTN> gModeSwitchBtn;
+extern ButtonT<MODE_BTN> gModeBtn;
 extern ButtonT<START_BTN> gStartBtn;
-extern ButtonT<EXTRA_BTN> gExtraBtn;
+extern ButtonT<ENCODER_BTN> gEncoderBtn;
 extern ButtonT<VIEW_BTN> gViewBtn;
 
 extern Timer gTimer;

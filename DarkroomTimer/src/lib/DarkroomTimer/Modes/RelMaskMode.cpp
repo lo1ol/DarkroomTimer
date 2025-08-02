@@ -115,16 +115,16 @@ void RelMaskMode::process() {
 }
 
 void RelMaskMode::processSetMasks() {
-    if (gExtraBtn.pressing()) {
+    if (gEncoderBtn.pressing()) {
         if (int8_t dir = gEncoder.getDir()) {
-            gExtraBtn.skipEvents();
+            gEncoderBtn.skipEvents();
             moveCurrentMask(dir);
         }
 
         return;
     }
 
-    if (gExtraBtn.click()) {
+    if (gEncoderBtn.click()) {
         moveCurrentMask(1);
     }
 
@@ -148,7 +148,7 @@ void RelMaskMode::processSetMasks() {
 }
 
 void RelMaskMode::processRun() {
-    if (gExtraBtn.click()) {
+    if (gEncoderBtn.click()) {
         for (auto& relTimeTable : m_relTimeTable)
             relTimeTable.toggleSecView();
         repaint();

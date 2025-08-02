@@ -20,7 +20,7 @@
 1. Click view btn to turn on/off a lamp
 2. Hold mode btn and turn encoder, to switch mode
 3. Click mode btn to navigate inside mode
-4. Hold extra btn to reset current printing at any mode (inside mask mode you can fast travel between masks)
+4. Hold encoder btn to reset current printing at any mode (inside mask mode you can fast travel between masks)
 5. Turn encoder in time table to scroll it
 6. Click start btn to start printing at any mode
 7. Hold view and change mode btns to go to settings
@@ -38,7 +38,7 @@
 1. F Stop test mode: increae testing time in stops
 2. Linear test mode: simple mode for linear testing
 3. Print mode: ability to pause printing at any time. It's creative mode and usefull for thoughtless printing
-4. Mask mode: for printing with accurate masks. Click extra btn to go to the next mask. Hold extra btn and turn encoder to fast travel between masks. Click start btn when set mask to play melody after printing this mask -- usefull, when you don't want to forgot to do something. For example, change filter.
+4. Mask mode: for printing with accurate masks. Click encoder btn to go to the next mask. Hold encoder btn and turn encoder to fast travel between masks. Click start btn when set mask to play melody after printing this mask -- usefull, when you don't want to forgot to do something. For example, change filter.
 5. Rel mask mode: the same as mask mode, but operates with relative times: you set base time and relative times (in stops) to it. Notification system is disabled. To see real time in seconds: click on encoder during run
 6. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
 7. Split mask and rel mask modes: the same as mask and rel mask modes, but allows to set mask for two filtres (0 and 5). Notification system is disabled.
@@ -46,7 +46,7 @@
 
 ## Killer features:
 
-1. Ability to stop any mode, during printing. Just hold extra button. Usefull to stop process, if you forgot something
+1. Ability to stop any mode, during printing. Just hold encoder button. Usefull to stop process, if you forgot something
 2. Ability to set lag time: lamp. It's could be usefull to get accurate results. To find it go to settings, choose minimum lag time and click start btn. Increase it till the moment of seeing that lamp is actually turn on
 3. Autoturn off in view mode. It could preserve lamp on your enlarger if you forgot to turn off it
 4. Buzzer that beep every second. Usefull to control the process, not looking at display
@@ -137,12 +137,12 @@ pio run -t upload
 
 ### Firmware configuration
 
-You can configure the firmware by your needs. For this, you have to change macroses in [Config.h](DarkroomTimer/src/Config.h) file:
+You can configure the firmware by your needs. For this, you have to change macroses in [Config.h](DarkroomTimer/src/lib/DarkroomTimer/Config.h) file:
 * `LCD_*` -- pin and arduino to `*` pin on display
-* `MODE_SWITCH_BTN` -- pin to mode button
+* `MODE_BTN` -- pin to mode button
 * `VIEW_BTN` -- pin to view button
 * `START_BTN` -- pin to start button
-* `EXTRA_BTN` -- pin to button on encoder
+* `ENCODER_BTN` -- pin to button on encoder
 * `ENCODER_DT` -- pin to DT(S1) pin on encoder (UNRECOMMENDED TO CHANGE)
 * `ENCODER_CLK` -- pin to CLK(S2) pin on encoder (UNRECOMMENDED TO CHANGE)
 * `BEEPER` -- pin to buzzer (UNRECOMMENDED TO CHANGE)

@@ -10,6 +10,7 @@ extern decltype(gMillis()) gCurrentTime;
 decltype(gMillis()) mockMillis();
 
 extern int gBuzzerVal;
+extern int gBacklightVal;
 extern bool gRelayVal;
 
 void mockAnalogWrite(uint8_t pin, int val);

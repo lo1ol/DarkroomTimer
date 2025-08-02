@@ -6,6 +6,7 @@ LiquidCrystalWrapMock gLcdWrapMock;
 Display gDisplay(&gLcdWrapMock);
 
 int gBuzzerVal = 0;
+int gBacklightVal = 0;
 bool gRelayVal = 0;
 
 decltype(gMillis()) gCurrentTime = 0;
@@ -18,6 +19,9 @@ void gAnalogWrite(uint8_t pin, int val) {
     switch (pin) {
     case BEEPER:
         gBuzzerVal = val;
+        return;
+    case BACKLIGHT:
+        gBacklightVal = val;
         return;
     }
 

@@ -119,16 +119,16 @@ void MaskMode::process() {
 }
 
 void MaskMode::processSetMasks() {
-    if (gExtraBtn.pressing()) {
+    if (gEncoderBtn.pressing()) {
         if (int8_t dir = gEncoder.getDir()) {
-            gExtraBtn.skipEvents();
+            gEncoderBtn.skipEvents();
             moveCurrentMask(dir);
         }
 
         return;
     }
 
-    if (gExtraBtn.click()) {
+    if (gEncoderBtn.click()) {
         // let's guess unknown masks
         Time prevTime = m_timeTable[m_currentFilter].getTime(m_currentMask);
         moveCurrentMask(1);

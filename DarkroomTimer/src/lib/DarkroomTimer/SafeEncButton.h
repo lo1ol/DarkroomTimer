@@ -84,4 +84,40 @@ private:
     bool m_reqHold;
 };
 
+// classes for tests
+class VirtButton {
+public:
+    bool pressing() const { return m_pressing; }
+    bool hold() const { return m_justHolded; }
+    bool click() const { return m_justClicked; }
+
+    template<class T1, class T2>
+    void tick(T1& t1, T2& t2) {
+        m_justHolded = false;
+        m_justClicked = false;
+
+        if (t1.pressing() && t2.pressing())
+            m_pressing = true;
+        else
+            m_pressing = false;
+
+        if (t1.click() && t2.click()) {
+            m_justClicked = true;
+            m_justHolded = false;
+            m_pressing = true;
+        }
+
+        if (t1.hold() && t2.hold()) {
+            m_justHolded = true;
+            m_justClicked = false;
+            m_pressing = true;
+        }
+    }
+
+private:
+    bool m_pressing = false;
+    bool m_justHolded = false;
+    bool m_justClicked = false;
+};
+
 #endif

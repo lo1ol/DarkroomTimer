@@ -5,7 +5,8 @@
 
 #include "Config.h"
 
-Settings::Settings() {
+Settings Settings::load() {
+    Settings res;
     int idx = 0;
     CRC32 crc32;
 #define GET_SETTING(value)    \
@@ -13,12 +14,12 @@ Settings::Settings() {
     idx += sizeof(value);     \
     crc32.update(value);
 
-    GET_SETTING(lagTime);
-    GET_SETTING(beepVolume);
-    GET_SETTING(backlight);
-    GET_SETTING(autoFinishViewMinutes);
-    GET_SETTING(startWithSettings);
-    GET_SETTING(melody);
+    GET_SETTING(res.lagTime);
+    GET_SETTING(res.beepVolume);
+    GET_SETTING(res.backlight);
+    GET_SETTING(res.autoFinishViewMinutes);
+    GET_SETTING(res.startWithSettings);
+    GET_SETTING(res.melody);
 
     uint32_t hash = crc32.finalize();
     uint32_t storedHash;
@@ -26,15 +27,10 @@ Settings::Settings() {
 #undef GET_SETTING
 
     if (hash != storedHash) {
-        lagTime = 0_ts;
-        beepVolume = MIN_BEEP_VOLUME + 3 * BEEP_VOLUME_STEP;
-        backlight = 3 * MAX_BACKLIGHT;
-        autoFinishViewMinutes = 3;
-        startWithSettings = false;
-        melody = Melody::nice;
-        updateEEPROM();
-        return;
+        res = kDefaultSettings;
+        res.updateEEPROM();
     }
+    return res;
 }
 
 void Settings::updateEEPROM() {

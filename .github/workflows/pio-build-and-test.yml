@@ -22,5 +22,8 @@ jobs:
       - name: Run build
         run: ~/.platformio/penv/bin/platformio run -d DarkroomTimer/
 
-      - name: Run tests
+      - name: Run part tests
         run: ~/.platformio/penv/bin/platformio test -d DarkroomTimer/ --without-uploading
+
+      - name: Run scenario tests
+        run: ~/.platformio/penv/bin/platformio test -d DarkroomTimer/ --without-uploading -e scenarios-env

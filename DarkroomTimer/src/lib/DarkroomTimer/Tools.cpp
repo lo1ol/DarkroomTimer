@@ -5,13 +5,13 @@
 #include <LiquidCrystal.h>
 #include <LiquidCrystalWrap.h>
 
-ButtonT<MODE_SWITCH_BTN> gModeSwitchBtn;
+ButtonT<MODE_BTN> gModeBtn;
 ButtonT<START_BTN> gStartBtn;
-ButtonT<EXTRA_BTN> gExtraBtn;
+ButtonT<ENCODER_BTN> gEncoderBtn;
 ButtonT<VIEW_BTN> gViewBtn;
 
 Timer gTimer;
-Settings gSettings;
+Settings gSettings = Settings::load();
 Beeper gBeeper(BEEPER);
 uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
