@@ -127,7 +127,7 @@ void processModeSwitch() {
     if (gModeSwitchBtn.holding() && !gSettingBtn.pressing())
         gBlockedByPreview = true;
 
-    int8_t dir = getEncoderDir();
+    int8_t dir = gEncoder.getDir();
     if (dir) {
         gModeSwitchBtn.skipEvents();
 
@@ -239,7 +239,6 @@ void processMode() {
 }
 
 void setup() {
-    setupEncoder();
     gBeeper.setup();
 
     setMode(ModeId::testFStops);

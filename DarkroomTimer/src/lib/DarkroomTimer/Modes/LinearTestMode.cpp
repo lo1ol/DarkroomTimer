@@ -34,15 +34,15 @@ void LinearTestMode::switchMode() {
 void LinearTestMode::process() {
     switch (m_step) {
     case Step::baseTime:
-        if (getTime(m_baseTime))
+        if (gEncoder.getTime(m_baseTime))
             repaint();
         return;
     case Step::initTime:
-        if (getTime(m_initTime))
+        if (gEncoder.getTime(m_initTime))
             repaint();
         return;
     case Step::stepTime:
-        if (getTime(m_stepTime))
+        if (gEncoder.getTime(m_stepTime))
             repaint();
         return;
     case Step::run:
@@ -62,9 +62,7 @@ void LinearTestMode::process() {
         repaint();
     }
 
-    if (gTimer.state() == Timer::STOPPED)
-        gScrollableContent.scroll();
-
+    gScrollableContent.scroll(gEncoder.getDir());
     gScrollableContent.paint();
 }
 

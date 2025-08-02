@@ -38,15 +38,15 @@ void FStopTestMode::switchMode() {
 void FStopTestMode::process() {
     switch (m_step) {
     case Step::baseTime:
-        if (getTime(m_baseTime))
+        if (gEncoder.getTime(m_baseTime))
             repaint();
         return;
     case Step::initTime:
-        if (getTime(m_initTime))
+        if (gEncoder.getTime(m_initTime))
             repaint();
         return;
     case Step::fstopSet:
-        if (getInt(m_FStopPartId, 0, sizeof(kFStopPartVarinatns) - 1))
+        if (gEncoder.getInt(m_FStopPartId, 0, sizeof(kFStopPartVarinatns) - 1))
             repaint();
         return;
     case Step::run:
@@ -66,9 +66,7 @@ void FStopTestMode::process() {
         repaint();
     }
 
-    if (gTimer.state() == Timer::STOPPED)
-        gScrollableContent.scroll();
-
+    gScrollableContent.scroll(gEncoder.getDir());
     gScrollableContent.paint();
 }
 

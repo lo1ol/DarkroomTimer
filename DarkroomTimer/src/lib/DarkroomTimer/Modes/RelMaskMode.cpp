@@ -102,7 +102,7 @@ void RelMaskMode::moveCurrentMask(int8_t dir) {
 void RelMaskMode::process() {
     switch (m_step) {
     case Step::setNum:
-        if (getInt(m_numberOfMasks[m_currentFilter], 0, m_maxMasksNumber))
+        if (gEncoder.getInt(m_numberOfMasks[m_currentFilter], 0, m_maxMasksNumber))
             repaint();
         return;
     case Step::setMasks:
@@ -116,7 +116,7 @@ void RelMaskMode::process() {
 
 void RelMaskMode::processSetMasks() {
     if (gExtraBtn.pressing()) {
-        if (int8_t dir = getEncoderDir()) {
+        if (int8_t dir = gEncoder.getDir()) {
             gExtraBtn.skipEvents();
             moveCurrentMask(dir);
         }
@@ -131,12 +131,12 @@ void RelMaskMode::processSetMasks() {
     bool changed = false;
     if (m_currentMask == -1) {
         auto time = m_relTimeTable[m_currentFilter].getBaseTime();
-        changed = getTime(time);
+        changed = gEncoder.getTime(time);
         if (changed)
             m_relTimeTable[m_currentFilter].setBaseTime(time);
     } else {
         auto relTime = m_relTimeTable[m_currentFilter].getRelTime(m_currentMask);
-        changed = getRelTime(relTime);
+        changed = gEncoder.getRelTime(relTime);
         if (changed)
             m_relTimeTable[m_currentFilter].setRelTime(m_currentMask, relTime);
     }
@@ -163,8 +163,8 @@ void RelMaskMode::processRun() {
             gBeeper.alarm();
     }
 
-    if (gTimer.state() == Timer::STOPPED && m_currentFilter != m_filterNum)
-        gScrollableContent.scroll();
+    if (m_currentFilter != m_filterNum)
+        gScrollableContent.scroll(gEncoder.getDir());
 
     gScrollableContent.paint();
 }

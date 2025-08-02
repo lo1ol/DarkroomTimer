@@ -4,8 +4,6 @@
 
 #include <stdint.h>
 
-int8_t getEncoderDir();
-
 class ScrollableContent {
 public:
     static constexpr uint8_t kMaxLineCnt = 16;
@@ -14,7 +12,7 @@ public:
     void paint();
     void forcePaint();
 
-    void scroll(int8_t dir = getEncoderDir());
+    void scroll(int8_t dir);
 
     void startNewLine();
     void print(const char* src, bool current = false, const char* mark = nullptr);

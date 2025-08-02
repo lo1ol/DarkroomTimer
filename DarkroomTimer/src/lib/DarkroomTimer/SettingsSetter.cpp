@@ -20,7 +20,7 @@ void SettingsSetter::processSetLagTime() {
     m_timer.tick();
 
     gDisplay[0] << "Lag time";
-    getTime(m_lagTime, true);
+    gEncoder.getTime(m_lagTime, true);
     if (m_lagTime > kMaxLagTime)
         m_lagTime = kMaxLagTime;
 
@@ -45,7 +45,7 @@ void SettingsSetter::processSetBeepVolume() const {
         gSettings.beepVolume = MAX_BEEP_VOLUME;
 
     uint8_t userVolume = (gSettings.beepVolume - MIN_BEEP_VOLUME) / BEEP_VOLUME_STEP;
-    if (getInt(userVolume, 0, 9))
+    if (gEncoder.getInt(userVolume, 0, 9))
         gBeeper.start();
 
     gSettings.beepVolume = MIN_BEEP_VOLUME + userVolume * BEEP_VOLUME_STEP;
@@ -54,7 +54,7 @@ void SettingsSetter::processSetBeepVolume() const {
 
 void SettingsSetter::processSetAutoFinishView() const {
     gDisplay[0] << "Auto finish view";
-    getInt(gSettings.autoFinishViewMinutes, 0, 10);
+    gEncoder.getInt(gSettings.autoFinishViewMinutes, 0, 10);
 
     if (gSettings.autoFinishViewMinutes == 0) {
         gDisplay[1] << "No";
@@ -67,7 +67,7 @@ void SettingsSetter::processSetAutoFinishView() const {
 void SettingsSetter::processSetBacklight() const {
     gDisplay[0] << "Backlight";
     uint8_t userBacklight = min(gSettings.backlight, MAX_BACKLIGHT * 10) / MAX_BACKLIGHT;
-    getInt(userBacklight, 1, 10);
+    gEncoder.getInt(userBacklight, 1, 10);
     gSettings.backlight = userBacklight * MAX_BACKLIGHT;
     gDisplay[1] << userBacklight;
     gAnalogWrite(BACKLIGHT, gSettings.backlight);
@@ -76,7 +76,7 @@ void SettingsSetter::processSetBacklight() const {
 void SettingsSetter::processStartWithSettings() const {
     gDisplay[0] << "Start with stngs";
     uint8_t choice = gSettings.startWithSettings;
-    getInt(choice, 0, 1);
+    gEncoder.getInt(choice, 0, 1);
     gSettings.startWithSettings = choice;
     if (choice == 0)
         gDisplay[1] << "No";
@@ -87,7 +87,7 @@ void SettingsSetter::processStartWithSettings() const {
 void SettingsSetter::processSetMelody() const {
     gDisplay[0] << "Notify melody";
     uint8_t choice = gSettings.melody;
-    bool changed = getInt(choice, 0, Melody::last_ - 1);
+    bool changed = gEncoder.getInt(choice, 0, Melody::last_ - 1);
 
     gDisplay[1] << Melody::getMelodyName(gSettings.melody);
 
@@ -113,7 +113,7 @@ void SettingsSetter::process() {
         if (gModeSwitchBtn.click())
             shift = 1;
         else if (gModeSwitchBtn.pressing()) {
-            if ((shift = getEncoderDir()))
+            if ((shift = gEncoder.getDir()))
                 gModeSwitchBtn.skipEvents();
         }
 

@@ -106,7 +106,7 @@ void MaskMode::process() {
     switch (m_step) {
     case Step::setNum:
         // table capacities are equal
-        if (getInt(m_numberOfMasks[m_currentFilter], 0, m_maxMasksNumber))
+        if (gEncoder.getInt(m_numberOfMasks[m_currentFilter], 0, m_maxMasksNumber))
             repaint();
         return;
     case Step::setMasks:
@@ -120,7 +120,7 @@ void MaskMode::process() {
 
 void MaskMode::processSetMasks() {
     if (gExtraBtn.pressing()) {
-        if (int8_t dir = getEncoderDir()) {
+        if (int8_t dir = gEncoder.getDir()) {
             gExtraBtn.skipEvents();
             moveCurrentMask(dir);
         }
@@ -139,7 +139,7 @@ void MaskMode::processSetMasks() {
     }
 
     auto time = m_timeTable[m_currentFilter].getTime(m_currentMask);
-    if (getTime(time)) {
+    if (gEncoder.getTime(time)) {
         m_timeTable[m_currentFilter].setTime(m_currentMask, time);
         setCurrentMask(m_currentFilter, m_currentMask);
         gDisplay.resetBlink(false);
@@ -170,8 +170,8 @@ void MaskMode::processRun() {
             gBeeper.alarm();
     }
 
-    if (gTimer.state() == Timer::STOPPED && m_currentFilter != m_filterNum)
-        gScrollableContent.scroll();
+    if (m_currentFilter != m_filterNum)
+        gScrollableContent.scroll(gEncoder.getDir());
 
     gScrollableContent.paint();
 }

@@ -33,7 +33,7 @@ void PrintMode::process() {
     }
 
     if (m_showLog) {
-        gScrollableContent.scroll();
+        gScrollableContent.scroll(gEncoder.getDir());
         gScrollableContent.paint();
         return;
     }
@@ -45,7 +45,7 @@ void PrintMode::process() {
 
     switch (gTimer.state()) {
     case Timer::STOPPED:
-        if (getTime(m_printTime))
+        if (gEncoder.getTime(m_printTime))
             repaint();
         break;
     case Timer::RUNNING:
