@@ -34,19 +34,33 @@ bool EncoderWrap::getInt(uint8_t& choosen, uint8_t min, uint8_t max) const {
     if (max - min > 30 && fast())
         shift *= 5;
 
-    if (shift == 0)
-        return false;
+    uint8_t res;
 
-    if (shift < 0 && (choosen - min) < -shift) {
-        choosen = min;
-        return false;
-    } else if (shift > 0 && (max - choosen) < shift) {
+    if (choosen > max) {
         choosen = max;
-        return false;
-    } else {
-        choosen += shift;
         return true;
     }
+
+    if (choosen < min) {
+        choosen = min;
+        return true;
+    }
+
+    if (!shift)
+        return false;
+
+    if (shift < 0 && (choosen - min) < -shift)
+        res = min;
+    else if (shift > 0 && (max - choosen) < shift)
+        res = max;
+    else
+        res = choosen + shift;
+
+    if (res == choosen)
+        return false;
+
+    choosen = res;
+    return true;
 }
 
 bool EncoderWrap::getTime(Time& time, bool smooth) const {
