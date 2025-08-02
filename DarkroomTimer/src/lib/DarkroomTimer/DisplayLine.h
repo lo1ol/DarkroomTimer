@@ -21,8 +21,8 @@ public:
 
     void print(const char* src, bool current = false, const char* mark = nullptr);
 
-    // it's responsobility of caller to keep fast repaint on the same place and with same len
-    void fastRepaint(const char* src, uint8_t shift);
+    // it's responsobility of caller to keep fast repaint length less then current length
+    void fastCurrentRepaint(const char* src);
     void restore();
 
 private:
@@ -33,16 +33,16 @@ private:
     int m_line;
     LiquidCrystalWrap* m_lcd;
 
-    uint8_t m_blinkPos = 0;
-    uint8_t m_blinkLength = 0;
     uint32_t m_blinkTimer = 0;
     bool m_blinkState = 0;
-    const char* m_mark = nullptr;
+
+    uint8_t m_currentPos = 0;
+    uint8_t m_currentLength = 0;
+    const char* m_currentMark = nullptr;
+    bool m_needCurrentFastRepaint = false;
+    bool m_hasCurrentFastRepaint = false;
+    char m_fastCurrentStr[DISPLAY_COLS + 1] = "";
+
     char m_fwInfo[DISPLAY_COLS + 1] = "";
     char m_bwInfo[DISPLAY_COLS + 1] = "";
-
-    bool m_needFastRepaint = false;
-    bool m_hasFastRepaint = false;
-    uint8_t m_fastChangePos = 0;
-    char m_fastChange[DISPLAY_COLS + 1] = "";
 };

@@ -74,18 +74,30 @@ void checkDisplayLineFastRepaint() {
 
     TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
 
-    gDisplay[0].fastRepaint("kek", 3);
+    gDisplay[0].fastCurrentRepaint("kek");
+    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    // current is not set
+    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
+
+    gDisplay[0].reset();
+    gDisplay[0] << "012";
+    gDisplay[0].print("345", true);
+    gDisplay[0] << "6789abcdef";
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
+    gDisplay[0].fastCurrentRepaint("kek");
     TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("012kek6789abcdef", gLcdWrapMock.getLine(0));
 
-    gDisplay[0].fastRepaint("lol", 9);
+    gDisplay[0].fastCurrentRepaint("lol");
     TEST_ASSERT_EQUAL_STRING("012kek6789abcdef", gLcdWrapMock.getLine(0));
     gDisplay[0].tick();
-    TEST_ASSERT_EQUAL_STRING("012kek678lolcdef", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("012lol6789abcdef", gLcdWrapMock.getLine(0));
 
     gDisplay[0].restore();
-    TEST_ASSERT_EQUAL_STRING("012kek678lolcdef", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("012lol6789abcdef", gLcdWrapMock.getLine(0));
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
 }
@@ -105,7 +117,7 @@ void checkDisplayLineBlink() {
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lolkekcheburek  ", gLcdWrapMock.getLine(0));
 
-    gDisplay[0].fastRepaint("lol", 3);
+    gDisplay[0].fastCurrentRepaint("lol");
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
     gDisplay[0].resetBlink(false);
@@ -119,7 +131,7 @@ void checkDisplayLineBlink() {
     gDisplay[0].resetBlink(true);
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
-    gDisplay[0].fastRepaint("lol", 3);
+    gDisplay[0].fastCurrentRepaint("lol");
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lollolcheburek  ", gLcdWrapMock.getLine(0));
     gDisplay[0].tick();

@@ -29,9 +29,9 @@ void DisplayLine::print(const char* src, bool current, const char* mark) {
     m_needRepaint = true;
 
     if (current) {
-        m_blinkLength = srclen;
-        m_blinkPos = dstlen;
-        m_mark = mark;
+        m_currentLength = srclen;
+        m_currentPos = dstlen;
+        m_currentMark = mark;
     }
 
     concat(m_fwInfo, src);
@@ -41,8 +41,8 @@ void DisplayLine::reset() {
     m_needRepaint = true;
     m_fwInfo[0] = 0;
     m_bwInfo[0] = 0;
-    m_blinkLength = 0;
-    m_mark = 0;
+    m_currentLength = 0;
+    m_currentMark = nullptr;
 }
 
 void DisplayLine::resetBlink(bool state) {
@@ -55,7 +55,7 @@ void DisplayLine::tick() {
 
     if (m_needRepaint) {
         m_needRepaint = false;
-        m_hasFastRepaint = false;
+        m_hasCurrentFastRepaint = false;
 
         auto fwLen = strlen(m_fwInfo);
         memcpy(printBuf, m_fwInfo, fwLen);
@@ -69,40 +69,40 @@ void DisplayLine::tick() {
         m_lcd->print(printBuf);
     }
 
-    if (m_needFastRepaint) {
-        m_needFastRepaint = false;
-        m_hasFastRepaint = true;
-        m_lcd->setCursor(m_fastChangePos, m_line);
-        m_lcd->print(m_fastChange);
+    if (m_needCurrentFastRepaint) {
+        m_needCurrentFastRepaint = false;
+        m_hasCurrentFastRepaint = true;
+        m_lcd->setCursor(m_currentPos, m_line);
+        m_lcd->print(m_fastCurrentStr);
     }
 
-    if (m_blinkLength && !m_hasFastRepaint) {
+    if (m_currentLength && !m_hasCurrentFastRepaint) {
         if (gMillis() - m_blinkTimer > 500) {
             m_blinkState = !m_blinkState;
             m_blinkTimer = gMillis();
         }
 
         if (m_blinkState) {
-            memset(printBuf, ' ', m_blinkLength);
+            memset(printBuf, ' ', m_currentLength);
 
-            if (m_mark) {
-                uint8_t marklen = strlen(m_mark);
-                memcpy(printBuf + m_blinkLength - marklen, m_mark, marklen);
+            if (m_currentMark) {
+                uint8_t marklen = strlen(m_currentMark);
+                memcpy(printBuf + m_currentLength - marklen, m_currentMark, marklen);
             }
         } else {
-            memcpy(printBuf, m_fwInfo + m_blinkPos, m_blinkLength);
+            memcpy(printBuf, m_fwInfo + m_currentPos, m_currentLength);
         }
 
-        printBuf[m_blinkLength] = 0;
-        m_lcd->setCursor(m_blinkPos, m_line);
+        printBuf[m_currentLength] = 0;
+        m_lcd->setCursor(m_currentPos, m_line);
         m_lcd->print(printBuf);
     }
 }
 
 void DisplayLine::restore() {
     m_needRepaint = true;
-    m_needFastRepaint = false;
-    m_hasFastRepaint = false;
+    m_needCurrentFastRepaint = false;
+    m_hasCurrentFastRepaint = false;
 }
 
 DisplayLine& DisplayLine::operator<<(const char* src) {
@@ -129,9 +129,11 @@ DisplayLine& DisplayLine::operator>>(int value) {
     return *this;
 }
 
-void DisplayLine::fastRepaint(const char* src, uint8_t pos) {
-    m_needFastRepaint = true;
-    m_hasFastRepaint = true;
-    m_fastChangePos = pos;
-    strcpy(m_fastChange, src);
+void DisplayLine::fastCurrentRepaint(const char* src) {
+    if (!m_currentLength)
+        return;
+
+    m_needCurrentFastRepaint = true;
+    m_hasCurrentFastRepaint = true;
+    strcpy(m_fastCurrentStr, src);
 }

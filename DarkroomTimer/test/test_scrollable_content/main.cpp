@@ -565,7 +565,7 @@ void checkScrollableContentTimer() {
     sc.paint();
     gDisplay.tick();
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4      kek6  ", gLcdWrapMock.getLine(1));
 
     gSettings.lagTime = 1_s;
     gTimer.tick();

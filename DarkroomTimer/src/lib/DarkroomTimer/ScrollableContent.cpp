@@ -134,8 +134,7 @@ void ScrollableContent::paintUnchanged() {
 
     alignStr(str, m_currentAlign);
 
-    gDisplay[m_currentDisplayLine].resetBlink();
-    gDisplay[m_currentDisplayLine].fastRepaint(str, m_currentShift);
+    gDisplay[m_currentDisplayLine].fastCurrentRepaint(str);
 }
 
 void ScrollableContent::paint() {
