@@ -38,6 +38,12 @@ extern Beeper gBeeper;
 extern uint8_t gModesCache[32];
 extern ScrollableContent gScrollableContent;
 
-extern decltype(&millis) gMillis;
-extern decltype(&digitalWrite) gDigitalWrite;
-extern decltype(&analogWrite) gAnalogWrite;
+#ifdef PIO_UNIT_TESTING
+uint32_t gMillis();
+void gDigitalWrite(uint8_t, uint8_t);
+void gAnalogWrite(uint8_t, int);
+#else
+    #define gMillis millis
+    #define gDigitalWrite digitalWrite
+    #define gAnalogWrite analogWrite
+#endif

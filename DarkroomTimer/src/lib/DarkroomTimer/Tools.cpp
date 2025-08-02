@@ -12,16 +12,15 @@ ButtonT<EXTRA_BTN> gExtraBtn;
 ButtonT<VIEW_BTN> gViewBtn;
 Timer gTimer;
 Settings gSettings;
-LiquidCrystal gLcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
-LiquidCrystalWrap gLcdWrap(&gLcd);
-Display gDisplay(&gLcdWrap);
 Beeper gBeeper(BEEPER);
 uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
 
-decltype(&millis) gMillis = millis;
-decltype(&digitalWrite) gDigitalWrite = digitalWrite;
-decltype(&analogWrite) gAnalogWrite = analogWrite;
+#ifndef PIO_UNIT_TESTING
+LiquidCrystal gLcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+LiquidCrystalWrap gLcdWrap(&gLcd);
+Display gDisplay(&gLcdWrap);
+#endif
 
 void isr() {
     gEncoder.tickISR();

@@ -37,8 +37,6 @@ private:
 SimpleMelody gSimpleMelody;
 
 void setUp() {
-    gMillis = &mockMillis;
-    gAnalogWrite = &mockAnalogWrite;
     gCurrentTime = 0;
     gBeeper.stop();
     gSettings.beepVolume = UP_VOLUME;

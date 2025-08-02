@@ -1,17 +1,20 @@
 #include "VirtEnv.h"
 
+#include <Tools.h>
+
 LiquidCrystalWrapMock gLcdWrapMock;
+Display gDisplay(&gLcdWrapMock);
 
 int gBuzzerVal = 0;
 bool gRelayVal = 0;
 
 decltype(gMillis()) gCurrentTime = 0;
 
-decltype(gMillis()) mockMillis() {
+uint32_t gMillis() {
     return gCurrentTime;
 }
 
-void mockAnalogWrite(uint8_t pin, int val) {
+void gAnalogWrite(uint8_t pin, int val) {
     switch (pin) {
     case BEEPER:
         gBuzzerVal = val;
@@ -22,7 +25,7 @@ void mockAnalogWrite(uint8_t pin, int val) {
     return;
 }
 
-void mockDigitalWrite(uint8_t pin, uint8_t val) {
+void gDigitalWrite(uint8_t pin, uint8_t val) {
     switch (pin) {
     case RELAY:
         gRelayVal = val;
