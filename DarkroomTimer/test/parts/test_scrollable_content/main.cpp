@@ -3,7 +3,7 @@
 
 #include <ScrollableContent.h>
 
-#include "../VirtEnv.h"
+#include "../../VirtEnv.h"
 
 void setUp() {
     gLcdWrapMock = LiquidCrystalWrapMock{};

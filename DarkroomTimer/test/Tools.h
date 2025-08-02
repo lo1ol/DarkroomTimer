@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ScrollableContent.h>
+#include <Tools.h>
 #include <unity.h>
 
 #define TEST_EQUAL_SCROLL_CONTENT(scDescArg, sc)                                                                  \
