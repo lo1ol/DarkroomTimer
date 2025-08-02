@@ -11,9 +11,9 @@ void Beeper::tick() {
         if (m_timer <= currentTime) {
             m_pinState = !m_pinState;
             if (m_pinState)
-                m_timer = currentTime + 100;
+                m_timer += 100;
             else
-                m_timer = currentTime + 900;
+                m_timer += 900;
         }
         break;
     case State::single:
@@ -85,8 +85,11 @@ void Beeper::processPin() const {
 }
 
 void Beeper::setMelody(Melody::Name melodyName) {
+    setMelody(Melody::getMelody(melodyName));
+}
+
+void Beeper::setMelody(Melody* melody) {
+    stop();
     delete m_melody;
-    m_melody = Melody::getMelody(melodyName);
-    if (m_state == State::alarm)
-        alarm();
+    m_melody = melody;
 }

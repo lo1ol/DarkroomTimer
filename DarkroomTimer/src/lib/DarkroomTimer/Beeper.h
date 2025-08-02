@@ -24,7 +24,10 @@ public:
 
     State state() const { return m_state; }
 
+#ifndef PIO_UNIT_TESTING
 private:
+#endif
+    void setMelody(Melody*);
     void processAlarm();
     void processPin() const;
 
