@@ -21,6 +21,7 @@ public:
 
     void print(const char* src, bool current = false, const char* mark = nullptr);
 
+    // it's responsobility of caller to keep fast repaint on the same place and with same len
     void fastRepaint(const char* src, uint8_t shift);
     void restore();
 
@@ -37,8 +38,11 @@ private:
     uint32_t m_blinkTimer = 0;
     bool m_blinkState = 0;
     const char* m_mark = nullptr;
-    bool m_hasFastChanges = false;
-
     char m_fwInfo[DISPLAY_COLS + 1] = "";
     char m_bwInfo[DISPLAY_COLS + 1] = "";
+
+    bool m_needFastRepaint = false;
+    bool m_hasFastRepaint = false;
+    uint8_t m_fastChangePos = 0;
+    char m_fastChange[DISPLAY_COLS + 1] = "";
 };

@@ -51,47 +51,58 @@ void DisplayLine::resetBlink(bool state) {
 }
 
 void DisplayLine::tick() {
-    if (!m_needRepaint && !m_blinkLength)
-        return;
-
-    if (!m_needRepaint && m_hasFastChanges)
-        return;
-
-    m_needRepaint = false;
-    m_hasFastChanges = false;
-
     char printBuf[DISPLAY_COLS + 1];
 
-    auto fwLen = strlen(m_fwInfo);
-    memcpy(printBuf, m_fwInfo, fwLen);
-    memset(printBuf + fwLen, ' ', DISPLAY_COLS - fwLen);
-    printBuf[DISPLAY_COLS] = 0;
+    if (m_needRepaint) {
+        m_needRepaint = false;
+        m_hasFastRepaint = false;
 
-    auto bwLen = strlen(m_bwInfo);
-    memcpy(printBuf + DISPLAY_COLS - bwLen, m_bwInfo, bwLen);
+        auto fwLen = strlen(m_fwInfo);
+        memcpy(printBuf, m_fwInfo, fwLen);
+        memset(printBuf + fwLen, ' ', DISPLAY_COLS - fwLen);
+        printBuf[DISPLAY_COLS] = 0;
 
-    if (m_blinkLength) {
+        auto bwLen = strlen(m_bwInfo);
+        memcpy(printBuf + DISPLAY_COLS - bwLen, m_bwInfo, bwLen);
+
+        m_lcd->setCursor(0, m_line);
+        m_lcd->print(printBuf);
+    }
+
+    if (m_needFastRepaint) {
+        m_needFastRepaint = false;
+        m_hasFastRepaint = true;
+        m_lcd->setCursor(m_fastChangePos, m_line);
+        m_lcd->print(m_fastChange);
+    }
+
+    if (m_blinkLength && !m_hasFastRepaint) {
         if (gMillis() - m_blinkTimer > 500) {
             m_blinkState = !m_blinkState;
             m_blinkTimer = gMillis();
         }
 
         if (m_blinkState) {
-            memset(printBuf + m_blinkPos, ' ', m_blinkLength);
+            memset(printBuf, ' ', m_blinkLength);
 
             if (m_mark) {
                 uint8_t marklen = strlen(m_mark);
-                memcpy(printBuf + m_blinkPos + m_blinkLength - marklen, m_mark, marklen);
+                memcpy(printBuf + m_blinkLength - marklen, m_mark, marklen);
             }
+        } else {
+            memcpy(printBuf, m_fwInfo + m_blinkPos, m_blinkLength);
         }
-    }
 
-    m_lcd->setCursor(0, m_line);
-    m_lcd->print(printBuf);
+        printBuf[m_blinkLength] = 0;
+        m_lcd->setCursor(m_blinkPos, m_line);
+        m_lcd->print(printBuf);
+    }
 }
 
 void DisplayLine::restore() {
     m_needRepaint = true;
+    m_needFastRepaint = false;
+    m_hasFastRepaint = false;
 }
 
 DisplayLine& DisplayLine::operator<<(const char* src) {
@@ -118,8 +129,9 @@ DisplayLine& DisplayLine::operator>>(int value) {
     return *this;
 }
 
-void DisplayLine::fastRepaint(const char* src, uint8_t shift) {
-    m_lcd->setCursor(shift, m_line);
-    m_lcd->print(src);
-    m_hasFastChanges = true;
+void DisplayLine::fastRepaint(const char* src, uint8_t pos) {
+    m_needFastRepaint = true;
+    m_hasFastRepaint = true;
+    m_fastChangePos = pos;
+    strcpy(m_fastChange, src);
 }

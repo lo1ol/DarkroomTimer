@@ -514,12 +514,6 @@ void checkScrollableContentTimer() {
     gDisplay.tick();
 
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4      kek6  ", gLcdWrapMock.getLine(1));
-
-    // need second call to print timer only
-    sc.paint();
-    gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("kek4  Lag kek6  ", gLcdWrapMock.getLine(1));
 
     gCurrentTime += 1;
@@ -627,13 +621,6 @@ void checkScrollableContentTimer() {
     TEST_ASSERT(!sc.m_changed);
     TEST_ASSERT(sc.currentIsPrinted());
 
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
-
-    sc.paint();
-    gDisplay.tick();
-    TEST_ASSERT(!sc.m_needGoToCurrent);
-    TEST_ASSERT(!sc.m_changed);
     TEST_ASSERT_EQUAL_STRING("kek1 kek2  Lag  ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
 }

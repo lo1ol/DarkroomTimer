@@ -103,6 +103,8 @@ void ScrollableContent::forcePaint() {
         m_lines[lineId][m_currentShift + m_currentAlign] = symBackup;
         gDisplay[displayLine] << (m_lines[lineId] + m_currentShift + m_currentAlign);
     }
+
+    paintUnchanged();
 }
 
 void ScrollableContent::paintUnchanged() {
