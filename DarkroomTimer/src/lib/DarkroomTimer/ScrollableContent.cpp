@@ -110,7 +110,7 @@ void ScrollableContent::forcePaint() {
 
 void ScrollableContent::paintUnchanged() {
     if (!currentIsPrinted()) {
-        if (gTimer.state() == Timer::RUNNING) {
+        if (gTimer.state() == Timer::RUNNING && m_currentLine != -1) {
             m_needGoToCurrent = true;
             m_changed = true;
             forcePaint();

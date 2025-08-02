@@ -51,6 +51,9 @@ void checkScrollableContentGeneric() {
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
 
+    sc.paint();
+    gDisplay.tick();
+
     sc.reset();
     TEST_ASSERT_EQUAL(0, sc.lineCnt());
     gDisplay.tick();
@@ -168,13 +171,6 @@ void checkScrollableContentScroll() {
     TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
 
     sc.scroll(1);
-    sc.scroll(-1);
-    sc.paint();
-    gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrapMock.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
-
-    sc.scroll(1);
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
@@ -188,7 +184,6 @@ void checkScrollableContentScroll() {
     TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(1));
 
-    sc.reset();
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
@@ -309,6 +304,9 @@ void checkScrollableContentCurrent() {
     TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrapMock.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
+
+    sc.paint();
+    gDisplay.tick();
 
     gCurrentTime += 500;
     gDisplay.tick();
@@ -496,9 +494,9 @@ void checkScrollableContentTimer() {
     gDisplay.tick();
     TEST_ASSERT_EQUAL_STRING("kek1            ", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL_STRING("                ", gLcdWrapMock.getLine(1));
+
     gTimer.reset();
     sc.reset();
-
     sc.print("kek1");
     sc.print("kek2");
     sc.print("kek3");

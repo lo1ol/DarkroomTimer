@@ -12,6 +12,7 @@ public:
         auto len = strlen(str);
         assert((m_c + len) <= DISPLAY_COLS);
         memcpy(m_lines[m_r] + m_c, str, len);
+        ++m_printCallCount;
     }
 
     void setCursor(uint8_t c, uint8_t r) override {
@@ -21,9 +22,16 @@ public:
 
     const char* getLine(uint8_t r) const { return m_lines[r]; }
 
+    uint8_t printCallCount() {
+        auto res = m_printCallCount;
+        m_printCallCount = 0;
+        return res;
+    }
+
 private:
     uint8_t m_c = 0;
     uint8_t m_r = 0;
+    uint8_t m_printCallCount = 0;
 
     char m_lines[DISPLAY_ROWS][DISPLAY_COLS + 1] = {};
 };
