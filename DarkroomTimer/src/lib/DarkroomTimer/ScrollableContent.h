@@ -45,7 +45,6 @@ public:
 #ifdef PIO_UNIT_TESTING
 public:
     struct Desc {
-        bool operator==(const Desc& o) const;
         const char* lines[kMaxLineCnt];
         int8_t currentLine;
         int8_t currentShift;

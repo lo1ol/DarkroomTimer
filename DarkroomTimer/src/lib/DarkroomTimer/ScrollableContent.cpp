@@ -147,39 +147,6 @@ void ScrollableContent::paint() {
 
 #ifdef PIO_UNIT_TESTING
 
-namespace {
-bool pointersOnStrCmp(const char* s1, const char* s2) {
-    if (!s1 && !s2)
-        return true;
-
-    if (!s1 || !s2)
-        return false;
-
-    return !strcmp(s1, s2);
-}
-} // namespace
-
-bool ScrollableContent::Desc::operator==(const Desc& o) const {
-    for (uint8_t i = 0; i != kMaxLineCnt; ++i)
-        if (!pointersOnStrCmp(lines[i], o.lines[i]))
-            return false;
-
-    if (o.currentLine != currentLine)
-        return false;
-
-    if (currentLine != -1) {
-        if (o.currentShift != currentShift)
-            return false;
-
-        if (o.currentAlign != currentAlign)
-            return false;
-
-        return pointersOnStrCmp(o.currentMark, currentMark);
-    }
-
-    return true;
-}
-
 ScrollableContent::Desc ScrollableContent::getDesc() const {
     Desc res{
         .lines = {},

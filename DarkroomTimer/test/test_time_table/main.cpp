@@ -1,9 +1,10 @@
 #include <Arduino.h>
-#include "unity.h"
+#include <unity.h>
 
 #include <TimeTable.h>
+#include <Tools.h>
 
-#include "../VirtEnv.h"
+#include "../Tools.h"
 
 void setUp() {
     gScrollableContent.reset();
@@ -32,80 +33,87 @@ void checkTimeTablePrint() {
 
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.2 0.3", "0.4 0.5" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.2 0.3", "0.4 0.5" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.2 0.3", "0.4 0.5", "0 0.1 0.2 0.3", "0.4 0.5" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.2 0.3", "0.4 0.5", "0 0.1 0.2 0.3", "0.4 0.5" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     gScrollableContent.reset();
     tt.setTime(3, 3_s);
     tt.flush();
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.2 3 0.4", "0.5" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.2 3 0.4", "0.5" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     gScrollableContent.reset();
 
     tt.setCurrent(3);
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.2 3.0", "0.4 0.5" },
-                    .currentLine = 0,
-                    .currentShift = 10,
-                    .currentAlign = 3,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.2 3.0", "0.4 0.5" },
+                                  .currentLine = 0,
+                                  .currentShift = 10,
+                                  .currentAlign = 3,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     tt.flush();
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.2 3.0", "0.4 0.5", "0 0.1 0.2 3.0", "0.4 0.5" },
-                    .currentLine = 2,
-                    .currentShift = 10,
-                    .currentAlign = 3,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.2 3.0", "0.4 0.5", "0 0.1 0.2 3.0", "0.4 0.5" },
+                                  .currentLine = 2,
+                                  .currentShift = 10,
+                                  .currentAlign = 3,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     gScrollableContent.reset();
     tt.setCurrent(2, "HA");
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.2 3 0.4", "0.5" },
-                    .currentLine = 0,
-                    .currentShift = 6,
-                    .currentAlign = 3,
-                    .currentMark = "HA",
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.2 3 0.4", "0.5" },
+                                  .currentLine = 0,
+                                  .currentShift = 6,
+                                  .currentAlign = 3,
+                                  .currentMark = "HA",
+                              }),
+                              gScrollableContent);
 
     gScrollableContent.reset();
     tt.resize(2);
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     gScrollableContent.reset();
     tt.setTime(2, 4_ts);
@@ -113,48 +121,52 @@ void checkTimeTablePrint() {
     tt.setTime(4, 6_ts);
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.4" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.4" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     gScrollableContent.reset();
     tt.printBadAsZero(true);
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "0 0.1 0.4 0 0.6" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "0 0.1 0.4 0 0.6" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     gScrollableContent.reset();
     tt.setPrefix("kek");
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "kek 0 0.1 0.4 0", "0.6" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "kek 0 0.1 0.4 0", "0.6" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 
     tt.setPrefix("lolo");
     tt.flush();
 
-    TEST_ASSERT((ScrollableContent::Desc{
-                    .lines = { "kek 0 0.1 0.4 0", "0.6", "lolo 0 0.1 0.4 0", "0.6" },
-                    .currentLine = -1,
-                    .currentShift = 0,
-                    .currentAlign = 0,
-                    .currentMark = nullptr,
-                }) == gScrollableContent.getDesc());
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "kek 0 0.1 0.4 0", "0.6", "lolo 0 0.1 0.4 0", "0.6" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
 }
 
 int main() {

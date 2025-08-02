@@ -7,6 +7,8 @@ public:
     constexpr RelTime() : RelTime(0) {}
     constexpr explicit RelTime(uint8_t id) : m_id(id) {}
 
+    constexpr bool operator==(const RelTime& o) const { return m_id == o.m_id; }
+
     Time operator^(Time) const;
     uint8_t toStr(char* buf) const;
 
