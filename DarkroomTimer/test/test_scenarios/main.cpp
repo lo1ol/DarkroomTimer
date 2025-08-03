@@ -76,11 +76,11 @@ void checkScenarioGeneric() {
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 181"); // TODO
+    TEST_DISPLAY("View", "Auto stop: 180");
 
     gCurrentTime += 2000;
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 179");
+    TEST_DISPLAY("View", "Auto stop: 178");
 
     gViewBtn.emulClick();
     loop_();

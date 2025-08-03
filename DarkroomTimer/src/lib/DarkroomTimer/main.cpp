@@ -187,33 +187,34 @@ void processView() {
         gDigitalWrite(RELAY, gViewState);
         gViewModeTurnOffTime = gMillis() + gSettings.autoFinishViewMinutes * 60000L;
 
-        if (gViewState == LOW)
+        if (gViewState) {
+            gDisplay.reset();
+            gDisplay[0] << "View";
+        } else {
             gModeProcessor->repaint();
+        }
     }
 
     gBlocked = gViewState;
 
-    if (gViewState != HIGH)
+    if (!gViewState)
         return;
 
-    gDisplay.reset();
-    gDisplay[0] << "View";
-
+    gDisplay[1].reset();
     if (!gSettings.autoFinishViewMinutes) {
         gDisplay[1] << "Auto stop is off";
         return;
     }
 
-    Time beforeStop = Time::fromMillis(gViewModeTurnOffTime - gMillis());
+    auto curTime = gMillis();
 
-    if (beforeStop < 0_ts) {
+    if (curTime >= gViewModeTurnOffTime) {
         gBlocked = gViewState = LOW;
         gDigitalWrite(RELAY, gViewState);
         gModeProcessor->repaint();
     } else {
         char str[DISPLAY_COLS] = "";
-        beforeStop = (beforeStop / 10) * 10 + 1_s;
-        beforeStop.getFormatedTime(str, false);
+        itoa((gViewModeTurnOffTime - 1 - curTime) / 1000 + 1, str, 10);
         gDisplay[1] << "Auto stop: " << str;
     }
 }

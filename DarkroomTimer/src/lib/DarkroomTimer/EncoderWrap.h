@@ -29,7 +29,7 @@ private:
     EncButton* m_enc = nullptr;
 #else
 
-    [[nodiscard]] EncoderWrap() {}
+    EncoderWrap() {}
 
     void emulTurn(int8_t dir) { m_reqDir = dir; }
     void emulTurnFast(int8_t dir) {
