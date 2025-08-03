@@ -16,6 +16,7 @@ constexpr uint8_t kMaxAutoFinishViewMinutes = 10;
 
 struct Settings {
     Settings& operator=(const Settings&) = default;
+    bool operator==(const Settings&) const;
 
     void updateEEPROM();
     [[nodiscard]] static Settings load();

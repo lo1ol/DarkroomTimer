@@ -63,3 +63,9 @@ void Settings::updateEEPROM() {
     PUT_SETTING(crc32.finalize());
 #undef PUT_SETTING
 }
+
+bool Settings::operator==(const Settings& o) const {
+    return lagTime == o.lagTime && beepVolume == o.beepVolume && backlight == o.backlight &&
+           autoFinishViewMinutes == o.autoFinishViewMinutes && startWithSettings == o.startWithSettings &&
+           melody == o.melody;
+}
