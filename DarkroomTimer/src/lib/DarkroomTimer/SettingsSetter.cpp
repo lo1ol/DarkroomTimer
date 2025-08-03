@@ -7,7 +7,9 @@ namespace {
 constexpr Time kMaxLagTime = 2_s;
 } // namespace
 
-SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime) {}
+SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime) {
+    repaint();
+}
 
 SettingsSetter::~SettingsSetter() {
     gBeeper.stop();
@@ -16,98 +18,69 @@ SettingsSetter::~SettingsSetter() {
 }
 
 void SettingsSetter::processSetLagTime() {
-    gSettings.lagTime = 0_ts;
-    m_timer.tick();
-
-    gDisplay[0] << "Lag time";
-    gEncoder.getTime(m_lagTime, true);
-    if (m_lagTime > kMaxLagTime)
-        m_lagTime = kMaxLagTime;
-
-    if (m_timer.state() != Timer::STOPPED) {
-        gDisplay[1] << m_timer.afterLastResume();
-        return;
+    gSettings.lagTime = 0_s;
+    if (gEncoder.getTime(m_lagTime, true)) {
+        if (m_lagTime > kMaxLagTime)
+            m_lagTime = kMaxLagTime;
+        repaint();
     }
 
-    gDisplay[1] << m_lagTime;
+    m_timer.tick();
+    if (m_timer.state() != Timer::STOPPED) {
+        repaint();
+        return;
+    }
 
     if (gStartBtn.click())
         m_timer.start(m_lagTime);
 }
 
 void SettingsSetter::processSetBeepVolume() const {
-    gDisplay[0] << "Beep volume";
-
-    if (gSettings.beepVolume < MIN_BEEP_VOLUME)
-        gSettings.beepVolume = MIN_BEEP_VOLUME;
-
-    if (gSettings.beepVolume > MAX_BEEP_VOLUME)
-        gSettings.beepVolume = MAX_BEEP_VOLUME;
-
     uint8_t userVolume = (gSettings.beepVolume - MIN_BEEP_VOLUME) / BEEP_VOLUME_STEP;
-    if (gEncoder.getInt(userVolume, 0, 9))
-        gBeeper.start();
+    if (!gEncoder.getInt(userVolume, 0, 9))
+        return;
 
+    gBeeper.start();
     gSettings.beepVolume = MIN_BEEP_VOLUME + userVolume * BEEP_VOLUME_STEP;
-    gDisplay[1] << (userVolume + 1);
+    repaint();
 }
 
 void SettingsSetter::processSetAutoFinishView() const {
-    gDisplay[0] << "Auto finish view";
-    gEncoder.getInt(gSettings.autoFinishViewMinutes, 0, 10);
-
-    if (gSettings.autoFinishViewMinutes == 0) {
-        gDisplay[1] << "No";
-        return;
-    }
-
-    gDisplay[1] << gSettings.autoFinishViewMinutes << " minute" << (gSettings.autoFinishViewMinutes == 1 ? "" : "s");
+    if (gEncoder.getInt(gSettings.autoFinishViewMinutes, 0, 10))
+        repaint();
 }
 
 void SettingsSetter::processSetBacklight() const {
-    gDisplay[0] << "Backlight";
     uint8_t userBacklight = min(gSettings.backlight, MAX_BACKLIGHT * 10) / MAX_BACKLIGHT;
-    gEncoder.getInt(userBacklight, 1, 10);
+    if (!gEncoder.getInt(userBacklight, 1, 10))
+        return;
     gSettings.backlight = userBacklight * MAX_BACKLIGHT;
-    gDisplay[1] << userBacklight;
     gAnalogWrite(BACKLIGHT, gSettings.backlight);
+    repaint();
 }
 
 void SettingsSetter::processStartWithSettings() const {
-    gDisplay[0] << "Start with stngs";
     uint8_t choice = gSettings.startWithSettings;
-    gEncoder.getInt(choice, 0, 1);
+    if (!gEncoder.getInt(choice, 0, 1))
+        return;
+
     gSettings.startWithSettings = choice;
-    if (choice == 0)
-        gDisplay[1] << "No";
-    else
-        gDisplay[1] << "Yes";
+    repaint();
 }
 
 void SettingsSetter::processSetMelody() const {
-    gDisplay[0] << "Notify melody";
     uint8_t choice = gSettings.melody;
-    bool changed = gEncoder.getInt(choice, 0, Melody::last_ - 1);
 
-    gDisplay[1] << Melody::getMelodyName(gSettings.melody);
-
-    if (!changed)
+    if (!gEncoder.getInt(choice, 0, Melody::last_ - 1))
         return;
 
     gSettings.melody = static_cast<Melody::Name>(choice);
-
     gBeeper.setMelody(gSettings.melody);
     gBeeper.alarm();
-}
-
-void SettingsSetter::processCheckVersion() const {
-    gDisplay[0] << "Version";
-    gDisplay[1] << TIMER_FIRMWARE_VERSION;
+    repaint();
 }
 
 void SettingsSetter::process() {
-    gDisplay.reset();
-
     if (m_timer.state() != Timer::RUNNING) {
         int8_t shift = 0;
         if (gModeBtn.click())
@@ -121,16 +94,8 @@ void SettingsSetter::process() {
             gEncoder.clear();
             m_step = ADD_TO_ENUM(Step, m_step, shift);
 
-            if (m_step == Step::setBeepVolume)
-                gBeeper.start();
-            else
-                gBeeper.stop();
-
-            if (m_step == Step::setMelody)
-                gBeeper.alarm();
-            else
-                gBeeper.stop();
-
+            gBeeper.stop();
+            repaint();
             gSettings.lagTime = m_lagTime;
             gSettings.updateEEPROM();
         }
@@ -156,8 +121,46 @@ void SettingsSetter::process() {
         processSetMelody();
         break;
     case Step::checkVersion:
-        processCheckVersion();
         break;
+    }
+}
+
+void SettingsSetter::repaint() const {
+    gDisplay.reset();
+    switch (m_step) {
+    case Step::setLagTime:
+        gDisplay[0] << "Lag time";
+        gDisplay[1] << ((m_timer.state() != Timer::STOPPED) ? m_timer.afterLastResume() : m_lagTime);
+        return;
+    case Step::setBacklight:
+        gDisplay[0] << "Backlight";
+        gDisplay[1] << gSettings.backlight / MAX_BACKLIGHT;
+        return;
+    case Step::setBeepVolume:
+        gDisplay[0] << "Beep volume";
+        gDisplay[1] << ((gSettings.beepVolume - MIN_BEEP_VOLUME) / BEEP_VOLUME_STEP + 1);
+        return;
+    case Step::setAutoFinishView:
+        gDisplay[0] << "Auto finish view";
+
+        if (gSettings.autoFinishViewMinutes == 0)
+            gDisplay[1] << "No";
+        else
+            gDisplay[1] << gSettings.autoFinishViewMinutes << " minute"
+                        << (gSettings.autoFinishViewMinutes == 1 ? "" : "s");
+        return;
+    case Step::setStartWithSettings:
+        gDisplay[0] << "Start with stngs";
+        gDisplay[1] << (gSettings.startWithSettings ? "Yes" : "No");
+        return;
+    case Step::setMelody:
+        gDisplay[0] << "Notify melody";
+        gDisplay[1] << Melody::getMelodyName(gSettings.melody);
+        return;
+    case Step::checkVersion:
+        gDisplay[0] << "Version";
+        gDisplay[1] << TIMER_FIRMWARE_VERSION;
+        return;
     }
 }
 

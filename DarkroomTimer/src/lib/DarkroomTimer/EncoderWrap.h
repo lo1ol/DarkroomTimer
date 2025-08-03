@@ -18,9 +18,8 @@ public:
     [[nodiscard]] int8_t getDir() const;
 #endif
 
-    // TODO [[nodiscard]]
-    bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) const;
-    bool getTime(Time& time, bool smooth = false) const;
+    [[nodiscard]] bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) const;
+    [[nodiscard]] bool getTime(Time& time, bool smooth = false) const;
     [[nodiscard]] bool getRelTime(RelTime& time) const;
 
 #ifndef PIO_UNIT_TESTING
