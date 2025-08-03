@@ -10,7 +10,7 @@ struct Settings {
     Settings& operator=(const Settings&) = default;
 
     void updateEEPROM();
-    static Settings load();
+    [[nodiscard]] static Settings load();
 
     Time lagTime;
     uint8_t beepVolume;

@@ -15,21 +15,22 @@ public:
     void tick();
     void clear();
 
-    int8_t getDir() const;
+    [[nodiscard]] int8_t getDir() const;
 #endif
 
+    // TODO [[nodiscard]]
     bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) const;
     bool getTime(Time& time, bool smooth = false) const;
-    bool getRelTime(RelTime& time) const;
+    [[nodiscard]] bool getRelTime(RelTime& time) const;
 
 #ifndef PIO_UNIT_TESTING
 private:
-    bool fast() const;
+    [[nodiscard]] bool fast() const;
 
     EncButton* m_enc = nullptr;
 #else
 
-    EncoderWrap() {}
+    [[nodiscard]] EncoderWrap() {}
 
     void emulTurn(int8_t dir) { m_reqDir = dir; }
     void emulTurnFast(int8_t dir) {
@@ -52,8 +53,8 @@ private:
         m_relTime = v;
     }
 
-    int8_t getDir() const { return m_dir; }
-    bool fast() const { return m_fast; }
+    [[nodiscard]] int8_t getDir() const { return m_dir; }
+    [[nodiscard]] bool fast() const { return m_fast; }
 
     void clear() {
         m_fast = false;

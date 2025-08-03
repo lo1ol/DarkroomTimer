@@ -22,7 +22,7 @@ public:
 
     void process();
 
-    bool couldBeClosed() const;
+    [[nodiscard]] bool couldBeClosed() const;
 
 private:
     void processSetLagTime();

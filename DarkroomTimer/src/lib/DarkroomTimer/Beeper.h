@@ -22,7 +22,7 @@ public:
 
     void setMelody(Melody::Name);
 
-    State state() const { return m_state; }
+    [[nodiscard]] State state() const { return m_state; }
 
 #ifndef PIO_UNIT_TESTING
 private:

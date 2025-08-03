@@ -16,25 +16,25 @@ public:
     bool pause();
     void resume();
     void stop();
-    uint32_t left() const;
-    bool lag() const;
+    [[nodiscard]] uint32_t left() const;
+    [[nodiscard]] bool lag() const;
 
-    bool justFinished() const { return m_justFinished; }
-    bool justStopped() const { return m_justStopped; }
+    [[nodiscard]] bool justFinished() const { return m_justFinished; }
+    [[nodiscard]] bool justStopped() const { return m_justStopped; }
 
-    Time afterLastResume() const;
+    [[nodiscard]] Time afterLastResume() const;
 
-    Time total() const;
+    [[nodiscard]] Time total() const;
     void resetTotal();
 
     void reset();
 
-    State state() const;
+    [[nodiscard]] State state() const;
 
 private:
     void updateAfterLastResume();
-    uint32_t afterResume() const;
-    uint32_t realStopTime() const;
+    [[nodiscard]] uint32_t afterResume() const;
+    [[nodiscard]] uint32_t realStopTime() const;
 
     bool m_justFinished = false;
     bool m_justStopped = false;

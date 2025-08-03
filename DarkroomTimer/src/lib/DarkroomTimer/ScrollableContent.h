@@ -17,8 +17,8 @@ public:
     void startNewLine();
     void print(const char* src, bool current = false, const char* mark = nullptr);
 
-    bool currentIsPrinted() const { return m_currentDisplayLine != -1; }
-    uint8_t lineCnt() const { return m_line + static_cast<bool>(m_lastLineLength); }
+    [[nodiscard]] bool currentIsPrinted() const { return m_currentDisplayLine != -1; }
+    [[nodiscard]] uint8_t lineCnt() const { return m_line + static_cast<bool>(m_lastLineLength); }
 
 private:
     void paintUnchanged();
@@ -50,6 +50,6 @@ public:
         const char* currentMark;
     };
 
-    Desc getDesc() const;
+    [[nodiscard]] Desc getDesc() const;
 #endif
 };

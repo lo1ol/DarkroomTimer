@@ -2,14 +2,14 @@
 
 class Melody {
 public:
-    virtual ~Melody() {}
+    virtual ~Melody() = default;
 
     enum Name { alarm, nice, hotline, last_ };
 
-    static Melody* getMelody(Name);
-    static const char* getMelodyName(Name);
+    [[nodiscard]] static Melody* getMelody(Name);
+    [[nodiscard]] static const char* getMelodyName(Name);
 
     virtual void init() = 0;
-    virtual bool end() const = 0;
-    virtual bool tick() = 0;
+    [[nodiscard]] virtual bool end() const = 0;
+    [[nodiscard]] virtual bool tick() = 0;
 };

@@ -16,11 +16,11 @@ public:
     void printBadAsZero(bool);
 
     void setTime(uint8_t id, Time);
-    Time getTime(uint8_t id) const { return m_times[id]; }
+    [[nodiscard]] Time getTime(uint8_t id) const { return m_times[id]; }
 
     void setCurrent(uint8_t id, const char* mark = nullptr);
 
-    uint8_t capacity() const { return m_capacity; }
+    [[nodiscard]] uint8_t capacity() const { return m_capacity; }
 
 private:
     Time* m_times = nullptr;

@@ -20,13 +20,15 @@ public:
         m_r = r;
     }
 
-    const char* getLine(uint8_t r) const { return m_lines[r]; }
+    [[nodiscard]] const char* getLine(uint8_t r) const { return m_lines[r]; }
 
-    uint8_t printCallCount() {
+    [[nodiscard]] uint8_t printCallCount() {
         auto res = m_printCallCount;
         m_printCallCount = 0;
         return res;
     }
+
+    void resetCallCount() { m_printCallCount = 0; }
 
 private:
     uint8_t m_c = 0;

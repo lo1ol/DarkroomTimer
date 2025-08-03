@@ -174,7 +174,7 @@ void checkDisplayLineBlink() {
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("lol   cheburek  ", gLcdWrapMock.getLine(0));
 
-    gLcdWrapMock.printCallCount();
+    gLcdWrapMock.resetCallCount();
 
     gDisplay[0].reset();
     gDisplay[0] << "lol";

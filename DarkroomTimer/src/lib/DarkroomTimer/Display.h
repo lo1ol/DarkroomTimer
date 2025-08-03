@@ -9,8 +9,8 @@ class LiquidCrystalWrap;
 class Display {
 public:
     explicit Display(LiquidCrystalWrap* lcd);
-    DisplayLine& operator[](uint8_t n) { return m_lines[n]; }
-    DisplayLine* getLines() { return m_lines; }
+    [[nodiscard]] DisplayLine& operator[](uint8_t n) { return m_lines[n]; }
+    [[nodiscard]] DisplayLine* getLines() { return m_lines; }
 
     void tick();
     void reset();

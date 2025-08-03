@@ -12,20 +12,20 @@ public:
     void flush() const;
     void reset();
     void resize(uint8_t);
-    uint8_t size() const { return m_size; }
+    [[nodiscard]] uint8_t size() const { return m_size; }
 
     void setBaseTime(Time);
     void setRelTime(uint8_t id, RelTime);
-    Time getBaseTime() const { return m_base; }
-    RelTime getRelTime(uint8_t id) const { return m_relTimes[id]; }
-    Time getTime(int8_t id) const;
+    [[nodiscard]] Time getBaseTime() const { return m_base; }
+    [[nodiscard]] RelTime getRelTime(uint8_t id) const { return m_relTimes[id]; }
+    [[nodiscard]] Time getTime(int8_t id) const;
 
     void setCurrent(uint8_t id);
 
     void toggleSecView();
     void setSecView(bool);
 
-    uint8_t capacity() const { return m_capacity; }
+    [[nodiscard]] uint8_t capacity() const { return m_capacity; }
 
 private:
     RelTime* m_relTimes = nullptr;

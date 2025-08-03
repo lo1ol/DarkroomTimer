@@ -7,12 +7,12 @@ public:
     constexpr RelTime() : RelTime(0) {}
     constexpr explicit RelTime(uint8_t id) : m_id(id) {}
 
-    constexpr bool operator==(const RelTime& o) const { return m_id == o.m_id; }
+    [[nodiscard]] constexpr bool operator==(const RelTime& o) const { return m_id == o.m_id; }
 
-    Time operator^(Time) const;
+    [[nodiscard]] Time operator^(Time) const;
     uint8_t toStr(char* buf) const;
 
-    constexpr uint8_t getId() const { return m_id; }
+    [[nodiscard]] constexpr uint8_t getId() const { return m_id; }
 
 private:
     uint8_t m_id;

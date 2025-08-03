@@ -30,7 +30,7 @@ enum class ModeId : uint8_t {
 ModeId gModeId;
 ModeProcessor* gModeProcessor = nullptr;
 
-const char* getPreview(ModeId modeId) {
+[[nodiscard]] const char* getPreview(ModeId modeId) {
     switch (modeId) {
     case ModeId::testFStops:
         return "F Stop test";
