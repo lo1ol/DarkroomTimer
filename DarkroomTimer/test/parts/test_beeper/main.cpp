@@ -39,7 +39,7 @@ SimpleMelody gSimpleMelody;
 void setUp() {
     gCurrentTime = 0;
     gBeeper.stop();
-    gSettings.beepVolume = UP_VOLUME;
+    gSettings.beepVolume = 3;
     gBeeper.setMelody(&gSimpleMelody);
 }
 

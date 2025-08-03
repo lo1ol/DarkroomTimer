@@ -78,7 +78,7 @@ void Beeper::processAlarm() {
 
 void Beeper::processPin() const {
     if (m_pinState)
-        gAnalogWrite(m_pin, gSettings.beepVolume);
+        gAnalogWrite(m_pin, MIN_BEEP_VOLUME + (gSettings.beepVolume - 1) * BEEP_VOLUME_STEP);
     else
         // setting volume to BEEP_VOLUME_SILENT instead of 0 reduce bad noise on low volumes
         gAnalogWrite(m_pin, BEEP_VOLUME_SILENT);

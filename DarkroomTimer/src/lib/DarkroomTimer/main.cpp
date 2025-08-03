@@ -245,7 +245,7 @@ void setup_() {
     setMode(ModeId::testFStops);
 
     pinMode(BACKLIGHT, OUTPUT);
-    gAnalogWrite(BACKLIGHT, gSettings.backlight);
+    setDisplayBacklight(gSettings.backlight);
     pinMode(RELAY, OUTPUT);
     gDigitalWrite(RELAY, 0);
 

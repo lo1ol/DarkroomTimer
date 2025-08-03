@@ -48,3 +48,7 @@ void alignStr(char* buf, uint8_t align) {
     strcpy(alignedStr + align - len, buf);
     strcpy(buf, alignedStr);
 }
+
+void setDisplayBacklight(uint8_t val) {
+    gAnalogWrite(BACKLIGHT, val * BACKLIGHT_STEP);
+}

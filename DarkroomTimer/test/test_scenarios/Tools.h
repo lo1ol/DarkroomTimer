@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../VirtEnv.h"
-
 #include <stdint.h>
 #include <string.h>
+
+#include "../VirtEnv.h"
 
 #define TEST_STRING_WITH_TRIM(line, nonTrimmed)         \
     {                                                   \

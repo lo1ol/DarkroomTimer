@@ -19,6 +19,7 @@
     (enumName)(((uint8_t)(current) + (uint8_t)enumName::last_ + num) % (uint8_t)enumName::last_)
 
 void alignStr(char* buf, uint8_t align);
+void setDisplayBacklight(uint8_t val);
 
 extern EncoderWrap gEncoder;
 extern ButtonT<MODE_BTN> gModeBtn;

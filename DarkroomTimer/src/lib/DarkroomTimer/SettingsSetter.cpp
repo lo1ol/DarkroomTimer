@@ -3,10 +3,6 @@
 #include "DisplayLine.h"
 #include "Tools.h"
 
-namespace {
-constexpr Time kMaxLagTime = 2_s;
-} // namespace
-
 SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime) {
     repaint();
 }
@@ -36,26 +32,22 @@ void SettingsSetter::processSetLagTime() {
 }
 
 void SettingsSetter::processSetBeepVolume() const {
-    uint8_t userVolume = (gSettings.beepVolume - MIN_BEEP_VOLUME) / BEEP_VOLUME_STEP;
-    if (!gEncoder.getInt(userVolume, 0, 9))
+    if (!gEncoder.getInt(gSettings.beepVolume, kMinBeepVolume, kMaxBeepVolume))
         return;
 
     gBeeper.start();
-    gSettings.beepVolume = MIN_BEEP_VOLUME + userVolume * BEEP_VOLUME_STEP;
     repaint();
 }
 
 void SettingsSetter::processSetAutoFinishView() const {
-    if (gEncoder.getInt(gSettings.autoFinishViewMinutes, 0, 10))
+    if (gEncoder.getInt(gSettings.autoFinishViewMinutes, 0, kMaxAutoFinishViewMinutes))
         repaint();
 }
 
 void SettingsSetter::processSetBacklight() const {
-    uint8_t userBacklight = min(gSettings.backlight, MAX_BACKLIGHT * 10) / MAX_BACKLIGHT;
-    if (!gEncoder.getInt(userBacklight, 1, 10))
+    if (!gEncoder.getInt(gSettings.backlight, kMinBacklight, kMaxBacklight))
         return;
-    gSettings.backlight = userBacklight * MAX_BACKLIGHT;
-    gAnalogWrite(BACKLIGHT, gSettings.backlight);
+    setDisplayBacklight(gSettings.backlight);
     repaint();
 }
 
@@ -94,8 +86,8 @@ void SettingsSetter::process() {
             gEncoder.clear();
             m_step = ADD_TO_ENUM(Step, m_step, shift);
 
-            gBeeper.stop();
             repaint();
+            gBeeper.stop();
             gSettings.lagTime = m_lagTime;
             gSettings.updateEEPROM();
         }
@@ -134,11 +126,11 @@ void SettingsSetter::repaint() const {
         return;
     case Step::setBacklight:
         gDisplay[0] << "Backlight";
-        gDisplay[1] << gSettings.backlight / MAX_BACKLIGHT;
+        gDisplay[1] << gSettings.backlight;
         return;
     case Step::setBeepVolume:
         gDisplay[0] << "Beep volume";
-        gDisplay[1] << ((gSettings.beepVolume - MIN_BEEP_VOLUME) / BEEP_VOLUME_STEP + 1);
+        gDisplay[1] << gSettings.beepVolume;
         return;
     case Step::setAutoFinishView:
         gDisplay[0] << "Auto finish view";

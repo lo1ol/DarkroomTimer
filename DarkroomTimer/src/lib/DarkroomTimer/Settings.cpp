@@ -26,10 +26,23 @@ Settings Settings::load() {
     GET_SETTING(storedHash);
 #undef GET_SETTING
 
-    if (hash != storedHash) {
+    bool badSettings = false;
+    badSettings |= hash != storedHash;
+    badSettings |= res.lagTime < kMinLagTime;
+    badSettings |= res.lagTime > kMaxLagTime;
+    badSettings |= res.beepVolume < kMinBeepVolume;
+    badSettings |= res.beepVolume > kMaxBeepVolume;
+    badSettings |= res.backlight < kMinBacklight;
+    badSettings |= res.backlight > kMaxBacklight;
+    badSettings |= res.autoFinishViewMinutes > kMaxAutoFinishViewMinutes;
+    badSettings |= res.melody < 0;
+    badSettings |= res.melody >= Melody::last_;
+
+    if (badSettings) {
         res = kDefaultSettings;
         res.updateEEPROM();
     }
+
     return res;
 }
 
