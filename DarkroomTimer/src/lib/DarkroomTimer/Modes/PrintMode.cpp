@@ -15,11 +15,8 @@ PrintMode::PrintMode() {
 }
 
 void PrintMode::switchMode() {
-    if (m_showLog) {
-        m_showLog = false;
-        repaint();
+    if (m_showLog)
         return;
-    }
 
     m_triggerByHold = !m_triggerByHold;
     repaint();
@@ -124,7 +121,10 @@ void PrintMode::repaint() {
 }
 
 void PrintMode::reset() {
-    appendPrintLog(gTimer.afterLastResume());
+    if (gTimer.state() == Timer::RUNNING)
+        appendPrintLog(gTimer.afterLastResume());
+
+    m_showLog = false;
 }
 
 void PrintMode::resetPrintInfo() {

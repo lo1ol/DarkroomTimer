@@ -32,13 +32,15 @@ public:
     void skipEvents() {
         m_justClicked = false;
         m_justHolded = false;
+        m_justPress = false;
     }
 
     void tick() {
         skipEvents();
 
         if (m_reqPress) {
-            m_justPress = true;
+            if (!m_pressing)
+                m_justPress = true;
             m_pressing = true;
         }
 
@@ -46,15 +48,14 @@ public:
             if (!m_pressing)
                 m_justPress = true;
             m_justClicked = true;
+            m_justHolded = false;
             m_pressing = false;
             m_holding = false;
         }
 
         if (m_reqHold) {
-            if (!m_pressing)
-                m_justPress = true;
-            m_justPress = true;
             m_justHolded = true;
+            m_justPress = false;
             m_holding = true;
             m_pressing = true;
         }
