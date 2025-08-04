@@ -93,20 +93,20 @@ void checkScenarioGeneric() {
     gStartBtn.emulClick();
     loop_();
     TEST_DISPLAY("Run Lag 8.4 16.8", "34 67 134 269");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 2000;
     loop_();
     TEST_DISPLAY("Run 2.2 8.4 16.8", "34 67 134 269");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gEncoderBtn.emulHold();
     loop_();
     TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
     TEST_ASSERT(!gRelayVal);
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
 }
 
 void checkFStopTest() {
@@ -158,7 +158,7 @@ void checkFStopTest() {
     loop_();
     TEST_DISPLAY("Run 0     0 0 0", "0 0 0 0 0 0 0 0");
     TEST_ASSERT(!gRelayVal);
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
 
     gEncoderBtn.emulHold();
     loop_();
@@ -171,15 +171,15 @@ void checkFStopTest() {
     for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         gCurrentTime += 120;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
 
     gModeBtn.emulClick();
     loop_();
@@ -221,17 +221,17 @@ void checkFStopTest() {
     for (int i = 0; i != 11; ++i) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         gCurrentTime += 1800000;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::STOPPED);
 
     gModeBtn.emulClick();
@@ -268,17 +268,17 @@ void checkFStopTest() {
     for (Time t : testSet) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += t.toMillis() - 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
         TEST_ASSERT(!gRelayVal);
     }
 
@@ -344,7 +344,7 @@ void checkLocalFStopTest() {
     loop_();
     TEST_DISPLAY("Run 0     0 0 0", "0 0 0 0 0 0 0 0");
     TEST_ASSERT(!gRelayVal);
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
 
     gEncoderBtn.emulHold();
     loop_();
@@ -357,15 +357,15 @@ void checkLocalFStopTest() {
     for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         gCurrentTime += 120;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
 
     gModeBtn.emulClick();
     loop_();
@@ -407,17 +407,17 @@ void checkLocalFStopTest() {
     for (int i = 0; i != 11; ++i) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         gCurrentTime += 3208000;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::STOPPED);
 
     gModeBtn.emulClick();
@@ -452,17 +452,17 @@ void checkLocalFStopTest() {
     for (Time t : testSet) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += t.toMillis() - 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
         TEST_ASSERT(!gRelayVal);
     }
 
@@ -517,17 +517,17 @@ void checkSpltFStopTest() {
     for (Time t : testSet) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += t.toMillis() - 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), (first ? Beeper::State::alarm : Beeper::State::off));
+        TEST_ASSERT_EQUAL((first ? Beeper::State::alarm : Beeper::State::off), gBeeper.state());
         TEST_ASSERT(!gRelayVal);
 
         first = false;
@@ -535,7 +535,7 @@ void checkSpltFStopTest() {
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
 }
 void checkLinearTest() {
     setup_();
@@ -568,23 +568,23 @@ void checkLinearTest() {
     for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += !i ? 2999 : 4999;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
         TEST_ASSERT(!gRelayVal);
     }
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gModeBtn.emulClick();
@@ -668,23 +668,23 @@ void checkLocalLinearTest() {
     for (uint32_t i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += 2999 + 5000 * i;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
         TEST_ASSERT(!gRelayVal);
     }
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gModeBtn.emulClick();
@@ -786,7 +786,7 @@ void checkSpltLinearTest() {
     for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         if (i == 0)
@@ -797,18 +797,18 @@ void checkSpltLinearTest() {
             gCurrentTime += 4999;
 
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
         TEST_ASSERT(gRelayVal);
 
         gCurrentTime += 1;
         loop_();
-        TEST_ASSERT_EQUAL(gBeeper.state(), (i ? Beeper::State::off : Beeper::State::alarm));
+        TEST_ASSERT_EQUAL((i ? Beeper::State::off : Beeper::State::alarm), gBeeper.state());
         TEST_ASSERT(!gRelayVal);
     }
 
     gStartBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 }
 
@@ -841,124 +841,124 @@ void checkPrintMode() {
     gStartBtn.emulClick();
     loop_();
     TEST_DISPLAY("Prnt CLK T:0", "0            0.0");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gEncoder.emulRetTime(1800_s);
     loop_();
     TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gSettings.lagTime = 3_ts;
     gStartBtn.emulClick();
     loop_();
     TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 200;
     loop_();
     TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 7600;
     loop_();
     TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gStartBtn.emulPress();
     loop_();
     TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulRelease();
     loop_();
     TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gModeBtn.emulClick();
     loop_();
     TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
     TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulPress();
     loop_();
     TEST_DISPLAY("Prnt HLD T:7.5", "Lag          7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 300;
     gStartBtn.emulRelease();
     loop_();
     TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulPress();
     loop_();
     TEST_DISPLAY("Prnt HLD T:7.5", "Lag          7.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 7000;
     loop_();
     TEST_DISPLAY("Prnt HLD T:14.2", "1785.8       6.7");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 1785799;
     loop_();
     TEST_DISPLAY("Prnt HLD T:1799.", "0         1792.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 1;
     loop_();
     TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gCurrentTime += 100;
     loop_();
     TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulRelease();
     gCurrentTime += 100;
     loop_();
     TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gEncoderBtn.emulClick();
     loop_();
     TEST_DISPLAY("7.5 1793", "");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
     TEST_DISPLAY("7.5 1793", "");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gModeBtn.emulClick();
     loop_();
     TEST_DISPLAY("7.5 1793", "");
-    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gEncoderBtn.emulHold();
@@ -995,6 +995,123 @@ void checkPrintMode() {
     TEST_DISPLAY("1 2 3 4 5 6 7 8", "9 10");
 }
 
+void checkMaskMode() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Mask printing", "Mask num: 1");
+
+    gEncoder.emulRetInt(15);
+    loop_();
+    TEST_DISPLAY("Mask printing", "Mask num: 15");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Set     0 0 0 0", "0 0 0 0 0 0 0 0");
+
+    Time times[] = { 1_ts,     10_ts, 30_ts, 2_ts, 60_ts, 1800_s, kBadTime, 32_s,
+                     kBadTime, 70_ts, 30_ts, 0_ts, 8_ts,  19_ts,  1800_s,   17_ts };
+    static_assert(sizeof(times) / sizeof(times[0]) == 16);
+
+    bool needGoNext = false;
+    for (auto t : times) {
+        // pass setting of time
+        // and check fast trevel
+        if (t == kBadTime) {
+            gEncoderBtn.emulPress();
+            gEncoder.emulTurn(1);
+            loop_();
+            gEncoder.emulTurn(1);
+            loop_();
+            gEncoderBtn.emulRelease();
+            loop_();
+            needGoNext = false;
+            continue;
+        }
+
+        if (needGoNext) {
+            gEncoderBtn.emulClick();
+            loop_();
+        }
+        needGoNext = true;
+        gEncoder.emulRetTime(t);
+        loop_();
+
+        if (t == 30_ts) {
+            // set notify
+            gStartBtn.emulClick();
+            loop_();
+        }
+    }
+
+    TEST_DISPLAY("3 0 0.8 1.9 1800", "1.7");
+
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Set     1 3 0.2", "6 1800 0 32 0 7");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run     1 3 0.2", "6 1800 0 32 0 7");
+
+    for (auto t : times) {
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+
+        if (t == kBadTime || t == 0_s) {
+            TEST_ASSERT(!gRelayVal);
+            continue;
+        }
+
+        gCurrentTime += t.toMillis() - 1;
+        loop_();
+        TEST_ASSERT(gRelayVal);
+        if (t > 1_s)
+            TEST_ASSERT_EQUAL(((t > 1_s) ? Beeper::State::on : Beeper::State::off), gBeeper.state());
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT(!gRelayVal);
+        // check notify
+        TEST_ASSERT_EQUAL(((t == 30_ts) ? Beeper::State::alarm : Beeper::State::off), gBeeper.state());
+    }
+
+    TEST_DISPLAY("3 0 0.8 1.9 1800", "1.7     Finished");
+    gStartBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    TEST_ASSERT(!gRelayVal);
+
+    // Scroll didn't work on finished
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("3 0 0.8 1.9 1800", "1.7     Finished");
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Run     1 3 0.2", "6 1800 0 32 0 7");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("6 1800 0 32 0 7", "3 0 0.8 1.9 1800");
+
+    // couldn't start if not see printing time
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run Lag 1 3 0.2", "6 1800 0 32 0 7");
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkScenarioGeneric);
@@ -1008,5 +1125,7 @@ int main() {
     RUN_TEST(checkSpltLinearTest);
 
     RUN_TEST(checkPrintMode);
+
+    RUN_TEST(checkMaskMode);
     UNITY_END();
 }
