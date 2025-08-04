@@ -285,9 +285,110 @@ void checkFStopTest() {
     TEST_DISPLAY("64 128 256 512", "1024 2048");
 }
 
+void checkLinearTest() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Linear test", "Init t:8");
+
+    gEncoder.emulRetTime(3_s);
+    loop_();
+    TEST_DISPLAY("Linear test", "Init t:3");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Linear test", "Step t:2");
+
+    gEncoder.emulRetTime(5_s);
+    loop_();
+    TEST_DISPLAY("Linear test", "Step t:5");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run     8 13 18", "23 28 33 38 43");
+
+    for (int i=0; i !=  sizeof(gModesCache) / sizeof(Time); ++i){
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT(gRelayVal);
+
+        gCurrentTime += !i ? 2999 : 4999;
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT(gRelayVal);
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+        TEST_ASSERT(!gRelayVal);
+    }
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gModeBtn.emulClick();
+    loop_();
+
+    gEncoder.emulRetTime(1800_s);
+    loop_();
+    TEST_DISPLAY("Linear test", "Init t:1800");
+
+    gModeBtn.emulClick();
+    loop_();
+
+    gEncoder.emulRetTime(100_s);
+    loop_();
+    TEST_DISPLAY("Linear test", "Step t:100");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run        1900", "2000 2100 2200");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("2000 2100 2200", "2300 2400 2500");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("2300 2400 2500", "2600 2700 2800");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("2900 3000 3100", "3200");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("2900 3000 3100", "3200");
+
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
+
+    // check can't start if not show printing time
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
+    TEST_ASSERT(!gRelayVal);
+    TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::STOPPED);
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkScenarioGeneric);
     RUN_TEST(checkFStopTest);
+    RUN_TEST(checkLinearTest);
     UNITY_END();
 }

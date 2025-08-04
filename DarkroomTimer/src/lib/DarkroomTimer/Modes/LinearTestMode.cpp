@@ -115,6 +115,7 @@ Time LinearTestMode::getTotalTime(uint8_t id) const {
     if (realId == 0)
         return m_baseTime;
 
+    // this math also prevent from overflow
     int32_t res = static_cast<int16_t>(m_stepTime);
     res *= realId - 1;
     res += static_cast<int16_t>(m_initTime);
