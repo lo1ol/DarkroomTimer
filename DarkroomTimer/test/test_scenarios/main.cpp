@@ -469,6 +469,74 @@ void checkLocalFStopTest() {
     TEST_DISPLAY("64 128 256 512", "1024 2048");
 }
 
+void checkSpltFStopTest() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gModeBtn.emulRelease();
+    loop_();
+
+    TEST_DISPLAY("Splt F Stop test", "Base t:2");
+
+    gEncoder.emulRetTime(32_ts);
+    loop_();
+    TEST_DISPLAY("Splt F Stop test", "Base t:3.2");
+
+    gModeBtn.emulClick();
+    loop_();
+
+    gEncoder.emulRetTime(4_s);
+    loop_();
+
+    TEST_DISPLAY("Splt F Stop test", "Init t:4");
+
+    gModeBtn.emulClick();
+    loop_();
+
+    TEST_DISPLAY("Splt F Stop test", "F stop: 1/1");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run ntf 4 8 16", "32 64 128 256");
+
+    Time testSet[] = {
+        32_ts, 4_s, 4_s, 8_s, 16_s, 32_s, 64_s, 128_s, 256_s, 512_s, 1024_s,
+    };
+    bool first = true;
+    for (Time t : testSet) {
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT(gRelayVal);
+
+        gCurrentTime += t.toMillis() - 1;
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT(gRelayVal);
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), (first ? Beeper::State::alarm : Beeper::State::off));
+        TEST_ASSERT(!gRelayVal);
+
+        first = false;
+    }
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+}
 void checkLinearTest() {
     setup_();
     loop_();
@@ -669,12 +737,88 @@ void checkLocalLinearTest() {
     TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::STOPPED);
 }
 
+void checkSpltLinearTest() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Splt linear test", "Base t:2");
+
+    gEncoder.emulRetTime(63_ts);
+    loop_();
+    TEST_DISPLAY("Splt linear test", "Base t:6.3");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Splt linear test", "Init t:8");
+
+    gEncoder.emulRetTime(3_s);
+    loop_();
+    TEST_DISPLAY("Splt linear test", "Init t:3");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Splt linear test", "Step t:2");
+
+    gEncoder.emulRetTime(5_s);
+    loop_();
+    TEST_DISPLAY("Splt linear test", "Step t:5");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run ntf 3 8 13", "18 23 28 33 38");
+
+    for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+        TEST_ASSERT(gRelayVal);
+
+        if (i == 0)
+            gCurrentTime += 6299;
+        else if (i == 1)
+            gCurrentTime += 2999;
+        else
+            gCurrentTime += 4999;
+
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+        TEST_ASSERT(gRelayVal);
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT_EQUAL(gBeeper.state(), (i ? Beeper::State::off : Beeper::State::alarm));
+        TEST_ASSERT(!gRelayVal);
+    }
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+}
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkScenarioGeneric);
     RUN_TEST(checkFStopTest);
     RUN_TEST(checkLocalFStopTest);
+    RUN_TEST(checkSpltFStopTest);
     RUN_TEST(checkLinearTest);
     RUN_TEST(checkLocalLinearTest);
+    RUN_TEST(checkSpltLinearTest);
     UNITY_END();
 }
