@@ -77,26 +77,36 @@ void checkScenarioGeneric() {
     gViewBtn.emulClick();
     loop_();
     TEST_DISPLAY("View", "Auto stop: 180");
+    TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 2000;
     loop_();
     TEST_DISPLAY("View", "Auto stop: 178");
+    TEST_ASSERT(gRelayVal);
+    TEST_ASSERT(gBuzzerVal == BEEP_VOLUME_SILENT);
 
     gViewBtn.emulClick();
     loop_();
     TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
+    TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
     TEST_DISPLAY("Run Lag 8.4 16.8", "34 67 134 269");
+    TEST_ASSERT(gBeeper.state() == Beeper::State::single);
+    TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 2000;
     loop_();
     TEST_DISPLAY("Run 2.2 8.4 16.8", "34 67 134 269");
+    TEST_ASSERT(gBeeper.state() == Beeper::State::on);
+    TEST_ASSERT(gRelayVal);
 
     gEncoderBtn.emulHold();
     loop_();
     TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
+    TEST_ASSERT(!gRelayVal);
+    TEST_ASSERT(gBeeper.state() == Beeper::State::off);
 }
 
 int main() {
