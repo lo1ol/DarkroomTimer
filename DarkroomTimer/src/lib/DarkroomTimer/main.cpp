@@ -28,6 +28,7 @@ enum class ModeId : uint8_t {
 };
 
 ModeId gModeId;
+static ModeId gNewModeId = gModeId;
 ModeProcessor* gModeProcessor = nullptr;
 
 [[nodiscard]] const char* getPreview(ModeId modeId) {
@@ -64,6 +65,7 @@ void setMode(ModeId modeId) {
         delete (gModeProcessor);
 
     gModeId = modeId;
+    gNewModeId = modeId;
 
     switch (gModeId) {
     case ModeId::testFStops:
@@ -108,15 +110,14 @@ VirtButton gSettingBtn;
 
 void processModeSwitch() {
     static bool gBlockedByPreview = false;
-    static ModeId gNewMode = gModeId;
 
     if (gBlocked && !gBlockedByPreview)
         return;
 
     if (!gModeBtn.pressing()) {
         if (gBlockedByPreview) {
-            if (gNewMode != gModeId)
-                setMode(gNewMode);
+            if (gNewModeId != gModeId)
+                setMode(gNewModeId);
             else
                 gModeProcessor->repaint();
         }
@@ -133,14 +134,14 @@ void processModeSwitch() {
 
         gBlocked = gBlockedByPreview = true;
 
-        gNewMode = ADD_TO_ENUM(ModeId, gNewMode, dir);
+        gNewModeId = ADD_TO_ENUM(ModeId, gNewModeId, dir);
         gEncoder.clear();
         gTimer.reset();
     }
 
     if (gBlockedByPreview) {
         gDisplay.reset();
-        gDisplay[0] << getPreview(gNewMode);
+        gDisplay[0] << getPreview(gNewModeId);
     }
 
     gBlocked = gBlockedByPreview;
