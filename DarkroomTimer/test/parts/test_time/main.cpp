@@ -30,6 +30,8 @@ void nonContstexprTests() {
 
     TEST_ASSERT(84_ts == (2. * 42_ts));
     TEST_ASSERT(-84_ts == ((-2.) * 42_ts));
+    TEST_ASSERT(1639_s*2. == kBadTime);
+    TEST_ASSERT(1638_s*2. == 3276_s);
 }
 
 void checkStringFormat() {
