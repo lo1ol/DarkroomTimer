@@ -811,14 +811,202 @@ void checkSpltLinearTest() {
     TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
     TEST_ASSERT(!gRelayVal);
 }
+
+void checkPrintMode() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "8            0.0");
+
+    gEncoder.emulRetTime(0_s);
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "0            0.0");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:0", "0            0.0");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "0            0.0");
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "0            0.0");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT(!gRelayVal);
+
+    gEncoder.emulRetTime(1800_s);
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT(!gRelayVal);
+
+    gSettings.lagTime = 3_ts;
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 200;
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 7600;
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+    TEST_ASSERT(gRelayVal);
+
+    gStartBtn.emulPress();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gStartBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gStartBtn.emulPress();
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:7.5", "Lag          7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 300;
+    gStartBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gStartBtn.emulPress();
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:7.5", "Lag          7.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::single);
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 7000;
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:14.2", "1785.8       6.7");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 1785799;
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:1799.", "0         1792.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::on);
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 1;
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gCurrentTime += 100;
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gStartBtn.emulRelease();
+    gCurrentTime += 100;
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("7.5 1793", "");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("7.5 1793", "");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("7.5 1793", "");
+    TEST_ASSERT_EQUAL(gBeeper.state(), Beeper::State::off);
+    TEST_ASSERT(!gRelayVal);
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Prnt HLD T:0", "1800         0.0");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+
+    gSettings.lagTime = 0_s;
+
+    for (int i = 1; i != 11; ++i) {
+        gStartBtn.emulClick();
+        loop_();
+
+        gCurrentTime += i * 1000;
+        gStartBtn.emulClick();
+        loop_();
+    }
+
+    TEST_DISPLAY("Prnt CLK T:55", "1745 PAUSE  10.0");
+
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("1 2 3 4 5 6 7 8", "9 10");
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("1 2 3 4 5 6 7 8", "9 10");
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkScenarioGeneric);
+
     RUN_TEST(checkFStopTest);
     RUN_TEST(checkLocalFStopTest);
     RUN_TEST(checkSpltFStopTest);
+
     RUN_TEST(checkLinearTest);
     RUN_TEST(checkLocalLinearTest);
     RUN_TEST(checkSpltLinearTest);
+
+    RUN_TEST(checkPrintMode);
     UNITY_END();
 }
