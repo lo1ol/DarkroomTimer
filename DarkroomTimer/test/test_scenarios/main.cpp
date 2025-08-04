@@ -1077,8 +1077,12 @@ void checkMaskMode() {
         gCurrentTime += t.toMillis() - 1;
         loop_();
         TEST_ASSERT(gRelayVal);
-        if (t > 1_s)
-            TEST_ASSERT_EQUAL(((t > 1_s) ? Beeper::State::on : Beeper::State::off), gBeeper.state());
+        if (t < 2_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+        else if (t < 11_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+        else
+            TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
 
         gCurrentTime += 1;
         loop_();
@@ -1106,10 +1110,133 @@ void checkMaskMode() {
     loop_();
     TEST_DISPLAY("6 1800 0 32 0 7", "3 0 0.8 1.9 1800");
 
-    // couldn't start if not see printing time
+    // could start even if not see printing time
     gStartBtn.emulClick();
     loop_();
     TEST_DISPLAY("Run Lag 1 3 0.2", "6 1800 0 32 0 7");
+}
+
+void checkRelMaskMode() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Rel mask print", "Mask num: 1");
+
+    gEncoder.emulRetInt(15);
+    loop_();
+    TEST_DISPLAY("Rel mask print", "Mask num: 15");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Set     0 0 0 0", "0 0 0 0 0 0 0 0");
+
+    Time baseTime = 16_s;
+    RelTime times[] = { RelTime(0), // not used time
+                        RelTime(3),  RelTime(0),  RelTime(10), RelTime(20), kMaxRelTime,
+                        kMaxRelTime, RelTime(10), RelTime(0),  RelTime(0),  RelTime(7),
+                        RelTime(0),  RelTime(4),  RelTime(25), RelTime(33), RelTime(41) };
+
+    static_assert(sizeof(times) / sizeof(times[0]) == 16);
+
+    bool first = true;
+    for (auto t : times) {
+        if (first) {
+            gEncoder.emulRetTime(baseTime);
+            loop_();
+            first = false;
+            continue;
+        }
+
+        gEncoderBtn.emulClick();
+        loop_();
+
+        gEncoder.emulRetRelTime(t);
+        loop_();
+    }
+
+    TEST_DISPLAY("1/4 2+1/2 2+5/12", "3+3/4");
+
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Set      2/3 0", "7/12 1+1/12 5 5");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run      2/3 0", "7/12 1+1/12 5 5");
+
+    first = true;
+    for (auto t : times) {
+        Time printTime = baseTime;
+        if (!first)
+            printTime = t ^ baseTime;
+        first = false;
+
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+
+        if (!printTime) {
+            TEST_ASSERT(!gRelayVal);
+            continue;
+        }
+
+        gCurrentTime += printTime.toMillis() - 1;
+        loop_();
+        TEST_ASSERT(gRelayVal);
+        if (printTime < 2_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+        else if (printTime < 11_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+        else
+            TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT(!gRelayVal);
+        // check notify
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    }
+
+    TEST_DISPLAY("1/4 2+1/2 2+5/12", "3+3/4   Finished");
+    gStartBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    TEST_ASSERT(!gRelayVal);
+
+    // Scroll didn't work on finished
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("1/4 2+1/2 2+5/12", "3+3/4   Finished");
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Run      2/3 0", "7/12 1+1/12 5 5");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("7/12 1+1/12 5 5", "7/12 0 0 5/6 0");
+
+    // could start even if not see printing time
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run  Lag 2/3 0", "7/12 1+1/12 5 5");
+
+    // could switch view at run time
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Run  Lag 9.4 0 8", "17.9 496 496 8 0");
 }
 
 int main() {
@@ -1127,5 +1254,6 @@ int main() {
     RUN_TEST(checkPrintMode);
 
     RUN_TEST(checkMaskMode);
+    RUN_TEST(checkRelMaskMode);
     UNITY_END();
 }
