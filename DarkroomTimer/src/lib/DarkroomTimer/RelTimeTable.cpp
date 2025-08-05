@@ -68,26 +68,41 @@ void RelTimeTable::flush() const {
     while (id != m_size) {
         char str[DISPLAY_COLS + 1];
         bool current = id == m_currentId;
+        const char* mark = nullptr;
+        Time t = getTime(id);
+        bool isBadTime = t == kBadTime;
 
-        if (m_secView) {
-            getTime(id).getFormatedTime(str, current, current);
-        } else {
-            if (id == -1) {
-                m_base.getFormatedTime(str, current, current);
-            } else {
-                int8_t alignSize;
-                if (current) {
-                    getTime(id).getFormatedTime(str, current, current);
-                    alignSize = strlen(str);
-                }
+        if (isBadTime) {
+            t = 0_s;
+            if (current)
+                mark = "ovr";
 
-                auto strLen = m_relTimes[id].toStr(str);
-                if (current && strLen < alignSize)
-                    alignStr(str, alignSize);
-            }
+            strcpy(str, "ovr");
         }
 
-        gScrollableContent.print(str, current);
+        if (m_secView || id == -1) {
+            if (!isBadTime || current)
+                t.getFormatedTime(str, current, current);
+        } else {
+            uint8_t alignSize = 0;
+            uint8_t strLen = 0;
+
+            if (isBadTime) {
+                alignSize = 3;
+                strLen = 3;
+            } else if (current) {
+                t.getFormatedTime(str, current, current);
+                alignSize = strlen(str);
+            }
+
+            if (!isBadTime || current)
+                strLen = m_relTimes[id].toStr(str);
+
+            if (current && strLen < alignSize)
+                alignStr(str, alignSize);
+        }
+
+        gScrollableContent.print(str, current, mark);
         ++id;
     }
 }

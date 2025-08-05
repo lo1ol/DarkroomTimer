@@ -186,6 +186,94 @@ void checkRelTimeTablePrint() {
                               gScrollableContent);
 }
 
+void checkRelTimeTableOverflow() {
+    RelTimeTable tt;
+    tt.setBuffer(gModesCache, sizeof(gModesCache));
+    tt.setBaseTime(1800_s);
+
+    RelTime times[] = { RelTime(12), RelTime(13), RelTime(24), RelTime(14), RelTime(21) };
+    int i = 0;
+    for (auto time : times) {
+        tt.setRelTime(i, time);
+        ++i;
+    }
+
+    gScrollableContent.reset();
+    tt.flush();
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "1800 1 ovr ovr", "1+1/3 1+5/12" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
+
+    tt.setCurrent(1);
+    gScrollableContent.reset();
+    tt.flush();
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "1800 1 1+1/2 ovr", "1+1/3 1+5/12" },
+                                  .currentLine = 0,
+                                  .currentShift = 7,
+                                  .currentAlign = 5,
+                                  .currentMark = "ovr",
+                              }),
+                              gScrollableContent);
+
+    tt.setCurrent(-2);
+    tt.setSecView(true);
+    gScrollableContent.reset();
+    tt.flush();
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "1800 1800 ovr", "ovr 2736 3005" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
+
+    tt.setCurrent(1);
+    tt.setSecView(true);
+    gScrollableContent.reset();
+    tt.flush();
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "1800 1800 0.0", "ovr 2736 3005" },
+                                  .currentLine = 0,
+                                  .currentShift = 10,
+                                  .currentAlign = 3,
+                                  .currentMark = "ovr",
+                              }),
+                              gScrollableContent);
+
+    tt.setCurrent(-2);
+    tt.setBaseTime(1300_s);
+    tt.setSecView(false);
+    gScrollableContent.reset();
+    tt.flush();
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "1300 1 1+1/2 ovr", "1+1/3 1+5/12" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
+
+    tt.setBaseTime(1000_s);
+    gScrollableContent.reset();
+    tt.flush();
+    TEST_EQUAL_SCROLL_CONTENT(({
+                                  .lines = { "1000 1 1+1/2 2", "1+1/3 1+5/12" },
+                                  .currentLine = -1,
+                                  .currentShift = 0,
+                                  .currentAlign = 0,
+                                  .currentMark = nullptr,
+                              }),
+                              gScrollableContent);
+}
+
 void checkRelTimeTablePrintSecView() {
     RelTimeTable tt;
     tt.setBuffer(gModesCache, sizeof(gModesCache));
@@ -335,5 +423,6 @@ int main() {
     RUN_TEST(checkRelTimeTableGeneric);
     RUN_TEST(checkRelTimeTablePrint);
     RUN_TEST(checkRelTimeTablePrintSecView);
+    RUN_TEST(checkRelTimeTableOverflow);
     UNITY_END();
 }
