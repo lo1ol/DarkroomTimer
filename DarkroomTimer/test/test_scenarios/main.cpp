@@ -1237,6 +1237,60 @@ void checkRelMaskMode() {
     gEncoderBtn.emulClick();
     loop_();
     TEST_DISPLAY("Run  Lag 9.4 0 8", "17.9 496 496 8 0");
+
+    // tests on overflow
+    gEncoderBtn.emulHold();
+    loop_();
+    gEncoderBtn.emulRelease();
+    loop_();
+
+    baseTime = 1400_s;
+    gModeBtn.emulClick();
+    loop_();
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Set      2/3 0", "7/12 1+1/12 5 5");
+
+    gEncoder.emulRetTime(baseTime);
+    loop_();
+    TEST_DISPLAY("Set 1400.0 2/3 0", "7/12 1+1/12 ovr");
+
+    gModeBtn.emulClick();
+    loop_();
+
+    first = true;
+    for (auto t : times) {
+        Time printTime = baseTime;
+        if (!first)
+            printTime = t ^ baseTime;
+        first = false;
+
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+
+        if (!printTime || printTime == kBadTime) {
+            TEST_ASSERT(!gRelayVal);
+            continue;
+        }
+
+        gCurrentTime += printTime.toMillis() - 1;
+        loop_();
+        TEST_ASSERT(gRelayVal);
+        if (printTime < 2_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+        else if (printTime < 11_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+        else
+            TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT(!gRelayVal);
+        // check notify
+        TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    }
+    TEST_DISPLAY("0 1/4 ovr ovr", "ovr     Finished");
 }
 
 int main() {

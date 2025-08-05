@@ -170,7 +170,8 @@ void RelMaskMode::processRun() {
 }
 
 Time RelMaskMode::getStepTime() {
-    return m_relTimeTable[m_currentFilter].getTime(m_currentMask);
+    Time t = m_relTimeTable[m_currentFilter].getTime(m_currentMask);
+    return (t == kBadTime) ? 0_s : t;
 }
 
 void RelMaskMode::repaint() {
