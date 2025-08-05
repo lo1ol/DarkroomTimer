@@ -8,13 +8,13 @@ class DisplayLine;
 class Time {
 public:
     constexpr Time() : Time(0) {}
-    constexpr explicit Time(int32_t ts) : m_ts(ts > INT16_MAX ? -1 : ts) {}
+    constexpr explicit Time(int32_t ts) : m_ts((ts > INT16_MAX || ts < INT16_MIN) ? -1 : ts) {}
 
     [[nodiscard]] constexpr explicit operator bool() const { return m_ts; }
     [[nodiscard]] constexpr explicit operator int16_t() const { return m_ts; }
 
     [[nodiscard]] Time operator*(double x) const {
-        int32_t res = static_cast<int32_t>(lround(m_ts * x));
+        int32_t res = lround(m_ts * x);
         if (res > INT16_MAX)
             return Time{ -1 };
 

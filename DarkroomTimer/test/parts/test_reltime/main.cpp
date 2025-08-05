@@ -11,8 +11,13 @@ void tearDown() {}
 static_assert(RelTime(42).getId() == 42);
 
 void nonContstexprTests() {
-    TEST_ASSERT((RelTime(12 * 2) ^ 2_ts) == 6_ts);
-    TEST_ASSERT((RelTime(12 * 2 + 2) ^ 2_ts) == 8_ts);
+    TEST_ASSERT_EQUAL(Time(6).toMillis(), (RelTime(12 * 2) ^ 2_ts).toMillis());
+    TEST_ASSERT_EQUAL(Time(8).toMillis(), (RelTime(12 * 2 + 2) ^ 2_ts).toMillis());
+
+    // checks on overflows
+    TEST_ASSERT_EQUAL(Time(18000).toMillis(), (RelTime(12) ^ 1800_s).toMillis());
+    TEST_ASSERT_EQUAL(kBadTime.toMillis(), (RelTime(12 + 1) ^ 1800_s).toMillis());    // RelTime is 2+1/2
+    TEST_ASSERT_EQUAL(Time(30054).toMillis(), (RelTime(12 + 9) ^ 1800_s).toMillis()); // RelTime is 2+5/12
 }
 
 void checkStringFormat() {
