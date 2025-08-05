@@ -1,6 +1,6 @@
 #include "Beeper.h"
 
-#include "Tools.h"
+#include "Hardware.h"
 
 void Beeper::tick() {
     uint32_t currentTime = gMillis();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Tools.h>
+#include <Hardware.h>
 
 #include "LiquidCrystalWrapMock.h"
 

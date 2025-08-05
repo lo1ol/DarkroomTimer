@@ -2,7 +2,8 @@
 
 #include <assert.h>
 
-#include "Tools.h"
+#include "Hardware.h"
+#include "Utils.h"
 
 void RelTimeTable::setBuffer(void* buf, uint8_t size) {
     m_relTimes = reinterpret_cast<RelTime*>(buf);

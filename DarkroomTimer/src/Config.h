@@ -2,6 +2,8 @@
 
 #include <assert.h>
 
+#include <Arduino.h>
+
 #define LCD_RS 12
 #define LCD_EN 11
 #define LCD_D4 9

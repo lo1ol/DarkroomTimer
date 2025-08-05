@@ -1,6 +1,6 @@
 #include "VirtEnv.h"
 
-#include <Tools.h>
+#include <Hardware.h>
 
 LiquidCrystalWrapMock gLcdWrapMock;
 Display gDisplay(&gLcdWrapMock);

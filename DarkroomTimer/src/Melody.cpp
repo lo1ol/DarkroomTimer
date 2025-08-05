@@ -1,6 +1,6 @@
 #include "Melody.h"
 
-#include "Tools.h"
+#include "Hardware.h"
 
 class MelodyPlayer : public Melody {
 public:

@@ -1,9 +1,8 @@
 #include "DisplayLine.h"
 
-#include <Arduino.h>
-
 #include "LiquidCrystalWrap.h"
-#include "Tools.h"
+#include "Hardware.h"
+#include "Utils.h"
 
 void DisplayLine::concat(char* dst, const char* src) {
     int srcLen = strlen(src);

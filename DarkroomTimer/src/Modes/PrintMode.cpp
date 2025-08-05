@@ -1,6 +1,7 @@
 #include "PrintMode.h"
 
-#include "../Tools.h"
+#include "../Hardware.h"
+#include "../Utils.h"
 
 PrintMode::PrintMode() {
     m_timeTable.setBuffer(gModesCache, sizeof(gModesCache));

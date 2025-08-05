@@ -1,6 +1,6 @@
 #include "ScrollableContent.h"
 
-#include "Tools.h"
+#include "Hardware.h"
 
 void ScrollableContent::reset() {
     m_currentLine = -1;

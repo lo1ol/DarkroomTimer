@@ -1,6 +1,7 @@
 #include "MaskMode.h"
 
-#include "../Tools.h"
+#include "../Hardware.h"
+#include "../Utils.h"
 
 namespace {
 

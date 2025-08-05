@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-#include "Tools.h"
+#include "Hardware.h"
 
 void TimeTable::setBuffer(void* buf, uint8_t size) {
     m_times = reinterpret_cast<Time*>(buf);

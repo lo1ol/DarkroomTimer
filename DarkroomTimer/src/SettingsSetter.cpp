@@ -1,7 +1,7 @@
 #include "SettingsSetter.h"
 
-#include "DisplayLine.h"
-#include "Tools.h"
+#include "Hardware.h"
+#include "Utils.h"
 
 SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime) {
     repaint();

@@ -1,6 +1,7 @@
 #include "LinearTestMode.h"
 
-#include "../Tools.h"
+#include "../Hardware.h"
+#include "../Utils.h"
 
 LinearTestMode::LinearTestMode(SubMode subMode) : kSubMode(subMode) {
     m_timeTable.setBuffer(gModesCache, sizeof(gModesCache));

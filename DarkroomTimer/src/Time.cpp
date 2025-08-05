@@ -2,7 +2,7 @@
 
 #include "Config.h"
 #include "DisplayLine.h"
-#include "Tools.h"
+#include "Hardware.h"
 
 void Time::getFormatedTime(char* buf, bool accurate, bool addZero) const {
     int16_t sec = secs();

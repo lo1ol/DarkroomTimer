@@ -1,6 +1,7 @@
 #include "FStopTestMode.h"
 
-#include "../Tools.h"
+#include "../Hardware.h"
+#include "../Utils.h"
 
 namespace {
 constexpr uint8_t kFStopPartVarinatns[] = { 12, 6, 4, 3, 2, 1 };

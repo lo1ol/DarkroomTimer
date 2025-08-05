@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-#include "Tools.h"
+#include "Hardware.h"
 
 void Timer::tick() {
     m_currentTime = gMillis();
