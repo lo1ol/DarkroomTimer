@@ -25,6 +25,7 @@ void PrintMode::switchMode() {
 
 void PrintMode::process() {
     if (gEncoderBtn.click() && gTimer.state() != Timer::RUNNING) {
+        gScrollableContent.goToFirstLine();
         m_showLog = !m_showLog;
         repaint();
         return;

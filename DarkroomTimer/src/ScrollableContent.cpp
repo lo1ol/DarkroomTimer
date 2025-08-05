@@ -62,22 +62,40 @@ void ScrollableContent::startNewLine() {
     m_changed = true;
 }
 
+void ScrollableContent::updateFirstPrintingLine() {
+    auto lineCnt_ = lineCnt();
+
+    auto mustPrintedLine = m_firstPrintedLine;
+    if (m_needGoToCurrent && m_currentLine != -1) {
+        m_needGoToCurrent = false;
+        mustPrintedLine = m_currentLine;
+    }
+
+    if (lineCnt_ <= DISPLAY_ROWS) {
+        m_firstPrintedLine = 0;
+        return;
+    }
+
+    if ((m_firstPrintedLine + DISPLAY_ROWS) > lineCnt_)
+        m_firstPrintedLine = lineCnt_ - DISPLAY_ROWS;
+
+    if (m_firstPrintedLine <= mustPrintedLine && (m_firstPrintedLine + DISPLAY_ROWS) > mustPrintedLine)
+        return;
+
+    if (mustPrintedLine < m_firstPrintedLine) {
+        m_firstPrintedLine = mustPrintedLine;
+        return;
+    }
+
+    m_firstPrintedLine = mustPrintedLine + 1 - DISPLAY_ROWS;
+}
+
 void ScrollableContent::forcePaint() {
     m_changed = false;
     gDisplay.reset();
 
-    if (m_needGoToCurrent && m_currentLine != -1) {
-        m_needGoToCurrent = false;
-        if (m_currentLine < m_firstPrintedLine)
-            m_firstPrintedLine = m_currentLine;
-        else if (m_firstPrintedLine + DISPLAY_ROWS <= m_currentLine)
-            m_firstPrintedLine = m_currentLine + 1 - DISPLAY_ROWS;
-    }
-
+    updateFirstPrintingLine();
     m_currentDisplayLine = -1;
-
-    if (m_firstPrintedLine >= m_line)
-        m_firstPrintedLine = 0;
 
     for (uint8_t displayLine = 0; displayLine != DISPLAY_ROWS; ++displayLine) {
         uint8_t lineId = m_firstPrintedLine + displayLine;

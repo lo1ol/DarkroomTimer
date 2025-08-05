@@ -20,8 +20,11 @@ public:
     [[nodiscard]] bool currentIsPrinted() const { return m_currentDisplayLine != -1; }
     [[nodiscard]] uint8_t lineCnt() const { return m_line + static_cast<bool>(m_lastLineLength); }
 
+    void goToFirstLine() { m_firstPrintedLine = 0; }
+
 private:
     void paintUnchanged();
+    void updateFirstPrintingLine();
 
 #ifdef PIO_UNIT_TESTING
 public:
