@@ -1118,6 +1118,143 @@ void checkMaskMode() {
     TEST_DISPLAY("Run Lag 1 3 0.2", "6 1800 0 32 0 7");
 }
 
+void checkSplitMaskMode() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Filter 1", "Mask num: 1");
+
+    gEncoder.emulRetInt(7);
+    loop_();
+    TEST_DISPLAY("Filter 1", "Mask num: 7");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Filter 2", "Mask num: 1");
+
+    gEncoder.emulRetInt(7);
+    loop_();
+    TEST_DISPLAY("Filter 2", "Mask num: 7");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("S F1     0 0 0 0", "0 0 0");
+
+    Time times[2][8] = { { 1_ts, 10_ts, 500_s, 10_ts, 40_s, 1800_s, kBadTime, 32_s },
+                         { 100_ts, kBadTime, 30_ts, 0_ts, 8_ts, 19_ts, 1800_s, 17_ts } };
+
+    bool needGoNext = false;
+    for (auto& tt : times) {
+        for (auto t : tt) {
+            // pass setting of time
+            // and check fast trevel
+            if (t == kBadTime) {
+                gEncoderBtn.emulPress();
+                gEncoder.emulTurn(1);
+                loop_();
+                gEncoder.emulTurn(1);
+                loop_();
+                gEncoderBtn.emulRelease();
+                loop_();
+                needGoNext = false;
+                continue;
+            }
+
+            if (needGoNext) {
+                gEncoderBtn.emulClick();
+                loop_();
+            }
+
+            needGoNext = true;
+            gEncoder.emulRetTime(t);
+            loop_();
+        }
+    }
+
+    TEST_DISPLAY("S F2 10 0 3 0", "0.8 1.9 1800 1.7")
+
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("S F1     1 500 1", "40 1800 0 32");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("R F1     1 500 1", "40 1800 0 32");
+
+    int i = 0;
+    for (auto& tt : times) {
+        for (auto t : tt) {
+            ++i;
+            gStartBtn.emulClick();
+            loop_();
+            TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+
+            if (t == kBadTime || t == 0_s) {
+                TEST_ASSERT(!gRelayVal);
+                continue;
+            }
+
+            gCurrentTime += t.toMillis() - 1;
+            loop_();
+            TEST_ASSERT(gRelayVal);
+            if (t < 2_ts)
+                TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+            else if (t < 11_ts)
+                TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+            else
+                TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+            gCurrentTime += 1;
+            loop_();
+            TEST_ASSERT(!gRelayVal);
+            // check notify
+            TEST_ASSERT_EQUAL(((i == 8) ? Beeper::State::alarm : Beeper::State::off), gBeeper.state());
+        }
+    }
+
+    TEST_DISPLAY("R F2 10 0 3 0", "0.8 1.9 Finished");
+    gStartBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    TEST_ASSERT(!gRelayVal);
+
+    // Scroll didn't work on finished
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("R F2 10 0 3 0", "0.8 1.9 Finished");
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("R F1     1 500 1", "40 1800 0 32");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("40 1800 0 32", "R F2 10 0 3 0");
+
+    // could start even if not see printing time
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("R F1 Lag 1 500 1", "40 1800 0 32");
+}
+
 void checkRelMaskMode() {
     setup_();
     loop_();
@@ -1310,6 +1447,8 @@ int main() {
     RUN_TEST(checkPrintMode);
 
     RUN_TEST(checkMaskMode);
+    RUN_TEST(checkSplitMaskMode);
+
     RUN_TEST(checkRelMaskMode);
     UNITY_END();
 }
