@@ -19,14 +19,17 @@ static_assert(-Time(42) == Time(-42));
 static_assert(Time(42) == -Time(-42));
 static_assert(Time(42) != -Time(43));
 static_assert(42_ts > -42_ts);
-static_assert(Time(INT16_MAX) != kBadTime);
+static_assert(Time(INT16_MAX) == kBadTime);
+static_assert(Time(INT16_MAX - 1) != kBadTime);
+static_assert(Time(INT16_MIN) != kBadTime);
 static_assert(Time(INT16_MAX + static_cast<int32_t>(1)) == kBadTime);
+static_assert(Time(INT16_MIN - static_cast<int32_t>(1)) == kBadTime);
 
 void nonContstexprTests() {
     TEST_ASSERT(4200 == Time::fromMillis(4200).toMillis());
     TEST_ASSERT(4200 == Time::fromMillis(4250).toMillis());
     TEST_ASSERT(4300 == Time::fromMillis(4251).toMillis());
-    TEST_ASSERT(kMaxTime + 1_ts != kBadTime); // TODO should fail?
+    TEST_ASSERT(kMaxTime + 2_ts != kBadTime); // TODO should fail?
 
     TEST_ASSERT(84_ts == (2. * 42_ts));
     TEST_ASSERT(-84_ts == ((-2.) * 42_ts));
