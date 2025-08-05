@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <unity.h>
 
-#include "../../VirtEnv.h"
+#include <Hardware.h>
 
 void setUp() {
     gCurrentTime = 0;

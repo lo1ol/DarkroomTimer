@@ -6,6 +6,7 @@
 #include "Config.h"
 #include "Display.h"
 #include "EncoderWrap.h"
+#include "LiquidCrystalWrap.h"
 #include "ScrollableContent.h"
 #include "Settings.h"
 #include "Timer.h"
@@ -18,9 +19,11 @@ extern ButtonT<START_BTN> gStartBtn;
 extern ButtonT<ENCODER_BTN> gEncoderBtn;
 extern ButtonT<VIEW_BTN> gViewBtn;
 
+extern LiquidCrystalWrap gLcdWrap;
+extern Display gDisplay;
+
 extern Timer gTimer;
 extern Settings gSettings;
-extern Display gDisplay;
 extern Beeper gBeeper;
 extern uint8_t gModesCache[32];
 extern ScrollableContent gScrollableContent;
@@ -29,6 +32,12 @@ extern ScrollableContent gScrollableContent;
 uint32_t gMillis();
 void gDigitalWrite(uint8_t, uint8_t);
 void gAnalogWrite(uint8_t, int);
+
+extern uint32_t gCurrentTime;
+
+extern int gBuzzerVal;
+extern int gBacklightVal;
+extern bool gRelayVal;
 #else
     #define gMillis millis
     #define gDigitalWrite digitalWrite

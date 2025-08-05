@@ -5,7 +5,7 @@
 #include <Config.h>
 #include <Melody.h>
 
-#include "../../VirtEnv.h"
+#include "Hardware.h"
 
 #define DOWN_VOLUME BEEP_VOLUME_SILENT
 #define UP_VOLUME (BEEP_VOLUME_SILENT + 30)

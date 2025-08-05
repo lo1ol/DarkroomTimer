@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <unity.h>
 
-#include <RelTimeTable.h>
 #include <Hardware.h>
+#include <RelTimeTable.h>
 
 #include "../../Tools.h"
 
