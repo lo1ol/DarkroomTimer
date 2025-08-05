@@ -45,7 +45,5 @@ Time RelTime::operator^(Time t) const {
     uint8_t frac = kFracIdMap[m_id % 12];
     float val = whole + frac / 12.;
 
-    int32_t res = static_cast<int16_t>(t);
-    res = lround(res * pow(2, val) - res);
-    return Time{ res };
+    return t * (pow(2, val) - 1);
 }

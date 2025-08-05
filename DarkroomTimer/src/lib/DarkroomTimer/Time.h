@@ -8,32 +8,30 @@ class DisplayLine;
 class Time {
 public:
     constexpr Time() : Time(0) {}
-    constexpr explicit Time(int32_t ts) : m_ts((ts > INT16_MAX || ts < INT16_MIN) ? INT16_MAX : ts) {}
+    constexpr explicit Time(int32_t ts) : m_ts(getTimeWithBoundCheck(ts)) {}
 
     [[nodiscard]] constexpr explicit operator bool() const { return m_ts; }
     [[nodiscard]] constexpr explicit operator int16_t() const { return m_ts; }
 
-    [[nodiscard]] Time operator*(double x) const {
-        int32_t res = lround(m_ts * x);
-        if (res > INT16_MAX)
-            return Time{ INT16_MAX };
+    [[nodiscard]] constexpr Time operator*(double x) const { return Time{ static_cast<int32_t>(lround(m_ts * x)) }; }
 
-        return Time{ static_cast<int16_t>(res) };
-    }
+    [[nodiscard]] constexpr Time operator*(int16_t x) const { return Time{ m_ts * static_cast<int32_t>(x) }; }
 
-    [[nodiscard]] constexpr Time operator*(int16_t x) const { return Time{ m_ts * x }; }
     [[nodiscard]] constexpr Time operator/(int n) const { return Time{ m_ts / n }; }
-    [[nodiscard]] constexpr Time operator+(const Time& o) const { return Time{ m_ts + o.m_ts }; }
-    [[nodiscard]] constexpr Time operator-(const Time& o) const { return Time{ m_ts - o.m_ts }; }
+    [[nodiscard]] constexpr Time operator+(const Time& o) const { return Time{ static_cast<int32_t>(m_ts) + o.m_ts }; }
+    [[nodiscard]] constexpr Time operator-(const Time& o) const { return Time{ static_cast<int32_t>(m_ts) - o.m_ts }; }
     [[nodiscard]] constexpr Time operator-() const { return Time{ -m_ts }; }
 
     Time& operator*=(const int16_t x) {
-        m_ts *= x;
+        int32_t res = static_cast<int32_t>(x) * m_ts;
+        m_ts = getTimeWithBoundCheck(res);
+
         return *this;
     }
 
     Time& operator+=(const Time& o) {
-        m_ts += o.m_ts;
+        int32_t res = static_cast<int32_t>(o.m_ts) + m_ts;
+        m_ts = getTimeWithBoundCheck(res);
         return *this;
     }
 
@@ -54,6 +52,10 @@ public:
     void getFormatedTime(char* buf, bool accurate = true, bool addZero = false) const;
 
 private:
+    constexpr static int16_t getTimeWithBoundCheck(int32_t x) {
+        return (x > INT16_MAX || x < INT16_MIN) ? INT16_MAX : x;
+    }
+
     int16_t m_ts; // tenth of seconds
 };
 

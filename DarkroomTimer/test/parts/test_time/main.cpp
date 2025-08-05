@@ -29,7 +29,9 @@ void nonContstexprTests() {
     TEST_ASSERT(4200 == Time::fromMillis(4200).toMillis());
     TEST_ASSERT(4200 == Time::fromMillis(4250).toMillis());
     TEST_ASSERT(4300 == Time::fromMillis(4251).toMillis());
-    TEST_ASSERT(kMaxTime + 2_ts != kBadTime); // TODO should fail?
+    TEST_ASSERT((kMaxTime + 1_ts) == kBadTime);
+    TEST_ASSERT((kMaxTime + 2_ts) == kBadTime);
+    TEST_ASSERT(((kMaxTime / 2 + 1_ts) * 2) == kBadTime);
 
     TEST_ASSERT(84_ts == (2. * 42_ts));
     TEST_ASSERT(-84_ts == ((-2.) * 42_ts));

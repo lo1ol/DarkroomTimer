@@ -94,7 +94,7 @@ bool EncoderWrap::getTime(Time& time, bool smooth) const {
         factor = 500;
 
     time += shift * factor;
-    time = Time((static_cast<int16_t>(time) / factor) * factor);
+    time = (time / factor) * factor;
 
     if (time < 0_ts)
         time = 0_ts;
