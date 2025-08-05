@@ -120,7 +120,6 @@ Time LinearTestMode::getTotalTime(uint8_t id) const {
 void LinearTestMode::reset() {
     m_currentRun = 0;
     m_timeTable.setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
-    repaint();
 }
 
 void LinearTestMode::setTimeTable() {

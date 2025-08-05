@@ -136,4 +136,5 @@ void DisplayLine::fastCurrentRepaint(const char* src) {
     m_needCurrentFastRepaint = true;
     m_hasCurrentFastRepaint = true;
     strcpy(m_fastCurrentStr, src);
+    alignStr(m_fastCurrentStr, m_currentLength);
 }

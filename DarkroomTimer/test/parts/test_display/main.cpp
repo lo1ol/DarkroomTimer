@@ -122,6 +122,18 @@ void checkDisplayLineFastRepaint() {
     gDisplay[0].tick();
     TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
     TEST_ASSERT_EQUAL(1, gLcdWrapMock.printCallCount());
+
+    gDisplay[0].fastCurrentRepaint("petr1");
+    TEST_ASSERT_EQUAL_STRING("0123456789abcdef", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("012pet6789abcdef", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL(1, gLcdWrapMock.printCallCount());
+
+    gDisplay[0].fastCurrentRepaint("ha");
+    TEST_ASSERT_EQUAL_STRING("012pet6789abcdef", gLcdWrapMock.getLine(0));
+    gDisplay[0].tick();
+    TEST_ASSERT_EQUAL_STRING("012 ha6789abcdef", gLcdWrapMock.getLine(0));
+    TEST_ASSERT_EQUAL(1, gLcdWrapMock.printCallCount());
 }
 
 void checkDisplayLineBlink() {

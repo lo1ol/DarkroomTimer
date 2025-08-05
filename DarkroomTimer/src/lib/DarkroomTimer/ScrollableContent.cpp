@@ -133,8 +133,6 @@ void ScrollableContent::paintUnchanged() {
         time.getFormatedTime(str, true, true);
     }
 
-    alignStr(str, m_currentAlign);
-
     gDisplay[m_currentDisplayLine].fastCurrentRepaint(str);
 }
 

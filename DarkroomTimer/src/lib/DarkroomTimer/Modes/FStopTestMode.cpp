@@ -127,7 +127,6 @@ Time FStopTestMode::getStepTotalTime(uint8_t id) const {
 void FStopTestMode::reset() {
     m_currentRun = 0;
     m_timeTable.setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
-    repaint();
 }
 
 void FStopTestMode::setTimeTable() {
