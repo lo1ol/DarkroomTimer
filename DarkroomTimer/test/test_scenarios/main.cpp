@@ -1,9 +1,10 @@
-#include <main.h>
-
 #include <unity.h>
 
 #include "../VirtEnv.h"
 #include "Tools.h"
+
+void setup_();
+void loop_();
 
 void setUp() {
     gCurrentTime = 0;
