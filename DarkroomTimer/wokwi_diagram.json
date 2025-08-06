@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-nano", "id": "nano", "top": 187.2, "left": 18.7, "attrs": {} },
+    { "type": "wokwi-lcd1602", "id": "lcd1", "top": -198.17, "left": 25.6, "attrs": {} },
+    { "type": "wokwi-ky-040", "id": "encoder1", "top": -27.1, "left": 210.4, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 86.8,
+      "left": 90.4,
+      "rotate": 90,
+      "attrs": { "color": "blue", "xray": "", "key": "2" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": -9.2,
+      "left": 80.8,
+      "rotate": 90,
+      "attrs": { "color": "green", "xray": "", "key": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn3",
+      "top": 87,
+      "left": 188.2,
+      "rotate": 270,
+      "attrs": { "color": "yellow", "xray": "", "key": "3" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": 184.8,
+      "left": 241.8,
+      "attrs": { "volume": "0.1" }
+    },
+    { "type": "wokwi-led", "id": "led1", "top": -138, "left": -34.6, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-text",
+      "id": "text1",
+      "top": 9.6,
+      "left": 19.2,
+      "attrs": { "text": "Mode (1)" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text2",
+      "top": 96,
+      "left": 19.2,
+      "attrs": { "text": "View (2)" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text3",
+      "top": 96,
+      "left": 249.6,
+      "attrs": { "text": "Start (3)" }
+    },
+    { "type": "wokwi-text", "id": "text4", "top": 0, "left": 182.4, "attrs": { "text": "Set" } },
+    {
+      "type": "wokwi-text",
+      "id": "text5",
+      "top": -384,
+      "left": 57.6,
+      "attrs": {
+        "text": "PRESS PLAY BTN AND CLICK ON ENCODER\n\nPress 1 to simulate Mode btn press\nPress 2 to simulate View btn press\nPress 3 to simulate Start btn press\nUse up/down arrows to rotate encoder\nPress space to simulate encoder press"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text8",
+      "top": -124.8,
+      "left": -96,
+      "attrs": { "text": "enlarger" }
+    }
+  ],
+  "connections": [
+    [ "lcd1:D7", "nano:6", "", [ "v0" ] ],
+    [ "lcd1:A", "nano:5", "", [ "v0" ] ],
+    [ "lcd1:D6", "nano:7", "", [ "v0" ] ],
+    [ "lcd1:D5", "nano:8", "", [ "v0" ] ],
+    [ "lcd1:D4", "nano:9", "", [ "v0" ] ],
+    [ "lcd1:E", "nano:11", "", [ "v0" ] ],
+    [ "lcd1:RS", "nano:12", "", [ "v0" ] ],
+    [ "nano:GND.1", "lcd1:K", "", [ "v0" ] ],
+    [ "nano:GND.1", "bz1:1", "", [ "v0" ] ],
+    [ "bz1:2", "nano:10", "", [ "v0" ] ],
+    [ "lcd1:V0", "nano:GND.1", "", [ "v0" ] ],
+    [ "lcd1:VDD", "nano:5V", "", [ "v0" ] ],
+    [ "lcd1:VSS", "lcd1:V0", "", [ "v0" ] ],
+    [ "lcd1:RW", "lcd1:V0", "", [ "v0" ] ],
+    [ "btn2:2.l", "lcd1:VSS", "", [ "v0" ] ],
+    [ "btn2:1.r", "nano:A0", "", [ "v0" ] ],
+    [ "btn1:2.l", "btn2:2.l", "", [ "v0" ] ],
+    [ "btn1:1.r", "nano:A2", "", [ "v0" ] ],
+    [ "led1:C", "nano:GND.1", "", [ "v0" ] ],
+    [ "led1:A", "nano:A4", "", [ "v0" ] ],
+    [ "encoder1:VCC", "nano:5V", "", [ "h0" ] ],
+    [ "encoder1:SW", "nano:A3", "", [ "h0" ] ],
+    [ "nano:GND.1", "btn3:2.r", "", [ "h0" ] ],
+    [ "encoder1:CLK", "nano:3", "", [ "h0" ] ],
+    [ "encoder1:DT", "nano:2", "", [ "h0" ] ],
+    [ "btn3:1.l", "nano:A1", "", [ "v0" ] ],
+    [ "encoder1:GND", "nano:GND.1", "", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}
