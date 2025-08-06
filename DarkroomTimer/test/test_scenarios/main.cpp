@@ -1432,6 +1432,208 @@ void checkRelMaskMode() {
     TEST_DISPLAY("0 1/4 ovr ovr", "ovr     Finished");
 }
 
+void checkSplitRelMaskMode() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    loop_();
+    gEncoder.emulTurn(-1);
+    loop_();
+    gEncoder.emulTurn(-1);
+    loop_();
+    gEncoder.emulTurn(-1);
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Filter 1", "Mask num: 1");
+
+    gEncoder.emulRetInt(7);
+    loop_();
+    TEST_DISPLAY("Filter 1", "Mask num: 7");
+
+    gModeBtn.emulClick();
+    loop_();
+
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_DISPLAY("Filter 2", "Mask num: 1");
+
+    gEncoder.emulRetInt(7);
+    loop_();
+    TEST_DISPLAY("Filter 2", "Mask num: 7");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("S F1     0 0 0 0", "0 0 0");
+
+    Time baseTimes[2] = { 16_s, 100_s };
+    RelTime times[] = { RelTime(0), // not used time
+                        RelTime(3),  RelTime(0), RelTime(22), RelTime(20), kMaxRelTime, kMaxRelTime, RelTime(10),
+                        RelTime(0), // not used time
+                        RelTime(10), RelTime(0), RelTime(7),  RelTime(0),  RelTime(25), RelTime(33), RelTime(41) };
+
+    static_assert(sizeof(times) / sizeof(times[0]) == 16);
+
+    int id = 0;
+    for (auto t : times) {
+        if (id) {
+            gEncoderBtn.emulClick();
+            loop_();
+        }
+
+        if (id % 8) {
+            gEncoder.emulRetRelTime(t);
+        } else {
+            gEncoder.emulRetTime(baseTimes[id / 8]);
+        }
+        loop_();
+
+        ++id;
+    }
+
+    TEST_DISPLAY("5/6 0 2+1/2", "2+5/12  3+3/4");
+
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("S F1      2/3 0", "1+7/12 1+1/12 5");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("R F1      2/3 0", "1+7/12 1+1/12 5");
+
+    id = 0;
+    for (auto t : times) {
+        ++id;
+        Time printTime = baseTimes[(id - 1) / 8];
+        if ((id % 8) != 1)
+            printTime = t ^ printTime;
+
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+
+        if (!printTime) {
+            TEST_ASSERT(!gRelayVal);
+            continue;
+        }
+
+        gCurrentTime += printTime.toMillis() - 1;
+        loop_();
+        TEST_ASSERT(gRelayVal);
+        if (printTime < 2_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+        else if (printTime < 11_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+        else
+            TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT(!gRelayVal);
+        // check notify
+        if (id == 8)
+            TEST_ASSERT_EQUAL(Beeper::State::alarm, gBeeper.state());
+        else
+            TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    }
+
+    TEST_DISPLAY("5/6 0 2+1/2", "2+5/12 3Finished");
+    gStartBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    TEST_ASSERT(!gRelayVal);
+
+    // Scroll didn't work on finished
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("5/6 0 2+1/2", "2+5/12 3Finished");
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("R F1      2/3 0", "1+7/12 1+1/12 5");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("1+7/12 1+1/12 5", "5 7/12");
+
+    // could start even if not see printing time
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("R F1  Lag 2/3 0", "1+7/12 1+1/12 5");
+
+    // could switch view at run time
+    gEncoderBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("R F1  Lag 9.4 0", "32 17.9 496 496");
+
+    // tests on overflow
+    baseTimes[0] = 1800_s;
+
+    gEncoderBtn.emulHold();
+    loop_();
+    gEncoderBtn.emulRelease();
+    loop_();
+
+    gModeBtn.emulClick();
+    loop_();
+    gModeBtn.emulClick();
+    loop_();
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("S F1      2/3 0", "1+7/12 1+1/12 5");
+
+    gEncoder.emulRetTime(baseTimes[0]);
+    loop_();
+    TEST_DISPLAY("S F1 1800.0 2/3", "0 ovr 1+1/12 ovr");
+
+    gModeBtn.emulClick();
+    loop_();
+
+    gEncoder.emulRetTime(baseTimes[0]);
+    loop_();
+    TEST_DISPLAY("R F1        2/3", "0 ovr 1+1/12 ovr");
+
+    id = 0;
+    for (auto t : times) {
+        ++id;
+        Time printTime = baseTimes[(id - 1) / 8];
+        if ((id % 8) != 1)
+            printTime = t ^ printTime;
+
+        gStartBtn.emulClick();
+        loop_();
+        TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+
+        if (!printTime || printTime == kBadTime) {
+            TEST_ASSERT(!gRelayVal);
+            continue;
+        }
+
+        gCurrentTime += printTime.toMillis() - 1;
+        loop_();
+        TEST_ASSERT(gRelayVal);
+        if (printTime < 2_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+        else if (printTime < 11_ts)
+            TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+        else
+            TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+
+        gCurrentTime += 1;
+        loop_();
+        TEST_ASSERT(!gRelayVal);
+        // check notify
+        if (id == 8)
+            TEST_ASSERT_EQUAL(Beeper::State::alarm, gBeeper.state());
+        else
+            TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    }
+    TEST_DISPLAY("5/6 0 2+1/2", "2+5/12 3Finished");
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkScenarioGeneric);
@@ -1450,5 +1652,6 @@ int main() {
     RUN_TEST(checkSplitMaskMode);
 
     RUN_TEST(checkRelMaskMode);
+    RUN_TEST(checkSplitRelMaskMode);
     UNITY_END();
 }
