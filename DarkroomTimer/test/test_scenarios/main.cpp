@@ -5,6 +5,7 @@
 #include "../Tools.h"
 
 void setup_();
+void unsetup_();
 void loop_();
 
 void setUp() {
@@ -21,7 +22,9 @@ void setUp() {
     gViewBtn = ButtonT<VIEW_BTN>{};
 }
 
-void tearDown() {}
+void tearDown() {
+    unsetup_();
+}
 
 void checkScenarioGeneric() {
     setup_();
@@ -1812,6 +1815,7 @@ void checkSettings() {
     gViewBtn.emulRelease();
     gModeBtn.emulRelease();
 
+    unsetup_();
     setup_();
     loop_();
 

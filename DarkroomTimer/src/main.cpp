@@ -279,3 +279,16 @@ void loop_() {
 
     gDisplay.tick();
 }
+
+#ifdef PIO_UNIT_TESTING
+void unsetup_() {
+    if (gSettingsSetter) {
+        delete gSettingsSetter;
+        gSettingsSetter = nullptr;
+    }
+    if (gModeProcessor) {
+        delete gModeProcessor;
+        gModeProcessor = nullptr;
+    }
+}
+#endif

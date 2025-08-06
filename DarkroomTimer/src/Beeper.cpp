@@ -2,6 +2,11 @@
 
 #include "Hardware.h"
 
+Beeper::~Beeper() {
+    if (m_melody)
+        delete m_melody;
+}
+
 void Beeper::tick() {
     uint32_t currentTime = gMillis();
     switch (m_state) {
