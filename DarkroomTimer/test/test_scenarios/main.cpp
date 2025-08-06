@@ -10,6 +10,7 @@ void loop_();
 void setUp() {
     gCurrentTime = 0;
     gSettings = kDefaultSettings;
+    gSettings.updateEEPROM();
     gTimer = Timer{};
     gEncoder.clear();
     gDisplay.reset();
@@ -1855,6 +1856,107 @@ void checkSettings() {
                                          .startWithSettings = true,
                                          .melody = Melody::alarm,
                                      }));
+
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    gViewBtn.emulRelease();
+    gModeBtn.emulRelease();
+    loop_();
+}
+
+void checkView() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+
+    gEncoder.emulRetTime(1800_s);
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+
+    gSettings.lagTime = 3_ts;
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 7800;
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+    TEST_ASSERT(gRelayVal);
+
+    // can't start view
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+
+    // check we can view at pause
+    gStartBtn.emulPress();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    TEST_ASSERT(!gRelayVal);
+
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("View", "Auto stop: 180");
+    TEST_ASSERT(gRelayVal);
+
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT(!gRelayVal);
+
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("View", "Auto stop: 180");
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 179999;
+    loop_();
+    TEST_DISPLAY("View", "Auto stop: 1");
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 1;
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT(!gRelayVal);
+
+    gSettings.autoFinishViewMinutes = 4;
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("View", "Auto stop: 240");
+    TEST_ASSERT(gRelayVal);
+
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT(!gRelayVal);
+
+    gSettings.autoFinishViewMinutes = 0;
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("View", "Auto stop is off");
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 1000000;
+    loop_();
+    TEST_DISPLAY("View", "Auto stop is off");
+    TEST_ASSERT(gRelayVal);
+
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT(!gRelayVal);
 }
 
 int main() {
@@ -1879,5 +1981,6 @@ int main() {
     RUN_TEST(checkSplitRelMaskMode);
 
     RUN_TEST(checkSettings);
+    RUN_TEST(checkView);
     UNITY_END();
 }
