@@ -22,7 +22,7 @@ void SettingsSetter::processSetLagTime() {
     }
 
     m_timer.tick();
-    if (m_timer.state() != Timer::STOPPED) {
+    if (m_timer.state() != Timer::STOPPED || m_timer.justFinished()) {
         repaint();
         return;
     }
@@ -122,7 +122,7 @@ void SettingsSetter::repaint() const {
     switch (m_step) {
     case Step::setLagTime:
         gDisplay[0] << "Lag time";
-        gDisplay[1] << ((m_timer.state() != Timer::STOPPED) ? m_timer.afterLastResume() : m_lagTime);
+        gDisplay[1] << ((m_timer.state() != Timer::STOPPED) ? Time::fromMillis(m_timer.left()) : m_lagTime);
         return;
     case Step::setBacklight:
         gDisplay[0] << "Backlight";

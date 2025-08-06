@@ -1634,8 +1634,232 @@ void checkSplitRelMaskMode() {
     TEST_DISPLAY("5/6 0 2+1/2", "2+5/12 3Finished");
 }
 
+void checkSettings() {
+    setup_();
+    loop_();
+
+    gModeBtn.emulHold();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+
+    gModeBtn.emulRelease();
+
+    gEncoder.emulRetTime(1800_s);
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+
+    gSettings.lagTime = 3_ts;
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 7800;
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
+    TEST_ASSERT(gRelayVal);
+
+    // can't open settings when timer is runned
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+
+    // check we can edit settings at pause
+    gStartBtn.emulPress();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
+    TEST_ASSERT(!gRelayVal);
+
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Lag time", "0.3");
+    TEST_ASSERT(!gRelayVal);
+
+    gEncoder.emulRetTime(6_ts);
+    loop_();
+    TEST_DISPLAY("Lag time", "0.6");
+    TEST_ASSERT(!gRelayVal);
+
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_ASSERT(!gRelayVal);
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "Lag          7.5");
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 600;
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "Lag          7.5");
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 1;
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       0.0");
+    TEST_ASSERT(gRelayVal);
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 0.0");
+    TEST_ASSERT(!gRelayVal);
+
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Lag time", "0.6");
+    TEST_ASSERT(!gRelayVal);
+    gViewBtn.emulRelease();
+    gModeBtn.emulRelease();
+    loop_();
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Lag time", "0.6");
+    TEST_ASSERT(gRelayVal);
+
+    gCurrentTime += 599;
+    loop_();
+    TEST_DISPLAY("Lag time", "0");
+    TEST_ASSERT(gRelayVal);
+
+    // can't close during setting
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Lag time", "0");
+    TEST_ASSERT(gRelayVal);
+    gViewBtn.emulRelease();
+    gModeBtn.emulRelease();
+
+    gCurrentTime += 1;
+    loop_();
+    TEST_DISPLAY("Lag time", "0.6");
+    TEST_ASSERT(!gRelayVal);
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Backlight", "5");
+
+    auto backlight = gBacklightVal;
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("Backlight", "6");
+    TEST_ASSERT(backlight < gBacklightVal);
+
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("Backlight", "5");
+    TEST_ASSERT(backlight == gBacklightVal);
+
+    gEncoder.emulRetInt(7);
+    loop_();
+    TEST_DISPLAY("Backlight", "7");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Beep volume", "3");
+
+    auto buzzerVal = gBuzzerVal;
+    TEST_ASSERT(buzzerVal == BEEP_VOLUME_SILENT);
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("Beep volume", "4");
+    TEST_ASSERT(buzzerVal < gBuzzerVal);
+    buzzerVal = gBuzzerVal;
+
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("Beep volume", "3");
+    TEST_ASSERT(buzzerVal > gBuzzerVal);
+    TEST_ASSERT(BEEP_VOLUME_SILENT < gBuzzerVal);
+
+    gEncoder.emulRetInt(7);
+    loop_();
+    TEST_DISPLAY("Beep volume", "7");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_ASSERT(BEEP_VOLUME_SILENT == gBuzzerVal);
+    TEST_DISPLAY("Auto finish view", "3 minutes");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("Auto finish view", "4 minutes");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Start with stngs", "No");
+
+    gEncoder.emulTurn(1);
+    loop_();
+    TEST_DISPLAY("Start with stngs", "Yes");
+
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    gViewBtn.emulRelease();
+    gModeBtn.emulRelease();
+
+    setup_();
+    loop_();
+
+    TEST_DISPLAY("Lag time", "0.6");
+
+    // check fast travel
+    gModeBtn.emulHold();
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gEncoder.emulTurn(1);
+    loop_();
+    gModeBtn.emulRelease();
+    loop_();
+
+    TEST_DISPLAY("Notify melody", "nice");
+
+    gEncoder.emulTurn(-1);
+    loop_();
+    TEST_DISPLAY("Notify melody", "alarm");
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_ASSERT_EQUAL_STRING("Version         ", gLcdWrap.getLine(0));
+
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY("Lag time", "0.6");
+
+    TEST_ASSERT((Settings::load() == Settings{
+
+                                         .lagTime = 6_ts,
+                                         .beepVolume = 7,
+                                         .backlight = 7,
+                                         .autoFinishViewMinutes = 4,
+                                         .startWithSettings = true,
+                                         .melody = Melody::alarm,
+                                     }));
+}
+
 int main() {
     UNITY_BEGIN();
+
     RUN_TEST(checkScenarioGeneric);
 
     RUN_TEST(checkFStopTest);
@@ -1653,5 +1877,7 @@ int main() {
 
     RUN_TEST(checkRelMaskMode);
     RUN_TEST(checkSplitRelMaskMode);
+
+    RUN_TEST(checkSettings);
     UNITY_END();
 }
