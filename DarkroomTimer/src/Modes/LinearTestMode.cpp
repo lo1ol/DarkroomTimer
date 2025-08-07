@@ -12,8 +12,6 @@ LinearTestMode::LinearTestMode(SubMode subMode) : kSubMode(subMode) {
     m_stepTime = 2_s;
     m_step = subMode == SplitGrade ? Step::baseTime : Step::initTime;
     m_currentRun = subMode == SplitGrade ? 0 : 1;
-
-    repaint();
 }
 
 void LinearTestMode::switchMode() {

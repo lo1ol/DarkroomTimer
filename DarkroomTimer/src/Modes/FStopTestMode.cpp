@@ -16,8 +16,6 @@ FStopTestMode::FStopTestMode(SubMode subMode) : kSubMode(subMode) {
     m_FStopPartId = 5;
     m_step = kSubMode == SplitGrade ? Step::baseTime : Step::initTime;
     m_currentRun = 0;
-
-    repaint();
 }
 
 void FStopTestMode::switchMode() {

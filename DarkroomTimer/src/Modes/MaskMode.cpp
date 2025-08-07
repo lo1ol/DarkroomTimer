@@ -35,8 +35,6 @@ MaskMode::MaskMode(uint8_t filterNum) {
         m_maxMasksNumber = min(15, m_timeTable[0].capacity() - 1);
     else
         m_maxMasksNumber = min(7, m_timeTable[0].capacity() - 1);
-
-    repaint();
 }
 
 void MaskMode::switchMode() {

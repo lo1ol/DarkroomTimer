@@ -951,19 +951,19 @@ void checkPrintMode() {
 
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("7.5 1793", "");
+    TEST_DISPLAY("Log 7.5 1793", "");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("7.5 1793", "");
+    TEST_DISPLAY("Log 7.5 1793", "");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("7.5 1793", "");
+    TEST_DISPLAY("Log 7.5 1793", "");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
@@ -990,7 +990,7 @@ void checkPrintMode() {
 
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("1 2 3 4 5 6 7 8", "9 10");
+    TEST_DISPLAY("Log 1 2 3 4 5 6", "7 8 9 10");
 
     gEncoderBtn.emulHold();
     loop_();
@@ -998,7 +998,7 @@ void checkPrintMode() {
 
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("1 2 3 4 5 6 7 8", "9 10");
+    TEST_DISPLAY("Log 1 2 3 4 5 6", "7 8 9 10");
 }
 
 void checkMaskMode() {

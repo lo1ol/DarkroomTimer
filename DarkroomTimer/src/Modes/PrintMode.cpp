@@ -6,13 +6,10 @@
 PrintMode::PrintMode() {
     m_timeTable.setBuffer(gModesCache, sizeof(gModesCache));
     m_timeTable.printBadAsZero(false);
-    m_timeTable.setPrefix("Log");
     m_timeTable.reset();
 
     m_printTime = 8_s;
     m_triggerByHold = false;
-
-    repaint();
 }
 
 void PrintMode::switchMode() {
@@ -98,6 +95,7 @@ void PrintMode::repaint() {
 
     if (m_showLog) {
         gScrollableContent.reset();
+        m_timeTable.setPrefix("Log");
         m_timeTable.flush();
         gScrollableContent.paint();
         return;

@@ -32,8 +32,6 @@ RelMaskMode::RelMaskMode(uint8_t filterNum) {
         m_maxMasksNumber = min(15, m_relTimeTable[0].capacity() - 1);
     else
         m_maxMasksNumber = min(7, m_relTimeTable[0].capacity() - 1);
-
-    repaint();
 }
 
 void RelMaskMode::switchMode() {

@@ -118,8 +118,8 @@ void processModeSwitch() {
         if (gBlockedByPreview) {
             if (gNewModeId != gModeId)
                 setMode(gNewModeId);
-            else
-                gModeProcessor->repaint();
+
+            gModeProcessor->repaint();
         }
         gBlocked = gBlockedByPreview = false;
         return;
@@ -248,6 +248,7 @@ void setup_() {
     gBeeper.setup();
 
     setMode(ModeId::testFStops);
+    gModeProcessor->repaint();
 
     pinMode(BACKLIGHT, OUTPUT);
     setDisplayBacklight(gSettings.backlight);
