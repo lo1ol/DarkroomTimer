@@ -30,7 +30,7 @@ private:
 #endif
     void setMelody(Melody*);
     void processAlarm();
-    void processPin() const;
+    void setPinState(bool pinState, bool force = false);
 
     bool m_pinState = false;
     State m_state = State::off;

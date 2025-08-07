@@ -8,13 +8,14 @@ Beeper::~Beeper() {
 }
 
 void Beeper::tick() {
+    // you couldn't change volume at runtime
     uint32_t currentTime = gMillis();
     switch (m_state) {
     case State::off:
         break;
     case State::on:
         if (m_timer <= currentTime) {
-            m_pinState = !m_pinState;
+            setPinState(!m_pinState);
             if (m_pinState)
                 m_timer += 100;
             else
@@ -22,67 +23,61 @@ void Beeper::tick() {
         }
         break;
     case State::single:
-        if (m_timer <= currentTime) {
-            m_state = State::off;
-            m_pinState = false;
-        }
+        if (m_timer <= currentTime)
+            stop();
         break;
     case State::alarm:
         processAlarm();
         break;
     }
-
-    processPin();
 }
 
 void Beeper::setup() {
     pinMode(m_pin, OUTPUT);
-    gAnalogWrite(m_pin, BEEP_VOLUME_SILENT);
-
+    setPinState(false, true);
     m_melody = Melody::getMelody(gSettings.melody);
 }
 
 void Beeper::beep() {
     m_state = State::single;
-
-    m_pinState = true;
     m_timer = gMillis() + 100;
-    processPin();
+    setPinState(true, true);
 }
 
 void Beeper::start() {
     m_state = State::on;
-    m_pinState = true;
     m_timer = gMillis() + 100;
-
-    processPin();
+    setPinState(true, true);
 }
 
 void Beeper::stop() {
     m_state = State::off;
-    m_pinState = false;
-    processPin();
+    setPinState(false, true);
 }
 
 void Beeper::alarm() {
     m_state = State::alarm;
-
     m_melody->init();
-
     processAlarm();
-    processPin();
+    // in case if volume was updated, but we were runned before
+    setPinState(m_pinState, true);
 }
 
 void Beeper::processAlarm() {
-    m_pinState = m_melody->tick();
+    setPinState(m_melody->tick());
     if (!m_melody->end())
         return;
 
     stop();
 }
 
-void Beeper::processPin() const {
-    if (m_pinState)
+void Beeper::setPinState(bool pinState, bool force) {
+    if (m_pinState == pinState && !force)
+        return;
+
+    m_pinState = pinState;
+
+    if (pinState)
         gAnalogWrite(m_pin, MIN_BEEP_VOLUME + (gSettings.beepVolume - 1) * BEEP_VOLUME_STEP);
     else
         // setting volume to BEEP_VOLUME_SILENT instead of 0 reduce bad noise on low volumes
