@@ -35,7 +35,7 @@ void Beeper::tick() {
 void Beeper::setup() {
     pinMode(m_pin, OUTPUT);
     setPinState(false, true);
-    m_melody = Melody::getMelody(gSettings.melody);
+    setMelody(gSettings.melody);
 }
 
 void Beeper::beep() {
