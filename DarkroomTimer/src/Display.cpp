@@ -2,7 +2,11 @@
 
 #include "LiquidCrystalWrap.h"
 
-Display::Display(LiquidCrystalWrap* lcd) : m_lcd(lcd), m_lines({ DisplayLine(0, m_lcd), DisplayLine(1, m_lcd) }) {}
+Display::Display(LiquidCrystalWrap* lcd) : m_lcd(lcd) {
+    int i = 0;
+    for (auto& line : m_lines)
+        line = DisplayLine(i++, m_lcd);
+}
 
 void Display::tick() {
     for (auto&& line : m_lines)

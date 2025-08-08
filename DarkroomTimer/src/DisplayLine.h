@@ -7,6 +7,7 @@ class LiquidCrystalWrap;
 
 class DisplayLine {
 public:
+    DisplayLine() = default;
     DisplayLine(int line, LiquidCrystalWrap* lcd) : m_line(line), m_lcd(lcd) {}
 
     void tick();
@@ -30,8 +31,8 @@ private:
     static void concatInt(char* dst, int value);
 
     bool m_needRepaint = false;
-    int m_line;
-    LiquidCrystalWrap* m_lcd;
+    int m_line = -1;
+    LiquidCrystalWrap* m_lcd = nullptr;
 
     uint32_t m_baseBlinkTime = 0;
     bool m_startBlinkState = false;

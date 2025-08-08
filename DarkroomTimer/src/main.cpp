@@ -176,7 +176,7 @@ void processSettings() {
 }
 
 void processView() {
-    static bool gViewState = LOW;
+    static bool gViewState = false;
 
     if (gBlocked && !gViewState)
         return;
@@ -210,7 +210,7 @@ void processView() {
     auto curTime = gMillis();
 
     if (curTime >= gViewModeTurnOffTime) {
-        gBlocked = gViewState = LOW;
+        gBlocked = gViewState = false;
         gDigitalWrite(RELAY, gViewState);
         gModeProcessor->repaint();
     } else {

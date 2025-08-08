@@ -2,7 +2,11 @@
 
 #include <stdint.h>
 
-#include <LiquidCrystal.h>
+#ifndef PIO_UNIT_TESTING
+    #include <LiquidCrystal.h>
+#else
+    #include <string.h>
+#endif
 
 #include "Config.h"
 

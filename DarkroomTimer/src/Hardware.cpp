@@ -1,7 +1,5 @@
 #include "Hardware.h"
 
-#include <LiquidCrystal.h>
-
 ButtonT<MODE_BTN> gModeBtn;
 ButtonT<START_BTN> gStartBtn;
 ButtonT<ENCODER_BTN> gEncoderBtn;

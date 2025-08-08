@@ -1851,6 +1851,7 @@ void checkSettings() {
     loop_();
     TEST_DISPLAY("Lag time", "0.6");
 
+#ifndef DT_NATIVE
     TEST_ASSERT((Settings::load() == Settings{
 
                                          .lagTime = 6_ts,
@@ -1860,6 +1861,7 @@ void checkSettings() {
                                          .startWithSettings = true,
                                          .melody = Melody::alarm,
                                      }));
+#endif
 
     gViewBtn.emulHold();
     gModeBtn.emulHold();

@@ -14,10 +14,9 @@ public:
     [[nodiscard]] constexpr explicit operator int16_t() const { return m_ts; }
 
     [[nodiscard]] constexpr Time operator*(double x) const { return Time{ static_cast<int32_t>(lround(m_ts * x)) }; }
-
     [[nodiscard]] constexpr Time operator*(int16_t x) const { return Time{ m_ts * static_cast<int32_t>(x) }; }
 
-    [[nodiscard]] constexpr Time operator/(int n) const { return Time{ m_ts / n }; }
+    [[nodiscard]] constexpr Time operator/(int16_t n) const { return Time{ m_ts / n }; }
     [[nodiscard]] constexpr Time operator+(const Time& o) const { return Time{ static_cast<int32_t>(m_ts) + o.m_ts }; }
     [[nodiscard]] constexpr Time operator-(const Time& o) const { return Time{ static_cast<int32_t>(m_ts) - o.m_ts }; }
     [[nodiscard]] constexpr Time operator-() const { return Time{ -m_ts }; }

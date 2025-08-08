@@ -1,18 +1,19 @@
 #include "Settings.h"
 
-#include <CRC32.h>
-#include <EEPROM.h>
+#ifndef DT_NATIVE
+    #include <CRC32.h>
+    #include <EEPROM.h>
 
-#include "Config.h"
+    #include "Config.h"
 
 Settings Settings::load() {
     Settings res;
     int idx = 0;
     CRC32 crc32;
-#define GET_SETTING(value)    \
-    EEPROM.get(idx, (value)); \
-    idx += sizeof(value);     \
-    crc32.update(value);
+    #define GET_SETTING(value)    \
+        EEPROM.get(idx, (value)); \
+        idx += sizeof(value);     \
+        crc32.update(value);
 
     GET_SETTING(res.lagTime);
     GET_SETTING(res.beepVolume);
@@ -24,7 +25,7 @@ Settings Settings::load() {
     uint32_t hash = crc32.finalize();
     uint32_t storedHash;
     GET_SETTING(storedHash);
-#undef GET_SETTING
+    #undef GET_SETTING
 
     bool badSettings = false;
     badSettings |= hash != storedHash;
@@ -49,10 +50,10 @@ Settings Settings::load() {
 void Settings::updateEEPROM() {
     int idx = 0;
     CRC32 crc32;
-#define PUT_SETTING(value)    \
-    EEPROM.put(idx, (value)); \
-    idx += sizeof(value);     \
-    crc32.update(value);
+    #define PUT_SETTING(value)    \
+        EEPROM.put(idx, (value)); \
+        idx += sizeof(value);     \
+        crc32.update(value);
 
     PUT_SETTING(lagTime);
     PUT_SETTING(beepVolume);
@@ -61,8 +62,15 @@ void Settings::updateEEPROM() {
     PUT_SETTING(startWithSettings);
     PUT_SETTING(melody);
     PUT_SETTING(crc32.finalize());
-#undef PUT_SETTING
+    #undef PUT_SETTING
 }
+
+#else
+Settings Settings::load() {
+    return kDefaultSettings;
+}
+void Settings::updateEEPROM() {}
+#endif
 
 bool Settings::operator==(const Settings& o) const {
     return lagTime == o.lagTime && beepVolume == o.beepVolume && backlight == o.backlight &&

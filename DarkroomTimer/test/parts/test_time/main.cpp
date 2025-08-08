@@ -13,7 +13,7 @@ static_assert(Time(42).tenth() == 2);
 
 static_assert(42_ts + 15_ts == 57_ts);
 static_assert(42_ts - 15_ts == 27_ts);
-static_assert(42_ts * 2 == 84_ts);
+static_assert(42_ts * int16_t(2) == 84_ts);
 static_assert(42_ts / 5 == 8_ts);
 static_assert(-Time(42) == Time(-42));
 static_assert(Time(42) == -Time(-42));
@@ -31,7 +31,7 @@ void nonContstexprTests() {
     TEST_ASSERT(4300 == Time::fromMillis(4251).toMillis());
     TEST_ASSERT((kMaxTime + 1_ts) == kBadTime);
     TEST_ASSERT((kMaxTime + 2_ts) == kBadTime);
-    TEST_ASSERT(((kMaxTime / 2 + 1_ts) * 2) == kBadTime);
+    TEST_ASSERT(((kMaxTime / 2 + 1_ts) * int16_t(2)) == kBadTime);
 
     TEST_ASSERT(84_ts == (2. * 42_ts));
     TEST_ASSERT(-84_ts == ((-2.) * 42_ts));

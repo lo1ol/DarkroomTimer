@@ -101,7 +101,7 @@ Time LinearTestMode::getPrintTime() const {
         return m_initTime;
 
     if (kSubMode == Local)
-        return m_initTime + m_stepTime * (realStep - 1);
+        return m_initTime + m_stepTime * static_cast<int16_t>(realStep - 1);
     else
         return m_stepTime;
 }
@@ -114,7 +114,7 @@ Time LinearTestMode::getTotalTime(uint8_t id) const {
     if (realId == 0)
         return m_baseTime;
 
-    return m_initTime + m_stepTime * (realId - 1);
+    return m_initTime + m_stepTime * static_cast<int16_t>(realId - 1);
 }
 void LinearTestMode::reset() {
     m_currentRun = 0;

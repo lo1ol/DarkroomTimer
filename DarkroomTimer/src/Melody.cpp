@@ -84,6 +84,7 @@ Melody* Melody::getMelody(Name name) {
         return new MelodyPlayer(kHotlineMelody, ArraySize(kHotlineMelody));
     }
 
+    assert(false);
     return nullptr;
 }
 

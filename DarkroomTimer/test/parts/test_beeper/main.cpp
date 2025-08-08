@@ -34,13 +34,11 @@ private:
     uint32_t m_timer;
 };
 
-SimpleMelody gSimpleMelody;
-
 void setUp() {
     gCurrentTime = 0;
     gBeeper.stop();
     gSettings.beepVolume = 3;
-    gBeeper.setMelody(&gSimpleMelody);
+    gBeeper.setMelody(new SimpleMelody);
 }
 
 void tearDown() {}

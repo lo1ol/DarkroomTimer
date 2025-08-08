@@ -1,5 +1,6 @@
 #include "RelTime.h"
 
+#include <Arduino.h>
 #include <stdlib.h>
 #include <string.h>
 
