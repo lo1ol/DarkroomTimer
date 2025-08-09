@@ -62,13 +62,11 @@ void RelMaskMode::switchMode() {
 }
 
 void RelMaskMode::setCurrentMask(uint8_t filter, uint8_t mask) {
-    if (filter == m_filterNum) {
-        for (auto& relTimeTable : m_relTimeTable)
-            relTimeTable.setCurrent(-2);
-    } else {
-        m_relTimeTable[m_currentFilter].setCurrent(-2);
+    for (auto& relTimeTable : m_relTimeTable)
+        relTimeTable.setCurrent(-2);
+
+    if (filter != m_filterNum)
         m_relTimeTable[filter].setCurrent(mask);
-    }
 
     m_currentFilter = filter;
     m_currentMask = mask;
