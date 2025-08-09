@@ -288,6 +288,11 @@ void checkEncoderTime() {
     gEncoder.clear();
     TEST_ASSERT(!gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(1800000, t.toMillis());
+
+    t = kBadTime;
+    gEncoder.tick();
+    TEST_ASSERT(gEncoder.getTime(t));
+    TEST_ASSERT_EQUAL(0, t.toMillis());
 }
 
 void checkEncoderRelTime() {

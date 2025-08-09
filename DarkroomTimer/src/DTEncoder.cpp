@@ -161,6 +161,11 @@ bool DTEncoder::getTime(Time& time, bool smooth) const {
         return true;
     }
 #endif
+    if (time == kBadTime) {
+        time = 0_s;
+        return true;
+    }
+
     Time shift;
     if (!smooth)
         shift = Time(getAceleratedShift(4));
