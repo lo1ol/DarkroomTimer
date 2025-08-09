@@ -98,5 +98,6 @@ const char* Melody::getMelodyName(Name name) {
         return "Hotline Miami";
     }
 
+    assert(false);
     return nullptr;
 }

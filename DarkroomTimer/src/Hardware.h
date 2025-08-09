@@ -4,8 +4,8 @@
 
 #include "Beeper.h"
 #include "Config.h"
+#include "DTEncoder.h"
 #include "Display.h"
-#include "EncoderWrap.h"
 #include "LiquidCrystalWrap.h"
 #include "ScrollableContent.h"
 #include "Settings.h"
@@ -13,7 +13,7 @@
 
 void setDisplayBacklight(uint8_t val);
 
-extern EncoderWrap gEncoder;
+extern DTEncoder& gEncoder;
 extern ButtonT<MODE_BTN> gModeBtn;
 extern ButtonT<START_BTN> gStartBtn;
 extern ButtonT<ENCODER_BTN> gEncoderBtn;

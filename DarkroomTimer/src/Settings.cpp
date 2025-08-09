@@ -36,7 +36,6 @@ Settings Settings::load() {
     badSettings |= res.backlight < kMinBacklight;
     badSettings |= res.backlight > kMaxBacklight;
     badSettings |= res.autoFinishViewMinutes > kMaxAutoFinishViewMinutes;
-    badSettings |= res.melody < 0;
     badSettings |= res.melody >= Melody::last_;
 
     if (badSettings) {

@@ -3,93 +3,121 @@
 
 #include <Hardware.h>
 
-void setUp() {}
+void setUp() {
+    gEncoder.clear();
+}
 
 void tearDown() {}
+
+void checkEncoderDir() {
+    gEncoder.emulTurns(2);
+    TEST_ASSERT_EQUAL(0, gEncoder.getDir());
+
+    gEncoder.tick();
+    TEST_ASSERT_EQUAL(1, gEncoder.getDir());
+
+    gEncoder.emulTurns(-3);
+    gEncoder.tick();
+    TEST_ASSERT_EQUAL(-1, gEncoder.getDir());
+
+    gEncoder.emulFastTurns(-3);
+    gEncoder.tick();
+    TEST_ASSERT_EQUAL(-1, gEncoder.getDir());
+
+    gEncoder.emulTurns(3);
+    gEncoder.emulFastTurns(-3);
+    gEncoder.tick();
+    TEST_ASSERT_EQUAL(0, gEncoder.getDir());
+
+    gEncoder.emulTurns(4);
+    gEncoder.emulFastTurns(-3);
+    gEncoder.tick();
+    TEST_ASSERT_EQUAL(1, gEncoder.getDir());
+}
 
 void checkEncoderInt() {
     uint8_t val = 3;
     TEST_ASSERT(!gEncoder.getInt(val, 0, 6));
     TEST_ASSERT_EQUAL(3, val);
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(2);
     TEST_ASSERT(!gEncoder.getInt(val, 0, 6));
     TEST_ASSERT_EQUAL(3, val);
 
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 6));
-    TEST_ASSERT_EQUAL(4, val);
+    TEST_ASSERT_EQUAL(5, val);
 
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getInt(val, 0, 6));
-    TEST_ASSERT_EQUAL(4, val);
+    TEST_ASSERT_EQUAL(5, val);
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 6));
     TEST_ASSERT_EQUAL(3, val);
 
     // fast turn didn't work on small ranges
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 6));
-    TEST_ASSERT_EQUAL(4, val);
+    TEST_ASSERT_EQUAL(5, val);
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 6));
     TEST_ASSERT_EQUAL(3, val);
 
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
-    TEST_ASSERT_EQUAL(8, val);
+    TEST_ASSERT_EQUAL(9, val);
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
-    TEST_ASSERT_EQUAL(3, val);
+    TEST_ASSERT_EQUAL(6, val);
 
     val = 49;
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(50, val);
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(50, val);
 
     val = 49;
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(50, val);
 
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(50, val);
 
     val = 1;
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(0, val);
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(0, val);
 
     val = 1;
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(0, val);
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getInt(val, 0, 50));
     TEST_ASSERT_EQUAL(0, val);
@@ -121,16 +149,34 @@ void checkEncoderInt() {
     TEST_ASSERT_EQUAL(3, val);
 
     val = 5;
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 3));
     TEST_ASSERT_EQUAL(3, val);
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     gEncoder.clear();
     TEST_ASSERT(!gEncoder.getInt(val, 0, 3));
     TEST_ASSERT_EQUAL(3, val);
+
+    val = 5;
+    gEncoder.emulTurns(1);
+    gEncoder.tick();
+    TEST_ASSERT(gEncoder.getInt(val, 0, 3));
+    TEST_ASSERT_EQUAL(3, val);
+
+    gEncoder.emulTurns(-1);
+    gEncoder.tick();
+    gEncoder.clear();
+    TEST_ASSERT(!gEncoder.getInt(val, 0, 3));
+    TEST_ASSERT_EQUAL(3, val);
+
+    gEncoder.emulTurns(2);
+    gEncoder.emulFastTurns(3);
+    gEncoder.tick();
+    TEST_ASSERT(gEncoder.getInt(val, 0, 100));
+    TEST_ASSERT_EQUAL(14, val);
 }
 
 void checkEncoderTime() {
@@ -138,7 +184,7 @@ void checkEncoderTime() {
     TEST_ASSERT(!gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(300, t.toMillis());
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     TEST_ASSERT(!gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(300, t.toMillis());
 
@@ -146,71 +192,71 @@ void checkEncoderTime() {
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(400, t.toMillis());
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(300, t.toMillis());
 
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(1100, t.toMillis());
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(300, t.toMillis());
 
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t, true));
     TEST_ASSERT_EQUAL(400, t.toMillis());
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t, true));
     TEST_ASSERT_EQUAL(300, t.toMillis());
 
     t = 1800_s - 1_ts;
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(1800000, t.toMillis());
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(1800000, t.toMillis());
 
     t = 1800_s - 1_ts;
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(1800000, t.toMillis());
 
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(1800000, t.toMillis());
 
     t = 1_ts;
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(0, t.toMillis());
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(0, t.toMillis());
 
     t = 1_ts;
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(0, t.toMillis());
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(0, t.toMillis());
@@ -237,7 +283,7 @@ void checkEncoderTime() {
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(1800000, t.toMillis());
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     gEncoder.clear();
     TEST_ASSERT(!gEncoder.getTime(t));
@@ -250,7 +296,7 @@ void checkEncoderRelTime() {
     TEST_ASSERT(!gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(3, t.getId());
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     TEST_ASSERT(!gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(3, t.getId());
 
@@ -258,61 +304,61 @@ void checkEncoderRelTime() {
     TEST_ASSERT(gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(4, t.getId());
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(3, t.getId());
 
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
-    TEST_ASSERT_EQUAL(8, t.getId());
+    TEST_ASSERT_EQUAL(6, t.getId());
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(3, t.getId());
 
     t = RelTime{ kMaxRelTime.getId() - 1 };
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(kMaxRelTime.getId(), t.getId());
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(kMaxRelTime.getId(), t.getId());
 
     t = RelTime{ kMaxRelTime.getId() - 1 };
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(kMaxRelTime.getId(), t.getId());
 
-    gEncoder.emulTurnFast(1);
+    gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(kMaxRelTime.getId(), t.getId());
 
     t = RelTime{ 1 };
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(0, t.getId());
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(0, t.getId());
 
     t = RelTime{ 1 };
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(0, t.getId());
 
-    gEncoder.emulTurnFast(-1);
+    gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getRelTime(t));
     TEST_ASSERT_EQUAL(0, t.getId());
@@ -342,6 +388,7 @@ void checkEncoderRelTime() {
 
 int main() {
     UNITY_BEGIN();
+    RUN_TEST(checkEncoderDir);
     RUN_TEST(checkEncoderInt);
     RUN_TEST(checkEncoderTime);
     RUN_TEST(checkEncoderRelTime);

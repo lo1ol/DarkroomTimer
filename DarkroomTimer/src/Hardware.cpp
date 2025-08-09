@@ -15,24 +15,8 @@ ScrollableContent gScrollableContent;
 LiquidCrystal gLcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 LiquidCrystalWrap gLcdWrap(gLcd);
 
-static EncButton gEncButton(ENCODER_DT, ENCODER_CLK);
-void isr() {
-    gEncButton.tickISR();
-}
-
-EncButton* getEncoder() {
-    attachInterrupt(0, isr, CHANGE);
-    attachInterrupt(1, isr, CHANGE);
-    gEncButton.setEncISR(true);
-    return &gEncButton;
-}
-
-EncoderWrap gEncoder(getEncoder());
-
 #else
-
 LiquidCrystalWrap gLcdWrap;
-EncoderWrap gEncoder;
 
 int gBuzzerVal = 0;
 int gBacklightVal = 0;
@@ -70,6 +54,7 @@ void gDigitalWrite(uint8_t pin, uint8_t val) {
 }
 #endif
 
+DTEncoder& gEncoder = DTEncoder::getInstance();
 Display gDisplay(&gLcdWrap);
 
 void setDisplayBacklight(uint8_t val) {

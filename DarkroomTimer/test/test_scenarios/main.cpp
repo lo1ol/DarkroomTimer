@@ -62,18 +62,18 @@ void checkScenarioGeneric() {
     TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
 
     gModeBtn.emulPress();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
-    loop_();
-    TEST_DISPLAY("Printing", "");
-
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Printing", "");
 
-    gEncoder.emulTurn(-1);
     loop_();
-    gEncoder.emulTurn(-1);
+    TEST_DISPLAY("Printing", "");
+
+    gEncoder.emulTurns(-1);
+    loop_();
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("F Stop test", "");
     gModeBtn.emulRelease();
@@ -131,28 +131,28 @@ void checkFStopTest() {
 
     TEST_DISPLAY("F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     TEST_DISPLAY("F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/2");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/3");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/4");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/6");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/12");
 
@@ -199,19 +199,19 @@ void checkFStopTest() {
     loop_();
     TEST_DISPLAY("Run        1907", "2020 2141 2268");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
 
@@ -250,17 +250,17 @@ void checkFStopTest() {
     gModeBtn.emulClick();
     loop_();
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/1");
 
@@ -296,11 +296,11 @@ void checkLocalFStopTest() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -317,28 +317,28 @@ void checkLocalFStopTest() {
 
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/2");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/3");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/4");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/6");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/12");
 
@@ -385,19 +385,19 @@ void checkLocalFStopTest() {
     loop_();
     TEST_DISPLAY("Run        1907", "2020 2141 2268");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
 
@@ -436,17 +436,17 @@ void checkLocalFStopTest() {
     gModeBtn.emulClick();
     loop_();
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/1");
 
@@ -480,15 +480,15 @@ void checkSpltFStopTest() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     gModeBtn.emulRelease();
     loop_();
@@ -548,7 +548,7 @@ void checkLinearTest() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -611,27 +611,27 @@ void checkLinearTest() {
     loop_();
     TEST_DISPLAY("Run        1900", "2000 2100 2200");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2000 2100 2200", "2300 2400 2500");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2300 2400 2500", "2600 2700 2800");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2900 3000 3100", "3200");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2900 3000 3100", "3200");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
 
@@ -648,7 +648,7 @@ void checkLocalLinearTest() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -711,27 +711,27 @@ void checkLocalLinearTest() {
     loop_();
     TEST_DISPLAY("Run        1900", "2000 2100 2200");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2000 2100 2200", "2300 2400 2500");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2300 2400 2500", "2600 2700 2800");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2900 3000 3100", "3200");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("2900 3000 3100", "3200");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
 
@@ -748,17 +748,17 @@ void checkSpltLinearTest() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -823,9 +823,9 @@ void checkPrintMode() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -1006,11 +1006,11 @@ void checkMaskMode() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -1035,9 +1035,9 @@ void checkMaskMode() {
         // and check fast trevel
         if (t == kBadTime) {
             gEncoderBtn.emulPress();
-            gEncoder.emulTurn(1);
+            gEncoder.emulTurns(1);
             loop_();
-            gEncoder.emulTurn(1);
+            gEncoder.emulTurns(1);
             loop_();
             gEncoderBtn.emulRelease();
             loop_();
@@ -1104,7 +1104,7 @@ void checkMaskMode() {
     TEST_ASSERT(!gRelayVal);
 
     // Scroll didn't work on finished
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("3 0 0.8 1.9 1800", "1.7     Finished");
 
@@ -1112,7 +1112,7 @@ void checkMaskMode() {
     loop_();
     TEST_DISPLAY("Run     1 3 0.2", "6 1800 0 32 0 7");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("6 1800 0 32 0 7", "3 0 0.8 1.9 1800");
 
@@ -1127,19 +1127,19 @@ void checkSplitMaskMode() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -1172,9 +1172,9 @@ void checkSplitMaskMode() {
             // and check fast trevel
             if (t == kBadTime) {
                 gEncoderBtn.emulPress();
-                gEncoder.emulTurn(1);
+                gEncoder.emulTurns(1);
                 loop_();
-                gEncoder.emulTurn(1);
+                gEncoder.emulTurns(1);
                 loop_();
                 gEncoderBtn.emulRelease();
                 loop_();
@@ -1241,7 +1241,7 @@ void checkSplitMaskMode() {
     TEST_ASSERT(!gRelayVal);
 
     // Scroll didn't work on finished
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("R F2 10 0 3 0", "0.8 1.9 Finished");
 
@@ -1249,7 +1249,7 @@ void checkSplitMaskMode() {
     loop_();
     TEST_DISPLAY("R F1     1 500 1", "40 1800 0 32");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("40 1800 0 32", "R F2 10 0 3 0");
 
@@ -1264,13 +1264,13 @@ void checkRelMaskMode() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -1359,7 +1359,7 @@ void checkRelMaskMode() {
     TEST_ASSERT(!gRelayVal);
 
     // Scroll didn't work on finished
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("1/4 2+1/2 2+5/12", "3+3/4   Finished");
 
@@ -1367,7 +1367,7 @@ void checkRelMaskMode() {
     loop_();
     TEST_DISPLAY("Run      2/3 0", "7/12 1+1/12 5 5");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("7/12 1+1/12 5 5", "7/12 0 0 5/6 0");
 
@@ -1442,11 +1442,11 @@ void checkSplitRelMaskMode() {
 
     gModeBtn.emulHold();
     loop_();
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -1550,7 +1550,7 @@ void checkSplitRelMaskMode() {
     TEST_ASSERT(!gRelayVal);
 
     // Scroll didn't work on finished
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("5/6 0 2+1/2", "2+5/12 3Finished");
 
@@ -1558,7 +1558,7 @@ void checkSplitRelMaskMode() {
     loop_();
     TEST_DISPLAY("R F1      2/3 0", "1+7/12 1+1/12 5");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("1+7/12 1+1/12 5", "5 7/12");
 
@@ -1643,9 +1643,9 @@ void checkSettings() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();
@@ -1755,12 +1755,12 @@ void checkSettings() {
     TEST_DISPLAY("Backlight", "5");
 
     auto backlight = gBacklightVal;
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Backlight", "6");
     TEST_ASSERT(backlight < gBacklightVal);
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Backlight", "5");
     TEST_ASSERT(backlight == gBacklightVal);
@@ -1776,13 +1776,13 @@ void checkSettings() {
     auto buzzerVal = gBuzzerVal;
     TEST_ASSERT(buzzerVal == BEEP_VOLUME_SILENT);
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Beep volume", "4");
     TEST_ASSERT(buzzerVal < gBuzzerVal);
     buzzerVal = gBuzzerVal;
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Beep volume", "3");
     TEST_ASSERT(buzzerVal > gBuzzerVal);
@@ -1797,7 +1797,7 @@ void checkSettings() {
     TEST_ASSERT(BEEP_VOLUME_SILENT == gBuzzerVal);
     TEST_DISPLAY("Auto finish view", "3 minutes");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Auto finish view", "4 minutes");
 
@@ -1805,7 +1805,7 @@ void checkSettings() {
     loop_();
     TEST_DISPLAY("Start with stngs", "No");
 
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Start with stngs", "Yes");
 
@@ -1824,22 +1824,22 @@ void checkSettings() {
     // check fast travel
     gModeBtn.emulHold();
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
     gModeBtn.emulRelease();
     loop_();
 
     TEST_DISPLAY("Notify melody", "nice");
 
-    gEncoder.emulTurn(-1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Notify melody", "alarm");
 
@@ -1876,9 +1876,9 @@ void checkView() {
     loop_();
 
     gModeBtn.emulHold();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
-    gEncoder.emulTurn(1);
+    gEncoder.emulTurns(1);
     loop_();
 
     gModeBtn.emulRelease();

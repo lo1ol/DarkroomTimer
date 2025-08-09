@@ -10,7 +10,7 @@
     #define EB_CLICK_TIME 200 // таймаут ожидания кликов (кнопка)
     #define EB_STEP_TIME 200  // таймаут импульсного удержания (кнопка)
     #define EB_HOLD_TIME 500  // таймаут удержания (кнопка)
-    #define EB_FAST_TIME 13   // таймаут быстрого поворота (энкодер)
+    #define EB_FAST_TIME 12   // таймаут быстрого поворота (энкодер)
 
     #include <EncButton.h>
 #else

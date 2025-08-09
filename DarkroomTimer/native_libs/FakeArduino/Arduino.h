@@ -8,7 +8,12 @@
 
 #define OUTPUT 0
 
-#define pinMode(pin, mode)
+#define pinMode(pin, mode) \
+    {}
+#define noInterrupts() \
+    {}
+#define interrupts() \
+    {}
 
 void itoa(int n, char s[], int base);
 

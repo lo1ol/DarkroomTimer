@@ -16,6 +16,9 @@
 #define START_BTN A1
 #define ENCODER_BTN A3
 
+// You shouldn't change this pins
+// Otherwise encoder could stop to work.
+// You allowed only swap them, to change encoder direction
 #define ENCODER_DT 2
 #define ENCODER_CLK 3
 
@@ -38,4 +41,15 @@
 static_assert(MAX_BEEP_VOLUME <= 255);
 static_assert(BACKLIGHT_STEP <= 25);
 
+// Time on which encoder starts to move faster
+#define ENCODER_FAST_TIMEOUT 11
+
 #define TIMER_FIRMWARE_VERSION "0.4.3"
+
+#if ENCODER_DT == 2 && ENCODER_CLK == 3
+    #define ENCODER_DIRECTION (1)
+#elif ENCODER_DT == 3 && ENCODER_CLK == 2
+    #define ENCODER_DIRECTION (-1)
+#else
+static_assert(false && "Bad values for ENCODER_DT and ENCODER_CLK")
+#endif
