@@ -33,6 +33,12 @@ void checkEncoderDir() {
     gEncoder.emulFastTurns(-3);
     gEncoder.tick();
     TEST_ASSERT_EQUAL(1, gEncoder.getDir());
+
+    gEncoder.emulTurns(-7);
+    gEncoder.emulFastTurns(3);
+    gEncoder.emulFastFastTurns(2);
+    gEncoder.tick();
+    TEST_ASSERT_EQUAL(-1, gEncoder.getDir());
 }
 
 void checkEncoderInt() {
@@ -71,12 +77,12 @@ void checkEncoderInt() {
     gEncoder.emulFastTurns(2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
-    TEST_ASSERT_EQUAL(9, val);
+    TEST_ASSERT_EQUAL(7, val);
 
     gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 50));
-    TEST_ASSERT_EQUAL(6, val);
+    TEST_ASSERT_EQUAL(5, val);
 
     val = 49;
     gEncoder.emulTurns(1);
@@ -176,7 +182,14 @@ void checkEncoderInt() {
     gEncoder.emulFastTurns(3);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getInt(val, 0, 100));
-    TEST_ASSERT_EQUAL(14, val);
+    TEST_ASSERT_EQUAL(11, val);
+
+    gEncoder.emulTurns(2);
+    gEncoder.emulFastTurns(3);
+    gEncoder.emulFastFastTurns(-3);
+    gEncoder.tick();
+    TEST_ASSERT(gEncoder.getInt(val, 0, 100));
+    TEST_ASSERT_EQUAL(7, val);
 }
 
 void checkEncoderTime() {
@@ -200,7 +213,7 @@ void checkEncoderTime() {
     gEncoder.emulFastTurns(2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1100, t.toMillis());
+    TEST_ASSERT_EQUAL(900, t.toMillis());
 
     gEncoder.emulFastTurns(-2);
     gEncoder.tick();
@@ -293,6 +306,14 @@ void checkEncoderTime() {
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
     TEST_ASSERT_EQUAL(0, t.toMillis());
+
+    t = 0_s;
+    gEncoder.emulTurns(2);
+    gEncoder.emulFastTurns(-1);
+    gEncoder.emulFastFastTurns(3);
+    gEncoder.tick();
+    TEST_ASSERT(gEncoder.getTime(t));
+    TEST_ASSERT_EQUAL(1700, t.toMillis());
 }
 
 void checkEncoderRelTime() {
@@ -317,7 +338,7 @@ void checkEncoderRelTime() {
     gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getRelTime(t));
-    TEST_ASSERT_EQUAL(6, t.getId());
+    TEST_ASSERT_EQUAL(5, t.getId());
 
     gEncoder.emulFastTurns(-1);
     gEncoder.tick();

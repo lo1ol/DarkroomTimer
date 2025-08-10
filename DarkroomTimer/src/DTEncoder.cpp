@@ -29,10 +29,12 @@ void DTEncoder::isr() {
     m_subPos = 0;
 
     uint16_t curTime = gMillis();
-    if (static_cast<uint16_t>(curTime - m_lastTurnChangeTime) < ENCODER_FAST_TIMEOUT)
-        m_fastTurnCounter += dir;
+    if (static_cast<uint16_t>(curTime - m_lastTurnChangeTime) < ENCODER_FAST_FAST_TIMEOUT)
+        m_turnCounters[2] += dir;
+    else if (static_cast<uint16_t>(curTime - m_lastTurnChangeTime) < ENCODER_FAST_TIMEOUT)
+        m_turnCounters[1] += dir;
     else
-        m_turnCounter += dir;
+        m_turnCounters[0] += dir;
 
     m_lastTurnChangeTime = curTime;
 }
@@ -62,7 +64,7 @@ DTEncoder& DTEncoder::getInstance() {
 }
 
 int8_t DTEncoder::getDir() const {
-    int8_t turns = m_regTurns + m_regFastTurns;
+    int8_t turns = getShift();
 
     if (!turns)
         return 0;
@@ -74,16 +76,15 @@ int8_t DTEncoder::getDir() const {
 }
 
 int8_t DTEncoder::getShift() const {
-    return m_regTurns + m_regFastTurns;
+    return m_retTurnCounters[0] + m_retTurnCounters[1] + m_retTurnCounters[2];
 }
 
-int8_t DTEncoder::getAceleratedShift(uint8_t factor) const {
-    return m_regTurns + m_regFastTurns * factor;
+int8_t DTEncoder::getAceleratedShift(uint8_t factor1, uint8_t factor2) const {
+    return m_retTurnCounters[0] + m_retTurnCounters[1] * factor1 + m_retTurnCounters[2] * factor2;
 }
 
 void DTEncoder::clear() {
-    m_regTurns = 0;
-    m_regFastTurns = 0;
+    memset(m_retTurnCounters, 0, sizeof(m_retTurnCounters));
 
 #ifdef PIO_UNIT_TESTING 
     m_retInt = m_reqRetInt;
@@ -94,10 +95,9 @@ void DTEncoder::clear() {
 
 void DTEncoder::tick() {
     noInterrupts();
-    m_regTurns = m_turnCounter;
-    m_regFastTurns = m_fastTurnCounter;
-    m_turnCounter = 0;
-    m_fastTurnCounter = 0;
+    static_assert(sizeof(m_retTurnCounters) == sizeof(m_turnCounters));
+    memcpy(m_retTurnCounters, m_turnCounters, sizeof(m_retTurnCounters));
+    memset(m_turnCounters, 0, sizeof(m_turnCounters));
     interrupts();
 
 #ifdef PIO_UNIT_TESTING 
@@ -121,7 +121,7 @@ bool DTEncoder::getInt(uint8_t& choosen, uint8_t min, uint8_t max) const {
 #endif
     int8_t shift;
     if (max - min > 30)
-        shift = getAceleratedShift(3);
+        shift = getAceleratedShift(2, 4);
     else
         shift = getShift();
 
@@ -173,7 +173,7 @@ bool DTEncoder::getTime(Time& time, bool smooth) const {
 
     int16_t shift;
     if (!smooth)
-        shift = getAceleratedShift(4);
+        shift = getAceleratedShift(3, 6);
     else
         shift = getShift();
 

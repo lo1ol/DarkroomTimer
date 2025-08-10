@@ -42,7 +42,9 @@ static_assert(MAX_BEEP_VOLUME <= 255);
 static_assert(BACKLIGHT_STEP <= 25);
 
 // Time on which encoder starts to move faster
-#define ENCODER_FAST_TIMEOUT 11
+#define ENCODER_FAST_TIMEOUT 22
+// Time on which encoder starts to even faster
+#define ENCODER_FAST_FAST_TIMEOUT 6
 
 #define TIMER_FIRMWARE_VERSION "0.5.0"
 

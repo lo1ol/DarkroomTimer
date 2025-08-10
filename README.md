@@ -148,6 +148,8 @@ You can configure the firmware by your needs. For this, you have to change macro
 * `MAX_BACKLIGHT` -- maximum backlight value (maximum value is 25)
 * `MIN_BEEP_VOLUME` -- minimum buzzer volume (can be different on different buzzers)
 * `BEEP_VOLUME_STEP` -- step size of buzzer valume
+* `ENCODER_FAST_TIMEOUT` -- time of encoder turn before which values will be changing faster
+* `ENCODER_FAST_FAST_TIMEOUT` -- time of encoder turn before which values will be changing more faster
 
 > NB: Swapping of ENCODER_DT with ENCODER_CLK change direction of encoder
 

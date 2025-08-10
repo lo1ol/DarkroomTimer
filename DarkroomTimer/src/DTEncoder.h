@@ -22,26 +22,25 @@ public:
 
 private:
     [[nodiscard]] int8_t getShift() const;
-    [[nodiscard]] int8_t getAceleratedShift(uint8_t factor) const;
+    [[nodiscard]] int8_t getAceleratedShift(uint8_t factor1, uint8_t factor2) const;
 
 #ifndef PIO_UNIT_TESTING
     static void isr_();
     void isr();
 #endif
 
-    int8_t m_turnCounter = 0;
-    int8_t m_fastTurnCounter = 0;
+    int8_t m_turnCounters[3] = {};
     int8_t m_lastEncoderState = 0;
     int8_t m_subPos = 0;
     uint16_t m_lastTurnChangeTime = 0;
 
-    int8_t m_regTurns = 0;
-    int8_t m_regFastTurns = 0;
+    int8_t m_retTurnCounters[3] = {};
 
 #ifdef PIO_UNIT_TESTING
 public:
-    void emulTurns(int8_t turns) { m_turnCounter += turns; }
-    void emulFastTurns(int8_t turns) { m_fastTurnCounter += turns; }
+    void emulTurns(int8_t turns) { m_turnCounters[0] += turns; }
+    void emulFastTurns(int8_t turns) { m_turnCounters[1] += turns; }
+    void emulFastFastTurns(int8_t turns) { m_turnCounters[2] += turns; }
 
     void emulRetInt(int v) {
         m_reqRetInt = true;
