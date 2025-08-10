@@ -9,6 +9,8 @@ void setUp() {
 
 void tearDown() {}
 
+#define TEST_ASSERT_EQUAL_TIME(t1, t2) TEST_ASSERT_EQUAL((t1).toMillis(), (t2).toMillis());
+
 void checkEncoderDir() {
     gEncoder.emulTurns(2);
     TEST_ASSERT_EQUAL(0, gEncoder.getDir());
@@ -195,117 +197,117 @@ void checkEncoderInt() {
 void checkEncoderTime() {
     Time t = 3_ts;
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(300, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(3_ts, t);
 
     gEncoder.emulTurns(1);
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(300, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(3_ts, t);
 
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(400, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(4_ts, t);
 
     gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(300, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(3_ts, t);
 
     gEncoder.emulFastTurns(2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(900, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(9_ts, t);
 
     gEncoder.emulFastTurns(-2);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(300, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(3_ts, t);
 
     gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t, true));
-    TEST_ASSERT_EQUAL(400, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(4_ts, t);
 
     gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t, true));
-    TEST_ASSERT_EQUAL(300, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(3_ts, t);
 
-    t = 1800_s - 1_ts;
+    t = kMaxTime - 1_ts;
     gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1800000, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(36000_ts, t);
 
     gEncoder.emulTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1800000, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(36000_ts, t);
 
-    t = 1800_s - 1_ts;
+    t = kMaxTime - 1_ts;
     gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1800000, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(36000_ts, t);
 
     gEncoder.emulFastTurns(1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1800000, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(36000_ts, t);
 
     t = 1_ts;
     gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(0, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(0_ts, t);
 
     gEncoder.emulTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(0, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(0_ts, t);
 
     t = 1_ts;
     gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(0, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(0_ts, t);
 
     gEncoder.emulFastTurns(-1);
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(0, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(0_ts, t);
 
     gEncoder.emulRetTime(1_s);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1000, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(10_ts, t);
 
     gEncoder.emulRetTime(1_s);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1000, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(10_ts, t);
 
     t = 5_ts;
     gEncoder.emulRetTime(1_s);
     gEncoder.tick();
     gEncoder.tick();
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(500, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(5_ts, t);
 
-    t = 1800_s + 1_ts;
+    t = kMaxTime;
     gEncoder.tick();
-    TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1800000, t.toMillis());
+    TEST_ASSERT(!gEncoder.getTime(t));
+    TEST_ASSERT_EQUAL_TIME(36000_ts, t);
 
     gEncoder.emulTurns(-1);
     gEncoder.tick();
     gEncoder.clear();
     TEST_ASSERT(!gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1800000, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(36000_ts, t);
 
     t = kBadTime;
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(0, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(0_ts, t);
 
     t = 0_s;
     gEncoder.emulTurns(2);
@@ -313,7 +315,7 @@ void checkEncoderTime() {
     gEncoder.emulFastFastTurns(3);
     gEncoder.tick();
     TEST_ASSERT(gEncoder.getTime(t));
-    TEST_ASSERT_EQUAL(1700, t.toMillis());
+    TEST_ASSERT_EQUAL_TIME(17_ts, t);
 }
 
 void checkEncoderRelTime() {

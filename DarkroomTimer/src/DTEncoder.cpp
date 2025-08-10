@@ -166,8 +166,8 @@ bool DTEncoder::getTime(Time& time, bool smooth) const {
         return true;
     }
     
-    if (time > 1800_s) {
-        time = 1800_s;
+    if (time > kMaxTime) {
+        time = kMaxTime;
         return true;
     }
 
@@ -180,7 +180,13 @@ bool DTEncoder::getTime(Time& time, bool smooth) const {
     if (!shift)
         return false;
 
-    int16_t id = time.getId() + shift;
+    uint16_t id = time.getId();
+
+    if (shift < 0 && id < static_cast<uint16_t>(-shift))
+        id = 0;
+    else
+        id += shift;
+
     Time newTime = Time::fromId(id);
 
     if (newTime == time)

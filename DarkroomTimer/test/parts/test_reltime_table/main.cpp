@@ -189,7 +189,7 @@ void checkRelTimeTablePrint() {
 void checkRelTimeTableOverflow() {
     RelTimeTable tt;
     tt.setBuffer(gModesCache, sizeof(gModesCache));
-    tt.setBaseTime(1800_s);
+    tt.setBaseTime(2000_s);
 
     RelTime times[] = { RelTime(12), RelTime(13), RelTime(24), RelTime(14), RelTime(21) };
     int i = 0;
@@ -201,7 +201,7 @@ void checkRelTimeTableOverflow() {
     gScrollableContent.reset();
     tt.flush();
     TEST_EQUAL_SCROLL_CONTENT(({
-                                  .lines = { "1800 1 ovr ovr", "1+1/3 1+5/12" },
+                                  .lines = { "2000 1 ovr ovr", "1+1/3 1+5/12" },
                                   .currentLine = -1,
                                   .currentShift = 0,
                                   .currentAlign = 0,
@@ -213,7 +213,7 @@ void checkRelTimeTableOverflow() {
     gScrollableContent.reset();
     tt.flush();
     TEST_EQUAL_SCROLL_CONTENT(({
-                                  .lines = { "1800 1 1+1/2 ovr", "1+1/3 1+5/12" },
+                                  .lines = { "2000 1 1+1/2 ovr", "1+1/3 1+5/12" },
                                   .currentLine = 0,
                                   .currentShift = 7,
                                   .currentAlign = 5,
@@ -226,7 +226,7 @@ void checkRelTimeTableOverflow() {
     gScrollableContent.reset();
     tt.flush();
     TEST_EQUAL_SCROLL_CONTENT(({
-                                  .lines = { "1800 1800 ovr", "ovr 2736 3005" },
+                                  .lines = { "2000 2000 ovr", "ovr 3040 3339" },
                                   .currentLine = -1,
                                   .currentShift = 0,
                                   .currentAlign = 0,
@@ -239,7 +239,7 @@ void checkRelTimeTableOverflow() {
     gScrollableContent.reset();
     tt.flush();
     TEST_EQUAL_SCROLL_CONTENT(({
-                                  .lines = { "1800 1800 0.0", "ovr 2736 3005" },
+                                  .lines = { "2000 2000 0.0", "ovr 3040 3339" },
                                   .currentLine = 0,
                                   .currentShift = 10,
                                   .currentAlign = 3,

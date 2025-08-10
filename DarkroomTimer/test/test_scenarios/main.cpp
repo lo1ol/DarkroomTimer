@@ -209,6 +209,10 @@ void checkFStopTest() {
 
     gEncoder.emulTurns(1);
     loop_();
+    TEST_DISPLAY("2857 3027 3207", "3398 3600");
+
+    gEncoder.emulTurns(-1);
+    loop_();
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
     gEncoder.emulTurns(-1);
@@ -224,7 +228,7 @@ void checkFStopTest() {
     loop_();
     TEST_DISPLAY("Run        1907", "2020 2141 2268");
 
-    for (int i = 0; i != 11; ++i) {
+    for (int i = 0; i != 13; ++i) {
         gStartBtn.emulClick();
         loop_();
         TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
@@ -233,7 +237,7 @@ void checkFStopTest() {
         TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
-    TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
+    TEST_DISPLAY("2857 3027 3207", "3398 3600");
 
     gStartBtn.emulClick();
     loop_();
@@ -395,6 +399,14 @@ void checkLocalFStopTest() {
 
     gEncoder.emulTurns(1);
     loop_();
+    TEST_DISPLAY("2857 3027 3207", "3398 3600");
+
+    gEncoder.emulTurns(1);
+    loop_();
+    TEST_DISPLAY("2857 3027 3207", "3398 3600");
+
+    gEncoder.emulTurns(-1);
+    loop_();
     TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
 
     gEncoder.emulTurns(-1);
@@ -410,16 +422,16 @@ void checkLocalFStopTest() {
     loop_();
     TEST_DISPLAY("Run        1907", "2020 2141 2268");
 
-    for (int i = 0; i != 11; ++i) {
+    for (int i = 0; i != 13; ++i) {
         gStartBtn.emulClick();
         loop_();
         TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
-        gCurrentTime += 3208000;
+        gCurrentTime += 3600000;
         loop_();
         TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
-    TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
+    TEST_DISPLAY("2857 3027 3207", "3398 3600");
 
     gStartBtn.emulClick();
     loop_();
@@ -625,11 +637,11 @@ void checkLinearTest() {
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("2900 3000 3100", "3200");
+    TEST_DISPLAY("2900 3000 3100", "3200 3300");
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("2900 3000 3100", "3200");
+    TEST_DISPLAY("2900 3000 3100", "3200 3300");
 
     gEncoder.emulTurns(-1);
     loop_();
@@ -725,11 +737,11 @@ void checkLocalLinearTest() {
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("2900 3000 3100", "3200");
+    TEST_DISPLAY("2900 3000 3100", "3200 3300");
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("2900 3000 3100", "3200");
+    TEST_DISPLAY("2900 3000 3100", "3200 3300");
 
     gEncoder.emulTurns(-1);
     loop_();
@@ -1573,7 +1585,7 @@ void checkSplitRelMaskMode() {
     TEST_DISPLAY("R F1  Lag 9.4 0", "32 17.9 496 496");
 
     // tests on overflow
-    baseTimes[0] = 1800_s;
+    baseTimes[0] = 2000_s;
 
     gEncoderBtn.emulHold();
     loop_();
@@ -1591,7 +1603,7 @@ void checkSplitRelMaskMode() {
 
     gEncoder.emulRetTime(baseTimes[0]);
     loop_();
-    TEST_DISPLAY("S F1 1800.0 2/3", "0 ovr 1+1/12 ovr");
+    TEST_DISPLAY("S F1 2000.0 2/3", "0 ovr 1+1/12 ovr");
 
     gModeBtn.emulClick();
     loop_();

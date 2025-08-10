@@ -123,7 +123,7 @@ uint32_t Timer::realStopTime() const {
 }
 
 Time Timer::total() const {
-    return Time{ static_cast<int32_t>(m_total + afterResume()) / 100 };
+    return Time{ static_cast<uint32_t>(m_total + afterResume()) / 100 };
 }
 
 void Timer::resetTotal() {
