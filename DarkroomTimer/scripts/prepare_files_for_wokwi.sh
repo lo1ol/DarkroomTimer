@@ -14,6 +14,8 @@ sed -I '' -e 's/#include "Modes\//#include "/' \
     -e 's/#include "..\//#include "/' \
     -e 's/gAnalogWrite(BACKLIGHT, val \* BACKLIGHT_STEP);/gAnalogWrite(BACKLIGHT, 255);/' \
     -e 's/#define BEEP_VOLUME_SILENT .*/#define BEEP_VOLUME_SILENT 0/'\
+    -e 's/#define ENCODER_FAST_TIMEOUT .*/#define ENCODER_FAST_TIMEOUT 200/'\
+    -e 's/#define ENCODER_FAST_FAST_TIMEOUT .*/#define ENCODER_FAST_FAST_TIMEOUT 100/'\
     $(find "$WOKWI_DIR"  -type f)
 
 cp "$SCRIPT_DIR/wokwi_diagram.json" "$WOKWI_DIR/diagram.json"

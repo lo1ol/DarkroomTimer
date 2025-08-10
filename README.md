@@ -10,7 +10,7 @@
 
 > **Main idea:** You prepare everything in light and click only Start btn during printing
 
-> [Online simulator](https://wokwi.com/projects/438577058575190017). Note, you can use keyboard to control timer
+> [Online simulator](https://wokwi.com/projects/438924953572456449). Note, you can use keyboard to control timer
 
 ## Manual
 
