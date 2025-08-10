@@ -4,6 +4,9 @@ on: [push]
 
 jobs:
   build-and-test:
+    strategy:
+      matrix:
+        env: [nanoatmega328, scenarios-env, native]
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +23,8 @@ jobs:
           python3 get-platformio.py
 
       - name: Run build
+        if: ${{ matrix.env == 'nanoatmega328' }}
         run: ~/.platformio/penv/bin/platformio run -d DarkroomTimer/
 
-      - name: Run part tests
-        run: ~/.platformio/penv/bin/platformio test -d DarkroomTimer/ --without-uploading
-
-      - name: Run scenario tests
-        run: ~/.platformio/penv/bin/platformio test -d DarkroomTimer/ --without-uploading -e scenarios-env
+      - name: Run tests
+        run: ~/.platformio/penv/bin/platformio test -d DarkroomTimer/ --without-uploading -e "${{ matrix.env }}"
