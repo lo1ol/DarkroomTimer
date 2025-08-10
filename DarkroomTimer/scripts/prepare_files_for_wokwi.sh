@@ -2,13 +2,14 @@
 
 set -eu
 
-SCRIPT_DIR=$(realpath $(dirname $0))
-WOKWI_DIR=${SCRIPT_DIR}/wokwi
+SCRIPT_DIR=$(realpath $(dirname "$0"))
+SRC_DIR=$(dirname "$SCRIPT_DIR")/src
+WOKWI_DIR=${PWD}/wokwi
 
 rm -rf "$WOKWI_DIR"
 mkdir -p "$WOKWI_DIR"
 
-find "$SCRIPT_DIR/src" -type f | xargs -I{} cp {} "$WOKWI_DIR"
+find "$SRC_DIR" -type f | xargs -I{} cp {} "$WOKWI_DIR"
 sed -I '' -e 's/#include "Modes\//#include "/' \
     -e 's/#include "..\//#include "/' \
     -e 's/gAnalogWrite(BACKLIGHT, val \* BACKLIGHT_STEP);/gAnalogWrite(BACKLIGHT, 255);/' \
