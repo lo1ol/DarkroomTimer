@@ -6,7 +6,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        env: [nanoatmega328, scenarios-env, native, native-valgrind]
+        env: [nanoatmega328, scenarios-env, native, native-valgrind, native-cov]
     runs-on: ubuntu-latest
 
     steps:
@@ -21,6 +21,10 @@ jobs:
         if: ${{ matrix.env == 'native-valgrind' }}
         run: sudo apt-get update && sudo apt-get install -y valgrind
 
+      - name: Install lcov
+        if: ${{ matrix.env == 'native-cov' }}
+        run: sudo apt-get update && sudo apt-get install -y lcov
+
       - name: Install platformio
         run: |
           curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py
@@ -31,4 +35,15 @@ jobs:
         run: ~/.platformio/penv/bin/platformio run -d DarkroomTimer/
 
       - name: Run tests
+        if: ${{ matrix.env != 'native-cov' }}
         run: ~/.platformio/penv/bin/platformio test -d DarkroomTimer/ --without-uploading -e "${{ matrix.env }}"
+
+      - name: Check coverage
+        if: ${{ matrix.env == 'native-cov' }}
+        run: PATH=~/.platformio/penv/bin/:$PATH ./DarkroomTimer/scripts/test_cov.sh cov_html
+
+      - name: Upload HTML with coverage report
+        if: ${{ matrix.env == 'native-cov' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: cov_html

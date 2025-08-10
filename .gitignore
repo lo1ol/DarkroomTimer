@@ -2,3 +2,5 @@
 **/.pio/
 **/.vscode/
 **/.DS_Store
+cov.info
+cov_html
