@@ -50,6 +50,9 @@ public:
 
     void getFormatedTime(char* buf, bool accurate = true, bool addZero = false) const;
 
+    int16_t getId() const;
+    static Time fromId(int16_t);
+
 private:
     constexpr static int16_t getTimeWithBoundCheck(int32_t x) {
         return (x > INT16_MAX || x < INT16_MIN) ? INT16_MAX : x;

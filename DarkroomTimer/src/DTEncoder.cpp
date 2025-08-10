@@ -165,42 +165,29 @@ bool DTEncoder::getTime(Time& time, bool smooth) const {
         time = 0_s;
         return true;
     }
-
-    Time shift;
-    if (!smooth)
-        shift = Time(getAceleratedShift(4));
-    else
-        shift = Time(getShift());
-
-    Time oldTime = time;
-
-    // Values are changing with accuracy 1/12 stop
-    // You can check accuracy range by this formule:
-    // t*(2**(1/12)-1)
-    int16_t factor;
-    if ((time + shift) < 10_s)
-        factor = 1;
-    else if ((time + shift) < 20_s)
-        factor = 5;
-    else if ((time + shift) < 100_s)
-        factor = 10;
-    else if ((time + shift) < 200_s)
-        factor = 50;
-    else if ((time + shift) < 1000_s)
-        factor = 100;
-    else
-        factor = 500;
-
-    time += shift * factor;
-    time = (time / factor) * factor;
-
-    if (time < 0_ts)
-        time = 0_ts;
-
-    if (time > 1800_s)
+    
+    if (time > 1800_s) {
         time = 1800_s;
+        return true;
+    }
 
-    return time != oldTime;
+    int16_t shift;
+    if (!smooth)
+        shift = getAceleratedShift(4);
+    else
+        shift = getShift();
+
+    if (!shift)
+        return false;
+
+    int16_t id = time.getId() + shift;
+    Time newTime = Time::fromId(id);
+
+    if (newTime == time)
+        return false;
+
+    time = newTime;
+    return true;
 }
 
 bool DTEncoder::getRelTime(RelTime& time) const {
