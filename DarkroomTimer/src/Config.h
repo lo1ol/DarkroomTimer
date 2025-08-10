@@ -46,7 +46,7 @@ static_assert(BACKLIGHT_STEP <= 25);
 // Time on which encoder starts to even faster
 #define ENCODER_FAST_FAST_TIMEOUT 6
 
-#define TIMER_FIRMWARE_VERSION "0.5.0"
+#define TIMER_FIRMWARE_VERSION "0.5.1"
 
 #if ENCODER_DT == 2 && ENCODER_CLK == 3
     #define ENCODER_DIRECTION (1)
