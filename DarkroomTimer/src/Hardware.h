@@ -14,10 +14,10 @@
 void setDisplayBacklight(uint8_t val);
 
 extern DTEncoder& gEncoder;
-extern ButtonT<MODE_BTN> gModeBtn;
-extern ButtonT<START_BTN> gStartBtn;
-extern ButtonT<ENCODER_BTN> gEncoderBtn;
-extern ButtonT<VIEW_BTN> gViewBtn;
+extern ButtonT<MODE_BTN_PIN> gModeBtn;
+extern ButtonT<START_BTN_PIN> gStartBtn;
+extern ButtonT<ENCODER_BTN_PIN> gEncoderBtn;
+extern ButtonT<VIEW_BTN_PIN> gViewBtn;
 
 extern LiquidCrystalWrap gLcdWrap;
 extern Display gDisplay;

@@ -134,24 +134,30 @@ pio run -t upload
 
 ### Firmware configuration
 
-You can configure the firmware by your needs. For this, you have to change macroses in [Config.h](DarkroomTimer/src/lib/DarkroomTimer/Config.h) file:
-* `LCD_*` -- pin and arduino to `*` pin on display
-* `MODE_BTN` -- pin to mode button
-* `VIEW_BTN` -- pin to view button
-* `START_BTN` -- pin to start button
-* `ENCODER_BTN` -- pin to button on encoder
-* `ENCODER_DT` -- pin to DT(S1) pin on encoder (UNRECOMMENDED TO CHANGE)
-* `ENCODER_CLK` -- pin to CLK(S2) pin on encoder (UNRECOMMENDED TO CHANGE)
-* `BEEPER` -- pin to buzzer (UNRECOMMENDED TO CHANGE)
-* `BACKLIGHT` -- pin to backlight control pin on display (marked as `A` on display)
-* `RELAY` -- pin to SSR
-* `MAX_BACKLIGHT` -- maximum backlight value (maximum value is 25)
-* `MIN_BEEP_VOLUME` -- minimum buzzer volume (can be different on different buzzers)
-* `BEEP_VOLUME_STEP` -- step size of buzzer valume
-* `ENCODER_FAST_TIMEOUT` -- time of encoder turn before which values will be changing faster
-* `ENCODER_FAST_FAST_TIMEOUT` -- time of encoder turn before which values will be changing more faster
+You can configure the firmware by your needs. For this, you have to create a file UserConfig.h in near to 'DarkroomTimer.ino' file and define needed macroses. All possiable values and description specified in [UserConfig.example.h](DarkroomTimer/UserConfig.example.h). Example configuration:
 
-> NB: Swapping of ENCODER_DT with ENCODER_CLK change direction of encoder
+```cpp
+// UserConfig.h
+
+// Change encoder direction
+#define ENCODER_DT_PIN 3
+#define ENCODER_CLK_PIN 2
+
+// make encoder move faster
+#define ENCODER_FAST_TIMEOUT 34
+#define ENCODER_FAST_FAST_TIMEOUT 9
+
+// Dim LCD if we not install acrylic cover
+#define LCD_BACKLIGHT_STEP 25
+
+// Make beeper quieter
+#define BEEPER_VOLUME_MIN 10
+
+// Fix beeper make a noise in turned off state
+#define BEEPER_VOLUME_SILENT 0
+```
+
+We will try not change name of config macroses. So, you can use this file for different versions of firmware
 
 ## Support
 

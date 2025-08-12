@@ -41,7 +41,7 @@ void Timer::start(Time time) {
     m_resumeTime = m_currentTime;
     m_status = RUNNING;
     updateAfterLastResume();
-    gDigitalWrite(RELAY, true);
+    gDigitalWrite(RELAY_PIN, true);
 }
 
 bool Timer::pause() {
@@ -53,7 +53,7 @@ bool Timer::pause() {
     m_total += afterResume();
     m_leftTime -= afterResume();
     m_status = PAUSED;
-    gDigitalWrite(RELAY, false);
+    gDigitalWrite(RELAY_PIN, false);
 
     return m_currentTime > (m_resumeTime + gSettings.lagTime.toMillis());
 }
@@ -66,12 +66,12 @@ void Timer::resume() {
     m_lagPassed = false;
     m_resumeTime = m_currentTime;
     m_status = RUNNING;
-    gDigitalWrite(RELAY, true);
+    gDigitalWrite(RELAY_PIN, true);
 }
 
 void Timer::stop() {
     gBeeper.stop();
-    gDigitalWrite(RELAY, false);
+    gDigitalWrite(RELAY_PIN, false);
 
     if (m_status == STOPPED)
         return;

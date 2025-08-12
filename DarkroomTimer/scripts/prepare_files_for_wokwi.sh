@@ -12,8 +12,8 @@ mkdir -p "$WOKWI_DIR"
 find "$SRC_DIR" -type f | xargs -I{} cp {} "$WOKWI_DIR"
 sed -I '' -e 's/#include "Modes\//#include "/' \
     -e 's/#include "..\//#include "/' \
-    -e 's/gAnalogWrite(BACKLIGHT, val \* BACKLIGHT_STEP);/gAnalogWrite(BACKLIGHT, 255);/' \
-    -e 's/#define BEEP_VOLUME_SILENT .*/#define BEEP_VOLUME_SILENT 0/'\
+    -e 's/gAnalogWrite(LCD_BACKLIGHT_PIN, val \* LCD_BACKLIGHT_STEP);/gAnalogWrite(LCD_BACKLIGHT_PIN, 255);/' \
+    -e 's/#define BEEPER_VOLUME_SILENT .*/#define BEEPER_VOLUME_SILENT 0/'\
     -e 's/#define ENCODER_FAST_TIMEOUT .*/#define ENCODER_FAST_TIMEOUT 200/'\
     -e 's/#define ENCODER_FAST_FAST_TIMEOUT .*/#define ENCODER_FAST_FAST_TIMEOUT 100/'\
     $(find "$WOKWI_DIR"  -type f)

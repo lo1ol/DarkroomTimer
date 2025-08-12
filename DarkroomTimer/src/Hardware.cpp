@@ -1,18 +1,18 @@
 #include "Hardware.h"
 
-ButtonT<MODE_BTN> gModeBtn;
-ButtonT<START_BTN> gStartBtn;
-ButtonT<ENCODER_BTN> gEncoderBtn;
-ButtonT<VIEW_BTN> gViewBtn;
+ButtonT<MODE_BTN_PIN> gModeBtn;
+ButtonT<START_BTN_PIN> gStartBtn;
+ButtonT<ENCODER_BTN_PIN> gEncoderBtn;
+ButtonT<VIEW_BTN_PIN> gViewBtn;
 
 Settings gSettings = Settings::load();
 Timer gTimer;
-Beeper gBeeper(BEEPER);
+Beeper gBeeper(BEEPER_PIN);
 uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
 
 #ifndef PIO_UNIT_TESTING
-LiquidCrystal gLcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+LiquidCrystal gLcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 LiquidCrystalWrap gLcdWrap(gLcd);
 
 #else
@@ -30,10 +30,10 @@ uint32_t gMillis() {
 
 void gAnalogWrite(uint8_t pin, int val) {
     switch (pin) {
-    case BEEPER:
+    case BEEPER_PIN:
         gBuzzerVal = val;
         return;
-    case BACKLIGHT:
+    case LCD_BACKLIGHT_PIN:
         gBacklightVal = val;
         return;
     }
@@ -44,7 +44,7 @@ void gAnalogWrite(uint8_t pin, int val) {
 
 void gDigitalWrite(uint8_t pin, uint8_t val) {
     switch (pin) {
-    case RELAY:
+    case RELAY_PIN:
         gRelayVal = val;
         return;
     }
@@ -58,5 +58,5 @@ DTEncoder& gEncoder = DTEncoder::getInstance();
 Display gDisplay(&gLcdWrap);
 
 void setDisplayBacklight(uint8_t val) {
-    gAnalogWrite(BACKLIGHT, val * BACKLIGHT_STEP);
+    gAnalogWrite(LCD_BACKLIGHT_PIN, val * LCD_BACKLIGHT_STEP);
 }

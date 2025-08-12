@@ -185,7 +185,7 @@ void processView() {
 
     if (gViewBtn.click()) {
         gViewState = !gViewState;
-        gDigitalWrite(RELAY, gViewState);
+        gDigitalWrite(RELAY_PIN, gViewState);
         gViewModeTurnOffTime = gMillis() + gSettings.autoFinishViewMinutes * 60000L;
 
         if (gViewState) {
@@ -211,7 +211,7 @@ void processView() {
 
     if (curTime >= gViewModeTurnOffTime) {
         gBlocked = gViewState = false;
-        gDigitalWrite(RELAY, gViewState);
+        gDigitalWrite(RELAY_PIN, gViewState);
         gModeProcessor->repaint();
     } else {
         char str[DISPLAY_COLS] = "";
@@ -247,13 +247,13 @@ void setup_() {
 #endif
     gBeeper.setup();
 
+    pinMode(LCD_BACKLIGHT_PIN, OUTPUT);
+    setDisplayBacklight(gSettings.backlight);
+    pinMode(RELAY_PIN, OUTPUT);
+    gDigitalWrite(RELAY_PIN, 0);
+
     setMode(ModeId::testFStops);
     gModeProcessor->repaint();
-
-    pinMode(BACKLIGHT, OUTPUT);
-    setDisplayBacklight(gSettings.backlight);
-    pinMode(RELAY, OUTPUT);
-    gDigitalWrite(RELAY, 0);
 
     if (gSettings.startWithSettings)
         gSettingsSetter = new SettingsSetter;

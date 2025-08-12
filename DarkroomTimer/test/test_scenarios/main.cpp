@@ -16,10 +16,10 @@ void setUp() {
     gEncoder.clear();
     gDisplay.reset();
     gScrollableContent.reset();
-    gModeBtn = ButtonT<MODE_BTN>{};
-    gStartBtn = ButtonT<START_BTN>{};
-    gEncoderBtn = ButtonT<ENCODER_BTN>{};
-    gViewBtn = ButtonT<VIEW_BTN>{};
+    gModeBtn = ButtonT<MODE_BTN_PIN>{};
+    gStartBtn = ButtonT<START_BTN_PIN>{};
+    gEncoderBtn = ButtonT<ENCODER_BTN_PIN>{};
+    gViewBtn = ButtonT<VIEW_BTN_PIN>{};
 }
 
 void tearDown() {
@@ -89,7 +89,7 @@ void checkScenarioGeneric() {
     loop_();
     TEST_DISPLAY("View", "Auto stop: 178");
     TEST_ASSERT(gRelayVal);
-    TEST_ASSERT(gBuzzerVal == BEEP_VOLUME_SILENT);
+    TEST_ASSERT(gBuzzerVal == BEEPER_VOLUME_SILENT);
 
     gViewBtn.emulClick();
     loop_();
@@ -1786,7 +1786,7 @@ void checkSettings() {
     TEST_DISPLAY("Beep volume", "3");
 
     auto buzzerVal = gBuzzerVal;
-    TEST_ASSERT(buzzerVal == BEEP_VOLUME_SILENT);
+    TEST_ASSERT(buzzerVal == BEEPER_VOLUME_SILENT);
 
     gEncoder.emulTurns(1);
     loop_();
@@ -1798,7 +1798,7 @@ void checkSettings() {
     loop_();
     TEST_DISPLAY("Beep volume", "3");
     TEST_ASSERT(buzzerVal > gBuzzerVal);
-    TEST_ASSERT(BEEP_VOLUME_SILENT < gBuzzerVal);
+    TEST_ASSERT(BEEPER_VOLUME_SILENT < gBuzzerVal);
 
     gEncoder.emulRetInt(7);
     loop_();
@@ -1806,7 +1806,7 @@ void checkSettings() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_ASSERT(BEEP_VOLUME_SILENT == gBuzzerVal);
+    TEST_ASSERT(BEEPER_VOLUME_SILENT == gBuzzerVal);
     TEST_DISPLAY("Auto finish view", "3 minutes");
 
     gEncoder.emulTurns(1);

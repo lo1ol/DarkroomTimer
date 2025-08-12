@@ -78,10 +78,10 @@ void Beeper::setPinState(bool pinState, bool force) {
     m_pinState = pinState;
 
     if (pinState)
-        gAnalogWrite(m_pin, MIN_BEEP_VOLUME + (gSettings.beepVolume - 1) * BEEP_VOLUME_STEP);
+        gAnalogWrite(m_pin, BEEPER_VOLUME_MIN + (gSettings.beepVolume - 1) * BEEPER_VOLUME_STEP);
     else
-        // setting volume to BEEP_VOLUME_SILENT instead of 0 reduce bad noise on low volumes
-        gAnalogWrite(m_pin, BEEP_VOLUME_SILENT);
+        // setting volume to BEEPER_VOLUME_SILENT instead of 0 reduce bad noise on low volumes
+        gAnalogWrite(m_pin, BEEPER_VOLUME_SILENT);
 }
 
 void Beeper::setMelody(Melody::Name melodyName) {

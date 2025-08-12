@@ -7,8 +7,8 @@
 
 #include "Hardware.h"
 
-#define DOWN_VOLUME BEEP_VOLUME_SILENT
-#define UP_VOLUME (BEEP_VOLUME_SILENT + 30)
+#define DOWN_VOLUME BEEPER_VOLUME_SILENT
+#define UP_VOLUME (BEEPER_VOLUME_SILENT + 30)
 
 class SimpleMelody : public Melody {
 public:
