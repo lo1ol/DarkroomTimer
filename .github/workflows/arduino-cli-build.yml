@@ -1,0 +1,29 @@
+name: Build on Arduino IDE
+
+on: [push]
+
+jobs:
+  build-arduino-ide:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Arduino cli
+        run: |
+          mkdir -p ~/local/bin
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=~/local/bin sh
+
+      - name: Install platform
+        run: ~/local/bin/arduino-cli core install arduino:avr
+
+      - name: Install deps
+        run: ~/local/bin/arduino-cli lib install EncButton GyverIO LiquidCrystal CRC32
+
+      - name: Run build
+        run: ~/local/bin/arduino-cli compile -v -b arduino:avr:nano DarkroomTimer/
