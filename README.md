@@ -104,9 +104,14 @@ Body extra components:
 9. [Heat shrink tube 2 meters](https://sl.aliexpress.ru/p?key=ChNn3Wr) (Not tested)
 10. [Transparent two sides tape](https://sl.aliexpress.ru/p?key=pbNn3xt)
 
-### Other versions of body
+### Low-budget versions of device
 
-I saw bodies created via electrical enclosure, pupular buttons and switches. You are free to create your version of body and use another components according to your budget
+You can made body cheeper if
+1. Don't install acrilic black glass. Just dim display in settings
+2. Connect body to power supply directly without XLR
+3. Use single color filament printed with 0.4 nozzle
+4. Don't print text on body
+5. Not use our version of power supply. Just put SSR and transformer into simple electrical enclosure and connect AC socket using wire to it
 
 ## Build and upload code to Arduino
 
