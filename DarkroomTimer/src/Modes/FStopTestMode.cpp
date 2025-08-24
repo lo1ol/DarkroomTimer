@@ -53,7 +53,7 @@ void FStopTestMode::process() {
     }
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getStepTotalTime(m_currentRun) != kBadTime &&
-        gScrollableContent.currentIsPrinted())
+        gScrollableContent.hasCurrent())
         gTimer.start(getPrintTime());
 
     if (gTimer.justFinished()) {

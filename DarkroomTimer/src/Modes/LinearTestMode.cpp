@@ -49,7 +49,7 @@ void LinearTestMode::process() {
     }
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime &&
-        gScrollableContent.currentIsPrinted())
+        gScrollableContent.hasCurrent())
         gTimer.start(getPrintTime());
 
     if (gTimer.justFinished()) {

@@ -219,10 +219,27 @@ void checkFStopTest() {
     loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
 
-    // check can't start if not show printing time
+    // check we can start if not show printing time
+    // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
+    TEST_DISPLAY("Run    Lag 1907", "2020 2141 2268");
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+
+    gEncoder.emulTurns(1);
+    loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
+
+    gEncoder.emulTurns(1);
+    loop_();
+    TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
+
+    gEncoder.emulTurns(1);
+    loop_();
+    TEST_DISPLAY("2857 3027 3207", "3398 3600");
 
     gEncoderBtn.emulHold();
     loop_();
@@ -413,10 +430,27 @@ void checkLocalFStopTest() {
     loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
 
-    // check can't start if not show printing time
+    // check we can start if not show printing time
+    // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
+    TEST_DISPLAY("Run    Lag 1907", "2020 2141 2268");
+
+    gEncoderBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+
+    gEncoder.emulTurns(1);
+    loop_();
     TEST_DISPLAY("2020 2141 2268", "2403 2546 2697");
+
+    gEncoder.emulTurns(1);
+    loop_();
+    TEST_DISPLAY("2403 2546 2697", "2857 3027 3207");
+
+    gEncoder.emulTurns(1);
+    loop_();
+    TEST_DISPLAY("2857 3027 3207", "3398 3600");
 
     gEncoderBtn.emulHold();
     loop_();
@@ -647,12 +681,13 @@ void checkLinearTest() {
     loop_();
     TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
 
-    // check can't start if not show printing time
+    // check we can start if not show printing time
+    // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
-    TEST_ASSERT(!gRelayVal);
-    TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::STOPPED);
+    TEST_DISPLAY("Run    Lag 1900", "2000 2100 2200");
+    TEST_ASSERT(gRelayVal);
+    TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::RUNNING);
 }
 
 void checkLocalLinearTest() {
@@ -747,12 +782,13 @@ void checkLocalLinearTest() {
     loop_();
     TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
 
-    // check can't start if not show printing time
+    // check we can start if not show printing time
+    // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("2600 2700 2800", "2900 3000 3100");
-    TEST_ASSERT(!gRelayVal);
-    TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::STOPPED);
+    TEST_DISPLAY("Run    Lag 1900", "2000 2100 2200");
+    TEST_ASSERT(gRelayVal);
+    TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::RUNNING);
 }
 
 void checkSpltLinearTest() {

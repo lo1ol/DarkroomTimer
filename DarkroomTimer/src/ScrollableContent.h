@@ -18,6 +18,7 @@ public:
     void print(const char* src, bool current = false, const char* mark = nullptr);
 
     [[nodiscard]] bool currentIsPrinted() const { return m_currentDisplayLine != -1; }
+    [[nodiscard]] bool hasCurrent() const { return m_currentLine != -1; }
     [[nodiscard]] uint8_t lineCnt() const { return m_line + static_cast<bool>(m_lastLineLength); }
 
     void goToFirstLine() { m_firstPrintedLine = 0; }
