@@ -10,14 +10,16 @@ Timer gTimer;
 Beeper gBeeper(BEEPER_PIN);
 uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
+Lcd gLcd;
 
-#ifndef PIO_UNIT_TESTING
-LiquidCrystal gLcd(LCD_RS_PIN, LCD_EN_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
-LiquidCrystalWrap gLcdWrap(gLcd);
+Display gDisplay(&gLcd);
+DTEncoder& gEncoder = DTEncoder::getInstance();
 
-#else
-LiquidCrystalWrap gLcdWrap;
+void setDisplayBacklight(uint8_t val) {
+    gAnalogWrite(LCD_BACKLIGHT_PIN, val * LCD_BACKLIGHT_STEP);
+}
 
+#ifdef PIO_UNIT_TESTING
 int gBuzzerVal = 0;
 int gBacklightVal = 0;
 bool gRelayVal = 0;
@@ -53,10 +55,3 @@ void gDigitalWrite(uint8_t pin, uint8_t val) {
     return;
 }
 #endif
-
-DTEncoder& gEncoder = DTEncoder::getInstance();
-Display gDisplay(&gLcdWrap);
-
-void setDisplayBacklight(uint8_t val) {
-    gAnalogWrite(LCD_BACKLIGHT_PIN, val * LCD_BACKLIGHT_STEP);
-}

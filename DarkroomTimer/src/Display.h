@@ -4,11 +4,11 @@
 #include "DisplayLine.h"
 #include "TimeTable.h"
 
-class LiquidCrystalWrap;
+class Lcd;
 
 class Display {
 public:
-    explicit Display(LiquidCrystalWrap* lcd);
+    explicit Display(Lcd* lcd);
     [[nodiscard]] DisplayLine& operator[](uint8_t n) { return m_lines[n]; }
     [[nodiscard]] DisplayLine* getLines() { return m_lines; }
 
@@ -17,6 +17,6 @@ public:
     void resetBlink(bool showBlinked);
 
 private:
-    LiquidCrystalWrap* m_lcd;
+    Lcd* m_lcd;
     DisplayLine m_lines[DISPLAY_ROWS];
 };

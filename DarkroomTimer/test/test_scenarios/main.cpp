@@ -1893,7 +1893,7 @@ void checkSettings() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL_STRING("Version         ", gLcdWrap.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("Version         ", gLcd.getLine(0));
 
     gModeBtn.emulClick();
     loop_();

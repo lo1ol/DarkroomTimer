@@ -1,7 +1,7 @@
 #include "DisplayLine.h"
 
 #include "Hardware.h"
-#include "LiquidCrystalWrap.h"
+#include "Lcd.h"
 #include "Utils.h"
 
 void DisplayLine::concat(char* dst, const char* src) {

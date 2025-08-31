@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string.h>
 #include <unity.h>
 
 #include <Hardware.h>
@@ -32,6 +33,6 @@
         TEST_ASSERT_EQUAL_STRING((line), lineBuf);      \
     }
 
-#define TEST_DISPLAY(line1, line2)                    \
-    TEST_STRING_WITH_TRIM(line1, gLcdWrap.getLine(0)) \
-    TEST_STRING_WITH_TRIM(line2, gLcdWrap.getLine(1))
+#define TEST_DISPLAY(line1, line2)                \
+    TEST_STRING_WITH_TRIM(line1, gLcd.getLine(0)) \
+    TEST_STRING_WITH_TRIM(line2, gLcd.getLine(1))

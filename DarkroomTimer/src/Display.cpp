@@ -1,8 +1,8 @@
 #include "Display.h"
 
-#include "LiquidCrystalWrap.h"
+#include "Lcd.h"
 
-Display::Display(LiquidCrystalWrap* lcd) : m_lcd(lcd) {
+Display::Display(Lcd* lcd) : m_lcd(lcd) {
     int i = 0;
     for (auto& line : m_lines)
         line = DisplayLine(i++, m_lcd);

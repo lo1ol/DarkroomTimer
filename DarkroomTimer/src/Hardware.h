@@ -6,7 +6,7 @@
 #include "Config.h"
 #include "DTEncoder.h"
 #include "Display.h"
-#include "LiquidCrystalWrap.h"
+#include "Lcd.h"
 #include "ScrollableContent.h"
 #include "Settings.h"
 #include "Timer.h"
@@ -19,7 +19,7 @@ extern ButtonT<START_BTN_PIN> gStartBtn;
 extern ButtonT<ENCODER_BTN_PIN> gEncoderBtn;
 extern ButtonT<VIEW_BTN_PIN> gViewBtn;
 
-extern LiquidCrystalWrap gLcdWrap;
+extern Lcd gLcd;
 extern Display gDisplay;
 
 extern Timer gTimer;

@@ -37,16 +37,16 @@ void checkScrollableContentGeneric() {
     TEST_ASSERT_EQUAL(3, sc.lineCnt());
 
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     sc.paint();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     sc.paint();
     gDisplay.tick();
@@ -55,27 +55,27 @@ void checkScrollableContentGeneric() {
     TEST_ASSERT_EQUAL(0, sc.lineCnt());
     gDisplay.tick();
     sc.paint();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     sc.print("1234567890abcde");
     sc.print("1");
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("1234567890abcde ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("1               ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("1234567890abcde ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("1               ", gLcd.getLine(1));
     sc.reset();
 
     sc.print("1234567890abcd");
     sc.print("1");
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("1234567890abcd 1", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("1234567890abcd 1", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
     sc.reset();
 }
 
@@ -100,92 +100,92 @@ void checkScrollableContentScroll() {
 
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     gDisplay.tick();
     sc.scroll(1);
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(1));
-
-    sc.scroll(1);
-    sc.paint();
-    gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(1));
 
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek12           ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcd.getLine(1));
 
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek12           ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek12           ", gLcd.getLine(1));
+
+    sc.scroll(1);
+    sc.paint();
+    gDisplay.tick();
+    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek12           ", gLcd.getLine(1));
 
     sc.scroll(0);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek12           ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek12           ", gLcd.getLine(1));
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcd.getLine(1));
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(1));
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     sc.scroll(1);
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     sc.scroll(1);
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek10 kek11     ", gLcd.getLine(1));
 
     sc.reset();
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     sc.reset();
     sc.print("kek1");
@@ -194,14 +194,14 @@ void checkScrollableContentScroll() {
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     sc.print("kek4");
     sc.print("kek5");
@@ -209,14 +209,14 @@ void checkScrollableContentScroll() {
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 }
 
 void checkScrollableContentStartNewLine() {
@@ -231,8 +231,8 @@ void checkScrollableContentStartNewLine() {
     TEST_ASSERT_EQUAL(0, sc.lineCnt());
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     sc.print("kek1");
     sc.print("kek2");
@@ -245,28 +245,28 @@ void checkScrollableContentStartNewLine() {
     TEST_ASSERT_EQUAL(2, sc.lineCnt());
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcd.getLine(1));
 
     sc.print("kek4");
     TEST_ASSERT_EQUAL(3, sc.lineCnt());
 
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcd.getLine(1));
 
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4            ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4            ", gLcd.getLine(1));
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2       ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek3            ", gLcd.getLine(1));
 }
 
 void checkScrollableContentCurrent() {
@@ -298,8 +298,8 @@ void checkScrollableContentCurrent() {
     sc.paint();
     TEST_ASSERT(sc.currentIsPrinted());
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.paint();
@@ -307,56 +307,56 @@ void checkScrollableContentCurrent() {
 
     gCurrentTime += 500;
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     gCurrentTime += 500;
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(1));
     TEST_ASSERT(!sc.currentIsPrinted());
 
     gCurrentTime += 500;
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(1));
     TEST_ASSERT(!sc.currentIsPrinted());
 
     gCurrentTime += 500;
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek7 kek8 kek9  ", gLcd.getLine(1));
     TEST_ASSERT(!sc.currentIsPrinted());
 
     sc.scroll(-1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     gCurrentTime += 500;
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.paint();
     gDisplay.resetBlink(true);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.reset();
@@ -373,8 +373,8 @@ void checkScrollableContentCurrent() {
     sc.paint();
     gDisplay.resetBlink(true);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("     kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("     kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.reset();
@@ -391,20 +391,20 @@ void checkScrollableContentCurrent() {
     sc.paint();
     gDisplay.resetBlink(true);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("   2 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("   2 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     gDisplay.resetBlink(false);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     gDisplay.resetBlink(true);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("   2 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("   2 kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.reset();
@@ -414,7 +414,7 @@ void checkScrollableContentCurrent() {
     sc.paint();
     gDisplay.resetBlink(true);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 1234 kek3  ", gLcdWrap.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek1 1234 kek3  ", gLcd.getLine(0));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.reset();
@@ -424,7 +424,7 @@ void checkScrollableContentCurrent() {
     sc.paint();
     gDisplay.resetBlink(true);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcdWrap.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek1      kek3  ", gLcd.getLine(0));
     TEST_ASSERT(sc.currentIsPrinted());
 
     sc.reset();
@@ -438,8 +438,8 @@ void checkScrollableContentCurrent() {
     sc.paint();
     gDisplay.resetBlink(true);
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("     kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("     kek5 kek6  ", gLcd.getLine(1));
     TEST_ASSERT(sc.currentIsPrinted());
 
     // don't need a croll after printing current
@@ -460,8 +460,8 @@ void checkScrollableContentCurrent() {
     TEST_ASSERT(!sc.m_changed);
     gDisplay.tick();
 
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("     kek8       ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("     kek8       ", gLcd.getLine(1));
 }
 
 void checkScrollableContentTimer() {
@@ -471,15 +471,15 @@ void checkScrollableContentTimer() {
     gTimer.start(2_s);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     gCurrentTime += 500;
     gTimer.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
     gTimer.reset();
 
     gTimer.start(2_s);
@@ -489,8 +489,8 @@ void checkScrollableContentTimer() {
     sc.print("kek1");
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1            ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("                ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1            ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("                ", gLcd.getLine(1));
 
     gTimer.reset();
     sc.reset();
@@ -508,43 +508,43 @@ void checkScrollableContentTimer() {
     TEST_ASSERT(!sc.m_changed);
     gDisplay.tick();
 
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4  Lag kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4  Lag kek6  ", gLcd.getLine(1));
 
     gCurrentTime += 1;
     gTimer.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4  2.0 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4  2.0 kek6  ", gLcd.getLine(1));
 
     // can't scroll
     sc.scroll(1);
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4  2.0 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4  2.0 kek6  ", gLcd.getLine(1));
 
     gCurrentTime += 999;
     gTimer.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4  1.0 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4  1.0 kek6  ", gLcd.getLine(1));
 
     gCurrentTime += 1000;
     gTimer.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4      kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4      kek6  ", gLcd.getLine(1));
 
     gCurrentTime += 500;
     gTimer.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     gTimer.tick();
     gTimer.start(2_s);
@@ -554,13 +554,13 @@ void checkScrollableContentTimer() {
     gDisplay.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4  1.5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4  1.5 kek6  ", gLcd.getLine(1));
     gTimer.stop();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4      kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4      kek6  ", gLcd.getLine(1));
 
     gSettings.lagTime = 1_s;
     gTimer.tick();
@@ -571,21 +571,21 @@ void checkScrollableContentTimer() {
     gDisplay.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4  Lag kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4  Lag kek6  ", gLcd.getLine(1));
 
     gCurrentTime += 1;
     gTimer.tick();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4  2.0 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4  2.0 kek6  ", gLcd.getLine(1));
 
     gTimer.reset();
     sc.paint();
     gDisplay.tick();
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 
     // check we auto scroll after gTimer started
     sc.reset();
@@ -605,8 +605,8 @@ void checkScrollableContentTimer() {
     sc.paint();
     gDisplay.tick();
 
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek7            ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek7            ", gLcd.getLine(1));
     TEST_ASSERT(!sc.currentIsPrinted());
 
     gTimer.start(2_s);
@@ -616,8 +616,8 @@ void checkScrollableContentTimer() {
     TEST_ASSERT(!sc.m_changed);
     TEST_ASSERT(sc.currentIsPrinted());
 
-    TEST_ASSERT_EQUAL_STRING("kek1 kek2  Lag  ", gLcdWrap.getLine(0));
-    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcdWrap.getLine(1));
+    TEST_ASSERT_EQUAL_STRING("kek1 kek2  Lag  ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING("kek4 kek5 kek6  ", gLcd.getLine(1));
 }
 
 int main() {

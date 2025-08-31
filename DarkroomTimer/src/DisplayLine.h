@@ -3,12 +3,13 @@
 #include <stdint.h>
 
 #include "Config.h"
-class LiquidCrystalWrap;
+
+class Lcd;
 
 class DisplayLine {
 public:
     DisplayLine() = default;
-    DisplayLine(int line, LiquidCrystalWrap* lcd) : m_line(line), m_lcd(lcd) {}
+    DisplayLine(int line, Lcd* lcd) : m_line(line), m_lcd(lcd) {}
 
     void tick();
     void reset();
@@ -32,7 +33,7 @@ private:
 
     bool m_needRepaint = false;
     int m_line = -1;
-    LiquidCrystalWrap* m_lcd = nullptr;
+    Lcd* m_lcd = nullptr;
 
     uint32_t m_baseBlinkTime = 0;
     bool m_startBlinkState = false;
