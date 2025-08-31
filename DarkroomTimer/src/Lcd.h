@@ -1,7 +1,15 @@
 #pragma once
 
+#include "Config.h"
+
 #ifdef PIO_UNIT_TESTING
     #include "LcdImpl/Test.h"
 #else
-    #include "LcdImpl/Common.h"
+    #if LCD_VERSION == LCD_VERSION_COMMON
+        #include "LcdImpl/Common.h"
+    #elif LCD_VERSION == LCD_VERSION_I2C
+        #include "LcdImpl/I2C.h"
+    #else
+        #error "Unknown LCD Version. Supported versions: LCD_VERSION_COMMON and LCD_VERSION_I2C"
+    #endif
 #endif
