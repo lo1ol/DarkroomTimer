@@ -153,7 +153,7 @@ You can configure the firmware by your needs. For this, you have to create a fil
 #define ENCODER_FAST_FAST_TIMEOUT 9
 
 // Dim LCD if we not install acrylic cover
-#define LCD_BACKLIGHT_STEP 25
+#define LCD_BACKLIGHT_STEP 2
 
 // Make beeper quieter
 #define BEEPER_VOLUME_MIN 10

@@ -170,7 +170,7 @@ pio run -t upload
 #define ENCODER_FAST_FAST_TIMEOUT 9
 
 // Приглушаем подсветку LCD, если акриловое стекло не установлено
-#define LCD_BACKLIGHT_STEP 25
+#define LCD_BACKLIGHT_STEP 2
 
 // Делаем пищалку тише
 #define BEEPER_VOLUME_MIN 10
