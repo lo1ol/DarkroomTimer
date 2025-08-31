@@ -23,7 +23,7 @@ jobs:
         run: ~/local/bin/arduino-cli core install arduino:avr
 
       - name: Install deps
-        run: ~/local/bin/arduino-cli lib install EncButton GyverIO LiquidCrystal CRC32
+        run: ~/local/bin/arduino-cli lib install EncButton GyverIO CRC32
 
       - name: Run build
         run: ~/local/bin/arduino-cli compile -v -b arduino:avr:nano DarkroomTimer/

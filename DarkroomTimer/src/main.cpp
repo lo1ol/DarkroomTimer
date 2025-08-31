@@ -242,12 +242,9 @@ void processMode() {
 
 #ifndef PIO_UNIT_TESTING
 void setup() {
+    gLcd.init();
 #else
 void setup_() {
-#endif
-
-#if LCD_VERSION == LCD_VERSION_I2C
-    gLcd.init();
 #endif
     gBeeper.setup();
 

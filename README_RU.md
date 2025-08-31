@@ -152,7 +152,6 @@
 2. Откройте ino файл через Arduino IDE (`File`->`Open...`->`path to .ino` file)
 4. Установите зависимости проекта (`Tools` -> `Manage Libraries...`):
    * EncButton
-   * LiquidCrystals
    * CRC32 (by Crystopher Baker)
 5. Выберете board -- Arduino Nano и processor --  ATmega328P
 6. Нажмите на кнопку Upload

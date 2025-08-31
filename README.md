@@ -134,7 +134,6 @@ If you want just upload code to your arduino without modification, then the simp
 3. Open ino file from Arduino IDE (`File`->`Open...`->`path to .ino` file)
 4. Install dep libreries (`Tools` -> `Manage Libraries...`):
    * EncButton
-   * LiquidCrystals
    * CRC32 (by Crystopher Baker)
 5. Choose your board -- Arduino Nano and processor -- ATmega328P
 6. Click Upload button
