@@ -3,7 +3,7 @@
 // To change the configuration create a copy of this file
 // and name it 'UserConfig.h'
 
-// Uncomment values you need redefine and set your values
+// Leave there only that values that you want to change
 
 /* LCD pin values */
 #define LCD_RS_PIN 12

@@ -59,6 +59,14 @@
 
 ![Main body circuit](./MainBodyCircuit.jpg)
 
+#### I2C version of LCD
+
+> Note: this circuit shows only how to connect I2C adapter to arduino. Everything else is connected the same way
+
+> Note: Not forget to set `LCD_VERSION` macro to `LCD_VERSION_I2C` at [UserConfig.h](./DarkroomTimer/UserConfig.example.h)
+
+![I2C LCD circuit](./I2C_LcdCircuit.jpg)
+
 #### Power supply
 
 ![Power supply circuit](./PowerSupplyCircuit.jpg)
@@ -86,6 +94,11 @@ My friend just create the coolest version of body for this project!!! You can fi
         - [BERM BRM-D480-5A](https://sl.aliexpress.ru/p?key=KyW6GRj)
         - [SSR-41FDA](https://sl.aliexpress.ru/p?key=oBW6G3x)
     * If you don't want to use timer with low wattage lamps (LED): you can buy [this popular SSR](https://sl.aliexpress.ru/p?key=wXDhGqU). This one has leakage in turned off state, and it's enough to power on the lamp
+12. [LCD with preinstalled I2C adapter](https://sl.aliexpress.ru/p?key=szYrVQH) (Optional. Not tested. Alternative for common LCD). Pros and cons of I2C version:
+    * Easier to solder -- you need to solder only 5 pins: GND, VCC, SDA -> A4, SCL -> A5, K -> Brightness control PIN (D5)
+    * Can work with electromagnetic relays without any graphical artifacts, BUT it's still not recommended to use them, because they generated reverse current. It can destroy your device
+    * Has bad response time. Version with direct LCD connection is more responsive on encoder rotation. [Demo](https://youtu.be/_PjdLxWIzHs)
+    * Not require resistor for contrast regulation. Use embedded potentiometer to adjust it
 
 > **WARNING**: Don't use solenoid relays. It can lead to hieroglyphs on the display and even kill Arduino
 
@@ -160,6 +173,9 @@ You can configure the firmware by your needs. For this, you have to create a fil
 
 // Fix beeper make a noise in turned off state
 #define BEEPER_VOLUME_SILENT 0
+
+// Switch to I2C implementation for LCD
+#define LCD_VERSION LCD_VERSION_I2C
 ```
 
 We will try not change name of config macroses. So, you can use this file for different versions of firmware
