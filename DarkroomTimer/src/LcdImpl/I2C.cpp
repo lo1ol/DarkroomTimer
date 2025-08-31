@@ -2,8 +2,6 @@
 
 #if LCD_VERSION == LCD_VERSION_I2C && !defined(PIO_UNIT_TESTING)
 
-    #include <Wire.h>
-
     #include "I2C.h"
 
     #define LCD_ADDR 0x27
@@ -12,6 +10,33 @@
     #define LCD_RS 0x01
 
 namespace {
+
+void i2cInit() {
+    TWSR = 0;
+    TWBR = 72; // ~100kHz @16MHz
+}
+
+void i2cStart(uint8_t addr) {
+    TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+    while (!(TWCR & (1 << TWINT)))
+        ;
+    TWDR = addr;
+    TWCR = (1 << TWINT) | (1 << TWEN);
+    while (!(TWCR & (1 << TWINT)))
+        ;
+}
+
+void i2cWrite(uint8_t data) {
+    TWDR = data;
+    TWCR = (1 << TWINT) | (1 << TWEN);
+    while (!(TWCR & (1 << TWINT)))
+        ;
+}
+
+static void i2cStop() {
+    TWCR = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
+}
+
 void lcdSendNibble(uint8_t data, bool isData) {
     data |= LCD_BACKLIGHT;
 
@@ -20,13 +45,13 @@ void lcdSendNibble(uint8_t data, bool isData) {
 
     // pulse enable
     // https://github.com/arduino-libraries/LiquidCrystal/blob/8c18c69e9de2fb7d89e64098b1899064fee3ba06/src/LiquidCrystal.cpp#L303
-    Wire.beginTransmission(LCD_ADDR);
-    Wire.write(data | LCD_ENABLE);
-    Wire.endTransmission();
+    i2cStart(LCD_ADDR << 1);
+    i2cWrite(data | LCD_ENABLE);
+    i2cStop();
     delayMicroseconds(1);
-    Wire.beginTransmission(LCD_ADDR);
-    Wire.write(data & ~LCD_ENABLE);
-    Wire.endTransmission();
+    i2cStart(LCD_ADDR << 1);
+    i2cWrite(data & ~LCD_ENABLE);
+    i2cStop();
     delayMicroseconds(100);
 }
 
@@ -45,6 +70,7 @@ inline void lcdData(uint8_t value) {
 } // namespace
 
 void Lcd::init() {
+    i2cInit();
     delay(50);
     // set 4-bit mode
     lcdSendNibble(0x30, 0);
