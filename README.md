@@ -78,44 +78,47 @@ My friend just create the coolest version of body for this project!!! You can fi
 
 #### Components
 
-1. [Encoder](https://sl.aliexpress.ru/p?key=d3DhGvG)
-2. [Buttons](https://sl.aliexpress.ru/p?key=SoBfsmF)
-3. [LED](https://sl.aliexpress.ru/p?key=tgDHsiN)
-4. [Buzzer](https://sl.aliexpress.ru/p?key=iXIeG78)
-5. [Switch](https://sl.aliexpress.ru/p?key=f3PfsRC)
-6. [5V Transformer](https://sl.aliexpress.ru/p?key=5RdhGtS) (still don't check it properly). Also you can just disassamble any 5V USB phone adapter
-7. [Arduino nano](https://sl.aliexpress.ru/p?key=daDhGj5): It's better to take Arduino with ATmega 328P processor. Arduino with ATmega 168 doesn't have anought memory to store this firmware. Notice, controller with mini usb socket is needed
+> Note: This is a list of items that I used during building. You could try other similar offers if they are chipper for you, but I couldn't garantee they fit.
+
+1. [Encoder EC11 module](https://aliexpress.com/item/1005007038297328.html)
+2. [Buttons 3 pcs](https://aliexpress.com/item/1005005783406100.html)
+3. [Red LCD 1602](https://aliexpress.com/item/1709948156.html)
+4. [Active Buzzer 5V](https://aliexpress.com/item/1005004207766097.html)
+5. [Toggle switch SS12F15G5 2 pcs](https://aliexpress.com/item/33001964763.html)
+6. [5V Transformer 700mA](https://aliexpress.com/item/33011812383.html) (still don't check it properly). Also you can just disassamble any 5V USB phone adapter
+7. [Arduino Nano ATMEGA328P/Type-C or Mini USB/WITHOUT WELDING](https://aliexpress.com/item/32915861640.html)
 8. Only one resistor is used to set contrast of screen: 2.2 kOm. Your value could differ.
 9. You could buy sustain pedal as footswitch. It has to be normally-open or has polarity switch. We use "Cherub wtb-006" and it's more than ok
-10. [Jack 6.35](https://sl.aliexpress.ru/p?key=W4aeGRp)
+10. [Jack 6.35](https://aliexpress.com/item/4001288527437.html)
 11. SSR:
     * If you want to use timer with any lamp (LED, halogen). You can buy any of it:
-        - [D3803HK/D3805HK/D3808HK](https://sl.aliexpress.ru/p?key=xlW6GV3)
-        - [BERM BRM-D480-5A](https://sl.aliexpress.ru/p?key=KyW6GRj)
-        - [SSR-41FDA](https://sl.aliexpress.ru/p?key=oBW6G3x)
-    * If you don't want to use timer with low wattage lamps (LED): you can buy [this popular SSR](https://sl.aliexpress.ru/p?key=wXDhGqU). This one has leakage in turned off state, and it's enough to power on the lamp
-12. [LCD with preinstalled I2C adapter](https://sl.aliexpress.ru/p?key=szYrVQH) (Optional. Not tested. Alternative for common LCD). Pros and cons of I2C version:
-    * Easier to solder -- you need to solder only 5 pins: GND, VCC, SDA -> A4, SCL -> A5, K -> Brightness control PIN (D5)
-    * Can work with electromagnetic relays without any graphical artifacts, BUT it's still not recommended to use them, because they generated reverse current. It can destroy your device
-    * Has bad response time. Version with direct LCD connection is more responsive on encoder rotation. [Demo](https://youtu.be/_PjdLxWIzHs)
-    * Not require resistor for contrast regulation. Use embedded potentiometer to adjust it
+        - [D3803HK/D3805HK/D3808HK](https://aliexpress.com/item/1005003616598178.html)
+        - [BERM BRM-D480-5A](https://aliexpress.com/item/1005005177941225.html)
+        - [SSR-41FDA](https://aliexpress.com/item/1005007299427443.html)
+    * If you don't want to use timer with low wattage lamps (LED): you can buy [this popular 5V SSR](https://aliexpress.com/item/33005799623.html). This one has leakage in turned off state, and it's enough to power on the lamp
 
 > **WARNING**: Don't use solenoid relays. It can lead to hieroglyphs on the display and even kill Arduino
+
+12. [Red LCD with preinstalled I2C adapter](https://aliexpress.com/item/32906948449.html) (Optional. Not tested. Alternative for common LCD). Pros and cons of I2C version:
+    * Easier to solder -- you need to solder only 5 pins: GND, VCC, SDA -> A4, SCL -> A5, K -> Brightness control PIN (D5)
+    * Can work with solenoid relays without any graphical artifacts, BUT it's still not recommended to use them, because they generated reverse current. It can destroy your device
+    * Has bad response time. Version with direct LCD connection is more responsive on encoder rotation. [Demo](https://youtu.be/_PjdLxWIzHs)
+    * Not require resistor for contrast regulation. Use embedded potentiometer to adjust it
 
 This body has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
 
 Body extra components:
 
-1. [XLR](https://sl.aliexpress.ru/p?key=bFaeGJn) -- is used to connect main part with power block
-2. [Acrilic black glass](https://sl.aliexpress.ru/p?key=tvaeGQb) -- cover display
-3. [Power block sockets](https://sl.aliexpress.ru/p?key=xoaeGXb)
-4. [Rocket switcher for power block](https://sl.aliexpress.ru/p?key=moaeG8T)
-5. [M2 screws](https://sl.aliexpress.ru/p?key=rRaeGCg)
+1. [XLR male and female](https://aliexpress.com/item/1005006112577152.html) -- is used to connect main part with power block
+2. [3mm black transparent acrilic glass](https://aliexpress.com/item/1005002538243937.html) -- cover display
+3. [Power block sockets](https://aliexpress.com/item/2043773958.html)
+4. [Rocket switcher for power block](https://aliexpress.com/item/1005004320737354.html)
+5. [M2 6mm screws 10 pcs](https://aliexpress.com/item/1005003194617253.html)
 6. M3 screw and nuts also needed but you could buy it everywhere you want
-7. [3 wire cabel 0.75 with AC Plug](https://sl.aliexpress.ru/p?key=Y0zn3DN) (Not tested)
-8. [32AWG cabel 6 color set (5 meters each)](https://sl.aliexpress.ru/p?key=lsNn3rZ) (Not tested)
-9. [Heat shrink tube 2 meters](https://sl.aliexpress.ru/p?key=ChNn3Wr) (Not tested)
-10. [Transparent two sides tape](https://sl.aliexpress.ru/p?key=pbNn3xt)
+7. [3 wire cabel 0.75 with AC Plug](https://aliexpress.com/item/1005004840824679.html) (Not tested)
+8. [32AWG cabel 6 color set (5 meters each)](https://aliexpress.com/item/1005006397237788.html) (Not tested)
+9. [Heat shrink tube 2 meters 4.8mm](https://aliexpress.com/item/1005001954843758.html) (Not tested)
+10. [Transparent two sides tape 3mm](https://aliexpress.com/item/4000282953023.html)
 
 ### Low-budget versions of device
 
@@ -188,5 +191,6 @@ tg: [@bogdanbogvzyan](http://t.me/bogdanbogvzyan)<br>
 email: [panasyukbv@yandex.ru](mailto:panasyukbv@yandex.ru?subject=Darkroom%20timer)
 
 Petr (code, assembling):<br>
+github: create issue on github if you have any questions and suggestions
 tg: [@lo1ol](http://t.me/lo1ol)<br>
 email: [myprettycapybara@gmail.com](mailto:myprettycapybara@gmail.com?subject=Darkroom%20timer)
