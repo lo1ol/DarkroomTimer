@@ -12,20 +12,9 @@
 
 #include "SettingsSetter.h"
 
-enum class ModeId : uint8_t {
-    testFStops,
-    testLinear,
-    print,
-    mask,
-    relMask,
-    splitFStops,
-    splitLinear,
-    splitMask,
-    splitRelMask,
-    localFStops,
-    localLinear,
-    last_
-};
+enum class ModeId : uint8_t { TIMER_MODES };
+
+static_assert(static_cast<int>(ModeId::last_) && "TIMER_MODES couldn't be empty");
 
 ModeId gModeId;
 static ModeId gNewModeId = gModeId;
@@ -33,31 +22,30 @@ ModeProcessor* gModeProcessor = nullptr;
 
 [[nodiscard]] const char* getPreview(ModeId modeId) {
     switch (modeId) {
-    case ModeId::testFStops:
-        return "F Stop test";
-    case ModeId::testLinear:
-        return "Linear test";
-    case ModeId::print:
-        return "Printing";
-    case ModeId::mask:
-        return "Mask printing";
-    case ModeId::relMask:
-        return "Rel mask print";
-    case ModeId::splitFStops:
-        return "Splt F Stop test";
-    case ModeId::splitLinear:
-        return "Splt linear test";
-    case ModeId::splitMask:
-        return "Splt mask";
-    case ModeId::splitRelMask:
-        return "Splt rel mask";
-    case ModeId::localFStops:
-        return "Locl F Stop test";
-    case ModeId::localLinear:
-        return "Locl linear test";
+#define RET_MODE_STR(id, str)            \
+    case ModeId::id:                     \
+        if (ModeId::id >= ModeId::last_) \
+            return nullptr;              \
+        return str;
+
+        RET_MODE_STR(testFStops, "F Stop test");
+        RET_MODE_STR(testLinear, "Linear test");
+        RET_MODE_STR(print, "Printing");
+        RET_MODE_STR(mask, "Mask printing");
+        RET_MODE_STR(relMask, "Rel mask print");
+        RET_MODE_STR(splitFStops, "Splt F Stop test");
+        RET_MODE_STR(splitLinear, "Splt linear test");
+        RET_MODE_STR(splitMask, "Splt linear test");
+        RET_MODE_STR(splitRelMask, "Splt rel mask");
+        RET_MODE_STR(localFStops, "Locl F Stop test");
+        RET_MODE_STR(localLinear, "Locl linear test");
+#undef RET_MODE_STR
+    case ModeId::last_:
+        assert(false);
+        return nullptr;
     }
 
-    return "";
+    return nullptr;
 }
 
 void setMode(ModeId modeId) {
@@ -68,39 +56,28 @@ void setMode(ModeId modeId) {
     gNewModeId = modeId;
 
     switch (gModeId) {
-    case ModeId::testFStops:
-        gModeProcessor = new FStopTestMode(FStopTestMode::Generic);
+#define SET_MODE_IMPL(id, impl)          \
+    case ModeId::id:                     \
+        if (ModeId::id >= ModeId::last_) \
+            return;                      \
+        gModeProcessor = new impl;       \
         break;
-    case ModeId::testLinear:
-        gModeProcessor = new LinearTestMode(LinearTestMode::Generic);
-        break;
-    case ModeId::print:
-        gModeProcessor = new PrintMode();
-        break;
-    case ModeId::mask:
-        gModeProcessor = new MaskMode(1);
-        break;
-    case ModeId::relMask:
-        gModeProcessor = new RelMaskMode(1);
-        break;
-    case ModeId::splitFStops:
-        gModeProcessor = new FStopTestMode(FStopTestMode::SplitGrade);
-        break;
-    case ModeId::splitLinear:
-        gModeProcessor = new LinearTestMode(LinearTestMode::SplitGrade);
-        break;
-    case ModeId::splitMask:
-        gModeProcessor = new MaskMode(2);
-        break;
-    case ModeId::splitRelMask:
-        gModeProcessor = new RelMaskMode(2);
-        break;
-    case ModeId::localFStops:
-        gModeProcessor = new FStopTestMode(FStopTestMode::Local);
-        break;
-    case ModeId::localLinear:
-        gModeProcessor = new LinearTestMode(LinearTestMode::Local);
-        break;
+
+        SET_MODE_IMPL(testFStops, FStopTestMode(FStopTestMode::Generic));
+        SET_MODE_IMPL(testLinear, LinearTestMode(LinearTestMode::Generic));
+        SET_MODE_IMPL(print, PrintMode());
+        SET_MODE_IMPL(mask, MaskMode(1));
+        SET_MODE_IMPL(relMask, RelMaskMode(1));
+        SET_MODE_IMPL(splitFStops, FStopTestMode(FStopTestMode::SplitGrade));
+        SET_MODE_IMPL(splitLinear, LinearTestMode(LinearTestMode::SplitGrade));
+        SET_MODE_IMPL(splitMask, MaskMode(2));
+        SET_MODE_IMPL(splitRelMask, RelMaskMode(2));
+        SET_MODE_IMPL(localFStops, FStopTestMode(FStopTestMode::Local));
+        SET_MODE_IMPL(localLinear, LinearTestMode(LinearTestMode::Local));
+#undef SET_MODE_IMPL
+    case ModeId::last_:
+        assert(false);
+        return;
     }
 }
 
@@ -253,7 +230,7 @@ void setup_() {
     pinMode(RELAY_PIN, OUTPUT);
     gDigitalWrite(RELAY_PIN, 0);
 
-    setMode(ModeId::testFStops);
+    setMode(static_cast<ModeId>(0));
     gModeProcessor->repaint();
 
     if (gSettings.startWithSettings)

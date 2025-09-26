@@ -82,6 +82,8 @@ Melody* Melody::getMelody(Name name) {
         return new MelodyPlayer(kNiceMelody, ArraySize(kNiceMelody));
     case Name::hotline:
         return new MelodyPlayer(kHotlineMelody, ArraySize(kHotlineMelody));
+    case Name::last_:
+        break;
     }
 
     assert(false);
@@ -96,6 +98,8 @@ const char* Melody::getMelodyName(Name name) {
         return "nice";
     case Name::hotline:
         return "Hotline Miami";
+    case Name::last_:
+        break;
     }
 
     assert(false);

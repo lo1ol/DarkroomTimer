@@ -108,6 +108,9 @@ void RelMaskMode::process() {
     case Step::run:
         processRun();
         return;
+    case Step::last_:
+        assert(false);
+        return;
     }
 }
 
@@ -211,6 +214,9 @@ void RelMaskMode::repaint() {
         gScrollableContent.paint();
         if (m_currentFilter == m_filterNum)
             gDisplay[DISPLAY_ROWS - 1] >> "Finished";
+        return;
+    case Step::last_:
+        assert(false);
         return;
     }
 }

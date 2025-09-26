@@ -108,3 +108,21 @@ static_assert((BEEPER_VOLUME_MIN + (BEEPER_VOLUME_STEP * 9)) <= 255);
 #define DISPLAY_COLS 16
 
 #define TIMER_FIRMWARE_VERSION "0.5.1"
+
+// clang-format off
+#ifndef TIMER_MODES
+    #define TIMER_MODES \
+        testFStops,     \
+        testLinear,     \
+        print,          \
+        mask,           \
+        relMask,        \
+        splitFStops,    \
+        splitLinear,    \
+        splitMask,      \
+        splitRelMask,   \
+        localFStops,    \
+        localLinear,    \
+        last_
+#endif
+// clang-format on

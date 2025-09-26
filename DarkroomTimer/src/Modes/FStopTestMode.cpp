@@ -50,6 +50,9 @@ void FStopTestMode::process() {
         return;
     case Step::run:
         break;
+    case Step::last_:
+        assert(false);
+        return;
     }
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getStepTotalTime(m_currentRun) != kBadTime &&
@@ -89,6 +92,9 @@ void FStopTestMode::repaint() {
         gScrollableContent.reset();
         m_timeTable.flush();
         gScrollableContent.paint();
+        return;
+    case Step::last_:
+        assert(false);
         return;
     }
 }

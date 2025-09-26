@@ -114,6 +114,9 @@ void SettingsSetter::process() {
         break;
     case Step::checkVersion:
         break;
+    case Step::last_:
+        assert(false);
+        break;
     }
 }
 
@@ -152,6 +155,9 @@ void SettingsSetter::repaint() const {
     case Step::checkVersion:
         gDisplay[0] << "Version";
         gDisplay[1] << TIMER_FIRMWARE_VERSION;
+        return;
+    case Step::last_:
+        assert(false);
         return;
     }
 }

@@ -66,3 +66,43 @@
  * And to 0 for low values of BEEPER_VOLUME_MIN (<8)
  */
 #define BEEPER_VOLUME_SILENT 1
+
+/* Set timer modes and their order
+ * Place modes that you don't need after 'last_' element,
+ * also you can rearrange modes.
+ * Notes:
+ *   1. you have to specify all modes, even not used (located after 'last_' elem)
+ *   2. you have to put comma and backslash after each elem (except last elem)
+ *
+ * Example:
+ *   // this config disable local test modes and rel mask modes
+ *   // also it change standard order of modes
+ *   #define TIMER_MODES \
+ *       testFStops,     \
+ *       testLinear,     \
+ *       splitLinear,    \
+ *       splitFStops,    \
+ *       mask,           \
+ *       splitMask,      \
+ *       print,          \
+ *       last_,          \
+ *       localFStops,    \
+ *       localLinear,    \
+ *       relMask,        \
+ *       splitRelMask,
+ */
+// clang-format off
+#define TIMER_MODES \
+    testFStops,     \
+    testLinear,     \
+    print,          \
+    mask,           \
+    relMask,        \
+    splitFStops,    \
+    splitLinear,    \
+    splitMask,      \
+    splitRelMask,   \
+    localFStops,    \
+    localLinear,    \
+    last_,
+// clang-format on

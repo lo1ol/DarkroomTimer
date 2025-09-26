@@ -195,8 +195,24 @@ pio run -t upload
 // Исправляем проблему при которой пищалка работает даже в выключенном состоянии
 #define BEEPER_VOLUME_SILENT 0
 
-// переключаемся на I2C реализацию работы с LCD
+// Переключаемся на I2C реализацию работы с LCD
 #define LCD_VERSION LCD_VERSION_I2C
+
+// Отключаем режим локальных тестов и относительных масок
+// Также меняем стандартный порядок режимов
+#define TIMER_MODES \
+    testFStops,     \
+    testLinear,     \
+    splitLinear,    \
+    splitFStops,    \
+    mask,           \
+    splitMask,      \
+    print,          \
+    last_,          \
+    localFStops,    \
+    localLinear,    \
+    relMask,        \
+    splitRelMask,
 ```
 
 Мы постараемся не менять названия этих макросов. Так что вы можете использовать этот конфиг для разных версий прошивки

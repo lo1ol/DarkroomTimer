@@ -70,6 +70,8 @@ void PrintMode::process() {
                 resetPrintInfo();
                 gTimer.start(m_printTime);
                 break;
+            case Timer::RUNNING:
+                break;
             }
             repaint();
         }

@@ -46,6 +46,9 @@ void LinearTestMode::process() {
         return;
     case Step::run:
         break;
+    case Step::last_:
+        assert(false);
+        return;
     }
 
     if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && getTotalTime(m_currentRun) != kBadTime &&
@@ -86,6 +89,9 @@ void LinearTestMode::repaint() {
         m_timeTable.flush();
         gScrollableContent.paint();
         break;
+    case Step::last_:
+        assert(false);
+        return;
     }
 }
 
