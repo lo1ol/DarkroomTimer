@@ -58,7 +58,7 @@
     #define LCD_BACKLIGHT_PIN 5
 #endif
 #ifndef RELAY_PIN
-    #define RELAY_PIN A4
+    #define RELAY_PIN 4
 #endif
 
 #ifndef ENCODER_DT_PIN

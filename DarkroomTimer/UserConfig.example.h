@@ -5,7 +5,15 @@
 
 // Leave there only that values that you want to change
 
-/* LCD pin values */
+/* LCD connection type
+ * Possiable values:
+ *    LCD_VERSION_COMMON -- LCD pins connected directly to Arduino
+ *    LCD_VERSION_I2C -- LCD connected to Arduino with I2C adapter (SDA -> A4, SCL -> A5)
+ *
+ * */
+#define LCD_VERSION LCD_VERSION_COMMON
+
+/* LCD pin values for LCD_VERSION_COMMON connection*/
 #define LCD_RS_PIN 12
 #define LCD_EN_PIN 11
 #define LCD_D4_PIN 9
@@ -28,8 +36,10 @@
 /* LCD backlight pin */
 #define LCD_BACKLIGHT_PIN 5
 
-/* SSR controlling pin */
-#define RELAY_PIN A4
+/* SSR controlling pin
+ * Note: Before 0.5.2 version A4 value was used
+ * */
+#define RELAY_PIN 4
 
 /* Encoder rotary pins
  *

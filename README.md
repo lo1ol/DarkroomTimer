@@ -159,6 +159,10 @@ You can configure the firmware by your needs. For this, you have to create a fil
 ```cpp
 // UserConfig.h
 
+// Change SSR input PIN
+// You need to specify it, if assamble Timer by guide of 0.5.1 version or lower
+#define RELAY_PIN A4
+
 // Change encoder direction
 #define ENCODER_DT_PIN 3
 #define ENCODER_CLK_PIN 2
