@@ -1,6 +1,6 @@
 # Advanced darkroom timer (KAF Red_Ray Timer RR-1)
 
-> [Инструкция на русском](./README_RU.md)
+> [Инструкция на русском. С более удобными ссылками на компоненты](./README_RU.md)
 
 > This project is inspired by [this one](https://github.com/nikonov1101/kafstop-timer), but improve it and extend functions
 
@@ -82,28 +82,24 @@ My friend just create the coolest version of body for this project!!! You can fi
 
 1. [Encoder EC11 module](https://aliexpress.com/item/1005007038297328.html)
 2. [Buttons 3 pcs](https://aliexpress.com/item/1005005783406100.html)
-3. [Red LCD 1602](https://aliexpress.com/item/1709948156.html)
-4. [Active Buzzer 5V](https://aliexpress.com/item/1005004207766097.html)
-5. [Toggle switch SS12F15G5 2 pcs](https://aliexpress.com/item/33001964763.html)
-6. [5V Transformer 700mA](https://aliexpress.com/item/33011812383.html) (still don't check it properly). Also you can just disassamble any 5V USB phone adapter
-7. [Arduino Nano ATMEGA328P/Type-C or Mini USB/WITHOUT WELDING](https://aliexpress.com/item/32915861640.html)
-8. Only one resistor is used to set contrast of screen: 2.2 kOm. Your value could differ.
-9. You could buy sustain pedal as footswitch. It has to be normally-open or has polarity switch. We use "Cherub wtb-006" and it's more than ok
-10. [Jack 6.35](https://aliexpress.com/item/4001288527437.html)
-11. SSR:
+3. [Active Buzzer 5V](https://aliexpress.com/item/1005004207766097.html)
+4. [Toggle switch SS12F15G5 2 pcs](https://aliexpress.com/item/33001964763.html)
+5. [5V Transformer 700mA](https://aliexpress.com/item/33011812383.html) (still don't check it properly). Also you can just disassamble any 5V USB phone adapter
+6. [Arduino Nano ATMEGA328P/Type-C or Mini USB/WITHOUT WELDING](https://aliexpress.com/item/32915861640.html)
+7. [Jack 6.35 (mono)](https://www.aliexpress.com/item/3256805643675386.html)
+8. SSR:
     * If you want to use timer with any lamp (LED, halogen). You can buy any of it:
         - [D3803HK/D3805HK/D3808HK](https://aliexpress.com/item/1005003616598178.html)
         - [BERM BRM-D480-5A](https://aliexpress.com/item/1005005177941225.html)
         - [SSR-41FDA](https://aliexpress.com/item/1005007299427443.html)
     * If you don't want to use timer with low wattage lamps (LED): you can buy [this popular 5V SSR](https://aliexpress.com/item/33005799623.html). This one has leakage in turned off state, and it's enough to power on the lamp
+9. Red LCD 1602:
+    * [LCD with I2C adapter](https://aliexpress.com/item/32906948449.html). Most convinient option. Need to soldure just 5 pins. You can adjust contrst on the I2C module
+    * [LCD without I2C adapter](https://aliexpress.com/item/32906948449.html). Harder to soldure. Can require resistor to adjust contrast, but in my cases it's not needed
+    * [Another LCD without I2C adapter](https://aliexpress.com/item/1709948156.html). Require additioal resistor 2.2kOm. Value could be differ from mine
+10. [Sustain pedal as footswitch](https://aliexpress.com/item/1005008834402930.html) (Optional). You could buy other one. It has to be normally-open or has polarity switch.
 
 > **WARNING**: Don't use solenoid relays. It can lead to hieroglyphs on the display and even kill Arduino
-
-12. [Red LCD with preinstalled I2C adapter](https://aliexpress.com/item/32906948449.html) (Optional. Not tested. Alternative for common LCD). Pros and cons of I2C version:
-    * Easier to solder -- you need to solder only 5 pins: GND, VCC, SDA -> A4, SCL -> A5, K -> Brightness control PIN (D5)
-    * Can work with solenoid relays without any graphical artifacts, BUT it's still not recommended to use them, because they generated reverse current. It can destroy your device
-    * Has bad response time. Version with direct LCD connection is more responsive on encoder rotation. [Demo](https://youtu.be/_PjdLxWIzHs)
-    * Not require resistor for contrast regulation. Use embedded potentiometer to adjust it
 
 This body has not enought space to keep transformer and SSR inside. You should put in special box for electronic. You could connect it with the body using, for example, XLR.
 
