@@ -1,8 +1,8 @@
 #include "../Config.h"
 
-#if LCD_VERSION == LCD_VERSION_COMMON && !defined(PIO_UNIT_TESTING)
+#if LCD_VERSION == LCD_VERSION_DIRECT && !defined(PIO_UNIT_TESTING)
 
-    #include "Common.h"
+    #include "Direct.h"
 
     #include <GyverIO.h>
 

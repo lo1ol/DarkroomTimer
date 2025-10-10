@@ -7,13 +7,13 @@
 
 /* LCD connection type
  * Possiable values:
- *    LCD_VERSION_COMMON -- LCD pins connected directly to Arduino
+ *    LCD_VERSION_DIRECT -- LCD pins connected directly to Arduino
  *    LCD_VERSION_I2C -- LCD connected to Arduino with I2C adapter (SDA -> A4, SCL -> A5)
  *
  * */
-#define LCD_VERSION LCD_VERSION_COMMON
+#define LCD_VERSION LCD_VERSION_DIRECT
 
-/* LCD pin values for LCD_VERSION_COMMON connection*/
+/* LCD pin values for LCD_VERSION_DIRECT connection*/
 #define LCD_RS_PIN 12
 #define LCD_EN_PIN 11
 #define LCD_D4_PIN 9

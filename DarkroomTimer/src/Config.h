@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 
-#define LCD_VERSION_COMMON 0
+#define LCD_VERSION_DIRECT 0
 #define LCD_VERSION_I2C 1
 
 // Use user config values if exists
@@ -16,7 +16,7 @@
 #endif
 
 #ifndef LCD_VERSION
-    #define LCD_VERSION LCD_VERSION_COMMON
+    #define LCD_VERSION LCD_VERSION_DIRECT
 #endif
 
 #ifndef LCD_RS_PIN
