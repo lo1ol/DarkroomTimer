@@ -32,15 +32,15 @@ jobs:
 
       - name: Run build
         if: ${{ matrix.env == 'nanoatmega328' }}
-        run: ~/.platformio/penv/bin/platformio run -d DarkroomTimer/
+        run: ~/.platformio/penv/bin/platformio run -d .
 
       - name: Run tests
         if: ${{ matrix.env != 'native-cov' }}
-        run: ~/.platformio/penv/bin/platformio test -d DarkroomTimer/ --without-uploading -e "${{ matrix.env }}"
+        run: ~/.platformio/penv/bin/platformio test -d . --without-uploading -e "${{ matrix.env }}"
 
       - name: Check coverage
         if: ${{ matrix.env == 'native-cov' }}
-        run: PATH=~/.platformio/penv/bin/:$PATH ./DarkroomTimer/scripts/test_cov.sh cov_html
+        run: PATH=~/.platformio/penv/bin/:$PATH ./scripts/test_cov.sh cov_html
 
       - name: Upload HTML with coverage report
         if: ${{ matrix.env == 'native-cov' }}

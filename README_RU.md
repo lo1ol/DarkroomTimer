@@ -56,7 +56,7 @@
 
 > Note: часть выделенная пунктиром -- это блок питания. Его подробная схема представлена ниже
 
-![Схема основной части](./MainBodyCircuit.jpg)
+![Схема основной части](./docs/MainBodyCircuit.jpg)
 
 #### I2C версия LCD
 
@@ -64,12 +64,12 @@
 
 > Note: не забудьте установить макрос `LCD_VERSION` в значение `LCD_VERSION_I2C` в [UserConfig.h](./DarkroomTimer/UserConfig.example.h)
 
-![I2C LCD circuit](./I2C_LcdCircuit.jpg)
+![I2C LCD circuit](./docs/I2C_LcdCircuit.jpg)
 
 
 #### Блок Питания
 
-![Схема блока питания](./PowerSupplyCircuit.jpg)
+![Схема блока питания](./docs/PowerSupplyCircuit.jpg)
 
 ### Корпус
 
@@ -159,7 +159,6 @@
 
 ```bash
 # build from command line
-cd DarkroomTimer/
 pio run -t build
 
 # upload to device

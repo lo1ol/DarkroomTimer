@@ -3,7 +3,7 @@
 set -eu
 
 SCRIPT_DIR=$(realpath $(dirname "$0"))
-SRC_DIR=$(dirname "$SCRIPT_DIR")/src
+SRC_DIR=$(dirname "$SCRIPT_DIR")/DarkroomTimer
 WOKWI_DIR=${PWD}/wokwi
 
 rm -rf "$WOKWI_DIR"

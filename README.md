@@ -57,7 +57,7 @@
 
 > Note: Dashed part is power supply block. It's not a part of main body. The datailed scheme of power supply is shown lower
 
-![Main body circuit](./MainBodyCircuit.jpg)
+![Main body circuit](./docs/MainBodyCircuit.jpg)
 
 #### I2C version of LCD
 
@@ -65,11 +65,11 @@
 
 > Note: Not forget to set `LCD_VERSION` macro to `LCD_VERSION_I2C` at [UserConfig.h](./DarkroomTimer/UserConfig.example.h)
 
-![I2C LCD circuit](./I2C_LcdCircuit.jpg)
+![I2C LCD circuit](./docs/I2C_LcdCircuit.jpg)
 
 #### Power supply
 
-![Power supply circuit](./PowerSupplyCircuit.jpg)
+![Power supply circuit](./docs/PowerSupplyCircuit.jpg)
 
 
 ### Hardware and body
@@ -141,7 +141,6 @@ If you want to modify this code, then I recomment to use PlatfromIO:
 
 ```bash
 # build from command line
-cd DarkroomTimer/
 pio run -t build
 
 # upload to device

@@ -7,6 +7,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: DoozyX/clang-format-lint-action@v0.17
         with:
-          sources: "DarkroomTimer"
+          sources: "."
           extensions: 'h,cpp,c,ino'
           clangFormatVersion: 17
