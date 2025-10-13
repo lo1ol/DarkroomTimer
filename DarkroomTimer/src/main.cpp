@@ -10,6 +10,7 @@
 #include "Modes/PrintMode.h"
 #include "Modes/RelMaskMode.h"
 
+#include "LightMeterMenu.h"
 #include "SettingsSetter.h"
 
 enum class ModeId : uint8_t { TIMER_MODES };
@@ -197,6 +198,33 @@ void processView() {
     }
 }
 
+void processLightMeter() {
+    static uint32_t gStartTime = millis();
+    if (millis() - gStartTime < 5000) {
+        return;
+    }
+
+    static bool gBlockedByLightMeter = false;
+    static LightMeterMenu gLightMeterMenu;
+
+    if (gBlocked && !gBlockedByLightMeter)
+        return;
+
+    if (gBlockedByLightMeter) {
+        gLightMeterMenu.process();
+        if (gLightMeterMenu.needExit()) {
+            gLightMeterMenu.exit();
+            gBlockedByLightMeter = false;
+            gModeProcessor->repaint();
+        }
+    } else {
+        if (gLightMeterMenu.askStart())
+            gBlockedByLightMeter = true;
+    }
+
+    gBlocked = gBlockedByLightMeter;
+}
+
 void processMode() {
     static bool gBlockedByRun = false;
 
@@ -235,6 +263,7 @@ void setup_() {
 
     if (gSettings.startWithSettings)
         gSettingsSetter = new SettingsSetter;
+    return;
 }
 
 #ifndef PIO_UNIT_TESTING
@@ -255,6 +284,7 @@ void loop_() {
     processSettings();
     processView();
     processMode();
+    processLightMeter();
 
     gDisplay.tick();
 }
