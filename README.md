@@ -94,9 +94,8 @@ My friend just create the coolest version of body for this project!!! You can fi
         - [SSR-41FDA](https://aliexpress.com/item/1005007299427443.html)
     * If you don't want to use timer with low wattage lamps (LED): you can buy [this popular 5V SSR](https://aliexpress.com/item/33005799623.html). This one has leakage in turned off state, and it's enough to power on the lamp
 9. Red LCD 1602:
-    * [LCD with I2C adapter](https://aliexpress.com/item/32906948449.html). Most convinient option. Need to soldure just 5 pins. You can adjust contrst on the I2C module
-    * [LCD without I2C adapter](https://aliexpress.com/item/32906948449.html). Harder to soldure. Can require resistor to adjust contrast, but in my cases it's not needed
-    * [Another LCD without I2C adapter](https://aliexpress.com/item/1709948156.html). Require additioal resistor 2.2kOm. Value could be differ from mine
+    * [LCD without I2C adapter](https://aliexpress.com/item/1709948156.html). Has really good angle of view compare to next one, but harder to solder. Requires additioal resistor 2.2kOm (value could be differ from mine). You could solder with own I2C adapter
+    * [LCD with I2C adapter](https://aliexpress.com/item/32906948449.html). Most convinient option, but not so good contrast. Need to soldure just 5 pins. You can adjust contrst on the I2C module
 10. [Sustain pedal as footswitch](https://aliexpress.com/item/1005008834402930.html) (Optional). You could buy other one. It has to be normally-open or has polarity switch.
 
 > **WARNING**: Don't use solenoid relays. It can lead to hieroglyphs on the display and even kill Arduino
