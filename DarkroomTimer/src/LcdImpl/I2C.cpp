@@ -8,6 +8,7 @@
     #define LCD_BACKLIGHT 0x08
     #define LCD_ENABLE 0x04
     #define LCD_RS 0x01
+    #define LCD_CLEARDISPLAY 0x01
 
 namespace {
 
@@ -52,7 +53,7 @@ void lcdSendNibble(uint8_t data, bool isData) {
     i2cWrite(data | LCD_ENABLE);
     delayMicroseconds(1);
     i2cWrite(data & ~LCD_ENABLE);
-    delayMicroseconds(100);
+    delayMicroseconds(50);
 }
 
 void lcdSend(uint8_t value, uint8_t mode) {
@@ -70,6 +71,8 @@ inline void lcdData(uint8_t value) {
 } // namespace
 
 void Lcd::init() {
+    // order is taken from
+    // https://github.com/johnrickman/LiquidCrystal_I2C/blob/738765e388816fb2a687d40436cd2604febce1b1/LiquidCrystal_I2C.cpp#L71
     i2cInit();
     delay(50); // some time to wake up device
 
@@ -77,15 +80,25 @@ void Lcd::init() {
     // set 4-bit mode
     lcdSendNibble(0x30, 0);
     delay(5);
+
+    // second try
     lcdSendNibble(0x30, 0);
+    delay(5);
+
+    // second try
+    lcdSendNibble(0x30, 0);
+    delayMicroseconds(150);
+
     delayMicroseconds(150);
     lcdSendNibble(0x20, 0);
 
     lcdCmd(0x28); // two strings, 4-bit
     lcdCmd(0x0C); // display is on, cursor is off
+
+    lcdCmd(LCD_CLEARDISPLAY); // clear display
+    delay(2);                 // delay for long clear display command
+
     lcdCmd(0x06); // cursor to the left after printing
-    lcdCmd(0x01); // clear display
-    delay(2);     // delay for long clear display command
     i2cStop();
 }
 
