@@ -1,5 +1,7 @@
 #include "../Config.h"
 
+#include "../CustomLcdSyms.h"
+
 #if LCD_VERSION == LCD_VERSION_I2C && !defined(PIO_UNIT_TESTING)
 
     #include "I2C.h"
@@ -9,6 +11,8 @@
     #define LCD_ENABLE 0x04
     #define LCD_RS 0x01
     #define LCD_CLEARDISPLAY 0x01
+    #define LCD_SETCGRAMADDR 0x40
+    #define LCD_SETDDRAMADDR 0x80
 
 namespace {
 
@@ -63,6 +67,7 @@ void lcdSend(uint8_t value, uint8_t mode) {
 
 inline void lcdCmd(uint8_t value) {
     lcdSend(value, false);
+    delayMicroseconds(50);
 }
 
 inline void lcdData(uint8_t value) {
@@ -99,20 +104,44 @@ void Lcd::init() {
     delay(2);                 // delay for long clear display command
 
     lcdCmd(0x06); // cursor to the left after printing
+
     i2cStop();
+
+    // syms id are shifted by one
+    createChar(kWplusSym - 1, kWplusMatrix);
+    createChar(kWminusSym - 1, kWminusMatrix);
+    createChar(kYplusSym - 1, kYplusMatrix);
+    createChar(kYminusSym - 1, kYminusMatrix);
+    createChar(kMplusSym - 1, kMplusMatrix);
+    createChar(kMminusSym - 1, kMminusMatrix);
+    createChar(kCplusSym - 1, kCplusMatrix);
+    createChar(kCminusSym - 1, kCminusMatrix);
 }
 
 void Lcd::setCursor(uint8_t c, uint8_t r) {
     i2cStart(LCD_ADDR << 1);
     static uint8_t rowOffsets[] = { 0x00, 0x40 };
-    lcdCmd(0x80 | (c + rowOffsets[r]));
+    lcdCmd(LCD_SETDDRAMADDR | (c + rowOffsets[r]));
     i2cStop();
 }
 
 void Lcd::print(const char* str) {
     i2cStart(LCD_ADDR << 1);
-    while (*str)
-        lcdData(*str++);
+    while (char ch = *str++) {
+        // custom char
+        if (ch < 9)
+            --ch;
+        lcdData(ch);
+    }
+    i2cStop();
+}
+
+void Lcd::createChar(uint8_t symId, const uint8_t symMatrix[8]) {
+    i2cStart(LCD_ADDR << 1);
+    lcdCmd(LCD_SETCGRAMADDR | (symId << 3));
+
+    for (uint8_t i = 0; i != 8; i++)
+        lcdData(symMatrix[i]);
     i2cStop();
 }
 

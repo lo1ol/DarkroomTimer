@@ -4,7 +4,12 @@
 
     #include "Direct.h"
 
+    #include "../CustomLcdSyms.h"
+
     #include <GyverIO.h>
+
+    #define LCD_SETCGRAMADDR 0x40
+    #define LCD_SETDDRAMADDR 0x80
 
 namespace {
 
@@ -49,18 +54,35 @@ void Lcd::init() {
 
     delay(50);
 
+    // first try to set 4-bit mode
     lcdWrite4bits(0x03);
     delay(5);
+    // second
+    lcdWrite4bits(0x03);
+    delay(5);
+    // third
     lcdWrite4bits(0x03);
     delayMicroseconds(150);
+
     lcdWrite4bits(0x03);
     lcdWrite4bits(0x02);
 
-    lcdCmd(0x28);
-    lcdCmd(0x0C);
-    lcdCmd(0x06);
+    lcdCmd(0x28); // two strings, 4-bit
+    lcdCmd(0x0C); // display is on, cursor is off
     lcdCmd(0x01);
     delay(2);
+
+    lcdCmd(0x06);
+
+    // syms id are shifted by one
+    createChar(kWplusSym - 1, kWplusMatrix);
+    createChar(kWminusSym - 1, kWminusMatrix);
+    createChar(kYplusSym - 1, kYplusMatrix);
+    createChar(kYminusSym - 1, kYminusMatrix);
+    createChar(kMplusSym - 1, kMplusMatrix);
+    createChar(kMminusSym - 1, kMminusMatrix);
+    createChar(kCplusSym - 1, kCplusMatrix);
+    createChar(kCminusSym - 1, kCminusMatrix);
 }
 
 void Lcd::setCursor(uint8_t c, uint8_t r) {
@@ -69,8 +91,19 @@ void Lcd::setCursor(uint8_t c, uint8_t r) {
 }
 
 void Lcd::print(const char* str) {
-    while (*str)
-        lcdData(*str++);
+    while (char ch = *str++) {
+        // custom char
+        if (ch < 9)
+            --ch;
+        lcdData(ch);
+    }
+}
+
+void Lcd::createChar(uint8_t symId, const uint8_t symMatrix[8]) {
+    lcdCmd(LCD_SETCGRAMADDR | (symId << 3));
+
+    for (uint8_t i = 0; i != 8; i++)
+        lcdData(symMatrix[i]);
 }
 
 #endif
