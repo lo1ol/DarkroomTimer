@@ -111,7 +111,7 @@ Body extra components:
 5. [M2 6mm screws 10 pcs](https://aliexpress.com/item/1005003194617253.html)
 6. M3 screw and nuts also needed but you could buy it everywhere you want
 7. [3 wire cabel 0.75 with AC Plug](https://aliexpress.com/item/1005004840824679.html) (Not tested)
-8. [32AWG cabel 6 color set (5 meters each)](https://aliexpress.com/item/1005006397237788.html) (Not tested)
+8. [24AWG cabel 6 color set (5 meters each)](https://aliexpress.com/item/1005006397237788.html) (Not tested)
 9. [Heat shrink tube 2 meters 4.8mm](https://aliexpress.com/item/1005001954843758.html) (Not tested)
 10. [Transparent two sides tape 3mm](https://aliexpress.com/item/4000282953023.html)
 
