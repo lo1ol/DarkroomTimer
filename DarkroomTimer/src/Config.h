@@ -125,4 +125,11 @@ static_assert((BEEPER_VOLUME_MIN + (BEEPER_VOLUME_STEP * 9)) <= 255);
         localLinear,    \
         last_
 #endif
+
+// TODO
+#define COMMUNICATION_MASTER_CLK_PIN A4
+#define COMMUNICATION_MASTER_DATA_PIN A5
+#define COMMUNICATION_MASTER_DELAY_US 50
+#define COMMUNICATION_SLAVE_HANDLE_TIME_MS 5
+
 // clang-format on

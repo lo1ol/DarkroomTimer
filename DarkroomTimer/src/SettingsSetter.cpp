@@ -4,10 +4,12 @@
 #include "Utils.h"
 
 SettingsSetter::SettingsSetter() : m_lagTime(gSettings.lagTime) {
+    gConnection.stop();
     repaint();
 }
 
 SettingsSetter::~SettingsSetter() {
+    gConnection.start();
     gBeeper.stop();
     gSettings.lagTime = m_lagTime;
     gSettings.updateEEPROM();
@@ -113,6 +115,7 @@ void SettingsSetter::process() {
         processSetMelody();
         break;
     case Step::checkVersion:
+    case Step::updateFirmware:
         break;
     case Step::last_:
         assert(false);
@@ -155,6 +158,10 @@ void SettingsSetter::repaint() const {
     case Step::checkVersion:
         gDisplay[0] << "Version";
         gDisplay[1] << TIMER_FIRMWARE_VERSION;
+        return;
+    case Step::updateFirmware:
+        gDisplay[0] << "Update firmware";
+        gDisplay[1] << "Run upload";
         return;
     case Step::last_:
         assert(false);
