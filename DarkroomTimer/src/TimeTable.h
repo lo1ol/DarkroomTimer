@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Time.h"
+#include "common/Time.h"
 
 // class for effective keep and printing time table
 class TimeTable {

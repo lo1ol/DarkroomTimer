@@ -4,8 +4,8 @@
 
 #include <stdint.h>
 
-#include "../Time.h"
 #include "../TimeTable.h"
+#include "../common/Time.h"
 
 class TestMode : public ModeProcessor {
 protected:

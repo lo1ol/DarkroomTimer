@@ -65,9 +65,6 @@ private:
     return time * x;
 }
 
-DisplayLine& operator<<(DisplayLine&, const Time&);
-DisplayLine& operator>>(DisplayLine&, const Time&);
-
 [[nodiscard]] constexpr inline Time operator""_ts(unsigned long long ts) {
     return Time(ts);
 }

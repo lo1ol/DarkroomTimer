@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SafeEncButton.h"
+#include "common/SafeEncButton.h"
 
 #include "Beeper.h"
 #include "Config.h"
