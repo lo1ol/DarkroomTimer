@@ -6,7 +6,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        env: [nanoatmega328, scenarios-env, native, native-valgrind, native-cov]
+        env: [timer_nanoatmega328, scenarios-env, native, native-valgrind, native-cov]
     runs-on: ubuntu-latest
 
     steps:
