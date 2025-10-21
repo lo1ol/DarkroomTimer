@@ -12,6 +12,8 @@ uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
 Lcd gLcd;
 
+Communication::ComMaster gConnection;
+
 Display gDisplay(&gLcd);
 DTEncoder& gEncoder = DTEncoder::getInstance();
 

@@ -33,6 +33,28 @@ void DisplayLine::print(const char* src, bool current, const char* mark) {
     concat(m_fwInfo, src);
 }
 
+void DisplayLine::print3DigInt(int16_t dig, char onPosChar, char onNegChar) {
+    char str[DISPLAY_COLS + 1];
+
+    if (dig < 0) {
+        dig = -dig;
+        str[0] = onNegChar;
+    } else {
+        str[0] = onPosChar;
+    }
+
+    if (dig > 999)
+        dig = 999;
+
+    itoa(dig, str + 1, 10);
+    alignStr(str + 1, 3, '0');
+
+    if (str[0] == 0)
+        concat(m_fwInfo, str + 1);
+    else
+        concat(m_fwInfo, str);
+}
+
 void DisplayLine::reset() {
     m_needRepaint = true;
     m_fwInfo[0] = 0;
