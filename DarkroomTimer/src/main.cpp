@@ -10,6 +10,7 @@
 #include "Modes/PrintMode.h"
 #include "Modes/RelMaskMode.h"
 
+#include "LightMeterMenu.h"
 #include "SettingsSetter.h"
 
 enum class ModeId : uint8_t { TIMER_MODES };
@@ -106,7 +107,7 @@ void processModeSwitch() {
         return;
     }
 
-    if (gModeBtn.holding() && !gSettingBtn.pressing())
+    if (gModeBtn.hold() && !gSettingBtn.pressing())
         gBlockedByPreview = true;
 
     int8_t dir = gEncoder.getDir();
@@ -202,6 +203,29 @@ void processView() {
     }
 }
 
+void processLightMeter() {
+    static bool gBlockedByLightMeter = false;
+    static LightMeterMenu gLightMeterMenu;
+
+    if (gBlocked && !gBlockedByLightMeter)
+        return;
+
+    if (gBlockedByLightMeter) {
+        gLightMeterMenu.process();
+        if (gLightMeterMenu.needExit() || gModeBtn.hold()) {
+            gLightMeterMenu.exit();
+            gBlockedByLightMeter = false;
+            gModeProcessor->repaint();
+            gModeBtn.skipEvents();
+        }
+    } else {
+        if (gLightMeterMenu.askStart())
+            gBlockedByLightMeter = true;
+    }
+
+    gBlocked = gBlockedByLightMeter;
+}
+
 void processMode() {
     static bool gBlockedByRun = false;
 
@@ -261,6 +285,7 @@ void loop_() {
     processSettings();
     processView();
     processMode();
+    processLightMeter();
 
     gDisplay.tick();
 }

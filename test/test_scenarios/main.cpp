@@ -1897,6 +1897,10 @@ void checkSettings() {
 
     gModeBtn.emulClick();
     loop_();
+    TEST_DISPLAY("Update firmware", "Run upload");
+
+    gModeBtn.emulClick();
+    loop_();
     TEST_DISPLAY("Lag time", "0.6");
 
 #ifndef DT_NATIVE

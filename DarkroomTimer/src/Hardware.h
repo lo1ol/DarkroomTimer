@@ -14,6 +14,7 @@
 #include "ScrollableContent.h"
 #include "Settings.h"
 #include "Timer.h"
+#include "common/Communication/ComMaster.h"
 
 void setDisplayBacklight(uint8_t val);
 
@@ -31,6 +32,7 @@ extern Settings gSettings;
 extern Beeper gBeeper;
 extern uint8_t gModesCache[32];
 extern ScrollableContent gScrollableContent;
+extern Communication::ComMaster gConnection;
 
 #ifdef PIO_UNIT_TESTING
 uint32_t gMillis();

@@ -14,6 +14,7 @@ public:
         setStartWithSettings,
         setMelody,
         checkVersion,
+        updateFirmware,
         last_
     };
 
