@@ -1,0 +1,10 @@
+name: Check common sync
+on: [push]
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check common dir is synced
+        run: |
+          diff --recursive DarkroomTimer/src/common Lightmeter/src/common
