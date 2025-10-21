@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "Config.h"
+#include "common/Time.h"
 
 class Lcd;
 
@@ -20,6 +21,9 @@ public:
 
     DisplayLine& operator>>(const char* src);
     DisplayLine& operator>>(int value);
+
+    DisplayLine& operator<<(const Time&);
+    DisplayLine& operator>>(const Time&);
 
     void print(const char* src, bool current = false, const char* mark = nullptr);
 
@@ -49,3 +53,4 @@ private:
     char m_fwInfo[DISPLAY_COLS + 1] = "";
     char m_bwInfo[DISPLAY_COLS + 1] = "";
 };
+

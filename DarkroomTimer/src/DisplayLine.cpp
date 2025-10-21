@@ -128,6 +128,18 @@ DisplayLine& DisplayLine::operator>>(int value) {
     return *this;
 }
 
+DisplayLine& DisplayLine::operator<<(const Time& time) {
+    char str[DISPLAY_COLS + 1];
+    time.getFormatedTime(str);
+    return *this << str;
+}
+
+DisplayLine& DisplayLine::operator>>(const Time& time) {
+    char str[DISPLAY_COLS + 1];
+    time.getFormatedTime(str, true, true);
+    return *this >> str;
+}
+
 void DisplayLine::fastCurrentRepaint(const char* src) {
     if (!m_currentLength)
         return;

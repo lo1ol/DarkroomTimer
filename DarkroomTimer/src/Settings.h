@@ -4,7 +4,7 @@
 
 #include "Config.h"
 #include "Melody.h"
-#include "Time.h"
+#include "common/Time.h"
 
 constexpr Time kMinLagTime = 0_s;
 constexpr Time kMaxLagTime = 2_s;
