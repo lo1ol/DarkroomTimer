@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-#include "RelTime.h"
-#include "Time.h"
+#include "common/RelTime.h"
+#include "common/Time.h"
 
 class DTEncoder {
 private:

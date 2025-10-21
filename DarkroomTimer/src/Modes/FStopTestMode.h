@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-#include "../Time.h"
 #include "../TimeTable.h"
+#include "../common/Time.h"
 
 class FStopTestMode final : public ModeProcessor {
     enum class Step { baseTime, initTime, fstopSet, run, last_ };

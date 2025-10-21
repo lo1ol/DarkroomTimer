@@ -23,18 +23,6 @@ void Time::getFormatedTime(char* buf, bool accurate, bool addZero) const {
     itoa(dec, buf + strlen(buf), 10);
 }
 
-DisplayLine& operator<<(DisplayLine& dl, const Time& time) {
-    char str[DISPLAY_COLS + 1];
-    time.getFormatedTime(str);
-    return dl << str;
-}
-
-DisplayLine& operator>>(DisplayLine& dl, const Time& time) {
-    char str[DISPLAY_COLS + 1];
-    time.getFormatedTime(str, true, true);
-    return dl >> str;
-}
-
 namespace {
 // Values are changing with accuracy 1/12 stop
 // You can check accuracy range by this formule:

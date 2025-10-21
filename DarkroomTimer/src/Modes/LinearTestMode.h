@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 
-#include "../Time.h"
 #include "../TimeTable.h"
+#include "../common/Time.h"
 
 class LinearTestMode final : public ModeProcessor {
     enum class Step { baseTime, initTime, stepTime, run, last_ };

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "RelTime.h"
+#include "common/RelTime.h"
+
+#include <stdint.h>
 
 // class for effective keep and printing time table
 class RelTimeTable {

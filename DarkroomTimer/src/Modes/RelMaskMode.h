@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #include "../RelTimeTable.h"
-#include "../Time.h"
+#include "../common/Time.h"
 
 class RelMaskMode final : public ModeProcessor {
     enum class Step { setNum, setMasks, run, last_ };
