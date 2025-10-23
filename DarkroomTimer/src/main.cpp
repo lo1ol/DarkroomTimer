@@ -50,17 +50,21 @@ ModeProcessor* gModeProcessor = nullptr;
 
 void setMode(ModeId modeId) {
     if (gModeProcessor)
-        delete (gModeProcessor);
+        gModeProcessor->~ModeProcessor();
 
     gModeId = modeId;
     gNewModeId = modeId;
 
+    // try not use heap at all
+    // to reduce firmware sice
+    static uint8_t gModeBuf[sizeof(MaskMode)];
+
     switch (gModeId) {
-#define SET_MODE_IMPL(id, impl)          \
-    case ModeId::id:                     \
-        if (ModeId::id >= ModeId::last_) \
-            return;                      \
-        gModeProcessor = new impl;       \
+#define SET_MODE_IMPL(id, impl)               \
+    case ModeId::id:                          \
+        if (ModeId::id >= ModeId::last_)      \
+            return;                           \
+        gModeProcessor = new (gModeBuf) impl; \
         break;
 
         SET_MODE_IMPL(testFStops, FStopTestMode(FStopTestMode::Generic));
@@ -125,6 +129,7 @@ void processModeSwitch() {
 }
 
 SettingsSetter* gSettingsSetter = nullptr;
+static uint8_t gSettingsSetterBuf[sizeof(SettingsSetter)];
 
 void processSettings() {
     if (gBlocked && !gSettingsSetter)
@@ -138,11 +143,11 @@ void processSettings() {
         if (gSettingsSetter) {
             if (!gSettingsSetter->couldBeClosed())
                 return;
-            delete gSettingsSetter;
+            gSettingsSetter->~SettingsSetter();
             gSettingsSetter = nullptr;
             gModeProcessor->repaint();
         } else {
-            gSettingsSetter = new SettingsSetter;
+            gSettingsSetter = new (gSettingsSetterBuf) SettingsSetter;
         }
     }
 
@@ -234,7 +239,8 @@ void setup_() {
     gModeProcessor->repaint();
 
     if (gSettings.startWithSettings)
-        gSettingsSetter = new SettingsSetter;
+        gSettingsSetter = new (gSettingsSetterBuf) SettingsSetter;
+    return;
 }
 
 #ifndef PIO_UNIT_TESTING
@@ -262,11 +268,11 @@ void loop_() {
 #ifdef PIO_UNIT_TESTING
 void unsetup_() {
     if (gSettingsSetter) {
-        delete gSettingsSetter;
+        gSettingsSetter->~SettingsSetter();
         gSettingsSetter = nullptr;
     }
     if (gModeProcessor) {
-        delete gModeProcessor;
+        gModeProcessor->~ModeProcessor();
         gModeProcessor = nullptr;
     }
 }

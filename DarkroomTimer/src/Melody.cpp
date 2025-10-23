@@ -75,13 +75,15 @@ uint16_t kHotlineMelody[] = {
 #define ArraySize(array) (sizeof(array) / sizeof((array)[0]))
 
 Melody* Melody::getMelody(Name name) {
+    static uint8_t gMelodyBuf[sizeof(MelodyPlayer)];
+
     switch (name) {
     case Name::alarm:
-        return new AlarmMelody;
+        return new (gMelodyBuf) AlarmMelody;
     case Name::nice:
-        return new MelodyPlayer(kNiceMelody, ArraySize(kNiceMelody));
+        return new (gMelodyBuf) MelodyPlayer(kNiceMelody, ArraySize(kNiceMelody));
     case Name::hotline:
-        return new MelodyPlayer(kHotlineMelody, ArraySize(kHotlineMelody));
+        return new (gMelodyBuf) MelodyPlayer(kHotlineMelody, ArraySize(kHotlineMelody));
     case Name::last_:
         break;
     }
