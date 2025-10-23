@@ -1,6 +1,7 @@
 #include "Time.h"
 
-#include <stdlib.h>
+#include <Arduino.h>
+
 #include <string.h>
 
 void Time::getFormatedTime(char* buf, bool accurate, bool addZero) const {

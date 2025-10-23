@@ -15,8 +15,13 @@
 #define interrupts() \
     {}
 
+#include <cstdint>
+
 void itoa(int n, char s[], int base);
 
 inline int min(int x, int y) {
     return (x > y) ? y : x;
 }
+
+void delay(uint32_t);
+void delayMicroseconds(uint32_t);
