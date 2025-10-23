@@ -111,8 +111,14 @@ void DTEncoder::tick() {
 #endif
 }
 
-
 bool DTEncoder::getInt(uint8_t& choosen, uint8_t min, uint8_t max) const {
+    uint16_t choosen_ = choosen;
+    bool res = getInt(choosen_, min, max);
+    choosen = choosen_;
+    return res;
+}
+
+bool DTEncoder::getInt(uint16_t& choosen, uint16_t min, uint16_t max) const {
 #ifdef PIO_UNIT_TESTING
     if (m_retInt) {
         choosen = m_int;
@@ -125,7 +131,7 @@ bool DTEncoder::getInt(uint8_t& choosen, uint8_t min, uint8_t max) const {
     else
         shift = getShift();
 
-    uint8_t res;
+    uint16_t res;
 
     if (choosen > max) {
         choosen = max;
@@ -140,9 +146,9 @@ bool DTEncoder::getInt(uint8_t& choosen, uint8_t min, uint8_t max) const {
     if (!shift)
         return false;
 
-    if (shift < 0 && (choosen - min) < -shift)
+    if (shift < 0 && (choosen - min) < static_cast<uint8_t>(-shift))
         res = min;
-    else if (shift > 0 && (max - choosen) < shift)
+    else if (shift > 0 && (max - choosen) < static_cast<uint8_t>(shift))
         res = max;
     else
         res = choosen + shift;
