@@ -25,10 +25,11 @@ public:
 
     [[nodiscard]] State state() const { return m_state; }
 
-#ifndef PIO_UNIT_TESTING
-private:
-#endif
+#ifdef PIO_UNIT_TESTING
     void setMelody(Melody*);
+#endif
+
+private:
     void processAlarm();
     void setPinState(bool pinState, bool force = false);
 
