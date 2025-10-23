@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <unistd.h>
 
 /* reverse:  переворачиваем строку s на месте */
 void reverse(char s[]) {
@@ -29,4 +30,12 @@ void itoa(int n, char s[], int base) {
         s[i++] = '-';
     s[i] = '\0';
     reverse(s);
+}
+
+void delay(uint32_t) {
+    // TODO
+}
+
+void delayMicroseconds(uint32_t) {
+    // TODO
 }
