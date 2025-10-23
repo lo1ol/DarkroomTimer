@@ -4,7 +4,7 @@
 
 Beeper::~Beeper() {
     if (m_melody)
-        delete m_melody;
+        m_melody->~Melody();
 }
 
 void Beeper::tick() {
@@ -85,11 +85,21 @@ void Beeper::setPinState(bool pinState, bool force) {
 }
 
 void Beeper::setMelody(Melody::Name melodyName) {
-    setMelody(Melody::getMelody(melodyName));
+    stop();
+
+    if (m_melody)
+        m_melody->~Melody();
+
+    m_melody = Melody::getMelody(melodyName);
 }
 
+#ifdef PIO_UNIT_TESTING
 void Beeper::setMelody(Melody* melody) {
     stop();
-    delete m_melody;
+
+    if (m_melody)
+        m_melody->~Melody();
+
     m_melody = melody;
 }
+#endif
