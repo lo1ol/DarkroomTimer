@@ -4,11 +4,11 @@
 
 class MelodyPlayer : public Melody {
 public:
-    MelodyPlayer(const uint16_t* melody, uint8_t size) : m_melody(melody), m_size(size) {}
+    MelodyPlayer(const uint8_t* melody, uint8_t size) : m_melody(melody), m_size(size) {}
 
     void init() override {
         m_melodyPhase = 0;
-        m_timer = gMillis() + m_melody[0];
+        m_timer = gMillis() + m_melody[0] * 4;
     }
 
     bool tick() override {
@@ -20,7 +20,7 @@ public:
             if (end())
                 return false;
 
-            m_timer = currentTime + m_melody[m_melodyPhase];
+            m_timer = currentTime + m_melody[m_melodyPhase] * 4;
         }
 
         return !(m_melodyPhase & 1);
@@ -29,7 +29,7 @@ public:
     bool end() const override { return m_melodyPhase >= m_size; }
 
 private:
-    const uint16_t* m_melody;
+    const uint8_t* m_melody;
     uint8_t m_size;
     uint8_t m_melodyPhase = 0;
     uint32_t m_timer = 0;
@@ -63,13 +63,13 @@ private:
     uint32_t m_timer = 0;
 };
 
-constexpr uint16_t kNiceMelody[] = { 250, 250, 120, 120, 60, 60, 400, 800 };
+constexpr uint8_t kNiceMelody[] = { 62, 62, 30, 30, 15, 15, 100, 200 };
 
-uint16_t kHotlineMelody[] = {
-    39,  211, 70, 70,  39, 47, 63, 211, 63, 78, 31, 78, 39,  102, 31, 78,  63,  78,  148, 102, 39,  320, 39,
-    102, 39,  70, 70,  70, 47, 47, 63,  94, 31, 78, 63, 78,  47,  63, 47,  94,  31,  78,  63,  78,  141, 109,
-    31,  78,  78, 63,  31, 78, 47, 219, 63, 63, 31, 63, 63,  94,  31, 78,  78,  63,  31,  78,  31,  109, 31,
-    78,  63,  78, 156, 94, 31, 78, 78,  63, 31, 78, 47, 203, 63,  78, 125, 234, 281, 219, 266, 234, 250, 10,
+uint8_t kHotlineMelody[] = {
+    9,  52, 17, 17, 9,  11, 15, 52, 15, 19, 7,  19, 9,  25, 7,  19, 15, 19, 37, 25, 9,  80, 9,
+    25, 9,  17, 17, 17, 11, 11, 15, 23, 7,  19, 15, 19, 11, 15, 11, 23, 7,  19, 15, 19, 35, 27,
+    7,  19, 19, 15, 7,  19, 11, 54, 15, 15, 7,  15, 15, 23, 7,  19, 19, 15, 7,  19, 7,  27, 7,
+    19, 15, 19, 39, 23, 7,  19, 19, 15, 7,  19, 11, 50, 15, 19, 31, 58, 70, 54, 66, 58, 62, 2,
 };
 
 #define ArraySize(array) (sizeof(array) / sizeof((array)[0]))
