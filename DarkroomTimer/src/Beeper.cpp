@@ -33,7 +33,7 @@ void Beeper::tick() {
 }
 
 void Beeper::setup() {
-    pinMode(m_pin, OUTPUT);
+    gPinMode(m_pin, OUTPUT);
     setPinState(false, true);
     setMelody(gSettings.melody);
 }

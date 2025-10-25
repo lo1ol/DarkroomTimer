@@ -2,29 +2,28 @@
 
 #if LCD_VERSION == LCD_VERSION_DIRECT && !defined(PIO_UNIT_TESTING)
 
+    #include "../Hardware.h"
     #include "Direct.h"
-
-    #include <GyverIO.h>
 
 namespace {
 
 void lcdPulseEnable() {
-    gio::write(LCD_EN_PIN, true);
+    gDigitalWrite(LCD_EN_PIN, true);
     delayMicroseconds(1);
-    gio::write(LCD_EN_PIN, false);
+    gDigitalWrite(LCD_EN_PIN, false);
     delayMicroseconds(100);
 }
 
 void lcdWrite4bits(uint8_t value) {
-    gio::write(LCD_D4_PIN, (value >> 0) & 0x01);
-    gio::write(LCD_D5_PIN, (value >> 1) & 0x01);
-    gio::write(LCD_D6_PIN, (value >> 2) & 0x01);
-    gio::write(LCD_D7_PIN, (value >> 3) & 0x01);
+    gDigitalWrite(LCD_D4_PIN, (value >> 0) & 0x01);
+    gDigitalWrite(LCD_D5_PIN, (value >> 1) & 0x01);
+    gDigitalWrite(LCD_D6_PIN, (value >> 2) & 0x01);
+    gDigitalWrite(LCD_D7_PIN, (value >> 3) & 0x01);
     lcdPulseEnable();
 }
 
 void lcdSend(uint8_t value, bool rs) {
-    gio::write(LCD_RS_PIN, rs);
+    gDigitalWrite(LCD_RS_PIN, rs);
     lcdWrite4bits(value >> 4);
     lcdWrite4bits(value);
 }
@@ -40,12 +39,12 @@ inline void lcdData(uint8_t data) {
 } // namespace
 
 void Lcd::init() {
-    pinMode(LCD_RS_PIN, OUTPUT);
-    pinMode(LCD_EN_PIN, OUTPUT);
-    pinMode(LCD_D4_PIN, OUTPUT);
-    pinMode(LCD_D5_PIN, OUTPUT);
-    pinMode(LCD_D6_PIN, OUTPUT);
-    pinMode(LCD_D7_PIN, OUTPUT);
+    gPinMode(LCD_RS_PIN, OUTPUT);
+    gPinMode(LCD_EN_PIN, OUTPUT);
+    gPinMode(LCD_D4_PIN, OUTPUT);
+    gPinMode(LCD_D5_PIN, OUTPUT);
+    gPinMode(LCD_D6_PIN, OUTPUT);
+    gPinMode(LCD_D7_PIN, OUTPUT);
 
     delay(50);
 
