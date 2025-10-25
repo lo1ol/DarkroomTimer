@@ -2,6 +2,10 @@
 
 #include "common/SafeEncButton.h"
 
+#ifndef PIO_UNIT_TESTING
+    #include <GyverIO.h>
+#endif
+
 #include "Beeper.h"
 #include "Config.h"
 #include "DTEncoder.h"
@@ -40,6 +44,8 @@ extern int gBacklightVal;
 extern bool gRelayVal;
 #else
     #define gMillis millis
-    #define gDigitalWrite digitalWrite
+    #define gDigitalRead gio::read
+    #define gDigitalWrite gio::write
+    #define gPinMode gio::mode
     #define gAnalogWrite analogWrite
 #endif

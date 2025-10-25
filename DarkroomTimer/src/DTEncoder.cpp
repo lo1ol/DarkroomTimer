@@ -52,8 +52,8 @@ DTEncoder& DTEncoder::getInstance() {
         gInited = true;
 
 #ifndef PIO_UNIT_TESTING 
-        pinMode(ENCODER_DT_PIN, INPUT_PULLUP);
-        pinMode(ENCODER_CLK_PIN, INPUT_PULLUP);
+        gPinMode(ENCODER_DT_PIN, INPUT_PULLUP);
+        gPinMode(ENCODER_CLK_PIN, INPUT_PULLUP);
         attachInterrupt(digitalPinToInterrupt(ENCODER_DT_PIN), isr_, CHANGE);
         attachInterrupt(digitalPinToInterrupt(ENCODER_CLK_PIN), isr_, CHANGE);
         gInstance.m_lastEncoderState = (PIND >> 2) & 0x03;

@@ -227,9 +227,9 @@ void setup_() {
 #endif
     gBeeper.setup();
 
-    pinMode(LCD_BACKLIGHT_PIN, OUTPUT);
+    gPinMode(LCD_BACKLIGHT_PIN, OUTPUT);
     setDisplayBacklight(gSettings.backlight);
-    pinMode(RELAY_PIN, OUTPUT);
+    gPinMode(RELAY_PIN, OUTPUT);
     gDigitalWrite(RELAY_PIN, 0);
 
     setMode(static_cast<ModeId>(0));
