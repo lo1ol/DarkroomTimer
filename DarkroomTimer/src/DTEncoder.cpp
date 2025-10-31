@@ -6,8 +6,13 @@
 #include "Hardware.h"
 
 #ifndef PIO_UNIT_TESTING
+
+uint8_t readState() {
+    return gDigitalRead(ENCODER_DT_PIN) | (gDigitalRead(ENCODER_CLK_PIN) << 1);
+}
+
 void DTEncoder::isr() {
-    uint8_t state = (PIND >> 2) & 0x03;
+    uint8_t state = readState();
     uint8_t transition = (m_lastEncoderState << 2) | state;
 
     // clang-format off
@@ -56,7 +61,7 @@ DTEncoder& DTEncoder::getInstance() {
         gPinMode(ENCODER_CLK_PIN, INPUT_PULLUP);
         attachInterrupt(digitalPinToInterrupt(ENCODER_DT_PIN), isr_, CHANGE);
         attachInterrupt(digitalPinToInterrupt(ENCODER_CLK_PIN), isr_, CHANGE);
-        gInstance.m_lastEncoderState = (PIND >> 2) & 0x03;
+        gInstance.m_lastEncoderState = readState();
 #endif
     }
 
