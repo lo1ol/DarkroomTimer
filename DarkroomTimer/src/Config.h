@@ -73,7 +73,7 @@
 #elif ENCODER_DT_PIN == 3 && ENCODER_CLK_PIN == 2
     #define ENCODER_DIRECTION (-1)
 #else
-static_assert(false && "Bad values for ENCODER_DT and ENCODER_CLK")
+static_assert(false && "Bad values for ENCODER_DT_PIN and ENCODER_CLK_PIN");
 #endif
 
 #ifndef ENCODER_FAST_TIMEOUT
