@@ -104,6 +104,16 @@ static_assert(LCD_BACKLIGHT_STEP <= 25 && 0 < LCD_BACKLIGHT_STEP);
 
 static_assert((BEEPER_VOLUME_MIN + (BEEPER_VOLUME_STEP * 9)) <= 255);
 
+#define BEEP_ON_START 1
+#define BEEP_ON_END 2
+#define BEEP_ON_START_AND_END (BEEP_ON_START | BEEP_ON_END)
+
+#ifndef BEEP_MODE
+    #define BEEP_MODE BEEP_ON_START
+#endif
+
+static_assert(BEEP_MODE, "Bad value for BEEP_MODE");
+
 #define DISPLAY_ROWS 2
 #define DISPLAY_COLS 16
 

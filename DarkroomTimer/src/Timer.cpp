@@ -12,7 +12,7 @@ void Timer::tick() {
 
     if (m_currentTime >= realStopTime()) {
         m_justFinished = true;
-        stop();
+        stop(true);
         return;
     }
 
@@ -28,7 +28,9 @@ void Timer::tick() {
 }
 
 void Timer::start(Time time) {
+#if BEEP_MODE & BEEP_ON_START
     gBeeper.beep();
+#endif
 
     if (time == 0_ts) {
         m_justFinished = true;
@@ -49,6 +51,10 @@ bool Timer::pause() {
         return false;
 
     gBeeper.stop();
+#if BEEP_MODE & BEEP_ON_END
+    gBeeper.beep();
+#endif
+
     updateAfterLastResume();
     m_total += afterResume();
     m_leftTime -= afterResume();
@@ -62,15 +68,23 @@ void Timer::resume() {
     if (m_status != PAUSED)
         return;
 
+#if BEEP_MODE & BEEP_ON_START
     gBeeper.beep();
+#endif
+
     m_lagPassed = false;
     m_resumeTime = m_currentTime;
     m_status = RUNNING;
     gDigitalWrite(RELAY_PIN, true);
 }
 
-void Timer::stop() {
+void Timer::stop([[maybe_unused]] bool withBeep) {
     gBeeper.stop();
+#if BEEP_MODE & BEEP_ON_END
+    if (withBeep)
+        gBeeper.beep();
+#endif
+
     gDigitalWrite(RELAY_PIN, false);
 
     if (m_status == STOPPED)
@@ -131,7 +145,7 @@ void Timer::resetTotal() {
 }
 
 void Timer::reset() {
-    stop();
+    stop(false);
     resetTotal();
     m_afterLastResume = 0_ts;
 }

@@ -556,7 +556,7 @@ void checkScrollableContentTimer() {
     gDisplay.tick();
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));
     TEST_ASSERT_EQUAL_STRING("kek4  1.5 kek6  ", gLcd.getLine(1));
-    gTimer.stop();
+    gTimer.stop(false);
     sc.paint();
     gDisplay.tick();
     TEST_ASSERT_EQUAL_STRING("kek1 kek2 kek3  ", gLcd.getLine(0));

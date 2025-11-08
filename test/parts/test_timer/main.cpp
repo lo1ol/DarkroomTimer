@@ -88,7 +88,7 @@ void checkTimerStop() {
     gTimer.start(2_s);
     TEST_ASSERT_EQUAL(Timer::State::RUNNING, gTimer.state());
     gTimer.tick();
-    gTimer.stop();
+    gTimer.stop(false);
     TEST_ASSERT_EQUAL(Timer::State::STOPPED, gTimer.state());
     TEST_ASSERT_EQUAL(false, gTimer.justFinished());
     gTimer.tick();

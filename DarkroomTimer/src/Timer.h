@@ -15,7 +15,7 @@ public:
     // info was it really paused
     bool pause();
     void resume();
-    void stop();
+    void stop(bool withBeep);
     [[nodiscard]] uint32_t left() const;
     [[nodiscard]] bool lag() const;
 

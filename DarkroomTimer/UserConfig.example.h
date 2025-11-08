@@ -77,6 +77,14 @@
  */
 #define BEEPER_VOLUME_SILENT 1
 
+/* Beeper beep mode
+ * Possiable values:
+ *   BEEP_ON_START: Make beep sound on start (default)
+ *   BEEP_ON_END: Make beep sound on end
+ *   BEEP_ON_START_AND_END: Make beep sound on start and end
+ */
+#define BEEP_MODE BEEP_ON_START
+
 /* Set timer modes and their order
  * Place modes that you don't need after 'last_' element,
  * also you can rearrange modes.
