@@ -4,7 +4,7 @@
 #include "../Utils.h"
 
 namespace {
-constexpr uint8_t kFStopPartVarinatns[] = { 12, 6, 4, 3, 2, 1 };
+constexpr uint8_t kFStopPartVarinatns[] = { 1, 2, 3, 4, 6, 12 };
 } // namespace
 
 FStopTestMode::FStopTestMode(SubMode subMode) : kSubMode(subMode) {
@@ -13,7 +13,7 @@ FStopTestMode::FStopTestMode(SubMode subMode) : kSubMode(subMode) {
 
     m_baseTime = 2_s;
     m_initTime = 2_s;
-    m_FStopPartId = 5;
+    m_FStopPartId = 0;
     m_step = kSubMode == SplitGrade ? Step::baseTime : Step::initTime;
     m_currentRun = 0;
 }

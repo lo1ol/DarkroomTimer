@@ -131,28 +131,28 @@ void checkFStopTest() {
 
     TEST_DISPLAY("F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
 
     TEST_DISPLAY("F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/2");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/3");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/4");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/6");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/12");
 
@@ -271,17 +271,17 @@ void checkFStopTest() {
     gModeBtn.emulClick();
     loop_();
 
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("F Stop test", "F stop: 1/1");
 
@@ -338,28 +338,28 @@ void checkLocalFStopTest() {
 
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
 
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/1");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/2");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/3");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/4");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/6");
 
-    gEncoder.emulTurns(-1);
+    gEncoder.emulTurns(1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/12");
 
@@ -482,17 +482,17 @@ void checkLocalFStopTest() {
     gModeBtn.emulClick();
     loop_();
 
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
-    gEncoder.emulTurns(1);
+    gEncoder.emulTurns(-1);
     loop_();
     TEST_DISPLAY("Locl F Stop test", "F stop: 1/1");
 
