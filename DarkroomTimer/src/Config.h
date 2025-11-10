@@ -10,9 +10,15 @@
 #define LCD_VERSION_DIRECT 0
 #define LCD_VERSION_I2C 1
 
-// Use user config values if exists
-#if __has_include("../UserConfig.h")
-    #include "../UserConfig.h"
+#ifdef PIO_UNIT_TESTING
+    #if __has_include(<UserConfig.h>)
+        #include <UserConfig.h>
+    #endif
+#else
+    // Use user config values if exists
+    #if __has_include("../UserConfig.h")
+        #include "../UserConfig.h"
+    #endif
 #endif
 
 #ifndef LCD_VERSION
