@@ -24,9 +24,17 @@ Time LinearTestMode::getStepTotalTime_(uint8_t step) const {
 }
 
 const char* LinearTestMode::header() const {
-    if (kSubMode == SplitGrade)
+    switch (kSubMode) {
+    case Generic:
+        return "Linear test";
+    case SplitGrade:
         return "Splt linear test";
-    if (kSubMode == Local)
+    case Local:
         return "Locl linear test";
-    return "Linear test";
+    case Expert:
+        return "Xprt linear test";
+    }
+
+    assert(false);
+    return "";
 }

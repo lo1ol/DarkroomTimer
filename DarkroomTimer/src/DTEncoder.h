@@ -13,6 +13,7 @@ public:
     static DTEncoder& getInstance();
 
     [[nodiscard]] int8_t getDir() const;
+    [[nodiscard]] bool getBool(bool& choosen) const;
     [[nodiscard]] bool getInt(uint8_t& choosen, uint8_t min, uint8_t max) const;
     [[nodiscard]] bool getTime(Time& time, bool smooth = false) const;
     [[nodiscard]] bool getRelTime(RelTime& time) const;
