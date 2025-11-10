@@ -40,6 +40,7 @@
 6. Split grade test modes: the same as fstop and linear test modes, but allows to set base time. After printing base, the melody is playing to not forget change filter
 7. Split mask and rel mask modes: the same as mask and rel mask modes, but allows to set mask for two filtres (0 and 5). Notification system is disabled.
 8. Localized test modes the same as fstop and linear test modes, but used to test the same region on photo. The time you see -- it's whole printing test time. [3D model of the test-strip maker](https://www.thingiverse.com/thing:7048981)
+9. Expert tests modes (disabled by default): include functionality of all test modes. Allows to set custom time of first exposure (preflash. Part of split-grade). Specify type of the test (localized or generic). You could use them instead of all standard modes. Only one disadvantage of this modes is a bug number of sum menues
 
 ## Killer features:
 

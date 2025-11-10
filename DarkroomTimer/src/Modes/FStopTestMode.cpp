@@ -30,9 +30,17 @@ Time FStopTestMode::getStepTotalTime_(uint8_t step) const {
 }
 
 const char* FStopTestMode::header() const {
-    if (kSubMode == SplitGrade)
+    switch (kSubMode) {
+    case Generic:
+        return "F Stop test";
+    case SplitGrade:
         return "Splt F Stop test";
-    if (kSubMode == Local)
+    case Local:
         return "Locl F Stop test";
-    return "F Stop test";
+    case Expert:
+        return "Xprt F Stop test";
+    }
+
+    assert(false);
+    return "";
 }

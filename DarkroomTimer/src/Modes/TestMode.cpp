@@ -10,18 +10,28 @@ TestMode::TestMode(SubMode subMode) : kSubMode(subMode) {
     m_preflashTime = 0_s;
     m_step = Step::initTime;
     m_currentRun = 0;
+    m_localized = false;
+
+    if (kSubMode == Local)
+        m_localized = true;
 
     if (kSubMode == SplitGrade)
         m_preflashTime = 2_s;
 
-    if (kSubMode == SplitGrade)
+    if (kSubMode == Expert)
+        m_step = Step::setLocalized;
+
+    else if (kSubMode == SplitGrade)
         m_step = Step::preflashTime;
 }
 
 void TestMode::switchMode() {
     m_step = ADD_TO_ENUM(Step, m_step, 1);
 
-    if (m_step == Step::preflashTime && kSubMode != SplitGrade)
+    if (m_step == Step::setLocalized && kSubMode != Expert)
+        m_step = Step::preflashTime;
+
+    if (m_step == Step::preflashTime && kSubMode != SplitGrade && kSubMode != Expert)
         m_step = Step::initTime;
 
     if (m_step == Step::run) {
@@ -36,6 +46,10 @@ void TestMode::switchMode() {
 
 void TestMode::process() {
     switch (m_step) {
+    case Step::setLocalized:
+        if (gEncoder.getBool(m_localized))
+            repaint();
+        return;
     case Step::preflashTime:
         if (gEncoder.getTime(m_preflashTime))
             repaint();
@@ -60,7 +74,7 @@ void TestMode::process() {
         gTimer.start(getPrintTime());
 
     if (gTimer.justFinished()) {
-        if (m_currentRun == 0 && kSubMode == SplitGrade)
+        if (m_currentRun == 0 && hasPreflashTime())
             gBeeper.alarm();
 
         m_timeTable.setCurrent(++m_currentRun);
@@ -75,9 +89,18 @@ void TestMode::repaint() {
     gDisplay.reset();
 
     switch (m_step) {
+    case Step::setLocalized:
+        gDisplay[0] << header();
+        gDisplay[1] << "Local tests:" << (m_localized ? "on" : "off");
+        return;
     case Step::preflashTime:
         gDisplay[0] << header();
-        gDisplay[1] << "First t:" << m_preflashTime;
+        if (kSubMode == SplitGrade)
+            gDisplay[1] << "First t:";
+        else
+            gDisplay[1] << "Preflash t:";
+
+        gDisplay[1] << m_preflashTime;
         return;
     case Step::initTime:
         gDisplay[0] << header();
@@ -100,7 +123,7 @@ void TestMode::repaint() {
 
 Time TestMode::getPrintTime() const {
     uint8_t realId = m_currentRun;
-    if (kSubMode != SplitGrade)
+    if (!hasPreflashTime())
         ++realId;
 
     if (realId == 0)
@@ -109,14 +132,14 @@ Time TestMode::getPrintTime() const {
     if (realId == 1)
         return m_initTime;
 
-    if (kSubMode == Local)
+    if (m_localized)
         return getStepTotalTime_(realId - 1);
     return getStepTime_(realId - 1);
 }
 
 Time TestMode::getStepTotalTime(uint8_t id) const {
     uint8_t realId = id;
-    if (kSubMode != SplitGrade)
+    if (!hasPreflashTime())
         ++realId;
 
     if (realId == 0)
@@ -128,9 +151,13 @@ Time TestMode::getStepTotalTime(uint8_t id) const {
     return getStepTotalTime_(realId - 1);
 }
 
+bool TestMode::hasPreflashTime() const {
+    return kSubMode == SplitGrade || m_preflashTime;
+}
+
 void TestMode::reset() {
     m_currentRun = 0;
-    m_timeTable.setCurrent(0, kSubMode == SplitGrade ? "ntf" : nullptr);
+    m_timeTable.setCurrent(0, m_preflashTime ? "ntf" : nullptr);
 }
 
 void TestMode::setTimeTable() {

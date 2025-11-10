@@ -111,6 +111,21 @@ void DTEncoder::tick() {
 #endif
 }
 
+bool DTEncoder::getBool(bool& choosen) const {
+    auto shift = getShift();
+
+    if (shift < 0 && choosen) {
+        choosen = false;
+        return true;
+    }
+
+    if (shift > 0 && !choosen) {
+        choosen = true;
+        return true;
+    }
+
+    return false;
+}
 
 bool DTEncoder::getInt(uint8_t& choosen, uint8_t min, uint8_t max) const {
 #ifdef PIO_UNIT_TESTING

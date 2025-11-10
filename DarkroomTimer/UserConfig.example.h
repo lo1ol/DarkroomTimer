@@ -85,17 +85,21 @@
  *   2. you have to put comma and backslash after each elem (except last elem)
  *
  * Example:
- *   // this config disable local test modes and rel mask modes
- *   // also it change standard order of modes
+ *   // This config:
+ *   // 1. Disable local and split grade test modes and rel mask modes
+ *   // 2. Enable expert test modes
+ *   // 3. Change standard order of modes
  *   #define TIMER_MODES \
  *       testFStops,     \
  *       testLinear,     \
- *       splitLinear,    \
- *       splitFStops,    \
  *       mask,           \
  *       splitMask,      \
  *       print,          \
+ *       expertFStops,   \
+ *       expertLinear,   \
  *       last_,          \
+ *       splitLinear,    \
+ *       splitFStops,    \
  *       localFStops,    \
  *       localLinear,    \
  *       relMask,        \
@@ -114,5 +118,7 @@
     splitRelMask,   \
     localFStops,    \
     localLinear,    \
-    last_,
+    last_,          \
+    expertFStops,   \
+    expertLinear,
 // clang-format on

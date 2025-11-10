@@ -9,13 +9,14 @@
 
 class TestMode : public ModeProcessor {
 protected:
-    enum class Step { preflashTime, initTime, setStep, run, last_ };
+    enum class Step { setLocalized, preflashTime, initTime, setStep, run, last_ };
 
 public:
     enum SubMode {
         Generic,
         SplitGrade,
         Local,
+        Expert,
     };
 
     explicit TestMode(SubMode subMode);
@@ -24,10 +25,6 @@ public:
     void switchMode() override;
 
     void repaint() override;
-
-    // returns time taking into account preflash time
-    Time getPrintTime() const;
-    Time getStepTotalTime(uint8_t step) const;
 
 protected:
     virtual const char* header() const = 0;
@@ -41,11 +38,17 @@ protected:
     virtual Time getStepTotalTime_(uint8_t step) const = 0;
 
 private:
+    // returns time taking into account preflash time
+    Time getPrintTime() const;
+    Time getStepTotalTime(uint8_t step) const;
+    bool hasPreflashTime() const;
+
     void setTimeTable();
 
     Step m_step;
     TimeTable m_timeTable;
     uint8_t m_currentRun;
+    bool m_localized;
 
 protected:
     const SubMode kSubMode;

@@ -129,6 +129,8 @@ static_assert((BEEPER_VOLUME_MIN + (BEEPER_VOLUME_STEP * 9)) <= 255);
         splitRelMask,   \
         localFStops,    \
         localLinear,    \
-        last_
+        last_,          \
+        expertFStops,   \
+        expertLinear,
 #endif
 // clang-format on
