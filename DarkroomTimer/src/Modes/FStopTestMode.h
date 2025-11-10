@@ -1,40 +1,19 @@
-#include "../ModeProcessor.h"
+#pragma once
 
-#include <stdint.h>
+#include "TestMode.h"
 
-#include "../Time.h"
-#include "../TimeTable.h"
-
-class FStopTestMode final : public ModeProcessor {
-    enum class Step { baseTime, initTime, fstopSet, run, last_ };
-
+class FStopTestMode final : public TestMode {
 public:
-    enum SubMode {
-        Generic,
-        SplitGrade,
-        Local,
-    };
-
     explicit FStopTestMode(SubMode subMode);
-    void process() override;
-    void reset() override;
-    void switchMode() override;
 
-    const char* preview() const;
+protected:
+    const char* header() const override;
 
-    void repaint() override;
+    bool handleStepSet() override;
+    void printStep() const override;
 
-private:
-    void setTimeTable();
-    Time getPrintTime() const;
-    Time getStepTotalTime(uint8_t step) const;
+    Time getStepTime_(uint8_t step) const override;
+    Time getStepTotalTime_(uint8_t step) const override;
 
-    const SubMode kSubMode;
-    Step m_step;
-    uint8_t m_currentRun;
     uint8_t m_FStopPartId;
-    Time m_baseTime;
-    Time m_initTime;
-
-    TimeTable m_timeTable;
 };

@@ -4,7 +4,6 @@
 
 #include "../Tools.h"
 
-
 void setup_();
 void unsetup_();
 void loop_();
@@ -540,11 +539,11 @@ void checkSpltFStopTest() {
     gModeBtn.emulRelease();
     loop_();
 
-    TEST_DISPLAY("Splt F Stop test", "Base t:2");
+    TEST_DISPLAY("Splt F Stop test", "First t:2");
 
     gEncoder.emulRetTime(32_ts);
     loop_();
-    TEST_DISPLAY("Splt F Stop test", "Base t:3.2");
+    TEST_DISPLAY("Splt F Stop test", "First t:3.2");
 
     gModeBtn.emulClick();
     loop_();
@@ -812,11 +811,11 @@ void checkSpltLinearTest() {
 
     gModeBtn.emulRelease();
     loop_();
-    TEST_DISPLAY("Splt linear test", "Base t:2");
+    TEST_DISPLAY("Splt linear test", "First t:2");
 
     gEncoder.emulRetTime(63_ts);
     loop_();
-    TEST_DISPLAY("Splt linear test", "Base t:6.3");
+    TEST_DISPLAY("Splt linear test", "First t:6.3");
 
     gModeBtn.emulClick();
     loop_();

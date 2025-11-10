@@ -67,17 +67,17 @@ void setMode(ModeId modeId) {
         gModeProcessor = new (gModeBuf) impl; \
         break;
 
-        SET_MODE_IMPL(testFStops, FStopTestMode(FStopTestMode::Generic));
-        SET_MODE_IMPL(testLinear, LinearTestMode(LinearTestMode::Generic));
+        SET_MODE_IMPL(testFStops, FStopTestMode(TestMode::Generic));
+        SET_MODE_IMPL(testLinear, LinearTestMode(TestMode::Generic));
         SET_MODE_IMPL(print, PrintMode());
         SET_MODE_IMPL(mask, MaskMode(1));
         SET_MODE_IMPL(relMask, RelMaskMode(1));
-        SET_MODE_IMPL(splitFStops, FStopTestMode(FStopTestMode::SplitGrade));
-        SET_MODE_IMPL(splitLinear, LinearTestMode(LinearTestMode::SplitGrade));
+        SET_MODE_IMPL(splitFStops, FStopTestMode(TestMode::SplitGrade));
+        SET_MODE_IMPL(splitLinear, LinearTestMode(TestMode::SplitGrade));
         SET_MODE_IMPL(splitMask, MaskMode(2));
         SET_MODE_IMPL(splitRelMask, RelMaskMode(2));
-        SET_MODE_IMPL(localFStops, FStopTestMode(FStopTestMode::Local));
-        SET_MODE_IMPL(localLinear, LinearTestMode(LinearTestMode::Local));
+        SET_MODE_IMPL(localFStops, FStopTestMode(TestMode::Local));
+        SET_MODE_IMPL(localLinear, LinearTestMode(TestMode::Local));
 #undef SET_MODE_IMPL
     case ModeId::last_:
         assert(false);

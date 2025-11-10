@@ -1,40 +1,19 @@
-#include "../ModeProcessor.h"
+#pragma once
 
-#include <stdint.h>
+#include "TestMode.h"
 
-#include "../Time.h"
-#include "../TimeTable.h"
-
-class LinearTestMode final : public ModeProcessor {
-    enum class Step { baseTime, initTime, stepTime, run, last_ };
-
+class LinearTestMode final : public TestMode {
 public:
-    enum SubMode {
-        Generic,
-        SplitGrade,
-        Local,
-    };
-
     explicit LinearTestMode(SubMode subMode);
-    void process() override;
-    void reset() override;
-    void switchMode() override;
 
-    const char* preview() const;
+protected:
+    const char* header() const override;
 
-    void repaint() override;
+    bool handleStepSet() override;
+    void printStep() const override;
 
-private:
-    void setTimeTable();
-    Time getPrintTime() const;
-    Time getTotalTime(uint8_t id) const;
+    Time getStepTime_(uint8_t step) const override;
+    Time getStepTotalTime_(uint8_t step) const override;
 
-    const SubMode kSubMode;
-    Step m_step;
-    uint8_t m_currentRun;
-    Time m_baseTime;
-    Time m_initTime;
     Time m_stepTime;
-
-    TimeTable m_timeTable;
 };
