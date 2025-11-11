@@ -1,3 +1,5 @@
+#pragma GCC diagnostic error "-Wswitch"
+
 #include "Config.h"
 #include "Hardware.h"
 #include "Utils.h"
@@ -12,9 +14,24 @@
 
 #include "SettingsSetter.h"
 
+#define MODE_DESCS                                                                            \
+    MODE_DESC(fStopTest, "F Stop test", FStopTestMode(TestMode::Generic))                     \
+    MODE_DESC(splitGradeFStopTest, "Splt F Stop test", FStopTestMode(TestMode::SplitGrade))   \
+    MODE_DESC(localizedFStopTest, "Locl F Stop test", FStopTestMode(TestMode::Local))         \
+    MODE_DESC(expertFStopTest, "Xprt F Stop test", FStopTestMode(TestMode::Expert))           \
+    MODE_DESC(linearTest, "Linear test", LinearTestMode(TestMode::Generic))                   \
+    MODE_DESC(splitGradeLinearTest, "Splt linear test", LinearTestMode(TestMode::SplitGrade)) \
+    MODE_DESC(localizedLinearTest, "Locl linear test", LinearTestMode(TestMode::Local))       \
+    MODE_DESC(expertLinearTest, "Xprt linear test", LinearTestMode(TestMode::Expert))         \
+    MODE_DESC(print, "Printing", PrintMode())                                                 \
+    MODE_DESC(mask, "Mask printing", MaskMode(1))                                             \
+    MODE_DESC(splitGradeMask, "Splt mask", MaskMode(2))                                       \
+    MODE_DESC(relMask, "Rel mask print", RelMaskMode(1))                                      \
+    MODE_DESC(splitGradeRelMask, "Splt rel mask", RelMaskMode(2))
+
 enum class ModeId : uint8_t { TIMER_MODES };
 
-static_assert(static_cast<int>(ModeId::last_) && "TIMER_MODES couldn't be empty");
+static_assert(static_cast<int>(ModeId::last_), "TIMER_MODES couldn't be empty");
 
 ModeId gModeId;
 static ModeId gNewModeId = gModeId;
@@ -22,26 +39,14 @@ ModeProcessor* gModeProcessor = nullptr;
 
 [[nodiscard]] const char* getPreview(ModeId modeId) {
     switch (modeId) {
-#define RET_MODE_STR(id, str)            \
+#define MODE_DESC(id, str, _)            \
     case ModeId::id:                     \
         if (ModeId::id >= ModeId::last_) \
             return nullptr;              \
         return str;
 
-        RET_MODE_STR(testFStops, "F Stop test");
-        RET_MODE_STR(splitFStops, "Splt F Stop test");
-        RET_MODE_STR(localFStops, "Locl F Stop test");
-        RET_MODE_STR(expertFStops, "Xprt F Stop test");
-        RET_MODE_STR(testLinear, "Linear test");
-        RET_MODE_STR(splitLinear, "Splt linear test");
-        RET_MODE_STR(localLinear, "Locl linear test");
-        RET_MODE_STR(expertLinear, "Xprt linear test");
-        RET_MODE_STR(print, "Printing");
-        RET_MODE_STR(mask, "Mask printing");
-        RET_MODE_STR(splitMask, "Splt mask");
-        RET_MODE_STR(relMask, "Rel mask print");
-        RET_MODE_STR(splitRelMask, "Splt rel mask");
-#undef RET_MODE_STR
+        MODE_DESCS
+#undef MODE_DESC
     case ModeId::last_:
         assert(false);
         return nullptr;
@@ -62,27 +67,15 @@ void setMode(ModeId modeId) {
     static uint8_t gModeBuf[sizeof(MaskMode)];
 
     switch (gModeId) {
-#define SET_MODE_IMPL(id, impl)               \
+#define MODE_DESC(id, _, impl)                \
     case ModeId::id:                          \
         if (ModeId::id >= ModeId::last_)      \
             return;                           \
         gModeProcessor = new (gModeBuf) impl; \
         break;
 
-        SET_MODE_IMPL(testFStops, FStopTestMode(TestMode::Generic));
-        SET_MODE_IMPL(splitFStops, FStopTestMode(TestMode::SplitGrade));
-        SET_MODE_IMPL(localFStops, FStopTestMode(TestMode::Local));
-        SET_MODE_IMPL(expertFStops, FStopTestMode(TestMode::Expert));
-        SET_MODE_IMPL(testLinear, LinearTestMode(TestMode::Generic));
-        SET_MODE_IMPL(splitLinear, LinearTestMode(TestMode::SplitGrade));
-        SET_MODE_IMPL(localLinear, LinearTestMode(TestMode::Local));
-        SET_MODE_IMPL(expertLinear, LinearTestMode(TestMode::Expert));
-        SET_MODE_IMPL(print, PrintMode());
-        SET_MODE_IMPL(mask, MaskMode(1));
-        SET_MODE_IMPL(splitMask, MaskMode(2));
-        SET_MODE_IMPL(relMask, RelMaskMode(1));
-        SET_MODE_IMPL(splitRelMask, RelMaskMode(2));
-#undef SET_MODE_IMPL
+        MODE_DESCS
+#undef MODE_DESC
     case ModeId::last_:
         assert(false);
         return;

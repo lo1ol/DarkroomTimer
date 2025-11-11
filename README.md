@@ -178,21 +178,24 @@ You can configure the firmware by your needs. For this, you have to create a fil
 // Switch to I2C implementation for LCD
 #define LCD_VERSION LCD_VERSION_I2C
 
-// Disable local test modes and rel mask modes
-// also it change standard order of modes
-#define TIMER_MODES \
-    testFStops,     \
-    testLinear,     \
-    splitLinear,    \
-    splitFStops,    \
-    mask,           \
-    splitMask,      \
-    print,          \
-    last_,          \
-    localFStops,    \
-    localLinear,    \
-    relMask,        \
-    splitRelMask,
+// 1. Disable local and split grade test modes and rel mask modes
+// 2. Enable expert test modes
+// 3. Change standard order of modes
+#define TIMER_MODES       \
+    fStopTest,            \
+    linearTest,           \
+    print,                \
+    mask,                 \
+    splitGradeMask,       \
+    expertFStopTest,      \
+    expertLinearTest,     \
+    last_,                \
+    localizedFStopTest,   \
+    localizedLinearTest,  \
+    splitGradeFStopTest,  \
+    splitGradeLinearTest, \
+    relMask,              \
+    splitGradeRelMask
 ```
 
 We will try not change name of config macroses. So, you can use this file for different versions of firmware

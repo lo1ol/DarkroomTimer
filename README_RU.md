@@ -192,21 +192,24 @@ pio run -t upload
 // Переключаемся на I2C реализацию работы с LCD
 #define LCD_VERSION LCD_VERSION_I2C
 
-// Отключаем режим локальных тестов и относительных масок
-// Также меняем стандартный порядок режимов
-#define TIMER_MODES \
-    testFStops,     \
-    testLinear,     \
-    splitLinear,    \
-    splitFStops,    \
-    mask,           \
-    splitMask,      \
-    print,          \
-    last_,          \
-    localFStops,    \
-    localLinear,    \
-    relMask,        \
-    splitRelMask,
+// 1. Отключаем режим локальных, сплит-грейд тестов и относительных масок
+// 2. Включаем экспертные тестовые режимы
+// 3. Меняем стандартный порядок режимов
+#define TIMER_MODES       \
+    fStopTest,            \
+    linearTest,           \
+    print,                \
+    mask,                 \
+    splitGradeMask,       \
+    expertFStopTest,      \
+    expertLinearTest,     \
+    last_,                \
+    localizedFStopTest,   \
+    localizedLinearTest,  \
+    splitGradeFStopTest,  \
+    splitGradeLinearTest, \
+    relMask,              \
+    splitGradeRelMask
 ```
 
 Мы постараемся не менять названия этих макросов. Так что вы можете использовать этот конфиг для разных версий прошивки
