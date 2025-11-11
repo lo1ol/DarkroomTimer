@@ -1,0 +1,2 @@
+#define ENCODER_DT_PIN 3
+#define ENCODER_CLK_PIN 3

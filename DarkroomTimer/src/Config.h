@@ -25,6 +25,8 @@
     #define LCD_VERSION LCD_VERSION_DIRECT
 #endif
 
+static_assert(LCD_VERSION | 1, "Bad LCD_VERSION");
+
 #ifndef LCD_RS_PIN
     #define LCD_RS_PIN 12
 #endif

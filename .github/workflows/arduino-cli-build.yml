@@ -30,11 +30,17 @@ jobs:
 
       - name: Run build with custom UserConfig.h
         run: |
-          echo -e '#define ENCODER_DT_PIN 3\n#define ENCODER_CLK_PIN 2\n#define LCD_BACKLIGHT_STEP 3' > DarkroomTimer/UserConfig.h
-          ~/local/bin/arduino-cli compile -v -b arduino:avr:nano DarkroomTimer/
+          for file in test/custom_configs/good/*; do
+            echo "Check $file"
+            cp "$file" DarkroomTimer/UserConfig.h
+            ~/local/bin/arduino-cli compile -b arduino:avr:nano DarkroomTimer/
+          done
 
       - name: Run build with bad custom UserConfig.h
         run: |
-          echo -e '#define ENCODER_DT_PIN 2\n#define ENCODER_CLK_PIN 5' > DarkroomTimer/UserConfig.h
-          ~/local/bin/arduino-cli compile -v -b arduino:avr:nano DarkroomTimer/ && false
+          for file in test/custom_configs/bad/*; do
+            echo "Check $file"
+            cp "$file" DarkroomTimer/UserConfig.h
+            ~/local/bin/arduino-cli compile --warnings default -b arduino:avr:nano DarkroomTimer/ && false
+          done
           true

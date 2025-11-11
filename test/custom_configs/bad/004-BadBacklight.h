@@ -1,0 +1,1 @@
+#define LCD_BACKLIGHT_STEP 0
