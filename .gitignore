@@ -1,6 +1,6 @@
 wokwi
-**/UserConfig.h
-**/UserConfig.h.*
+DarkroomTimer/UserConfig.h
+DarkroomTimer/UserConfig.h.*
 **/build/
 **/.pio/
 **/.vscode/
