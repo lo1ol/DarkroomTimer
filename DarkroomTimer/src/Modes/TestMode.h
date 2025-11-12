@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 #include "../ModeProcessor.h"
 
 #include <stdint.h>
@@ -27,7 +29,7 @@ public:
     void repaint() override;
 
 protected:
-    virtual const char* header() const = 0;
+    virtual const __FlashStringHelper* header() const = 0;
 
     virtual bool handleStepSet() = 0;
     virtual void printStep() const = 0;

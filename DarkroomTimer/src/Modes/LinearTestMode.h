@@ -7,7 +7,7 @@ public:
     explicit LinearTestMode(SubMode subMode);
 
 protected:
-    const char* header() const override;
+    const __FlashStringHelper* header() const override;
 
     bool handleStepSet() override;
     void printStep() const override;

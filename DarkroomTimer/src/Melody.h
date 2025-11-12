@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 #if __has_include("new.h")
     #include <new.h>
 #else
@@ -22,7 +24,7 @@ public:
     static void operator delete(void*) {}
 
     [[nodiscard]] static Melody* getMelody(Name);
-    [[nodiscard]] static const char* getMelodyName(Name);
+    [[nodiscard]] static const __FlashStringHelper* getMelodyName(Name);
 
     virtual void init() = 0;
     [[nodiscard]] virtual bool end() const = 0;

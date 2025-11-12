@@ -16,7 +16,7 @@ bool FStopTestMode::handleStepSet() {
 }
 
 void FStopTestMode::printStep() const {
-    gDisplay[1] << "F stop: 1/" << kFStopPartVarinatns[m_FStopPartId];
+    gDisplay[1] << F("F stop: 1/") << kFStopPartVarinatns[m_FStopPartId];
 }
 
 Time FStopTestMode::getStepTime_(uint8_t step) const {
@@ -29,18 +29,18 @@ Time FStopTestMode::getStepTotalTime_(uint8_t step) const {
     return m_initTime * pow(2, step / stopPart);
 }
 
-const char* FStopTestMode::header() const {
+const __FlashStringHelper* FStopTestMode::header() const {
     switch (kSubMode) {
     case Generic:
-        return "F Stop test";
+        return F("F Stop test");
     case SplitGrade:
-        return "Splt F Stop test";
+        return F("Splt F Stop test");
     case Local:
-        return "Locl F Stop test";
+        return F("Locl F Stop test");
     case Expert:
-        return "Xprt F Stop test";
+        return F("Xprt F Stop test");
     }
 
     assert(false);
-    return "";
+    return F("");
 }

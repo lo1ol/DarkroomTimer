@@ -124,37 +124,37 @@ void SettingsSetter::repaint() const {
     gDisplay.reset();
     switch (m_step) {
     case Step::setLagTime:
-        gDisplay[0] << "Lag time";
+        gDisplay[0] << F("Lag time");
         gDisplay[1] << ((m_timer.state() != Timer::STOPPED) ? Time::fromMillis(m_timer.left()) : m_lagTime);
         return;
     case Step::setBacklight:
-        gDisplay[0] << "Backlight";
+        gDisplay[0] << F("Backlight");
         gDisplay[1] << gSettings.backlight;
         return;
     case Step::setBeepVolume:
-        gDisplay[0] << "Beep volume";
+        gDisplay[0] << F("Beep volume");
         gDisplay[1] << gSettings.beepVolume;
         return;
     case Step::setAutoFinishView:
-        gDisplay[0] << "Auto finish view";
+        gDisplay[0] << F("Auto finish view");
 
         if (gSettings.autoFinishViewMinutes == 0)
-            gDisplay[1] << "No";
+            gDisplay[1] << F("No");
         else
-            gDisplay[1] << gSettings.autoFinishViewMinutes << " minute"
+            gDisplay[1] << gSettings.autoFinishViewMinutes << F(" minute")
                         << (gSettings.autoFinishViewMinutes == 1 ? "" : "s");
         return;
     case Step::setStartWithSettings:
-        gDisplay[0] << "Start with stngs";
-        gDisplay[1] << (gSettings.startWithSettings ? "Yes" : "No");
+        gDisplay[0] << F("Start with stngs");
+        gDisplay[1] << (gSettings.startWithSettings ? F("Yes") : F("No"));
         return;
     case Step::setMelody:
-        gDisplay[0] << "Notify melody";
+        gDisplay[0] << F("Notify melody");
         gDisplay[1] << Melody::getMelodyName(gSettings.melody);
         return;
     case Step::checkVersion:
-        gDisplay[0] << "Version";
-        gDisplay[1] << TIMER_FIRMWARE_VERSION;
+        gDisplay[0] << F("Version");
+        gDisplay[1] << F(TIMER_FIRMWARE_VERSION);
         return;
     case Step::last_:
         assert(false);

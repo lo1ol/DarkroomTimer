@@ -14,20 +14,20 @@
 
 #include "SettingsSetter.h"
 
-#define MODE_DESCS                                                                            \
-    MODE_DESC(fStopTest, "F Stop test", FStopTestMode(TestMode::Generic))                     \
-    MODE_DESC(splitGradeFStopTest, "Splt F Stop test", FStopTestMode(TestMode::SplitGrade))   \
-    MODE_DESC(localizedFStopTest, "Locl F Stop test", FStopTestMode(TestMode::Local))         \
-    MODE_DESC(expertFStopTest, "Xprt F Stop test", FStopTestMode(TestMode::Expert))           \
-    MODE_DESC(linearTest, "Linear test", LinearTestMode(TestMode::Generic))                   \
-    MODE_DESC(splitGradeLinearTest, "Splt linear test", LinearTestMode(TestMode::SplitGrade)) \
-    MODE_DESC(localizedLinearTest, "Locl linear test", LinearTestMode(TestMode::Local))       \
-    MODE_DESC(expertLinearTest, "Xprt linear test", LinearTestMode(TestMode::Expert))         \
-    MODE_DESC(print, "Printing", PrintMode())                                                 \
-    MODE_DESC(mask, "Mask printing", MaskMode(1))                                             \
-    MODE_DESC(splitGradeMask, "Splt mask", MaskMode(2))                                       \
-    MODE_DESC(relMask, "Rel mask print", RelMaskMode(1))                                      \
-    MODE_DESC(splitGradeRelMask, "Splt rel mask", RelMaskMode(2))
+#define MODE_DESCS                                                                               \
+    MODE_DESC(fStopTest, F("F Stop test"), FStopTestMode(TestMode::Generic))                     \
+    MODE_DESC(splitGradeFStopTest, F("Splt F Stop test"), FStopTestMode(TestMode::SplitGrade))   \
+    MODE_DESC(localizedFStopTest, F("Locl F Stop test"), FStopTestMode(TestMode::Local))         \
+    MODE_DESC(expertFStopTest, F("Xprt F Stop test"), FStopTestMode(TestMode::Expert))           \
+    MODE_DESC(linearTest, F("Linear test"), LinearTestMode(TestMode::Generic))                   \
+    MODE_DESC(splitGradeLinearTest, F("Splt linear test"), LinearTestMode(TestMode::SplitGrade)) \
+    MODE_DESC(localizedLinearTest, F("Locl linear test"), LinearTestMode(TestMode::Local))       \
+    MODE_DESC(expertLinearTest, F("Xprt linear test"), LinearTestMode(TestMode::Expert))         \
+    MODE_DESC(print, F("Printing"), PrintMode())                                                 \
+    MODE_DESC(mask, F("Mask printing"), MaskMode(1))                                             \
+    MODE_DESC(splitGradeMask, F("Splt mask"), MaskMode(2))                                       \
+    MODE_DESC(relMask, F("Rel mask print"), RelMaskMode(1))                                      \
+    MODE_DESC(splitGradeRelMask, F("Splt rel mask"), RelMaskMode(2))
 
 enum class ModeId : uint8_t { TIMER_MODES };
 
@@ -37,7 +37,7 @@ ModeId gModeId;
 static ModeId gNewModeId = gModeId;
 ModeProcessor* gModeProcessor = nullptr;
 
-[[nodiscard]] const char* getPreview(ModeId modeId) {
+[[nodiscard]] const __FlashStringHelper* getPreview(ModeId modeId) {
     switch (modeId) {
 #define MODE_DESC(id, str, _)            \
     case ModeId::id:                     \
@@ -169,7 +169,7 @@ void processView() {
 
         if (gViewState) {
             gDisplay.reset();
-            gDisplay[0] << "View";
+            gDisplay[0] << F("View");
         } else {
             gModeProcessor->repaint();
         }
@@ -182,7 +182,7 @@ void processView() {
 
     gDisplay[1].reset();
     if (!gSettings.autoFinishViewMinutes) {
-        gDisplay[1] << "Auto stop is off";
+        gDisplay[1] << F("Auto stop is off");
         return;
     }
 
@@ -195,7 +195,7 @@ void processView() {
     } else {
         char str[DISPLAY_COLS] = "";
         itoa((gViewModeTurnOffTime - 1 - curTime) / 1000 + 1, str, 10);
-        gDisplay[1] << "Auto stop: " << str;
+        gDisplay[1] << F("Auto stop: ") << str;
     }
 }
 

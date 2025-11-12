@@ -128,6 +128,20 @@ DisplayLine& DisplayLine::operator>>(int value) {
     return *this;
 }
 
+#ifndef DT_NATIVE
+DisplayLine& DisplayLine::operator<<(const __FlashStringHelper* src) {
+    char buf[DISPLAY_COLS + 1];
+    strncpy_P(buf, (PGM_P)src, sizeof(buf));
+    return *this << buf;
+}
+
+DisplayLine& DisplayLine::operator>>(const __FlashStringHelper* src) {
+    char buf[DISPLAY_COLS + 1];
+    strncpy_P(buf, (PGM_P)src, sizeof(buf));
+    return *this >> buf;
+}
+#endif
+
 void DisplayLine::fastCurrentRepaint(const char* src) {
     if (!m_currentLength)
         return;

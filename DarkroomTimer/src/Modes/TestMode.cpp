@@ -91,20 +91,20 @@ void TestMode::repaint() {
     switch (m_step) {
     case Step::setLocalized:
         gDisplay[0] << header();
-        gDisplay[1] << "Local tests:" << (m_localized ? "on" : "off");
+        gDisplay[1] << F("Local tests:") << (m_localized ? "on" : "off");
         return;
     case Step::preflashTime:
         gDisplay[0] << header();
         if (kSubMode == SplitGrade)
-            gDisplay[1] << "First t:";
+            gDisplay[1] << F("First t:");
         else
-            gDisplay[1] << "Preflash t:";
+            gDisplay[1] << F("Preflash t:");
 
         gDisplay[1] << m_preflashTime;
         return;
     case Step::initTime:
         gDisplay[0] << header();
-        gDisplay[1] << "Init t:" << m_initTime;
+        gDisplay[1] << F("Init t:") << m_initTime;
         return;
     case Step::setStep:
         gDisplay[0] << header();

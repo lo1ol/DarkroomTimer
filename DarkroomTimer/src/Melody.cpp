@@ -92,14 +92,14 @@ Melody* Melody::getMelody(Name name) {
     return nullptr;
 }
 
-const char* Melody::getMelodyName(Name name) {
+const __FlashStringHelper* Melody::getMelodyName(Name name) {
     switch (name) {
     case Name::alarm:
-        return "alarm";
+        return F("alarm");
     case Name::nice:
-        return "nice";
+        return F("nice");
     case Name::hotline:
-        return "Hotline Miami";
+        return F("Hotline Miami");
     case Name::last_:
         break;
     }

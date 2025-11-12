@@ -7,13 +7,13 @@
 #define A4 18
 
 #define OUTPUT 0
+#define F(x) (x)
 
-#define pinMode(pin, mode) \
-    {}
-#define noInterrupts() \
-    {}
-#define interrupts() \
-    {}
+#define pinMode(pin, mode)
+#define noInterrupts()
+#define interrupts()
+
+using __FlashStringHelper = char;
 
 void itoa(int n, char s[], int base);
 

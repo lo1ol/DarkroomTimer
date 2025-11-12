@@ -184,11 +184,11 @@ void MaskMode::repaint() {
     switch (m_step) {
     case Step::setNum:
         if (m_filterNum == 1)
-            gDisplay[0] << "Mask printing";
+            gDisplay[0] << F("Mask printing");
         else
-            gDisplay[0] << "Filter " << m_currentFilter + 1;
+            gDisplay[0] << F("Filter ") << m_currentFilter + 1;
 
-        gDisplay[1] << "Mask num: " << m_numberOfMasks[m_currentFilter];
+        gDisplay[1] << F("Mask num: ") << m_numberOfMasks[m_currentFilter];
         return;
     case Step::setMasks:
         gScrollableContent.reset();
@@ -217,7 +217,7 @@ void MaskMode::repaint() {
 
         gScrollableContent.paint();
         if (m_currentFilter == m_filterNum)
-            gDisplay[DISPLAY_ROWS - 1] >> "Finished";
+            gDisplay[DISPLAY_ROWS - 1] >> F("Finished");
         return;
     case Step::last_:
         assert(false);

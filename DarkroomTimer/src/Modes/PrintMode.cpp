@@ -103,7 +103,7 @@ void PrintMode::repaint() {
         return;
     }
 
-    gDisplay[0] << "Prnt " << (m_triggerByHold ? "HLD T:" : "CLK T:") << gTimer.total();
+    gDisplay[0] << F("Prnt ") << (m_triggerByHold ? F("HLD T:") : F("CLK T:")) << gTimer.total();
 
     switch (gTimer.state()) {
     case Timer::STOPPED:
@@ -111,12 +111,12 @@ void PrintMode::repaint() {
         break;
     case Timer::RUNNING:
         if (gTimer.lag())
-            gDisplay[1] << "Lag";
+            gDisplay[1] << F("Lag");
         else
             gDisplay[1] << Time::fromMillis(gTimer.left());
         break;
     case Timer::PAUSED:
-        gDisplay[1] << Time::fromMillis(gTimer.left()) << " PAUSE";
+        gDisplay[1] << Time::fromMillis(gTimer.left()) << F(" PAUSE");
         break;
     }
     gDisplay[1] >> gTimer.afterLastResume();
