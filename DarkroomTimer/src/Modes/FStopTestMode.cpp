@@ -1,6 +1,7 @@
 #include "FStopTestMode.h"
 
 #include "../Hardware.h"
+#include "../Utils.h"
 
 namespace {
 constexpr uint8_t kFStopPartVarinatns[] = { 1, 2, 3, 4, 6, 12 };
@@ -21,12 +22,12 @@ void FStopTestMode::printStep() const {
 
 Time FStopTestMode::getStepTime_(uint8_t step) const {
     float stopPart = kFStopPartVarinatns[m_FStopPartId];
-    return m_initTime * (pow(2, step / stopPart) - pow(2, (step - 1) / stopPart));
+    return m_initTime * (fast2pow(step / stopPart) - fast2pow((step - 1) / stopPart));
 }
 
 Time FStopTestMode::getStepTotalTime_(uint8_t step) const {
     float stopPart = kFStopPartVarinatns[m_FStopPartId];
-    return m_initTime * pow(2, step / stopPart);
+    return m_initTime * fast2pow(step / stopPart);
 }
 
 const __FlashStringHelper* FStopTestMode::header() const {

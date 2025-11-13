@@ -6,3 +6,7 @@
     (enumName)(((uint8_t)(current) + (uint8_t)enumName::last_ + num) % (uint8_t)enumName::last_)
 
 void alignStr(char* buf, uint8_t align);
+
+// 3 times faster then pow(2, exp)
+// has acuracy 0.01% compare to it
+float fast2pow(float exp);

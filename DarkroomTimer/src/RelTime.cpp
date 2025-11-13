@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "Utils.h"
+
 namespace {
 
 constexpr uint8_t kFracIdMap[12] = { 0, 6, 4, 8, 3, 9, 2, 10, 1, 5, 7, 11 };
@@ -46,5 +48,5 @@ Time RelTime::operator^(Time t) const {
     uint8_t frac = kFracIdMap[m_id % 12];
     float val = whole + frac / 12.;
 
-    return t * (pow(2, val) - 1);
+    return t * (fast2pow(val) - 1);
 }
