@@ -32,6 +32,7 @@ extern ScrollableContent gScrollableContent;
 uint32_t gMillis();
 void gDigitalWrite(uint8_t, uint8_t);
 void gAnalogWrite(uint8_t, int);
+inline void gPinMode(uint8_t, int) {}
 
 extern uint32_t gCurrentTime;
 
@@ -39,7 +40,10 @@ extern int gBuzzerVal;
 extern int gBacklightVal;
 extern bool gRelayVal;
 #else
+    #include <GyverIO.h>
+
     #define gMillis millis
-    #define gDigitalWrite digitalWrite
+    #define gDigitalWrite gio::write
     #define gAnalogWrite analogWrite
+    #define gPinMode gio::mode
 #endif
