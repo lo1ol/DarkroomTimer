@@ -111,7 +111,7 @@
 5. [Винты M2 6мм 10 шт.](https://sl.aliexpress.ru/p?key=rRaeGCg)
 6. Винты и гайки M3. Можете купить где угодно
 7. [Трехжильный сетевой шнур 0.75 со штепселем на блок питания](https://www.chipdip.kz/product0/494606311) или [такой (не проверен)](https://sl.aliexpress.ru/p?key=Y0zn3DN)
-8. [Монтыжные провода 0.2 (24 AWG) для распайки электроники](https://www.chipdip.kz/product/amp30-mgshv-0.2) или [такие (не проверены)](https://sl.aliexpress.ru/p?key=lsNn3rZ)
+8. [Монтыжные провода 0.2 (24 AWG) для распайки электроники](https://www.chipdip.kz/product/amp30-mgshv-0.2) или [такие](https://sl.aliexpress.ru/p?key=lsNn3rZ)
 9. [Термоусадочная трубка 2 метра 4.8мм](https://www.chipdip.kz/product/iske-h-3x-4.5-1.5-black) или [такая (не проверена)](https://sl.aliexpress.ru/p?key=ChNn3Wr)
 10. [Двусторонний полупрозрачный скотч 3мм](https://sl.aliexpress.ru/p?key=pbNn3xt)
 

@@ -95,7 +95,7 @@ My friend just create the coolest version of body for this project!!! You can fi
         - [SSR-41FDA](https://aliexpress.com/item/1005007299427443.html)
     * If you don't want to use timer with low wattage lamps (LED): you can buy [this popular 5V SSR](https://aliexpress.com/item/33005799623.html). This one has leakage in turned off state, and it's enough to power on the lamp
 9. Red LCD 1602:
-    * [LCD without I2C adapter](https://aliexpress.com/item/1709948156.html). Has really good angle of view compare to next one, but harder to solder. Requires additioal resistor 2.2kOm (value could be differ from mine). You could solder with own I2C adapter
+    * [LCD without I2C adapter](https://aliexpress.com/item/1709948156.html). Has really good angle of view compare to next one, but harder to solder. Requires additional resistor 2.2kOm (value could be differ from mine). You could solder with own I2C adapter
     * [LCD with I2C adapter](https://aliexpress.com/item/32906948449.html). Most convinient option, but not so good contrast. Need to soldure just 5 pins. You can adjust contrst on the I2C module
 10. [Sustain pedal as footswitch](https://aliexpress.com/item/1005008834402930.html) (Optional). You could buy other one. It has to be normally-open or has polarity switch.
 
@@ -112,7 +112,7 @@ Body extra components:
 5. [M2 6mm screws 10 pcs](https://aliexpress.com/item/1005003194617253.html)
 6. M3 screw and nuts also needed but you could buy it everywhere you want
 7. [3 wire cabel 0.75 with AC Plug](https://aliexpress.com/item/1005004840824679.html) (Not tested)
-8. [24AWG cabel 6 color set (5 meters each)](https://aliexpress.com/item/1005006397237788.html) (Not tested)
+8. [24AWG cabel 6 color set (5 meters each)](https://aliexpress.com/item/1005006397237788.html)
 9. [Heat shrink tube 2 meters 4.8mm](https://aliexpress.com/item/1005001954843758.html) (Not tested)
 10. [Transparent two sides tape 3mm](https://aliexpress.com/item/4000282953023.html)
 
