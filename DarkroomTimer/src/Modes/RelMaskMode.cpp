@@ -11,14 +11,9 @@ constexpr const char* kRunPrefixes[] = { "R F1", "R F2" };
 
 } // namespace
 
-RelMaskMode::RelMaskMode(uint8_t filterNum) {
-    m_filterNum = filterNum;
-    m_step = Step::setNum;
-    m_currentMask = -1;
-    m_currentFilter = 0;
-
-    auto tableCacheSize = sizeof(gModesCache) / filterNum;
-    for (uint8_t filter = 0; filter != filterNum; ++filter) {
+RelMaskMode::RelMaskMode(uint8_t filterNum) : AbstractMaskMode(filterNum) {
+    auto tableCacheSize = sizeof(gModesCache) / kFilterNum;
+    for (uint8_t filter = 0; filter != kFilterNum; ++filter) {
         auto& relTimeTable = m_relTimeTable[filter];
         m_numberOfMasks[filter] = 1;
         relTimeTable.setBuffer(gModesCache + filter * tableCacheSize, tableCacheSize);
@@ -28,200 +23,88 @@ RelMaskMode::RelMaskMode(uint8_t filterNum) {
             relTimeTable.setRelTime(i, RelTime());
     }
 
-    if (filterNum == 1)
-        m_maxMasksNumber = min(15, m_relTimeTable[0].capacity() - 1);
-    else
-        m_maxMasksNumber = min(7, m_relTimeTable[0].capacity() - 1);
+    assert(kMaxMasksNumber <= m_relTimeTable[0].capacity());
 }
 
-void RelMaskMode::switchMode() {
-    gTimer.reset();
+void RelMaskMode::onUpdateTimeTableNums() {
+    for (uint8_t filter = 0; filter != kFilterNum; ++filter) {
+        auto numberOfMasks = m_numberOfMasks[filter];
+        auto& relTimeTable = m_relTimeTable[filter];
+        for (uint8_t i = numberOfMasks; i < kMaxMasksNumber; ++i)
+            relTimeTable.setRelTime(i, RelTime());
 
-    if (m_step == Step::setNum && m_currentFilter + 1 < m_filterNum) {
-        ++m_currentFilter;
-        m_step = Step::setNum;
-        repaint();
-        return;
+        relTimeTable.resize(numberOfMasks);
+        relTimeTable.setSecView(false);
     }
-
-    if (m_step == Step::setNum) {
-        for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
-            auto numberOfMasks = m_numberOfMasks[filter];
-            auto& relTimeTable = m_relTimeTable[filter];
-            for (uint8_t i = numberOfMasks; i < m_maxMasksNumber; ++i)
-                relTimeTable.setRelTime(i, RelTime());
-
-            relTimeTable.resize(numberOfMasks);
-            relTimeTable.setSecView(false);
-        }
-    }
-
-    m_step = ADD_TO_ENUM(Step, m_step, 1);
-
-    setCurrentMask(0, -1);
 }
 
-void RelMaskMode::setCurrentMask(uint8_t filter, uint8_t mask) {
+void RelMaskMode::setCurrentMask_(uint8_t filter, uint8_t mask, [[maybe_unused]] bool needGuessMask) {
     for (auto& relTimeTable : m_relTimeTable)
         relTimeTable.setCurrent(-2);
 
-    if (filter != m_filterNum)
-        m_relTimeTable[filter].setCurrent(mask);
+    if (filter == kFilterNum)
+        return;
 
-    m_currentFilter = filter;
-    m_currentMask = mask;
-
-    repaint();
+    m_relTimeTable[filter].setCurrent(mask - 1);
 }
 
-void RelMaskMode::moveCurrentMask(int8_t dir) {
-    auto newFilter = m_currentFilter;
-    auto newMask = m_currentMask;
-    if (m_currentMask == -1 && dir == -1) {
-        if (m_currentFilter == 0)
-            newFilter = m_filterNum - 1;
-        else
-            --newFilter;
-        newMask = m_numberOfMasks[newFilter] - 1;
-    } else if (m_currentMask == m_numberOfMasks[m_currentFilter] - 1 && dir == 1) {
-        newMask = -1;
-        if (m_currentFilter + 1 == m_filterNum)
-            newFilter = m_step == Step::run ? m_filterNum : 0;
-        else
-            ++newFilter;
-    } else {
-        newMask += dir;
-    }
-
-    setCurrentMask(newFilter, newMask);
-}
-
-void RelMaskMode::process() {
-    switch (m_step) {
-    case Step::setNum:
-        if (gEncoder.getInt(m_numberOfMasks[m_currentFilter], 0, m_maxMasksNumber))
-            repaint();
-        return;
-    case Step::setMasks:
-        processSetMasks();
-        return;
-    case Step::run:
-        processRun();
-        return;
-    case Step::last_:
-        assert(false);
-        return;
-    }
-}
-
-void RelMaskMode::processSetMasks() {
-    if (gEncoderBtn.pressing()) {
-        if (int8_t dir = gEncoder.getDir()) {
-            gEncoderBtn.skipEvents();
-            moveCurrentMask(dir);
-        }
-
-        return;
-    }
-
-    if (gEncoderBtn.click()) {
-        moveCurrentMask(1);
-    }
-
-    bool changed = false;
-    if (m_currentMask == -1) {
+bool RelMaskMode::handleSetCurrentTime() {
+    if (m_currentMask == 0) {
         auto time = m_relTimeTable[m_currentFilter].getBaseTime();
-        changed = gEncoder.getTime(time);
-        if (changed)
-            m_relTimeTable[m_currentFilter].setBaseTime(time);
-    } else {
-        auto relTime = m_relTimeTable[m_currentFilter].getRelTime(m_currentMask);
-        changed = gEncoder.getRelTime(relTime);
-        if (changed)
-            m_relTimeTable[m_currentFilter].setRelTime(m_currentMask, relTime);
+        if (!gEncoder.getTime(time))
+            return false;
+
+        m_relTimeTable[m_currentFilter].setBaseTime(time);
+        return true;
     }
 
-    if (changed) {
-        setCurrentMask(m_currentFilter, m_currentMask);
-        gDisplay.resetBlink(false);
-    }
+    auto relTime = m_relTimeTable[m_currentFilter].getRelTime(m_currentMask - 1);
+    if (!gEncoder.getRelTime(relTime))
+        return false;
+
+    m_relTimeTable[m_currentFilter].setRelTime(m_currentMask - 1, relTime);
+    return true;
 }
 
-void RelMaskMode::processRun() {
-    if (gEncoderBtn.click()) {
-        for (auto& relTimeTable : m_relTimeTable)
-            relTimeTable.toggleSecView();
-        repaint();
-    }
+bool RelMaskMode::handleEncoderClickAtRun() {
+    for (auto& relTimeTable : m_relTimeTable)
+        relTimeTable.toggleSecView();
 
-    if (gTimer.state() == Timer::STOPPED && gStartBtn.click() && m_currentFilter != m_filterNum)
-        gTimer.start(getStepTime());
-
-    if (gTimer.justFinished()) {
-        moveCurrentMask(1);
-        if (m_currentMask == -1 && m_currentFilter != m_filterNum)
-            gBeeper.alarm();
-    }
-
-    if (m_currentFilter != m_filterNum)
-        gScrollableContent.scroll(gEncoder.getDir());
-
-    gScrollableContent.paint();
+    return true;
 }
 
-Time RelMaskMode::getStepTime() {
-    Time t = m_relTimeTable[m_currentFilter].getTime(m_currentMask);
+Time RelMaskMode::getStepTime() const {
+    Time t = m_relTimeTable[m_currentFilter].getTime(m_currentMask - 1);
     return (t == kBadTime) ? 0_s : t;
 }
 
-void RelMaskMode::repaint() {
-    gDisplay.reset();
+void RelMaskMode::printHeaderForSetNum() const {
+    if (kFilterNum == 1)
+        gDisplay[0] << F("Rel mask print");
+    else
+        gDisplay[0] << F("Filter ") << m_currentFilter + 1;
+}
 
-    switch (m_step) {
-    case Step::setNum:
-        if (m_filterNum == 1)
-            gDisplay[0] << F("Rel mask print");
-        else
-            gDisplay[0] << F("Filter ") << m_currentFilter + 1;
-
-        gDisplay[1] << F("Mask num: ") << m_numberOfMasks[m_currentFilter];
-        return;
-    case Step::setMasks:
-        gScrollableContent.reset();
-        if (m_filterNum == 1) {
-            m_relTimeTable[0].setPrefix("Set");
-            m_relTimeTable[0].flush();
-        } else {
-            for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
-                m_relTimeTable[filter].setPrefix(kSetPrefixes[filter]);
-                m_relTimeTable[filter].flush();
-            }
+void RelMaskMode::flushTimeTables() {
+    if (kFilterNum == 1) {
+        m_relTimeTable[0].setPrefix("Set");
+        m_relTimeTable[0].flush();
+    } else {
+        for (uint8_t filter = 0; filter != kFilterNum; ++filter) {
+            m_relTimeTable[filter].setPrefix(kSetPrefixes[filter]);
+            m_relTimeTable[filter].flush();
         }
-        gScrollableContent.paint();
-        return;
-    case Step::run:
-        gScrollableContent.reset();
-        if (m_filterNum == 1) {
-            m_relTimeTable[0].setPrefix("Run");
-            m_relTimeTable[0].flush();
-        } else {
-            for (uint8_t filter = 0; filter != m_filterNum; ++filter) {
-                m_relTimeTable[filter].setPrefix(kRunPrefixes[filter]);
-                m_relTimeTable[filter].flush();
-            }
-        }
-
-        gScrollableContent.paint();
-        if (m_currentFilter == m_filterNum)
-            gDisplay[DISPLAY_ROWS - 1] >> F("Finished");
-        return;
-    case Step::last_:
-        assert(false);
-        return;
     }
 }
 
-void RelMaskMode::reset() {
-    if (m_step != Step::setMasks)
-        setCurrentMask(0, -1);
+void RelMaskMode::flashTimeTablesAtRun() {
+    if (kFilterNum == 1) {
+        m_relTimeTable[0].setPrefix("Run");
+        m_relTimeTable[0].flush();
+    } else {
+        for (uint8_t filter = 0; filter != kFilterNum; ++filter) {
+            m_relTimeTable[filter].setPrefix(kRunPrefixes[filter]);
+            m_relTimeTable[filter].flush();
+        }
+    }
 }
