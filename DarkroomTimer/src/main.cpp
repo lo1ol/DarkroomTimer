@@ -222,9 +222,13 @@ void processMode() {
 #ifndef PIO_UNIT_TESTING
 void setup() {
     gLcd.init();
+    #if STARTUP_LOGO_VERSION != LOGO_DISABLED
+    gDisplay.playLogo();
+    #endif
 #else
 void setup_() {
 #endif
+
     gBeeper.setup();
 
     gPinMode(LCD_BACKLIGHT_PIN, OUTPUT);

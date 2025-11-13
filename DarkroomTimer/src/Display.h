@@ -12,6 +12,10 @@ public:
     [[nodiscard]] DisplayLine& operator[](uint8_t n) { return m_lines[n]; }
     [[nodiscard]] DisplayLine* getLines() { return m_lines; }
 
+#ifndef PIO_UNIT_TESTING
+    void playLogo();
+#endif
+
     void tick();
     void reset();
     void resetBlink(bool showBlinked);

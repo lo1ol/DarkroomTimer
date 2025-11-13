@@ -27,6 +27,7 @@ public:
 #endif
 
     void print(const char* src, bool current = false, const char* mark = nullptr);
+    void printChar(char);
 
     // it's responsobility of caller to keep fast repaint length less then current length
     void fastCurrentRepaint(const char* src);

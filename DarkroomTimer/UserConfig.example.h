@@ -77,6 +77,12 @@
  */
 #define BEEPER_VOLUME_SILENT 1
 
+/* Set logo on startup
+ * LOGO_DISABLED -- not show logo
+ * LOGO_MATRIX -- show animated matrix logo
+ */
+#define STARTUP_LOGO_VERSION LOGO_DISABLED
+
 /* Set timer modes and their order
  * Place modes that you don't need after 'last_' element,
  * also you can rearrange modes.

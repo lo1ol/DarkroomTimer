@@ -31,6 +31,8 @@
 
 #define BEEPER_VOLUME_SILENT 0
 
+#define STARTUP_LOGO_VERSION LOGO_DISABLED
+
 // clang-format off
 #define TIMER_MODES       \
     fStopTest,            \
