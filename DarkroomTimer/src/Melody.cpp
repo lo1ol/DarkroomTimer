@@ -2,13 +2,20 @@
 
 #include "Hardware.h"
 
+#ifdef DT_NATIVE
+    #define PROGMEM
+    #define READ_PROGMEM(array, id) (array[id])
+#else
+    #define READ_PROGMEM(array, id) (pgm_read_byte(&array[id]))
+#endif
+
 class MelodyPlayer : public Melody {
 public:
     MelodyPlayer(const uint8_t* melody, uint8_t size) : m_melody(melody), m_size(size) {}
 
     void init() override {
         m_melodyPhase = 0;
-        m_timer = gMillis() + m_melody[0] * 4;
+        m_timer = gMillis() + READ_PROGMEM(m_melody, 0) * 4;
     }
 
     bool tick() override {
@@ -20,7 +27,7 @@ public:
             if (end())
                 return false;
 
-            m_timer = currentTime + m_melody[m_melodyPhase] * 4;
+            m_timer = currentTime + READ_PROGMEM(m_melody, m_melodyPhase) * 4;
         }
 
         return !(m_melodyPhase & 1);
@@ -63,9 +70,9 @@ private:
     uint32_t m_timer = 0;
 };
 
-constexpr uint8_t kNiceMelody[] = { 62, 62, 30, 30, 15, 15, 100, 200 };
+constexpr uint8_t kNiceMelody[] PROGMEM = { 62, 62, 30, 30, 15, 15, 100, 200 };
 
-uint8_t kHotlineMelody[] = {
+constexpr uint8_t kHotlineMelody[] PROGMEM = {
     9,  52, 17, 17, 9,  11, 15, 52, 15, 19, 7,  19, 9,  25, 7,  19, 15, 19, 37, 25, 9,  80, 9,
     25, 9,  17, 17, 17, 11, 11, 15, 23, 7,  19, 15, 19, 11, 15, 11, 23, 7,  19, 15, 19, 35, 27,
     7,  19, 19, 15, 7,  19, 11, 54, 15, 15, 7,  15, 15, 23, 7,  19, 19, 15, 7,  19, 7,  27, 7,
