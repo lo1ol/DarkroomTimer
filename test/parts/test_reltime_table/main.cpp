@@ -418,11 +418,35 @@ void checkRelTimeTablePrintSecView() {
                               gScrollableContent);
 }
 
+void checkScrollMax() {
+    RelTimeTable tt;
+    tt.setBuffer(gModesCache, sizeof(gModesCache));
+    tt.setBaseTime(1000_s);
+    tt.setPrefix("Set");
+    tt.setCurrent(-1);
+
+    for (int i = 0; i != 15; ++i)
+        tt.setRelTime(i, RelTime(1 * 12 + 11));
+
+    tt.flush();
+
+    TEST_EQUAL_SCROLL_CONTENT(
+        ({
+            .lines = { "Set 1000.0", "1+11/12 1+11/12", "1+11/12 1+11/12", "1+11/12 1+11/12", "1+11/12 1+11/12",
+                       "1+11/12 1+11/12", "1+11/12 1+11/12", "1+11/12 1+11/12", "1+11/12" },
+            .currentLine = 0,
+            .currentShift = 4,
+            .currentAlign = 6,
+            .currentMark = nullptr,
+        }),
+        gScrollableContent);
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkRelTimeTableGeneric);
     RUN_TEST(checkRelTimeTablePrint);
     RUN_TEST(checkRelTimeTablePrintSecView);
-    RUN_TEST(checkRelTimeTableOverflow);
+    RUN_TEST(checkScrollMax);
     UNITY_END();
 }

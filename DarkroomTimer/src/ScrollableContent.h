@@ -6,7 +6,7 @@
 
 class ScrollableContent {
 public:
-    static constexpr uint8_t kMaxLineCnt = 16;
+    static constexpr uint8_t kMaxLineCnt = 10;
 
     void reset();
     void paint();
