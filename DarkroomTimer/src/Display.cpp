@@ -23,6 +23,19 @@ void Display::resetBlink(bool showBlinked) {
         line.resetBlink(showBlinked);
 }
 
+void Display::setupCharset(Charset charset) {
+#define ADD_CUSTOM_CHAR(symStr, symMatrix) m_lcd->addCustomChar(static_cast<uint8_t>(symStr[0]) - 0x80, symMatrix)
+    switch (charset) {
+    case Charset::Main:
+        ADD_CUSTOM_CHAR(kLampSymTop, kLampSymTopMatrix);
+        ADD_CUSTOM_CHAR(kLampSymBottom, kLampSymBottomMatrix);
+        ADD_CUSTOM_CHAR(kWrenchSymTop, kWrenchSymTopMatrix);
+        ADD_CUSTOM_CHAR(kWrenchSymBottom, kWrenchSymBottomMatrix);
+        break;
+    }
+#undef ADD_CUSTOM_CHAR
+}
+
 #ifndef PIO_UNIT_TESTING
 
 void Display::playLogo() {

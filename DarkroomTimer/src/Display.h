@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Config.h"
+#include "CustomChars.h"
 #include "DisplayLine.h"
 #include "TimeTable.h"
 
@@ -19,6 +20,7 @@ public:
     void tick();
     void reset();
     void resetBlink(bool showBlinked);
+    void setupCharset(Charset charset);
 
 private:
     Lcd* m_lcd;

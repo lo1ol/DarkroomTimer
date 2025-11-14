@@ -111,8 +111,19 @@ void Lcd::setCursor(uint8_t c, uint8_t r) {
 
 void Lcd::print(const char* str) {
     i2cStart(LCD_ADDR << 1);
-    while (*str)
-        lcdData(*str++);
+    while (uint8_t ch = *str++) {
+        if (ch >= 0x80)
+            ch -= 0x80;
+        lcdData(ch);
+    }
+    i2cStop();
+}
+
+void Lcd::addCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
+    i2cStart(LCD_ADDR << 1);
+    lcdCmd(0x40 | location << 3);
+    for (uint8_t i = 0; i != sizeof(matrix); ++i)
+        lcdData(pgm_read_byte(matrix + i));
     i2cStop();
 }
 

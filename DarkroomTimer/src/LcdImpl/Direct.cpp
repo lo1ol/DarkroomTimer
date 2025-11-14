@@ -2,6 +2,7 @@
 
 #if LCD_VERSION == LCD_VERSION_DIRECT && !defined(PIO_UNIT_TESTING)
 
+    #include "../CustomChars.h"
     #include "../Hardware.h"
     #include "Direct.h"
 
@@ -68,8 +69,17 @@ void Lcd::setCursor(uint8_t c, uint8_t r) {
 }
 
 void Lcd::print(const char* str) {
-    while (*str)
-        lcdData(*str++);
+    while (uint8_t ch = *str++) {
+        if (ch >= 0x80)
+            ch -= 0x80;
+        lcdData(ch);
+    }
+}
+
+void Lcd::addCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
+    lcdCmd(0x40 | location << 3);
+    for (uint8_t i = 0; i != sizeof(matrix); ++i)
+        lcdData(pgm_read_byte(matrix + i));
 }
 
 #endif

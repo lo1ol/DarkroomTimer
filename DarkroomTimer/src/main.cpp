@@ -1,6 +1,7 @@
 #pragma GCC diagnostic error "-Wswitch"
 
 #include "Config.h"
+#include "CustomChars.h"
 #include "Hardware.h"
 #include "Utils.h"
 
@@ -229,11 +230,16 @@ void processMode() {
 #ifndef PIO_UNIT_TESTING
 void setup() {
     gLcd.init();
+#else
+void setup_() {
+#endif
+
+    gDisplay.setupCharset(Charset::Main);
+
+#ifndef PIO_UNIT_TESTING
     #if STARTUP_LOGO_VERSION != LOGO_DISABLED
     gDisplay.playLogo();
     #endif
-#else
-void setup_() {
 #endif
 
     gBeeper.setup();
