@@ -19,7 +19,7 @@ Settings Settings::load() {
     GET_SETTING(res.beepVolume);
     GET_SETTING(res.backlight);
     GET_SETTING(res.autoFinishViewMinutes);
-    GET_SETTING(res.startWithSettings);
+    GET_SETTING(res.startWith);
     GET_SETTING(res.melody);
 
     uint32_t hash = crc32.finalize();
@@ -36,6 +36,7 @@ Settings Settings::load() {
     badSettings |= res.backlight < kMinBacklight;
     badSettings |= res.backlight > kMaxBacklight;
     badSettings |= res.autoFinishViewMinutes > kMaxAutoFinishViewMinutes;
+    badSettings |= res.startWith >= StartWith::last_;
     badSettings |= res.melody >= Melody::last_;
 
     if (badSettings) {
@@ -58,7 +59,7 @@ void Settings::updateEEPROM() {
     PUT_SETTING(beepVolume);
     PUT_SETTING(backlight);
     PUT_SETTING(autoFinishViewMinutes);
-    PUT_SETTING(startWithSettings);
+    PUT_SETTING(startWith);
     PUT_SETTING(melody);
     PUT_SETTING(crc32.finalize());
     #undef PUT_SETTING
@@ -73,6 +74,5 @@ void Settings::updateEEPROM() {}
 
 bool Settings::operator==(const Settings& o) const {
     return lagTime == o.lagTime && beepVolume == o.beepVolume && backlight == o.backlight &&
-           autoFinishViewMinutes == o.autoFinishViewMinutes && startWithSettings == o.startWithSettings &&
-           melody == o.melody;
+           autoFinishViewMinutes == o.autoFinishViewMinutes && startWith == o.startWith && melody == o.melody;
 }

@@ -11,7 +11,7 @@ public:
         setBacklight,
         setBeepVolume,
         setAutoFinishView,
-        setStartWithSettings,
+        setStartWith,
         setMelody,
         checkVersion,
         last_
@@ -30,7 +30,7 @@ private:
     void processSetBacklight() const;
     void processSetBeepVolume() const;
     void processSetAutoFinishView() const;
-    void processStartWithSettings() const;
+    void processStartWith() const;
     void processSetMelody() const;
 
     Step m_step = Step::setLagTime;

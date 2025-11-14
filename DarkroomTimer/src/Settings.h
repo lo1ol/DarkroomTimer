@@ -6,6 +6,12 @@
 #include "Melody.h"
 #include "Time.h"
 
+enum class StartWith : uint8_t {
+    Modes,
+    Settings,
+    last_,
+};
+
 constexpr Time kMinLagTime = 0_s;
 constexpr Time kMaxLagTime = 2_s;
 constexpr uint8_t kMinBeepVolume = 1;
@@ -25,7 +31,7 @@ struct Settings {
     uint8_t beepVolume;
     uint8_t backlight;
     uint8_t autoFinishViewMinutes;
-    bool startWithSettings;
+    enum StartWith startWith;
     Melody::Name melody;
 };
 
@@ -34,6 +40,6 @@ constexpr Settings kDefaultSettings{
     .beepVolume = 3,
     .backlight = 5,
     .autoFinishViewMinutes = 3,
-    .startWithSettings = false,
+    .startWith = StartWith::Modes,
     .melody = Melody::nice,
 };

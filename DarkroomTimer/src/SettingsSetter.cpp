@@ -51,12 +51,12 @@ void SettingsSetter::processSetBacklight() const {
     repaint();
 }
 
-void SettingsSetter::processStartWithSettings() const {
-    uint8_t choice = gSettings.startWithSettings;
-    if (!gEncoder.getInt(choice, 0, 1))
+void SettingsSetter::processStartWith() const {
+    uint8_t choice = static_cast<uint8_t>(gSettings.startWith);
+    if (!gEncoder.getInt(choice, 0, static_cast<uint8_t>(StartWith::last_)))
         return;
 
-    gSettings.startWithSettings = choice;
+    gSettings.startWith = static_cast<StartWith>(choice);
     repaint();
 }
 
@@ -106,8 +106,8 @@ void SettingsSetter::process() {
     case Step::setAutoFinishView:
         processSetAutoFinishView();
         break;
-    case Step::setStartWithSettings:
-        processStartWithSettings();
+    case Step::setStartWith:
+        processStartWith();
         break;
     case Step::setMelody:
         processSetMelody();
@@ -122,6 +122,10 @@ void SettingsSetter::process() {
 
 void SettingsSetter::repaint() const {
     gDisplay.reset();
+
+    gDisplay[0] << F(kWrenchSymTop);
+    gDisplay[1] << F(kWrenchSymBottom);
+
     switch (m_step) {
     case Step::setLagTime:
         gDisplay[0] << F("Lag time");
@@ -136,7 +140,7 @@ void SettingsSetter::repaint() const {
         gDisplay[1] << gSettings.beepVolume;
         return;
     case Step::setAutoFinishView:
-        gDisplay[0] << F("Auto finish view");
+        gDisplay[0] << F("Autofinish view");
 
         if (gSettings.autoFinishViewMinutes == 0)
             gDisplay[1] << F("No");
@@ -144,9 +148,19 @@ void SettingsSetter::repaint() const {
             gDisplay[1] << gSettings.autoFinishViewMinutes << F(" minute")
                         << (gSettings.autoFinishViewMinutes == 1 ? "" : "s");
         return;
-    case Step::setStartWithSettings:
-        gDisplay[0] << F("Start with stngs");
-        gDisplay[1] << (gSettings.startWithSettings ? F("Yes") : F("No"));
+    case Step::setStartWith:
+        gDisplay[0] << F("Start with");
+        switch (gSettings.startWith) {
+        case StartWith::Modes:
+            gDisplay[1] << F("Modes");
+            return;
+        case StartWith::Settings:
+            gDisplay[1] << F("Settings");
+            return;
+        case StartWith::last_:
+            assert(false);
+            return;
+        }
         return;
     case Step::setMelody:
         gDisplay[0] << F("Notify melody");

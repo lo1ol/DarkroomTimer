@@ -48,7 +48,6 @@ void Lcd::init() {
     gPinMode(LCD_D7_PIN, OUTPUT);
 
     delay(50);
-
     lcdWrite4bits(0x03);
     delay(5);
     lcdWrite4bits(0x03);

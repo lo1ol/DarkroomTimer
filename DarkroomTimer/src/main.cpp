@@ -177,7 +177,7 @@ void processView() {
 
         if (gViewState) {
             gDisplay.reset();
-            gDisplay[0] << F("View");
+            gDisplay[0] << F(kLampSymTop "View");
         } else {
             gModeProcessor->repaint();
         }
@@ -189,6 +189,7 @@ void processView() {
         return;
 
     gDisplay[1].reset();
+    gDisplay[1] << F(kLampSymBottom);
     if (!gSettings.autoFinishViewMinutes) {
         gDisplay[1] << F("Auto stop is off");
         return;
@@ -252,7 +253,7 @@ void setup_() {
     setMode(static_cast<ModeId>(0));
     gModeProcessor->repaint();
 
-    if (gSettings.startWithSettings)
+    if (gSettings.startWith == StartWith::Settings)
         gSettingsSetter = new (gSettingsSetterBuf) SettingsSetter;
     return;
 }
