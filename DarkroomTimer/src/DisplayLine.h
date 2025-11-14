@@ -27,19 +27,30 @@ public:
 #endif
 
     void print(const char* src, bool current = false, const char* mark = nullptr);
-    void printChar(char);
+
+    void printWithAnimation(const __FlashStringHelper*, uint16_t time);
+    bool animationIsRunning() const { return m_showingAnimation; }
 
     // it's responsobility of caller to keep fast repaint length less then current length
     void fastCurrentRepaint(const char* src);
     void restore();
 
 private:
+    void tickAnimation();
+
     static void concat(char* dst, const char* src);
     static void concatInt(char* dst, int value);
 
     bool m_needRepaint = false;
     int m_line = -1;
     Lcd* m_lcd = nullptr;
+
+    static constexpr uint8_t kAnimationUpdateRate = 40;
+
+    bool m_showingAnimation = false;
+    uint16_t m_animationStartTime = 0;
+    uint16_t m_animationTime = 0;
+    uint16_t m_lastAnimationUpdateTime = 0;
 
     uint32_t m_baseBlinkTime = 0;
     bool m_startBlinkState = false;

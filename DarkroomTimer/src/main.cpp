@@ -103,11 +103,18 @@ void processModeSwitch() {
         return;
     }
 
-    if (gModeBtn.holding() && !gSettingBtn.pressing())
+    bool needUpdate = false;
+
+    if (gModeBtn.holding() && !gSettingBtn.pressing()) {
+        if (!gBlockedByPreview)
+            needUpdate = true;
+
         gBlockedByPreview = true;
+    }
 
     int8_t dir = gEncoder.getDir();
     if (dir) {
+        needUpdate = true;
         gModeBtn.skipEvents();
 
         gBlocked = gBlockedByPreview = true;
@@ -117,9 +124,9 @@ void processModeSwitch() {
         gTimer.reset();
     }
 
-    if (gBlockedByPreview) {
+    if (gBlockedByPreview && needUpdate) {
         gDisplay.reset();
-        gDisplay[0] << getPreview(gNewModeId);
+        gDisplay[0].printWithAnimation(getPreview(gNewModeId), 200);
     }
 
     gBlocked = gBlockedByPreview;
