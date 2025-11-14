@@ -97,7 +97,7 @@ void PrintMode::repaint() {
 
     if (m_showLog) {
         gScrollableContent.reset();
-        m_timeTable.setPrefix("Log");
+        m_timeTable.setPrefix("Log " kSheetSym);
         m_timeTable.flush();
         gScrollableContent.paint();
         return;
@@ -107,16 +107,18 @@ void PrintMode::repaint() {
 
     switch (gTimer.state()) {
     case Timer::STOPPED:
-        gDisplay[1] << m_printTime;
+        gDisplay[1] << F(kPlaySym " ") << m_printTime;
         break;
     case Timer::RUNNING:
+        gDisplay[1] << F(kPlaySym " ");
         if (gTimer.lag())
             gDisplay[1] << F("Lag");
         else
             gDisplay[1] << Time::fromMillis(gTimer.left());
         break;
     case Timer::PAUSED:
-        gDisplay[1] << Time::fromMillis(gTimer.left()) << F(" PAUSE");
+        gDisplay[1] << F(kPauseSym " ");
+        gDisplay[1] << Time::fromMillis(gTimer.left());
         break;
     }
     gDisplay[1] >> gTimer.afterLastResume();

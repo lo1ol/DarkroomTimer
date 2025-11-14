@@ -162,7 +162,7 @@ void TestMode::reset() {
 
 void TestMode::setTimeTable() {
     m_timeTable.reset();
-    m_timeTable.setPrefix("Run");
+    m_timeTable.setPrefix(kPlaySym);
     uint8_t id = 0;
     while (true) {
         if (id == m_timeTable.capacity())

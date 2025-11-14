@@ -31,6 +31,9 @@ void Display::setupCharset(Charset charset) {
         ADD_CUSTOM_CHAR(kLampSymBottom, kLampSymBottomMatrix);
         ADD_CUSTOM_CHAR(kWrenchSymTop, kWrenchSymTopMatrix);
         ADD_CUSTOM_CHAR(kWrenchSymBottom, kWrenchSymBottomMatrix);
+        ADD_CUSTOM_CHAR(kSheetSym, kSheetSymMatrix);
+        ADD_CUSTOM_CHAR(kPlaySym, kPlaySymMatrix);
+        ADD_CUSTOM_CHAR(kPauseSym, kPauseSymMatrix);
         break;
     }
 #undef ADD_CUSTOM_CHAR
@@ -42,16 +45,16 @@ void Display::playLogo() {
     reset();
     tick();
 
-    m_lines[0].printWithAnimation(F("    RED RAY"), 2000);
+    m_lines[0].printWithAnimation(F("    RED RAY"), 1400);
 
     while (m_lines[0].animationIsRunning())
         m_lines[0].tick();
 
-    delay(800);
+    delay(600);
 
     m_lines[1] << F("  Let's print   ");
     m_lines[1].tick();
-    delay(1400);
+    delay(1200);
 
     reset();
 }

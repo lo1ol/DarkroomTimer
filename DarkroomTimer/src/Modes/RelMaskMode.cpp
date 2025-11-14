@@ -5,9 +5,8 @@
 
 namespace {
 
-constexpr const char* kSetPrefixes[] = { "S F1", "S F2" };
-
-constexpr const char* kRunPrefixes[] = { "R F1", "R F2" };
+constexpr const char* kSetPrefixes[] = { "1" kSheetSym, "2" kSheetSym };
+constexpr const char* kRunPrefixes[] = { "1" kPlaySym, "2" kPlaySym };
 
 } // namespace
 
@@ -87,7 +86,7 @@ void RelMaskMode::printHeaderForSetNum() const {
 
 void RelMaskMode::flushTimeTables() {
     if (kFilterNum == 1) {
-        m_relTimeTable[0].setPrefix("Set");
+        m_relTimeTable[0].setPrefix(kSheetSym);
         m_relTimeTable[0].flush();
     } else {
         for (uint8_t filter = 0; filter != kFilterNum; ++filter) {
@@ -99,7 +98,7 @@ void RelMaskMode::flushTimeTables() {
 
 void RelMaskMode::flashTimeTablesAtRun() {
     if (kFilterNum == 1) {
-        m_relTimeTable[0].setPrefix("Run");
+        m_relTimeTable[0].setPrefix(kPlaySym);
         m_relTimeTable[0].flush();
     } else {
         for (uint8_t filter = 0; filter != kFilterNum; ++filter) {
