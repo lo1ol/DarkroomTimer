@@ -74,15 +74,15 @@ void checkExpertFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  ntf 3.5 4.9", "7 9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "  ntf 3.5 4.9 7", "9.9 14 19.8 28");
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  Lag 3.5 4.9", "7 9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "  Lag 3.5 4.9 7", "9.9 14 19.8 28");
 
     gCurrentTime += 15000;
     loop_();
-    TEST_DISPLAY("Run 10.5     4.9", "7 9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym " 10.5     4.9 7", "9.9 14 19.8 28");
     TEST_ASSERT(gTimer.justStopped());
     TEST_ASSERT(gBeeper.state() == Beeper::State::alarm);
 
@@ -97,11 +97,11 @@ void checkExpertFStopTest() {
     gCurrentTime += 4900;
     loop_();
     TEST_ASSERT(gTimer.justStopped());
-    TEST_DISPLAY("Run 10.5 3.5 4.9", "    9.9 14 19.8");
+    TEST_DISPLAY(kPlaySym " 10.5 3.5 4.9", "    9.9 14 19.8");
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run  ntf 3.5 4.9", "7 9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "  ntf 3.5 4.9 7", "9.9 14 19.8 28");
 
     gModeBtn.emulClick();
     loop_();
@@ -119,13 +119,13 @@ void checkExpertFStopTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  ntf 3.5 4.9", "7 9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "  ntf 3.5 4.9 7", "9.9 14 19.8 28");
 
     gStartBtn.emulClick();
     loop_();
     gCurrentTime += 15000;
     loop_();
-    TEST_DISPLAY("Run 10.5     4.9", "7 9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym " 10.5     4.9 7", "9.9 14 19.8 28");
     TEST_ASSERT(gTimer.justStopped());
     TEST_ASSERT(gBeeper.state() == Beeper::State::alarm);
 
@@ -163,7 +163,7 @@ void checkExpertFStopTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     4.9 7", "9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "     4.9 7 9.9", "14 19.8 28 40 56");
 
     gStartBtn.emulClick();
     loop_();
@@ -171,7 +171,7 @@ void checkExpertFStopTest() {
     loop_();
     TEST_ASSERT(gTimer.justStopped());
     TEST_ASSERT(gBeeper.state() == Beeper::State::off);
-    TEST_DISPLAY("Run 3.5     7", "9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym " 3.5     7 9.9", "14 19.8 28 40 56");
 
     gStartBtn.emulClick();
     loop_();
@@ -240,15 +240,15 @@ void checkExpertLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  ntf 3.5 9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym "  ntf 3.5 9.5", "15.5 22 28 34 40");
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  Lag 3.5 9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym "  Lag 3.5 9.5", "15.5 22 28 34 40");
 
     gCurrentTime += 15000;
     loop_();
-    TEST_DISPLAY("Run 10.5     9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym " 10.5     9.5", "15.5 22 28 34 40");
     TEST_ASSERT(gTimer.justStopped());
     TEST_ASSERT(gBeeper.state() == Beeper::State::alarm);
 
@@ -263,11 +263,11 @@ void checkExpertLinearTest() {
     gCurrentTime += 6000;
     loop_();
     TEST_ASSERT(gTimer.justStopped());
-    TEST_DISPLAY("Run 10.5 3.5 9.5", "     22 28 34 40");
+    TEST_DISPLAY(kPlaySym " 10.5 3.5 9.5", "     22 28 34 40");
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run  ntf 3.5 9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym "  ntf 3.5 9.5", "15.5 22 28 34 40");
 
     gModeBtn.emulClick();
     loop_();
@@ -285,13 +285,13 @@ void checkExpertLinearTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  ntf 3.5 9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym "  ntf 3.5 9.5", "15.5 22 28 34 40");
 
     gStartBtn.emulClick();
     loop_();
     gCurrentTime += 15000;
     loop_();
-    TEST_DISPLAY("Run 10.5     9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym " 10.5     9.5", "15.5 22 28 34 40");
     TEST_ASSERT(gTimer.justStopped());
     TEST_ASSERT(gBeeper.state() == Beeper::State::alarm);
 
@@ -329,7 +329,7 @@ void checkExpertLinearTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     9.5 15.5", "22 28 34 40 46");
+    TEST_DISPLAY(kPlaySym "     9.5 15.5", "22 28 34 40 46");
 
     gStartBtn.emulClick();
     loop_();
@@ -337,7 +337,7 @@ void checkExpertLinearTest() {
     loop_();
     TEST_ASSERT(gTimer.justStopped());
     TEST_ASSERT(gBeeper.state() == Beeper::State::off);
-    TEST_DISPLAY("Run 3.5     15.5", "22 28 34 40 46");
+    TEST_DISPLAY(kPlaySym " 3.5     15.5", "22 28 34 40 46");
 
     gStartBtn.emulClick();
     loop_();

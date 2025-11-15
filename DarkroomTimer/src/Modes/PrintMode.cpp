@@ -97,7 +97,7 @@ void PrintMode::repaint() {
 
     if (m_showLog) {
         gScrollableContent.reset();
-        m_timeTable.setPrefix("Log " kSheetSym);
+        m_timeTable.setPrefix("Log");
         m_timeTable.flush();
         gScrollableContent.paint();
         return;

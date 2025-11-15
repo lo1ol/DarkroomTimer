@@ -15,7 +15,7 @@ void checkSettingsGeneric() {
     settings.beepVolume = 7;
     settings.backlight = 2;
     settings.autoFinishViewMinutes = 7;
-    settings.startWithSettings = 1;
+    settings.startWith = StartWith::Settings;
     settings.melody = Melody::Name::alarm;
     settings.updateEEPROM();
     TEST_ASSERT(settings == Settings::load());

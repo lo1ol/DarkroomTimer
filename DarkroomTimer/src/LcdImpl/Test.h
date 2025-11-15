@@ -17,6 +17,7 @@ public:
         m_r = r;
     }
 
+    void addCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {}
     [[nodiscard]] const char* getLine(uint8_t r) const { return m_lines[r]; }
 
     [[nodiscard]] uint8_t printCallCount() {

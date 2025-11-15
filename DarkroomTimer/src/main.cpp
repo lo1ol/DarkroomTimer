@@ -252,7 +252,7 @@ void processView() {
     gDisplay[1] << animStr << " ";
 
     if (!gSettings.autoFinishViewMinutes) {
-        gDisplay[1] << F("Auto stop is off");
+        gDisplay[1] << F("Auto stop off");
         return;
     }
 

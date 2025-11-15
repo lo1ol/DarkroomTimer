@@ -42,75 +42,75 @@ void checkScenarioGeneric() {
     gModeBtn.emulClick();
     loop_();
 
-    TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym "     8.4 16.8", "34 67 134 269");
 
     gCurrentTime += 500;
     loop_();
-    TEST_DISPLAY("Run 4.2 8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym " 4.2 8.4 16.8", "34 67 134 269");
 
     gModeBtn.emulHold();
     gViewBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Lag time", "0");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0");
 
     loop_();
-    TEST_DISPLAY("Lag time", "0");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0");
 
     gModeBtn.emulHold();
     gViewBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym "     8.4 16.8", "34 67 134 269");
 
     gModeBtn.emulPress();
     gEncoder.emulTurns(1);
     loop_();
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("Printing", "");
+    TEST_DISPLAY(kFolder3Str "Printing", "");
 
     loop_();
-    TEST_DISPLAY("Printing", "");
+    TEST_DISPLAY(kFolder3Str "Printing", "");
 
     gEncoder.emulTurns(-1);
     loop_();
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY("F Stop test", "");
+    TEST_DISPLAY(kFolder1Str "F Stop test", "");
     gModeBtn.emulRelease();
     loop_();
-    TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym "     8.4 16.8", "34 67 134 269");
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 180");
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop: 180");
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 2000;
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 178");
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop: 178");
     TEST_ASSERT(gRelayVal);
     TEST_ASSERT(gBuzzerVal == BEEPER_VOLUME_SILENT);
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym "     8.4 16.8", "34 67 134 269");
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run Lag 8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym " Lag 8.4 16.8", "34 67 134 269");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 2000;
     loop_();
-    TEST_DISPLAY("Run 2.2 8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym " 2.2 8.4 16.8", "34 67 134 269");
     TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run     8.4 16.8", "34 67 134 269");
+    TEST_DISPLAY(kPlaySym "     8.4 16.8", "34 67 134 269");
     TEST_ASSERT(!gRelayVal);
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
 }
@@ -158,17 +158,17 @@ void checkFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     0 0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kPlaySym "     0 0 0 0 0", "0 0 0 0 0 0 0 0");
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run 0     0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kPlaySym " 0     0 0 0 0", "0 0 0 0 0 0 0 0");
     TEST_ASSERT(!gRelayVal);
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run     0 0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kPlaySym "     0 0 0 0 0", "0 0 0 0 0 0 0 0");
 
     gEncoderBtn.emulRelease();
     loop_();
@@ -197,7 +197,7 @@ void checkFStopTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "        1907", "2020 2141 2268");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -223,11 +223,11 @@ void checkFStopTest() {
     // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run    Lag 1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "    Lag 1907", "2020 2141 2268");
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "        1907", "2020 2141 2268");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -243,7 +243,7 @@ void checkFStopTest() {
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "        1907", "2020 2141 2268");
 
     for (int i = 0; i != 13; ++i) {
         gStartBtn.emulClick();
@@ -254,7 +254,7 @@ void checkFStopTest() {
         TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
-    TEST_DISPLAY("2857 3027 3207", "3398 3600");
+    TEST_DISPLAY("3027 3207 3398", "3600");
 
     gStartBtn.emulClick();
     loop_();
@@ -287,7 +287,7 @@ void checkFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     4 8 16", "32 64 128 256");
+    TEST_DISPLAY(kPlaySym "     4 8 16 32", "64 128 256 512");
 
     Time testSet[] = {
         2_s, 2_s, 4_s, 8_s, 16_s, 32_s, 64_s, 128_s, 256_s, 512_s, 1024_s,
@@ -309,7 +309,7 @@ void checkFStopTest() {
         TEST_ASSERT(!gRelayVal);
     }
 
-    TEST_DISPLAY("64 128 256 512", "1024 2048");
+    TEST_DISPLAY("128 256 512 1024", "2048");
 }
 
 void checkLocalFStopTest() {
@@ -365,17 +365,17 @@ void checkLocalFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     0 0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kPlaySym "     0 0 0 0 0", "0 0 0 0 0 0 0 0");
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run 0     0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kPlaySym " 0     0 0 0 0", "0 0 0 0 0 0 0 0");
     TEST_ASSERT(!gRelayVal);
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run     0 0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kPlaySym "     0 0 0 0 0", "0 0 0 0 0 0 0 0");
 
     gEncoderBtn.emulRelease();
     loop_();
@@ -404,7 +404,7 @@ void checkLocalFStopTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "        1907", "2020 2141 2268");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -434,11 +434,11 @@ void checkLocalFStopTest() {
     // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run    Lag 1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "    Lag 1907", "2020 2141 2268");
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "        1907", "2020 2141 2268");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -454,7 +454,7 @@ void checkLocalFStopTest() {
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run        1907", "2020 2141 2268");
+    TEST_DISPLAY(kPlaySym "        1907", "2020 2141 2268");
 
     for (int i = 0; i != 13; ++i) {
         gStartBtn.emulClick();
@@ -465,7 +465,7 @@ void checkLocalFStopTest() {
         TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
-    TEST_DISPLAY("2857 3027 3207", "3398 3600");
+    TEST_DISPLAY("3027 3207 3398", "3600");
 
     gStartBtn.emulClick();
     loop_();
@@ -498,7 +498,7 @@ void checkLocalFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     4 8 16", "32 64 128 256");
+    TEST_DISPLAY(kPlaySym "     4 8 16 32", "64 128 256 512");
 
     Time testSet[] = { 2_s, 4_s, 8_s, 16_s, 32_s, 64_s, 128_s, 256_s, 512_s, 1024_s, 2048_s };
     for (Time t : testSet) {
@@ -518,7 +518,7 @@ void checkLocalFStopTest() {
         TEST_ASSERT(!gRelayVal);
     }
 
-    TEST_DISPLAY("64 128 256 512", "1024 2048");
+    TEST_DISPLAY("128 256 512 1024", "2048");
 }
 
 void checkSpltFStopTest() {
@@ -560,7 +560,7 @@ void checkSpltFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run ntf 4 8 16", "32 64 128 256");
+    TEST_DISPLAY(kPlaySym " ntf 4 8 16 32", "64 128 256 512");
 
     Time testSet[] = {
         32_ts, 4_s, 4_s, 8_s, 16_s, 32_s, 64_s, 128_s, 256_s, 512_s, 1024_s,
@@ -615,7 +615,7 @@ void checkLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     8 13 18", "23 28 33 38 43");
+    TEST_DISPLAY(kPlaySym "     8 13 18 23", "28 33 38 43 48");
 
     for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
@@ -655,7 +655,7 @@ void checkLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run        1900", "2000 2100 2200");
+    TEST_DISPLAY(kPlaySym "        1900", "2000 2100 2200");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -685,7 +685,7 @@ void checkLinearTest() {
     // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run    Lag 1900", "2000 2100 2200");
+    TEST_DISPLAY(kPlaySym "    Lag 1900", "2000 2100 2200");
     TEST_ASSERT(gRelayVal);
     TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::RUNNING);
 }
@@ -716,7 +716,7 @@ void checkLocalLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     8 13 18", "23 28 33 38 43");
+    TEST_DISPLAY(kPlaySym "     8 13 18 23", "28 33 38 43 48");
 
     for (uint32_t i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
@@ -756,7 +756,7 @@ void checkLocalLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run        1900", "2000 2100 2200");
+    TEST_DISPLAY(kPlaySym "        1900", "2000 2100 2200");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -786,7 +786,7 @@ void checkLocalLinearTest() {
     // and automatically go to current line
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run    Lag 1900", "2000 2100 2200");
+    TEST_DISPLAY(kPlaySym "    Lag 1900", "2000 2100 2200");
     TEST_ASSERT(gRelayVal);
     TEST_ASSERT_EQUAL(gTimer.state(), Timer::State::RUNNING);
 }
@@ -835,7 +835,7 @@ void checkSpltLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run ntf 3 8 13", "18 23 28 33 38");
+    TEST_DISPLAY(kPlaySym " ntf 3 8 13 18", "23 28 33 38 43");
 
     for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
@@ -878,122 +878,122 @@ void checkPrintMode() {
 
     gModeBtn.emulRelease();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "8            0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 8          0.0");
 
     gEncoder.emulRetTime(0_s);
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "0            0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 0          0.0");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt HLD T:0", "0            0.0");
+    TEST_DISPLAY("Prnt HLD T:0", kPlaySym " 0          0.0");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "0            0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 0          0.0");
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "0            0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 0          0.0");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gEncoder.emulRetTime(1800_s);
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 1800       0.0");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gSettings.lagTime = 3_ts;
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " Lag        0.0");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 200;
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " Lag        0.0");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 7600;
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gStartBtn.emulPress();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulRelease();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt HLD T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt HLD T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulPress();
     loop_();
-    TEST_DISPLAY("Prnt HLD T:7.5", "Lag          7.5");
+    TEST_DISPLAY("Prnt HLD T:7.5", kPlaySym " Lag        7.5");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 300;
     gStartBtn.emulRelease();
     loop_();
-    TEST_DISPLAY("Prnt HLD T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt HLD T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulPress();
     loop_();
-    TEST_DISPLAY("Prnt HLD T:7.5", "Lag          7.5");
+    TEST_DISPLAY("Prnt HLD T:7.5", kPlaySym " Lag        7.5");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 7000;
     loop_();
-    TEST_DISPLAY("Prnt HLD T:14.2", "1785.8       6.7");
+    TEST_DISPLAY("Prnt HLD T:14.2", kPlaySym " 1785.8     6.7");
     TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 1785799;
     loop_();
-    TEST_DISPLAY("Prnt HLD T:1799.", "0         1792.5");
+    TEST_DISPLAY("Prnt HLD T:1799.", kPlaySym " 0       1792.5");
     TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 1;
     loop_();
-    TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
+    TEST_DISPLAY("Prnt HLD T:1800", kPlaySym " 1800    1792.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gCurrentTime += 100;
     loop_();
-    TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
+    TEST_DISPLAY("Prnt HLD T:1800", kPlaySym " 1800    1792.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulRelease();
     gCurrentTime += 100;
     loop_();
-    TEST_DISPLAY("Prnt HLD T:1800", "1800      1792.5");
+    TEST_DISPLAY("Prnt HLD T:1800", kPlaySym " 1800    1792.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
@@ -1017,11 +1017,11 @@ void checkPrintMode() {
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Prnt HLD T:0", "1800         0.0");
+    TEST_DISPLAY("Prnt HLD T:0", kPlaySym " 1800       0.0");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 1800       0.0");
 
     gSettings.lagTime = 0_s;
 
@@ -1034,7 +1034,7 @@ void checkPrintMode() {
         loop_();
     }
 
-    TEST_DISPLAY("Prnt CLK T:55", "1745 PAUSE  10.0");
+    TEST_DISPLAY("Prnt CLK T:55", kPauseSym " 1745      10.0");
 
     gEncoderBtn.emulClick();
     loop_();
@@ -1042,7 +1042,7 @@ void checkPrintMode() {
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 1800       0.0");
 
     gEncoderBtn.emulClick();
     loop_();
@@ -1071,7 +1071,7 @@ void checkMaskMode() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Set     0 0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kSheetSym "     0 0 0 0 0", "0 0 0 0 0 0 0 0");
 
     Time times[] = { 1_ts,     10_ts, 30_ts, 2_ts, 60_ts, 1800_s, kBadTime, 32_s,
                      kBadTime, 70_ts, 30_ts, 0_ts, 8_ts,  19_ts,  1800_s,   17_ts };
@@ -1108,15 +1108,15 @@ void checkMaskMode() {
         }
     }
 
-    TEST_DISPLAY("3 0 0.8 1.9 1800", "1.7");
+    TEST_DISPLAY("0 0.8 1.9 1800", "1.7");
 
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Set     1 3 0.2", "6 1800 0 32 0 7");
+    TEST_DISPLAY(kSheetSym "     1 3 0.2 6", "1800 0 32 0 7 3");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run     1 3 0.2", "6 1800 0 32 0 7");
+    TEST_DISPLAY(kPlaySym "     1 3 0.2 6", "1800 0 32 0 7 3");
 
     for (auto t : times) {
         gStartBtn.emulClick();
@@ -1145,7 +1145,7 @@ void checkMaskMode() {
         TEST_ASSERT_EQUAL(((t == 30_ts) ? Beeper::State::alarm : Beeper::State::off), gBeeper.state());
     }
 
-    TEST_DISPLAY("3 0 0.8 1.9 1800", "1.7     Finished");
+    TEST_DISPLAY("0 0.8 1.9 1800", "1.7     Finished");
     gStartBtn.emulClick();
     loop_();
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
@@ -1154,20 +1154,20 @@ void checkMaskMode() {
     // Scroll didn't work on finished
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY("3 0 0.8 1.9 1800", "1.7     Finished");
+    TEST_DISPLAY("0 0.8 1.9 1800", "1.7     Finished");
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run     1 3 0.2", "6 1800 0 32 0 7");
+    TEST_DISPLAY(kPlaySym "     1 3 0.2 6", "1800 0 32 0 7 3");
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("6 1800 0 32 0 7", "3 0 0.8 1.9 1800");
+    TEST_DISPLAY("1800 0 32 0 7 3", "0 0.8 1.9 1800");
 
     // could start even if not see printing time
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run Lag 1 3 0.2", "6 1800 0 32 0 7");
+    TEST_DISPLAY(kPlaySym " Lag 1 3 0.2 6", "1800 0 32 0 7 3");
 }
 
 void checkSplitMaskMode() {
@@ -1208,7 +1208,7 @@ void checkSplitMaskMode() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("S F1     0 0 0 0", "0 0 0");
+    TEST_DISPLAY("1" kSheetSym "     0 0 0 0 0", "0 0");
 
     Time times[2][8] = { { 1_ts, 10_ts, 500_s, 10_ts, 40_s, 1800_s, kBadTime, 32_s },
                          { 100_ts, kBadTime, 30_ts, 0_ts, 8_ts, 19_ts, 1800_s, 17_ts } };
@@ -1241,15 +1241,15 @@ void checkSplitMaskMode() {
         }
     }
 
-    TEST_DISPLAY("S F2 10 0 3 0", "0.8 1.9 1800 1.7")
+    TEST_DISPLAY("2" kSheetSym " 10 0 3 0 0.8", "1.9 1800 1.7")
 
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("S F1     1 500 1", "40 1800 0 32");
+    TEST_DISPLAY("1" kSheetSym "     1 500 1", "40 1800 0 32");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("R F1     1 500 1", "40 1800 0 32");
+    TEST_DISPLAY("1" kPlaySym "     1 500 1", "40 1800 0 32");
 
     int i = 0;
     for (auto& tt : times) {
@@ -1282,7 +1282,7 @@ void checkSplitMaskMode() {
         }
     }
 
-    TEST_DISPLAY("R F2 10 0 3 0", "0.8 1.9 Finished");
+    TEST_DISPLAY("2" kPlaySym " 10 0 3 0 0.8", "1.9 1800Finished");
     gStartBtn.emulClick();
     loop_();
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
@@ -1291,20 +1291,20 @@ void checkSplitMaskMode() {
     // Scroll didn't work on finished
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY("R F2 10 0 3 0", "0.8 1.9 Finished");
+    TEST_DISPLAY("2" kPlaySym " 10 0 3 0 0.8", "1.9 1800Finished");
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("R F1     1 500 1", "40 1800 0 32");
+    TEST_DISPLAY("1" kPlaySym "     1 500 1", "40 1800 0 32");
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("40 1800 0 32", "R F2 10 0 3 0");
+    TEST_DISPLAY("40 1800 0 32", "2" kPlaySym " 10 0 3 0 0.8");
 
     // could start even if not see printing time
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("R F1 Lag 1 500 1", "40 1800 0 32");
+    TEST_DISPLAY("1" kPlaySym " Lag 1 500 1", "40 1800 0 32");
 }
 
 void checkRelMaskMode() {
@@ -1331,7 +1331,7 @@ void checkRelMaskMode() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Set     0 0 0 0", "0 0 0 0 0 0 0 0");
+    TEST_DISPLAY(kSheetSym "     0 0 0 0 0", "0 0 0 0 0 0 0 0");
 
     Time baseTime = 16_s;
     RelTime times[] = { RelTime(0), // not used time
@@ -1357,15 +1357,15 @@ void checkRelMaskMode() {
         loop_();
     }
 
-    TEST_DISPLAY("1/4 2+1/2 2+5/12", "3+3/4");
+    TEST_DISPLAY("2+1/2 2+5/12", "3+3/4");
 
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Set      2/3 0", "7/12 1+1/12 5 5");
+    TEST_DISPLAY(kSheetSym "      2/3 0", "7/12 1+1/12 5 5");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run      2/3 0", "7/12 1+1/12 5 5");
+    TEST_DISPLAY(kPlaySym "      2/3 0", "7/12 1+1/12 5 5");
 
     first = true;
     for (auto t : times) {
@@ -1400,7 +1400,7 @@ void checkRelMaskMode() {
         TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     }
 
-    TEST_DISPLAY("1/4 2+1/2 2+5/12", "3+3/4   Finished");
+    TEST_DISPLAY("2+1/2 2+5/12", "3+3/4   Finished");
     gStartBtn.emulClick();
     loop_();
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
@@ -1409,11 +1409,11 @@ void checkRelMaskMode() {
     // Scroll didn't work on finished
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY("1/4 2+1/2 2+5/12", "3+3/4   Finished");
+    TEST_DISPLAY("2+1/2 2+5/12", "3+3/4   Finished");
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Run      2/3 0", "7/12 1+1/12 5 5");
+    TEST_DISPLAY(kPlaySym "      2/3 0", "7/12 1+1/12 5 5");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -1422,12 +1422,12 @@ void checkRelMaskMode() {
     // could start even if not see printing time
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  Lag 2/3 0", "7/12 1+1/12 5 5");
+    TEST_DISPLAY(kPlaySym "  Lag 2/3 0", "7/12 1+1/12 5 5");
 
     // could switch view at run time
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Run  Lag 9.4 0 8", "17.9 496 496 8 0");
+    TEST_DISPLAY(kPlaySym "  Lag 9.4 0 8", "17.9 496 496 8 0");
 
     // tests on overflow
     gEncoderBtn.emulHold();
@@ -1440,11 +1440,11 @@ void checkRelMaskMode() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Set      2/3 0", "7/12 1+1/12 5 5");
+    TEST_DISPLAY(kSheetSym "      2/3 0", "7/12 1+1/12 5 5");
 
     gEncoder.emulRetTime(baseTime);
     loop_();
-    TEST_DISPLAY("Set 1400.0 2/3 0", "7/12 1+1/12 ovr");
+    TEST_DISPLAY(kSheetSym " 1400.0 2/3 0", "7/12 1+1/12 ovr");
 
     gModeBtn.emulClick();
     loop_();
@@ -1518,7 +1518,7 @@ void checkSplitRelMaskMode() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("S F1     0 0 0 0", "0 0 0");
+    TEST_DISPLAY("1" kSheetSym "     0 0 0 0 0", "0 0");
 
     Time baseTimes[2] = { 16_s, 100_s };
     RelTime times[] = { RelTime(0), // not used time
@@ -1549,11 +1549,11 @@ void checkSplitRelMaskMode() {
 
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("S F1      2/3 0", "1+7/12 1+1/12 5");
+    TEST_DISPLAY("1" kSheetSym "      2/3 0", "1+7/12 1+1/12 5");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("R F1      2/3 0", "1+7/12 1+1/12 5");
+    TEST_DISPLAY("1" kPlaySym "      2/3 0", "1+7/12 1+1/12 5");
 
     id = 0;
     for (auto t : times) {
@@ -1604,7 +1604,7 @@ void checkSplitRelMaskMode() {
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY("R F1      2/3 0", "1+7/12 1+1/12 5");
+    TEST_DISPLAY("1" kPlaySym "      2/3 0", "1+7/12 1+1/12 5");
 
     gEncoder.emulTurns(1);
     loop_();
@@ -1613,12 +1613,12 @@ void checkSplitRelMaskMode() {
     // could start even if not see printing time
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("R F1  Lag 2/3 0", "1+7/12 1+1/12 5");
+    TEST_DISPLAY("1" kPlaySym "  Lag 2/3 0", "1+7/12 1+1/12 5");
 
     // could switch view at run time
     gEncoderBtn.emulClick();
     loop_();
-    TEST_DISPLAY("R F1  Lag 9.4 0", "32 17.9 496 496");
+    TEST_DISPLAY("1" kPlaySym "  Lag 9.4 0 32", "17.9 496 496 8");
 
     // tests on overflow
     baseTimes[0] = 2000_s;
@@ -1635,18 +1635,18 @@ void checkSplitRelMaskMode() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("S F1      2/3 0", "1+7/12 1+1/12 5");
+    TEST_DISPLAY("1" kSheetSym "      2/3 0", "1+7/12 1+1/12 5");
 
     gEncoder.emulRetTime(baseTimes[0]);
     loop_();
-    TEST_DISPLAY("S F1 2000.0 2/3", "0 ovr 1+1/12 ovr");
+    TEST_DISPLAY("1" kSheetSym " 2000.0 2/3 0", "ovr 1+1/12 ovr");
 
     gModeBtn.emulClick();
     loop_();
 
     gEncoder.emulRetTime(baseTimes[0]);
     loop_();
-    TEST_DISPLAY("R F1        2/3", "0 ovr 1+1/12 ovr");
+    TEST_DISPLAY("1" kPlaySym "        2/3 0", "ovr 1+1/12 ovr");
 
     id = 0;
     for (auto t : times) {
@@ -1700,18 +1700,18 @@ void checkSettings() {
 
     gEncoder.emulRetTime(1800_s);
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 1800       0.0");
 
     gSettings.lagTime = 3_ts;
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " Lag        0.0");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 7800;
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
@@ -1719,56 +1719,56 @@ void checkSettings() {
     gViewBtn.emulHold();
     gModeBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " 1792.5     7.5");
 
     // check we can edit settings at pause
     gStartBtn.emulPress();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gViewBtn.emulHold();
     gModeBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Lag time", "0.3");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0.3");
     TEST_ASSERT(!gRelayVal);
 
     gEncoder.emulRetTime(6_ts);
     loop_();
-    TEST_DISPLAY("Lag time", "0.6");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0.6");
     TEST_ASSERT(!gRelayVal);
 
     gViewBtn.emulHold();
     gModeBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT(!gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "Lag          7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " Lag        7.5");
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 600;
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "Lag          7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " Lag        7.5");
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 1;
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       0.0");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " 1792.5     0.0");
     TEST_ASSERT(gRelayVal);
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 0.0");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     0.0");
     TEST_ASSERT(!gRelayVal);
 
     gViewBtn.emulHold();
     gModeBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Lag time", "0.6");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0.6");
     TEST_ASSERT(!gRelayVal);
     gViewBtn.emulRelease();
     gModeBtn.emulRelease();
@@ -1776,86 +1776,86 @@ void checkSettings() {
 
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Lag time", "0.6");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0.6");
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 599;
     loop_();
-    TEST_DISPLAY("Lag time", "0");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0");
     TEST_ASSERT(gRelayVal);
 
     // can't close during setting
     gViewBtn.emulHold();
     gModeBtn.emulHold();
     loop_();
-    TEST_DISPLAY("Lag time", "0");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0");
     TEST_ASSERT(gRelayVal);
     gViewBtn.emulRelease();
     gModeBtn.emulRelease();
 
     gCurrentTime += 1;
     loop_();
-    TEST_DISPLAY("Lag time", "0.6");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0.6");
     TEST_ASSERT(!gRelayVal);
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Backlight", "5");
+    TEST_DISPLAY(kWrenchSymTop " Backlight", kWrenchSymBottom " 5");
 
     auto backlight = gBacklightVal;
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("Backlight", "6");
+    TEST_DISPLAY(kWrenchSymTop " Backlight", kWrenchSymBottom " 6");
     TEST_ASSERT(backlight < gBacklightVal);
 
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY("Backlight", "5");
+    TEST_DISPLAY(kWrenchSymTop " Backlight", kWrenchSymBottom " 5");
     TEST_ASSERT(backlight == gBacklightVal);
 
     gEncoder.emulRetInt(7);
     loop_();
-    TEST_DISPLAY("Backlight", "7");
+    TEST_DISPLAY(kWrenchSymTop " Backlight", kWrenchSymBottom " 7");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Beep volume", "3");
+    TEST_DISPLAY(kWrenchSymTop " Beep volume", kWrenchSymBottom " 3");
 
     auto buzzerVal = gBuzzerVal;
     TEST_ASSERT(buzzerVal == BEEPER_VOLUME_SILENT);
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("Beep volume", "4");
+    TEST_DISPLAY(kWrenchSymTop " Beep volume", kWrenchSymBottom " 4");
     TEST_ASSERT(buzzerVal < gBuzzerVal);
     buzzerVal = gBuzzerVal;
 
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY("Beep volume", "3");
+    TEST_DISPLAY(kWrenchSymTop " Beep volume", kWrenchSymBottom " 3");
     TEST_ASSERT(buzzerVal > gBuzzerVal);
     TEST_ASSERT(BEEPER_VOLUME_SILENT < gBuzzerVal);
 
     gEncoder.emulRetInt(7);
     loop_();
-    TEST_DISPLAY("Beep volume", "7");
+    TEST_DISPLAY(kWrenchSymTop " Beep volume", kWrenchSymBottom " 7");
 
     gModeBtn.emulClick();
     loop_();
     TEST_ASSERT(BEEPER_VOLUME_SILENT == gBuzzerVal);
-    TEST_DISPLAY("Auto finish view", "3 minutes");
+    TEST_DISPLAY(kWrenchSymTop " Auto stop view", kWrenchSymBottom " 3 minutes");
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("Auto finish view", "4 minutes");
+    TEST_DISPLAY(kWrenchSymTop " Auto stop view", kWrenchSymBottom " 4 minutes");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Start with stngs", "No");
+    TEST_DISPLAY(kWrenchSymTop " Start with", kWrenchSymBottom " Modes");
 
     gEncoder.emulTurns(1);
     loop_();
-    TEST_DISPLAY("Start with stngs", "Yes");
+    TEST_DISPLAY(kWrenchSymTop " Start with", kWrenchSymBottom " Settings");
 
     gViewBtn.emulHold();
     gModeBtn.emulHold();
@@ -1867,7 +1867,7 @@ void checkSettings() {
     setup_();
     loop_();
 
-    TEST_DISPLAY("Lag time", "0.6");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0.6");
 
     // check fast travel
     gModeBtn.emulHold();
@@ -1885,19 +1885,19 @@ void checkSettings() {
     gModeBtn.emulRelease();
     loop_();
 
-    TEST_DISPLAY("Notify melody", "nice");
+    TEST_DISPLAY(kWrenchSymTop " Notify melody", kWrenchSymBottom " nice");
 
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY("Notify melody", "alarm");
+    TEST_DISPLAY(kWrenchSymTop " Notify melody", kWrenchSymBottom " alarm");
 
     gModeBtn.emulClick();
     loop_();
-    TEST_ASSERT_EQUAL_STRING("Version         ", gLcd.getLine(0));
+    TEST_ASSERT_EQUAL_STRING(kWrenchSymTop " Version       ", gLcd.getLine(0));
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Lag time", "0.6");
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0.6");
 
 #ifndef DT_NATIVE
     TEST_ASSERT((Settings::load() == Settings{
@@ -1906,7 +1906,7 @@ void checkSettings() {
                                          .beepVolume = 7,
                                          .backlight = 7,
                                          .autoFinishViewMinutes = 4,
-                                         .startWithSettings = true,
+                                         .startWith = StartWith::Settings,
                                          .melody = Melody::alarm,
                                      }));
 #endif
@@ -1933,83 +1933,83 @@ void checkView() {
 
     gEncoder.emulRetTime(1800_s);
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "1800         0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " 1800       0.0");
 
     gSettings.lagTime = 3_ts;
     gStartBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:0", "Lag          0.0");
+    TEST_DISPLAY("Prnt CLK T:0", kPlaySym " Lag        0.0");
     TEST_ASSERT_EQUAL(Beeper::State::single, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 7800;
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::on, gBeeper.state());
     TEST_ASSERT(gRelayVal);
 
     // can't start view
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5       7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPlaySym " 1792.5     7.5");
 
     // check we can view at pause
     gStartBtn.emulPress();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT_EQUAL(Beeper::State::off, gBeeper.state());
     TEST_ASSERT(!gRelayVal);
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 180");
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop: 180");
     TEST_ASSERT(gRelayVal);
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT(!gRelayVal);
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 180");
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop: 180");
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 179999;
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 1");
+    TEST_DISPLAY(kLampSym " View", kLampLight6Sym " Auto stop: 1");
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 1;
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT(!gRelayVal);
 
     gSettings.autoFinishViewMinutes = 4;
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("View", "Auto stop: 240");
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop: 240");
     TEST_ASSERT(gRelayVal);
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT(!gRelayVal);
 
     gSettings.autoFinishViewMinutes = 0;
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("View", "Auto stop is off");
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop off");
     TEST_ASSERT(gRelayVal);
 
     gCurrentTime += 1000000;
     loop_();
-    TEST_DISPLAY("View", "Auto stop is off");
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop off");
     TEST_ASSERT(gRelayVal);
 
     gViewBtn.emulClick();
     loop_();
-    TEST_DISPLAY("Prnt CLK T:7.5", "1792.5 PAUSE 7.5");
+    TEST_DISPLAY("Prnt CLK T:7.5", kPauseSym " 1792.5     7.5");
     TEST_ASSERT(!gRelayVal);
 }
 

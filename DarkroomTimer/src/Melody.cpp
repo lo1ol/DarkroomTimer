@@ -3,7 +3,6 @@
 #include "Hardware.h"
 
 #ifdef DT_NATIVE
-    #define PROGMEM
     #define READ_PROGMEM(array, id) (array[id])
 #else
     #define READ_PROGMEM(array, id) (pgm_read_byte(&array[id]))

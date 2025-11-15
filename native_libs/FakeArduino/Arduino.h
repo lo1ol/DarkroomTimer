@@ -15,6 +15,7 @@
 #define interrupts()
 #define strncpy_P(m_fwInfo, src, size) strcpy(m_fwInfo, src)
 #define PGM_P const char*
+#define PROGMEM
 
 using __FlashStringHelper = char;
 
