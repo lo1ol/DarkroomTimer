@@ -157,7 +157,7 @@ bool TestMode::hasPreflashTime() const {
 
 void TestMode::reset() {
     m_currentRun = 0;
-    m_timeTable.setCurrent(0, hasPreflashTime() ? "ntf" : nullptr);
+    m_timeTable.setCurrent(0, hasPreflashTime() ? kBellSym : nullptr);
 }
 
 void TestMode::setTimeTable() {

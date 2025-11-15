@@ -28,6 +28,9 @@ constexpr uint8_t kPlaySymMatrix[] PROGMEM = {
 constexpr uint8_t kPauseSymMatrix[] PROGMEM = {
     0b00000, 0b11011, 0b11011, 0b11011, 0b11011, 0b11011, 0b11011, 0b00000
 };
+constexpr uint8_t kBellSymMatrix[] PROGMEM = {
+    0b00100, 0b01110, 0b01110, 0b01110, 0b11111, 0b11111, 0b00100, 0b00000
+};
 // clang-format on
 
 #define kWrenchSymTop "\x80"
@@ -35,6 +38,7 @@ constexpr uint8_t kPauseSymMatrix[] PROGMEM = {
 #define kSheetSym "\x82"
 #define kPlaySym "\x83"
 #define kPauseSym "\x84"
+#define kBellSym "\x85"
 
 // syms from mode preview charset
 // clang-format off

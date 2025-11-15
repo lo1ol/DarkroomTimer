@@ -165,6 +165,7 @@ void SettingsSetter::repaint() const {
     case Step::setMelody:
         gDisplay[0] << F("Notify melody");
         gDisplay[1] << Melody::getMelodyName(gSettings.melody);
+        gDisplay[1] >> F(kBellSym);
         return;
     case Step::checkVersion:
         gDisplay[0] << F("Version");

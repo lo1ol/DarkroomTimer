@@ -74,7 +74,7 @@ void checkExpertFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY(kPlaySym "  ntf 3.5 4.9 7", "9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "    " kBellSym " 3.5 4.9 7", "9.9 14 19.8 28");
 
     gStartBtn.emulClick();
     loop_();
@@ -101,7 +101,7 @@ void checkExpertFStopTest() {
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY(kPlaySym "  ntf 3.5 4.9 7", "9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "    " kBellSym " 3.5 4.9 7", "9.9 14 19.8 28");
 
     gModeBtn.emulClick();
     loop_();
@@ -119,7 +119,7 @@ void checkExpertFStopTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY(kPlaySym "  ntf 3.5 4.9 7", "9.9 14 19.8 28");
+    TEST_DISPLAY(kPlaySym "    " kBellSym " 3.5 4.9 7", "9.9 14 19.8 28");
 
     gStartBtn.emulClick();
     loop_();
@@ -240,7 +240,7 @@ void checkExpertLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY(kPlaySym "  ntf 3.5 9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym "    " kBellSym " 3.5 9.5", "15.5 22 28 34 40");
 
     gStartBtn.emulClick();
     loop_();
@@ -267,7 +267,7 @@ void checkExpertLinearTest() {
 
     gEncoderBtn.emulHold();
     loop_();
-    TEST_DISPLAY(kPlaySym "  ntf 3.5 9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym "    " kBellSym " 3.5 9.5", "15.5 22 28 34 40");
 
     gModeBtn.emulClick();
     loop_();
@@ -285,7 +285,7 @@ void checkExpertLinearTest() {
     loop_();
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY(kPlaySym "  ntf 3.5 9.5", "15.5 22 28 34 40");
+    TEST_DISPLAY(kPlaySym "    " kBellSym " 3.5 9.5", "15.5 22 28 34 40");
 
     gStartBtn.emulClick();
     loop_();

@@ -51,7 +51,7 @@ void MaskMode::setCurrentMask_(uint8_t filter, uint8_t mask, bool needGuessMask)
         m_timeTable[filter].setTime(mask, prevTime);
     }
 
-    m_timeTable[filter].setCurrent(mask, ((m_notifyMask & (1 << mask)) ? "ntf" : nullptr));
+    m_timeTable[filter].setCurrent(mask, ((m_notifyMask & (1 << mask)) ? kBellSym : nullptr));
 }
 
 bool MaskMode::handleSetCurrentTime() {

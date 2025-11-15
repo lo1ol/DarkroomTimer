@@ -560,7 +560,7 @@ void checkSpltFStopTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY(kPlaySym " ntf 4 8 16 32", "64 128 256 512");
+    TEST_DISPLAY(kPlaySym "   " kBellSym " 4 8 16 32", "64 128 256 512");
 
     Time testSet[] = {
         32_ts, 4_s, 4_s, 8_s, 16_s, 32_s, 64_s, 128_s, 256_s, 512_s, 1024_s,
@@ -835,7 +835,7 @@ void checkSpltLinearTest() {
 
     gModeBtn.emulClick();
     loop_();
-    TEST_DISPLAY(kPlaySym " ntf 3 8 13 18", "23 28 33 38 43");
+    TEST_DISPLAY(kPlaySym "   " kBellSym " 3 8 13 18", "23 28 33 38 43");
 
     for (int i = 0; i != sizeof(gModesCache) / sizeof(Time); ++i) {
         gStartBtn.emulClick();
@@ -1885,11 +1885,11 @@ void checkSettings() {
     gModeBtn.emulRelease();
     loop_();
 
-    TEST_DISPLAY(kWrenchSymTop " Notify melody", kWrenchSymBottom " nice");
+    TEST_DISPLAY(kWrenchSymTop " Notify melody", kWrenchSymBottom " Nice         " kBellSym);
 
     gEncoder.emulTurns(-1);
     loop_();
-    TEST_DISPLAY(kWrenchSymTop " Notify melody", kWrenchSymBottom " alarm");
+    TEST_DISPLAY(kWrenchSymTop " Notify melody", kWrenchSymBottom " Alarm        " kBellSym);
 
     gModeBtn.emulClick();
     loop_();

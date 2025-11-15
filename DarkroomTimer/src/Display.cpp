@@ -32,6 +32,7 @@ void Display::setupCharset(Charset charset) {
         ADD_CUSTOM_CHAR(kSheetSym, kSheetSymMatrix);
         ADD_CUSTOM_CHAR(kPlaySym, kPlaySymMatrix);
         ADD_CUSTOM_CHAR(kPauseSym, kPauseSymMatrix);
+        ADD_CUSTOM_CHAR(kBellSym, kBellSymMatrix);
         break;
     case Charset::ModePreview:
         ADD_CUSTOM_CHAR(kFolderBegin1Sym, kFolderBegin1SymMatrix);

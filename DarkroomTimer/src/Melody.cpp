@@ -101,11 +101,11 @@ Melody* Melody::getMelody(Name name) {
 const __FlashStringHelper* Melody::getMelodyName(Name name) {
     switch (name) {
     case Name::alarm:
-        return F("alarm");
+        return F("Alarm");
     case Name::nice:
-        return F("nice");
+        return F("Nice");
     case Name::hotline:
-        return F("Hotline Miami");
+        return F("Hotline");
     case Name::last_:
         break;
     }
