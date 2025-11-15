@@ -300,16 +300,17 @@ void setup_() {
 
     gDisplay.setupCharset(Charset::Main);
 
+    gBeeper.setup();
+
+    gPinMode(LCD_BACKLIGHT_PIN, OUTPUT);
+    setDisplayBacklight(gSettings.backlight);
+
 #ifndef PIO_UNIT_TESTING
     #if STARTUP_LOGO_VERSION != LOGO_DISABLED
     gDisplay.playLogo();
     #endif
 #endif
 
-    gBeeper.setup();
-
-    gPinMode(LCD_BACKLIGHT_PIN, OUTPUT);
-    setDisplayBacklight(gSettings.backlight);
     gPinMode(RELAY_PIN, OUTPUT);
     gDigitalWrite(RELAY_PIN, 0);
 
