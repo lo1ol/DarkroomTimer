@@ -200,6 +200,22 @@ You can configure the firmware by your needs. For this, you have to create a fil
 
 We will try not change name of config macroses. So, you can use this file for different versions of firmware
 
+## FAQ
+
+> The beeper sounds continiously
+
+Define this at UserConfig.h:
+```cpp
+#define BEEPER_VOLUME_SILENT 0
+```
+
+> I updated  firmware and timer stoped to control enlarger
+
+After 0.5.1 version default Relay pin was moved from  A4 to D4 pin. You can add this line to UserConfig.h to fix it:
+```cpp
+#define RELAY_PIN A4
+```
+
 ## Support
 
 If you have any questions, problems or suggestions, you are welcome to write us:)
