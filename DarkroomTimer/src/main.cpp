@@ -15,20 +15,32 @@
 
 #include "SettingsSetter.h"
 
-#define MODE_DESCS                                                                               \
-    MODE_DESC(fStopTest, F("F Stop test"), FStopTestMode(TestMode::Generic))                     \
-    MODE_DESC(splitGradeFStopTest, F("Splt F Stop test"), FStopTestMode(TestMode::SplitGrade))   \
-    MODE_DESC(localizedFStopTest, F("Locl F Stop test"), FStopTestMode(TestMode::Local))         \
-    MODE_DESC(expertFStopTest, F("Xprt F Stop test"), FStopTestMode(TestMode::Expert))           \
-    MODE_DESC(linearTest, F("Linear test"), LinearTestMode(TestMode::Generic))                   \
-    MODE_DESC(splitGradeLinearTest, F("Splt linear test"), LinearTestMode(TestMode::SplitGrade)) \
-    MODE_DESC(localizedLinearTest, F("Locl linear test"), LinearTestMode(TestMode::Local))       \
-    MODE_DESC(expertLinearTest, F("Xprt linear test"), LinearTestMode(TestMode::Expert))         \
-    MODE_DESC(print, F("Printing"), PrintMode())                                                 \
-    MODE_DESC(mask, F("Mask printing"), MaskMode(1))                                             \
-    MODE_DESC(splitGradeMask, F("Splt mask"), MaskMode(2))                                       \
-    MODE_DESC(relMask, F("Rel mask print"), RelMaskMode(1))                                      \
-    MODE_DESC(splitGradeRelMask, F("Splt rel mask"), RelMaskMode(2))
+namespace {
+constexpr const char kFStopTestStr[] PROGMEM = "F Stop test";
+constexpr const char kLinearTestStr[] PROGMEM = "Linear test";
+constexpr const char kPrintingStr[] PROGMEM = "Printing";
+constexpr const char kMaskPrinting[] PROGMEM = "Mask printing";
+constexpr const char kRelMaskPrinting[] PROGMEM = "Rel mask print";
+
+constexpr const char kSplitGradeStr[] PROGMEM = "Split grade";
+constexpr const char kLocalizedStr[] PROGMEM = "Localized";
+constexpr const char kExpertStr[] PROGMEM = "Expert";
+} // namespace
+
+#define MODE_DESCS                                                                                        \
+    MODE_DESC(fStopTest, kFStopTestStr, nullptr, FStopTestMode(TestMode::Generic))                        \
+    MODE_DESC(splitGradeFStopTest, kFStopTestStr, kSplitGradeStr, FStopTestMode(TestMode::SplitGrade))    \
+    MODE_DESC(localizedFStopTest, kFStopTestStr, kLocalizedStr, FStopTestMode(TestMode::Local))           \
+    MODE_DESC(expertFStopTest, kFStopTestStr, kExpertStr, FStopTestMode(TestMode::Expert))                \
+    MODE_DESC(linearTest, kLinearTestStr, nullptr, LinearTestMode(TestMode::Generic))                     \
+    MODE_DESC(splitGradeLinearTest, kLinearTestStr, kSplitGradeStr, LinearTestMode(TestMode::SplitGrade)) \
+    MODE_DESC(localizedLinearTest, kLinearTestStr, kLocalizedStr, LinearTestMode(TestMode::Local))        \
+    MODE_DESC(expertLinearTest, kLinearTestStr, kExpertStr, LinearTestMode(TestMode::Expert))             \
+    MODE_DESC(print, kPrintingStr, nullptr, PrintMode())                                                  \
+    MODE_DESC(mask, kMaskPrinting, nullptr, MaskMode(1))                                                  \
+    MODE_DESC(splitGradeMask, kMaskPrinting, kSplitGradeStr, MaskMode(2))                                 \
+    MODE_DESC(relMask, kRelMaskPrinting, nullptr, RelMaskMode(1))                                         \
+    MODE_DESC(splitGradeRelMask, kRelMaskPrinting, kSplitGradeStr, RelMaskMode(2))
 
 enum class ModeId : uint8_t { TIMER_MODES };
 
@@ -38,13 +50,31 @@ ModeId gModeId;
 static ModeId gNewModeId = gModeId;
 ModeProcessor* gModeProcessor = nullptr;
 
-[[nodiscard]] const __FlashStringHelper* getPreview(ModeId modeId) {
+[[nodiscard]] const __FlashStringHelper* getMainPreview(ModeId modeId) {
     switch (modeId) {
-#define MODE_DESC(id, str, _)            \
+#define MODE_DESC(id, str, _1, _2)       \
     case ModeId::id:                     \
         if (ModeId::id >= ModeId::last_) \
             return nullptr;              \
-        return str;
+        return (const __FlashStringHelper*)(str);
+
+        MODE_DESCS
+#undef MODE_DESC
+    case ModeId::last_:
+        assert(false);
+        return nullptr;
+    }
+
+    return nullptr;
+}
+
+[[nodiscard]] const __FlashStringHelper* getSubPreview(ModeId modeId) {
+    switch (modeId) {
+#define MODE_DESC(id, _1, str, _2)       \
+    case ModeId::id:                     \
+        if (ModeId::id >= ModeId::last_) \
+            return nullptr;              \
+        return (const __FlashStringHelper*)(str);
 
         MODE_DESCS
 #undef MODE_DESC
@@ -68,7 +98,7 @@ void setMode(ModeId modeId) {
     static uint8_t gModeBuf[sizeof(MaskMode)];
 
     switch (gModeId) {
-#define MODE_DESC(id, _, impl)                \
+#define MODE_DESC(id, _1, _2, impl)           \
     case ModeId::id:                          \
         if (ModeId::id >= ModeId::last_)      \
             return;                           \
@@ -95,9 +125,11 @@ void processModeSwitch() {
 
     if (!gModeBtn.pressing()) {
         if (gBlockedByPreview) {
+            gDisplay.setupCharset(Charset::Main);
             if (gNewModeId != gModeId)
                 setMode(gNewModeId);
 
+            gTimer.reset();
             gModeProcessor->repaint();
         }
         gBlocked = gBlockedByPreview = false;
@@ -107,8 +139,10 @@ void processModeSwitch() {
     bool needUpdate = false;
 
     if (gModeBtn.holding() && !gSettingBtn.pressing()) {
-        if (!gBlockedByPreview)
+        if (!gBlockedByPreview) {
+            gDisplay.setupCharset(Charset::ModePreview);
             needUpdate = true;
+        }
 
         gBlockedByPreview = true;
     }
@@ -122,15 +156,34 @@ void processModeSwitch() {
 
         gNewModeId = ADD_TO_ENUM(ModeId, gNewModeId, dir);
         gEncoder.clear();
-        gTimer.reset();
-    }
-
-    if (gBlockedByPreview && needUpdate) {
-        gDisplay.reset();
-        gDisplay[0].printWithAnimation(getPreview(gNewModeId), 200);
     }
 
     gBlocked = gBlockedByPreview;
+
+    if (!gBlockedByPreview || !needUpdate)
+        return;
+
+    gDisplay.reset();
+    switch (static_cast<uint8_t>(gNewModeId) % 4) {
+    case 0:
+        gDisplay[0] << F(kFolder1Str);
+        break;
+    case 1:
+        gDisplay[0] << F(kFolder2Str);
+        break;
+    case 2:
+        gDisplay[0] << F(kFolder3Str);
+        break;
+    case 3:
+        gDisplay[0] << F(kFolder4Str);
+        break;
+    }
+
+    gDisplay[0] << getMainPreview(gNewModeId);
+
+    auto subPreview = getSubPreview(gNewModeId);
+    if (subPreview)
+        gDisplay[1] << F(" " kSubFolderPointerSym) << subPreview;
 }
 
 SettingsSetter* gSettingsSetter = nullptr;
@@ -168,17 +221,19 @@ void processView() {
     if (gBlocked && !gViewState)
         return;
 
-    static uint32_t gViewModeTurnOffTime;
+    static uint32_t gViewModeStartTime;
 
     if (gViewBtn.click()) {
         gViewState = !gViewState;
         gDigitalWrite(RELAY_PIN, gViewState);
-        gViewModeTurnOffTime = gMillis() + gSettings.autoFinishViewMinutes * 60000L;
+        gViewModeStartTime = gMillis();
 
         if (gViewState) {
             gDisplay.reset();
-            gDisplay[0] << F(kLampSymTop "View");
+            gDisplay.setupCharset(Charset::View);
+            gDisplay[0] << F(kLampSym " View");
         } else {
+            gDisplay.setupCharset(Charset::Main);
             gModeProcessor->repaint();
         }
     }
@@ -189,23 +244,31 @@ void processView() {
         return;
 
     gDisplay[1].reset();
-    gDisplay[1] << F(kLampSymBottom);
+
+    uint32_t passedTime = gMillis() - gViewModeStartTime;
+    uint8_t lampAnimStage = (passedTime % 1000) / 167;
+    char animStr[2] = kLampLight1Sym;
+    animStr[0] += lampAnimStage;
+    gDisplay[1] << animStr << " ";
+
     if (!gSettings.autoFinishViewMinutes) {
         gDisplay[1] << F("Auto stop is off");
         return;
     }
 
-    auto curTime = gMillis();
-
-    if (curTime >= gViewModeTurnOffTime) {
+    if (passedTime >= gSettings.autoFinishViewMinutes * 60000L) {
         gBlocked = gViewState = false;
         gDigitalWrite(RELAY_PIN, gViewState);
+        gDisplay.setupCharset(Charset::Main);
         gModeProcessor->repaint();
-    } else {
-        char str[DISPLAY_COLS] = "";
-        itoa((gViewModeTurnOffTime - 1 - curTime) / 1000 + 1, str, 10);
-        gDisplay[1] << F("Auto stop: ") << str;
+        return;
     }
+
+    uint32_t leftTime = gSettings.autoFinishViewMinutes * 60000L - passedTime;
+
+    char str[DISPLAY_COLS] = "";
+    itoa((leftTime - 1) / 1000 + 1, str, 10);
+    gDisplay[1] << F("Auto stop: ") << str;
 }
 
 void processMode() {

@@ -123,8 +123,8 @@ void SettingsSetter::process() {
 void SettingsSetter::repaint() const {
     gDisplay.reset();
 
-    gDisplay[0] << F(kWrenchSymTop);
-    gDisplay[1] << F(kWrenchSymBottom);
+    gDisplay[0] << F(kWrenchSymTop " ");
+    gDisplay[1] << F(kWrenchSymBottom " ");
 
     switch (m_step) {
     case Step::setLagTime:
@@ -140,7 +140,7 @@ void SettingsSetter::repaint() const {
         gDisplay[1] << gSettings.beepVolume;
         return;
     case Step::setAutoFinishView:
-        gDisplay[0] << F("Autofinish view");
+        gDisplay[0] << F("Auto stop view");
 
         if (gSettings.autoFinishViewMinutes == 0)
             gDisplay[1] << F("No");
