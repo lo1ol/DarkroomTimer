@@ -125,7 +125,7 @@ static_assert((BEEPER_VOLUME_MIN + (BEEPER_VOLUME_STEP * 9)) <= 255);
 
 static_assert(STARTUP_LOGO_VERSION | 1, "Bad STARTUP_LOGO_VERSION");
 
-#define TIMER_FIRMWARE_VERSION "0.5.1"
+#define TIMER_FIRMWARE_VERSION "0.6.0"
 
 #ifndef TIMER_MODES
 // clang-format off
