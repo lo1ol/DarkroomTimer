@@ -97,7 +97,7 @@
     [ "btn1:2.l", "btn2:2.l", "", [ "v0" ] ],
     [ "btn1:1.r", "nano:A2", "", [ "v0" ] ],
     [ "led1:C", "nano:GND.1", "", [ "v0" ] ],
-    [ "led1:A", "nano:A4", "", [ "v0" ] ],
+    [ "led1:A", "nano:4", "", [ "v0" ] ],
     [ "encoder1:VCC", "nano:5V", "", [ "h0" ] ],
     [ "encoder1:SW", "nano:A3", "", [ "h0" ] ],
     [ "nano:GND.1", "btn3:2.r", "", [ "h0" ] ],
