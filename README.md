@@ -202,19 +202,25 @@ We will try not change name of config macroses. So, you can use this file for di
 
 ## FAQ
 
-> The beeper sounds continiously
+### The beeper sounds continiously
 
 Define this at UserConfig.h:
 ```cpp
 #define BEEPER_VOLUME_SILENT 0
 ```
 
-> I updated  firmware and timer stoped to control enlarger
+### I updated  firmware and timer stoped to control enlarger
 
 After 0.5.1 version default Relay pin was moved from  A4 to D4 pin. You can add this line to UserConfig.h to fix it:
 ```cpp
 #define RELAY_PIN A4
 ```
+
+### Where and how to create `UserConfig.h`
+
+`UserConfig.h` should be created near to `DarkroomTimer.ino`. You can find info about configuration at `UserConfig.example.h`
+
+![UserConfig.h](docs/UserConfigFaq.jpg)
 
 ## Support
 
