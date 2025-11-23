@@ -136,31 +136,31 @@ void processModeSwitch() {
         return;
     }
 
-    bool needUpdate = false;
-
-    if (gModeBtn.holding() && !gSettingBtn.pressing()) {
-        if (!gBlockedByPreview) {
-            gDisplay.setupCharset(Charset::ModePreview);
-            needUpdate = true;
-        }
-
+    if (gModeBtn.holding() && !gSettingBtn.pressing())
         gBlockedByPreview = true;
-    }
 
+    bool needUpdate = false;
     int8_t dir = gEncoder.getDir();
     if (dir) {
         needUpdate = true;
         gModeBtn.skipEvents();
 
-        gBlocked = gBlockedByPreview = true;
+        gBlockedByPreview = true;
 
         gNewModeId = ADD_TO_ENUM(ModeId, gNewModeId, dir);
         gEncoder.clear();
     }
 
-    gBlocked = gBlockedByPreview;
+    if (!gBlockedByPreview)
+        return;
 
-    if (!gBlockedByPreview || !needUpdate)
+    if (!gBlocked && gBlockedByPreview) {
+        gDisplay.setupCharset(Charset::ModePreview);
+        needUpdate = true;
+        gBlocked = true;
+    }
+
+    if (!needUpdate)
         return;
 
     gDisplay.reset();
