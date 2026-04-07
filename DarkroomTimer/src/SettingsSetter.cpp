@@ -53,7 +53,7 @@ void SettingsSetter::processSetBacklight() const {
 
 void SettingsSetter::processStartWith() const {
     uint8_t choice = static_cast<uint8_t>(gSettings.startWith);
-    if (!gEncoder.getInt(choice, 0, static_cast<uint8_t>(StartWith::last_)))
+    if (!gEncoder.getInt(choice, 0, static_cast<uint8_t>(StartWith::last_) - 1))
         return;
 
     gSettings.startWith = static_cast<StartWith>(choice);
