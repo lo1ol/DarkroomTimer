@@ -5,6 +5,8 @@
 #define ADD_TO_ENUM(enumName, current, num) \
     (enumName)(((uint8_t)(current) + (uint8_t)enumName::last_ + num) % (uint8_t)enumName::last_)
 
+#define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
+
 void alignStr(char* buf, uint8_t align);
 
 // 3 times faster then pow(2, exp)
