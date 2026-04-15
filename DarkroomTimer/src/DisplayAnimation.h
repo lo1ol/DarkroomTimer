@@ -11,8 +11,8 @@ struct ImgDesc {
 struct RenderedImgDesc {
     char row0Str[7];
     char row1Str[7];
-    uint8_t customSyms[8][8];
     uint8_t customSymsCnt = 0;
+    uint8_t customSyms[8][8];
 };
 
 class DisplayAnimation {
@@ -44,4 +44,13 @@ private:
 class DvdAnimation : public BounceAnimation {
 public:
     DvdAnimation();
+};
+
+class RussianDickKicker : public DisplayAnimation {
+public:
+    void tick() override;
+
+private:
+    uint8_t m_currentFrame = 0;
+    uint8_t m_xPos = 0;
 };

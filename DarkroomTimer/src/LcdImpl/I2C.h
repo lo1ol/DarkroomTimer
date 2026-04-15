@@ -4,6 +4,8 @@
 
 class Lcd {
 public:
+    // Add fast modes
+
     // should be called at setup function
     void init();
 

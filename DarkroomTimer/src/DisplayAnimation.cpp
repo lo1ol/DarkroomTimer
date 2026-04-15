@@ -54,27 +54,23 @@ RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset,
 void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, uint8_t col) {
     char symN = '\x80';
     for (uint8_t symId = 0; symId != desc.customSymsCnt; ++symId)
-        gLcd.addFastCustomChar(symN++, desc.customSyms[symId]);
-
-    char endStr[ARRAY_SIZE(desc.row0Str)];
+        gLcd.fastAddCustomChar(symN++, desc.customSyms[symId]);
 
     for (uint8_t rowN = 0; rowN != 2; ++rowN) {
         auto rowStr = desc.row0Str;
         if (rowN == 1)
             rowStr = desc.row1Str;
-        auto rowStrLen = strlen(rowStr);
 
-        // print end of row str
-        auto endLineLen = min(rowStrLen, static_cast<uint8_t>(16 - col));
-        memcpy(endStr, rowStr, endLineLen);
-        endStr[endLineLen] = 0;
         gLcd.setCursor(col, rowN);
-        gLcd.print(endStr);
 
-        // if something left -- print it at beginning
-        if (endLineLen != rowStrLen) {
-            gLcd.setCursor(0, rowN);
-            gLcd.print(rowStr += endLineLen);
+        for (uint8_t i = 0; rowStr[i]; ++i) {
+            if (col + i == 16)
+                gLcd.setCursor(0, rowN);
+
+            if (rowStr[i] == ' ')
+                continue;
+
+            gLcd.print(rowStr[i]);
         }
     }
 }
@@ -86,8 +82,10 @@ void BounceAnimation::tick() {
     auto col = m_xPos / 5;
     auto renderedImg = renderImg(*m_imgDesc, m_xPos % 5, m_yPos);
 
+    gLcd.beginFastPrint();
     gLcd.clear();
     printRenderedImg(renderedImg, col);
+    gLcd.endFastPrint();
 
     m_xPos += m_xShift;
     m_yPos += m_yShift;
@@ -137,3 +135,151 @@ constexpr ImgDesc gDvdImgDesc{
 } // namespace
 
 DvdAnimation::DvdAnimation() : BounceAnimation(&gDvdImgDesc, 2, 1) {}
+
+namespace {
+constexpr uint8_t gRussianDickKickerWidth = 23;
+constexpr uint8_t gRussianDickKickerHeight = 14;
+
+// clang-format off
+constexpr uint32_t gRussianDickKickerFrames[7][gRussianDickKickerHeight] = {
+    {
+        0b00001100000000000000000,
+        0b00010010000000000000000,
+        0b00010010000000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00111110000000000000000,
+        0b01001001000000000000000,
+        0b00001000000000000000000,
+        0b00001000000000000000000,
+        0b00001000011000000000000,
+        0b00010100100100011000000,
+        0b00010100010111110100000,
+        0b00010100100111110100000,
+        0b00010110011000011000000,
+    },
+    {
+        0b00001100000000000000000,
+        0b00010010000000000000000,
+        0b00010010000000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00011110000000000000000,
+        0b00101001100000000000000,
+        0b00101000000000000000000,
+        0b00001000000000000000000,
+        0b11110100011000000000000,
+        0b10000100100100011000000,
+        0b00000100010111110100000,
+        0b00000100100111110100000,
+        0b00000110011000011000000,
+    },
+    {
+        0b00001100000000000000000,
+        0b00010010000000000000000,
+        0b00010010000000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00001110000000000000000,
+        0b00001001100000000000000,
+        0b00001100000000000000000,
+        0b00001010001100000000000,
+        0b00001000010010001100000,
+        0b00000110001011111010000,
+        0b00000101010011111010000,
+        0b00000100111100001100000,
+        0b00000110000000000000000,
+    },
+    {
+        0b00001100000000000000000,
+        0b00010010000000000000000,
+        0b00010010000000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00001110000000000000000,
+        0b00001001100000000000000,
+        0b00001100000000000000000,
+        0b00001010000011000000000,
+        0b00001000000100100011000,
+        0b00000110000010111110100,
+        0b00000101000100111110100,
+        0b00000100110011000011000,
+        0b00000110000000000000000,
+    },
+    {
+        0b00001100000000000000000,
+        0b00010010000000000000000,
+        0b00010010000000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00011110000000000000000,
+        0b00001001100000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00001000000001100000000,
+        0b00010100000010010001100,
+        0b00010100000001011111010,
+        0b00010100000010011111010,
+        0b00010110000001100001100,
+    },
+    {
+        0b00001100000000000000000,
+        0b00010010000000000000000,
+        0b00010010000000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00011110000000000000000,
+        0b00001001100000000000000,
+        0b00001100000000000000000,
+        0b00001000000000000000000,
+        0b00001000000000110000000,
+        0b00010100000001001000110,
+        0b00010100000000101111101,
+        0b00010100000001001111101,
+        0b00010110000000110000110,
+    },
+    {
+        0b00000011000000000000000,
+        0b00000100100000000000000,
+        0b00000100100000000000000,
+        0b00000011000000000000000,
+        0b00000010000000000000000,
+        0b00001111100000000000000,
+        0b00010010100000000000000,
+        0b00000010000000000000000,
+        0b00000010000000000000000,
+        0b00000010000000110000000,
+        0b00000101000001001000110,
+        0b00000101000000101111101,
+        0b00000101000001001111101,
+        0b00000111100000110000110,
+    },
+};
+// clang-format on
+
+} // namespace
+
+void RussianDickKicker::tick() {
+    ImgDesc img{ .img = gRussianDickKickerFrames[m_currentFrame],
+                 .height = gRussianDickKickerHeight,
+                 .width = gRussianDickKickerWidth };
+
+    auto renderedImg = renderImg(img, 0, 2);
+
+    gLcd.beginFastPrint();
+    gLcd.clear();
+    gLcd.setCursor(5, 0);
+    gLcd.print("Relax");
+    printRenderedImg(renderedImg, m_xPos);
+    gLcd.endFastPrint();
+
+    ++m_currentFrame;
+
+    if (m_currentFrame == ARRAY_SIZE(gRussianDickKickerFrames)) {
+        m_currentFrame = 0;
+        ++m_xPos;
+    }
+
+    if (m_xPos == 16)
+        m_xPos = 0;
+}

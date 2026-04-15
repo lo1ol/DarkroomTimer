@@ -75,6 +75,13 @@ void Lcd::print(const char* str) {
     }
 }
 
+void Lcd::print(char ch_) {
+    uint8_t ch = ch_;
+    if (ch >= 0x80)
+        ch -= 0x80;
+    lcdData(ch);
+}
+
 void Lcd::clear() {
     lcdCmd(0x01);
     delay(2);
@@ -86,7 +93,7 @@ void Lcd::addCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
         lcdData(pgm_read_byte(matrix + i));
 }
 
-void Lcd::addFastCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
+void Lcd::fastAddCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
     lcdCmd(0x40 | location << 3);
     for (uint8_t i = 0; i != sizeof(matrix); ++i)
         lcdData(matrix[i]);
