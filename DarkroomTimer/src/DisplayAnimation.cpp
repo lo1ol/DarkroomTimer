@@ -51,7 +51,7 @@ RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset,
     return res;
 }
 
-void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, uint8_t col) {
+void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, const uint8_t col) {
     char symN = '\x80';
     for (uint8_t symId = 0; symId != desc.customSymsCnt; ++symId)
         gLcd.fastAddCustomChar(symN++, desc.customSyms[symId]);
@@ -61,14 +61,19 @@ void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, uint8_t col
         if (rowN == 1)
             rowStr = desc.row1Str;
 
-        gLcd.setCursor(col, rowN);
+        bool needSetCursror = true;
 
         for (uint8_t i = 0; rowStr[i]; ++i) {
             if (col + i == 16)
-                gLcd.setCursor(0, rowN);
+                needSetCursror = true;
 
-            if (rowStr[i] == ' ')
+            if (rowStr[i] == ' ') {
+                needSetCursror = true;
                 continue;
+            }
+
+            if (needSetCursror)
+                gLcd.setCursor((col + i) % 16, rowN);
 
             gLcd.print(rowStr[i]);
         }
@@ -78,7 +83,7 @@ void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, uint8_t col
 BounceAnimation::BounceAnimation(const ImgDesc* imgDesc, uint8_t xShift, uint8_t yShift)
     : m_imgDesc(imgDesc), kBaseXShift(xShift), kBaseYShift(yShift) {}
 
-void BounceAnimation::tick() {
+uint16_t BounceAnimation::tick() {
     auto col = m_xPos / 5;
     auto renderedImg = renderImg(*m_imgDesc, m_xPos % 5, m_yPos);
 
@@ -109,6 +114,8 @@ void BounceAnimation::tick() {
         m_yPos = 16 - m_imgDesc->height;
         m_yShift = -kBaseYShift;
     }
+
+    return 300;
 }
 
 namespace {
@@ -139,6 +146,10 @@ DvdAnimation::DvdAnimation() : BounceAnimation(&gDvdImgDesc, 2, 1) {}
 namespace {
 constexpr uint8_t gRussianDickKickerWidth = 23;
 constexpr uint8_t gRussianDickKickerHeight = 14;
+
+constexpr uint8_t gRussianDickKickerFrameTime[7] = {
+    20, 12, 7, 7, 7, 7, 15,
+};
 
 // clang-format off
 constexpr uint32_t gRussianDickKickerFrames[7][gRussianDickKickerHeight] = {
@@ -259,7 +270,7 @@ constexpr uint32_t gRussianDickKickerFrames[7][gRussianDickKickerHeight] = {
 
 } // namespace
 
-void RussianDickKicker::tick() {
+uint16_t RussianDickKicker::tick() {
     ImgDesc img{ .img = gRussianDickKickerFrames[m_currentFrame],
                  .height = gRussianDickKickerHeight,
                  .width = gRussianDickKickerWidth };
@@ -273,6 +284,8 @@ void RussianDickKicker::tick() {
     printRenderedImg(renderedImg, m_xPos);
     gLcd.endFastPrint();
 
+    uint16_t frameTime = gRussianDickKickerFrameTime[m_currentFrame] * 50UL;
+
     ++m_currentFrame;
 
     if (m_currentFrame == ARRAY_SIZE(gRussianDickKickerFrames)) {
@@ -282,4 +295,38 @@ void RussianDickKicker::tick() {
 
     if (m_xPos == 16)
         m_xPos = 0;
+
+    return frameTime;
+}
+
+DisplayAnimation* DisplayAnimation::createAnimation(Id id) {
+    static uint8_t gAnimationBuf[sizeof(DvdAnimation)];
+
+tryAgain:
+    switch (id) {
+    case random:
+        id = static_cast<Id>(random + millis() % (last_ - random));
+        goto tryAgain;
+    case dvd:
+        return new (gAnimationBuf) DvdAnimation();
+    case dickKicker:
+        return new (gAnimationBuf) RussianDickKicker();
+    case last_:
+    default:
+        return nullptr;
+    }
+}
+
+const __FlashStringHelper* DisplayAnimation::getAnimationName(Id id) {
+    switch (id) {
+    case random:
+        return F("Surprise me");
+    case dvd:
+        return F("DVD");
+    case dickKicker:
+        return F("Dick Kicker");
+    case last_:
+    default:
+        return nullptr;
+    }
 }

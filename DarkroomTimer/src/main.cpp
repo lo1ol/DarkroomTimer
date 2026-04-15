@@ -13,6 +13,7 @@
 #include "Modes/PrintMode.h"
 #include "Modes/RelMaskMode.h"
 
+#include "IdleShower.h"
 #include "SettingsSetter.h"
 
 namespace {
@@ -291,6 +292,40 @@ void processMode() {
     gBlocked = gBlockedByRun = gTimer.state() == Timer::RUNNING;
 }
 
+void processIdle() {
+    static bool gBlockedByIdle = false;
+    static uint32_t gLastAction = millis();
+    static IdleShower gIdleShower;
+
+    if (!gSettings.idleAfterMinutes)
+        return;
+
+    if (gBlocked && !gBlockedByIdle) {
+        gLastAction = millis();
+        return;
+    }
+
+    if (gEncoder.getDir() || gEncoderBtn.pressing() || gStartBtn.pressing() || gViewBtn.pressing() ||
+        gModeBtn.pressing()) {
+        gLastAction = millis();
+    }
+
+    if (!gBlockedByIdle && millis() - gLastAction > gSettings.idleAfterMinutes * 60000L) {
+        gBlockedByIdle = gBlocked = true;
+        gIdleShower.startAnimation(gSettings.idleAnimation);
+    }
+
+    if (!gBlockedByIdle)
+        return;
+
+    if (!gIdleShower.tick())
+        return;
+
+    gBlockedByIdle = gBlocked = false;
+    gDisplay.setupCharset(Charset::Main);
+    gModeProcessor->repaint();
+}
+
 #ifndef PIO_UNIT_TESTING
 void setup() {
     gLcd.init();
@@ -340,6 +375,7 @@ void loop_() {
     processSettings();
     processView();
     processMode();
+    processIdle();
 
     gDisplay.tick();
 }

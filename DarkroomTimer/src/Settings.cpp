@@ -21,6 +21,8 @@ Settings Settings::load() {
     GET_SETTING(res.autoFinishViewMinutes);
     GET_SETTING(res.startWith);
     GET_SETTING(res.melody);
+    GET_SETTING(res.idleAfterMinutes);
+    GET_SETTING(res.idleAnimation);
 
     uint32_t hash = crc32.finalize();
     uint32_t storedHash;
@@ -38,6 +40,8 @@ Settings Settings::load() {
     badSettings |= res.autoFinishViewMinutes > kMaxAutoFinishViewMinutes;
     badSettings |= res.startWith >= StartWith::last_;
     badSettings |= res.melody >= Melody::last_;
+    badSettings |= res.idleAfterMinutes > kMaxIdleAfterMinutes;
+    badSettings |= res.idleAnimation >= DisplayAnimation::last_;
 
     if (badSettings) {
         res = kDefaultSettings;
@@ -61,6 +65,8 @@ void Settings::updateEEPROM() {
     PUT_SETTING(autoFinishViewMinutes);
     PUT_SETTING(startWith);
     PUT_SETTING(melody);
+    PUT_SETTING(idleAfterMinutes);
+    PUT_SETTING(idleAnimation);
     PUT_SETTING(crc32.finalize());
     #undef PUT_SETTING
 }
@@ -73,6 +79,22 @@ void Settings::updateEEPROM() {}
 #endif
 
 bool Settings::operator==(const Settings& o) const {
-    return lagTime == o.lagTime && beepVolume == o.beepVolume && backlight == o.backlight &&
-           autoFinishViewMinutes == o.autoFinishViewMinutes && startWith == o.startWith && melody == o.melody;
+#define RETURN_FALSE_IF_DIFFER(member) \
+    do {                               \
+        if (member != o.member)        \
+            return false;              \
+    } while (false)
+
+    RETURN_FALSE_IF_DIFFER(lagTime);
+    RETURN_FALSE_IF_DIFFER(beepVolume);
+    RETURN_FALSE_IF_DIFFER(backlight);
+    RETURN_FALSE_IF_DIFFER(autoFinishViewMinutes);
+    RETURN_FALSE_IF_DIFFER(startWith);
+    RETURN_FALSE_IF_DIFFER(melody);
+    RETURN_FALSE_IF_DIFFER(idleAfterMinutes);
+    RETURN_FALSE_IF_DIFFER(idleAnimation);
+
+#undef RETURN_FALSE_IF_DIFFER
+
+    return true;
 }
