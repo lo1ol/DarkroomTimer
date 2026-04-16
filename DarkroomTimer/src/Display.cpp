@@ -24,7 +24,8 @@ void Display::resetBlink(bool showBlinked) {
 }
 
 void Display::setupCharset(Charset charset) {
-#define ADD_CUSTOM_CHAR(symStr, symMatrix) m_lcd->addCustomChar(static_cast<uint8_t>(symStr[0]) - 0x80, symMatrix)
+#define ADD_CUSTOM_CHAR(symStr, symMatrix) \
+    m_lcd->addPROGMEMCustomChar(static_cast<uint8_t>(symStr[0]) - 0x80, symMatrix)
     switch (charset) {
     case Charset::Main:
         ADD_CUSTOM_CHAR(kWrenchSymTop, kWrenchSymTopMatrix);

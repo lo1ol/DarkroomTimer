@@ -102,29 +102,83 @@ void Lcd::init() {
     i2cStop();
 }
 
+void Lcd::clear() {
+    if (!m_fastPrint)
+        i2cStart(LCD_ADDR << 1);
+
+    lcdCmd(0x01);
+    delay(2);
+
+    if (!m_fastPrint)
+        i2cStop();
+}
+
 void Lcd::setCursor(uint8_t c, uint8_t r) {
-    i2cStart(LCD_ADDR << 1);
+    if (!m_fastPrint)
+        i2cStart(LCD_ADDR << 1);
     static uint8_t rowOffsets[] = { 0x00, 0x40 };
     lcdCmd(0x80 | (c + rowOffsets[r]));
-    i2cStop();
+    if (!m_fastPrint)
+        i2cStop();
 }
 
 void Lcd::print(const char* str) {
-    i2cStart(LCD_ADDR << 1);
+    if (!m_fastPrint)
+        i2cStart(LCD_ADDR << 1);
     while (uint8_t ch = *str++) {
         if (ch >= 0x80)
             ch -= 0x80;
         lcdData(ch);
     }
-    i2cStop();
+    if (!m_fastPrint)
+        i2cStop();
 }
 
-void Lcd::addCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
-    i2cStart(LCD_ADDR << 1);
+void Lcd::print(char ch_) {
+    if (!m_fastPrint)
+        i2cStart(LCD_ADDR << 1);
+
+    uint8_t ch = ch_;
+    if (ch >= 0x80)
+        ch -= 0x80;
+    lcdData(ch);
+
+    if (!m_fastPrint)
+        i2cStop();
+}
+
+void Lcd::addPROGMEMCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
+    if (!m_fastPrint)
+        i2cStart(LCD_ADDR << 1);
+
     lcdCmd(0x40 | location << 3);
     for (uint8_t i = 0; i != sizeof(matrix); ++i)
         lcdData(pgm_read_byte(matrix + i));
-    i2cStop();
+
+    if (!m_fastPrint)
+        i2cStop();
+}
+
+void Lcd::addRAMCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
+    if (!m_fastPrint)
+        i2cStart(LCD_ADDR << 1);
+
+    lcdCmd(0x40 | location << 3);
+    for (uint8_t i = 0; i != sizeof(matrix); ++i)
+        lcdData(matrix[i]);
+
+    if (!m_fastPrint)
+        i2cStop();
+}
+
+void Lcd::beginFastPrint() {
+    m_fastPrint = true;
+    i2cStart(LCD_ADDR << 1);
+}
+
+void Lcd::endFastPrint() {
+    m_fastPrint = false;
+    i2cStart(LCD_ADDR << 1);
 }
 
 #endif

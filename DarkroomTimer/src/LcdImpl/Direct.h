@@ -9,10 +9,11 @@ public:
     void print(const char* str);
     void print(char ch);
     void clear();
-    void addCustomChar(uint8_t location, const uint8_t (&matrix)[8]);
+    // add custom char from program memory
+    void addPROGMEMCustomChar(uint8_t location, const uint8_t (&matrix)[8]);
+    // add custom char from RAM
+    void addRAMCustomChar(uint8_t location, const uint8_t (&matrix)[8]);
 
     void beginFastPrint() {}
     void endFastPrint() {}
-
-    void fastAddCustomChar(uint8_t location, const uint8_t (&matrix)[8]);
 };

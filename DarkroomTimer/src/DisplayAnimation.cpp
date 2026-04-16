@@ -66,7 +66,7 @@ RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset,
 void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, const int8_t col) {
     char symN = '\x80';
     for (uint8_t symId = 0; symId != desc.customSymsCnt; ++symId)
-        gLcd.fastAddCustomChar(symN++, desc.customSyms[symId]);
+        gLcd.addRAMCustomChar(symN++, desc.customSyms[symId]);
 
     for (uint8_t rowN = 0; rowN != 2; ++rowN) {
         auto rowStr = desc.row0Str;
