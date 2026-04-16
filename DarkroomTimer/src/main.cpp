@@ -293,22 +293,22 @@ void processMode() {
 
 void processIdle() {
     static bool gBlockedByIdle = false;
-    static uint32_t gLastAction = millis();
+    static uint32_t gLastAction = gMillis();
 
     if (!gSettings.idleAfterMinutes)
         return;
 
     if (gBlocked && !gBlockedByIdle) {
-        gLastAction = millis();
+        gLastAction = gMillis();
         return;
     }
 
     if (gEncoder.getDir() || gEncoderBtn.pressing() || gStartBtn.pressing() || gViewBtn.pressing() ||
         gModeBtn.pressing()) {
-        gLastAction = millis();
+        gLastAction = gMillis();
     }
 
-    if (!gBlockedByIdle && millis() - gLastAction > gSettings.idleAfterMinutes * 60000L) {
+    if (!gBlockedByIdle && gMillis() - gLastAction > gSettings.idleAfterMinutes * 60000L) {
         gBlockedByIdle = gBlocked = true;
         gIdleShower.startAnimation(gSettings.idleAnimation);
     }
@@ -326,11 +326,11 @@ void processIdle() {
 
 #ifndef PIO_UNIT_TESTING
 void setup() {
-    gLcd.init();
 #else
 void setup_() {
 #endif
 
+    gLcd.init();
     gDisplay.setupCharset(Charset::Main);
 
     gBeeper.setup();

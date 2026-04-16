@@ -37,7 +37,12 @@ RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset,
                 }
 
                 uint32_t imgRowPixels = 0;
+
+#ifdef PIO_UNIT_TESTING
+    #define memcpy_P memcpy
+#endif
                 memcpy_P(&imgRowPixels, img.img + imgRow * img.bytesInRow, img.bytesInRow);
+#undef memcpy_P
 
                 int8_t offset = img.bytesInRow * 8 - (colN + 1) * 5 + xOffset;
                 if (offset >= 0)
@@ -150,7 +155,7 @@ constexpr uint8_t gDvdImg[][2] PROGMEM = {
 };
 // clang-format on
 
-constexpr ImgDesc gDvdImgDesc{
+ImgDesc gDvdImgDesc{
     .img = reinterpret_cast<const uint8_t*>(gDvdImg),
     .height = ARRAY_SIZE(gDvdImg),
     .bytesInRow = 2,
@@ -321,7 +326,11 @@ DisplayAnimation* DisplayAnimation::createAnimation(Id id) {
 tryAgain:
     switch (id) {
     case random:
+#ifdef PIO_UNIT_TESTING
+    #define micros gMillis
+#endif
         id = static_cast<Id>(random + micros() % (last_ - random));
+#undef micros
         goto tryAgain;
     case dvd:
         return new (gAnimationBuf) DvdAnimation();

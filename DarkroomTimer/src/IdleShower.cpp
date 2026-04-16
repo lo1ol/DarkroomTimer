@@ -41,8 +41,8 @@ bool IdleShower::tick() {
         return true;
     }
 
-    if (millis() >= m_nextUpdateTime)
-        m_nextUpdateTime = millis() + m_anim->tick();
+    if (gMillis() >= m_nextUpdateTime)
+        m_nextUpdateTime = gMillis() + m_anim->tick();
 
     return false;
 }
