@@ -89,7 +89,6 @@ void SettingsSetter::processIdleAnimation() {
         repaint();
     }
 
-
     if (gStartBtn.click()) {
         gIdleShower.startAnimation(gSettings.idleAnimation);
         m_playingIdleAnim = true;

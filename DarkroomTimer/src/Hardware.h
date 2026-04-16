@@ -34,6 +34,7 @@ extern ScrollableContent gScrollableContent;
 uint32_t gMillis();
 void gDigitalWrite(uint8_t, uint8_t);
 void gAnalogWrite(uint8_t, int);
+    #define gAnalogRead(x) 0
 inline void gPinMode(uint8_t, int) {}
 
 extern uint32_t gCurrentTime;
@@ -47,5 +48,6 @@ extern bool gRelayVal;
     #define gMillis millis
     #define gDigitalWrite gio::write
     #define gAnalogWrite analogWrite
+    #define gAnalogRead analogRead
     #define gPinMode gio::mode
 #endif

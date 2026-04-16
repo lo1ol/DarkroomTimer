@@ -29,7 +29,7 @@ public:
     virtual uint16_t tick() = 0;
 
     // random has to be first
-    enum Id { random, dvd, dickKicker, last_ };
+    enum Id { random, dvd, dickKicker, sleepyTimer, last_ };
 
     virtual ~DisplayAnimation() = default;
 
@@ -78,4 +78,18 @@ public:
 private:
     uint8_t m_currentFrame = 0;
     int8_t m_xPos = -4;
+};
+
+class SleepyTimer : public DisplayAnimation {
+public:
+    enum Phase : uint8_t { WakedUp, GoingToSleep, Sleep, WakingUp, last_ };
+
+    uint16_t tick() override;
+
+private:
+    void setPhaseChars();
+    void nextPhase();
+
+    Phase m_phase = Phase::WakedUp;
+    uint8_t m_inPhaseCnt = 0;
 };

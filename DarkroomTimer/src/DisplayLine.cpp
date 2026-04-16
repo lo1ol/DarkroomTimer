@@ -118,7 +118,7 @@ void DisplayLine::tickAnimation() {
     if (currentTime - m_lastAnimationUpdateTime < kAnimationUpdateRate)
         return;
 
-    static uint16_t gSeed = analogRead(A6);
+    static uint16_t gSeed = gAnalogRead(A6);
 
     char buf[DISPLAY_COLS + 1];
     buf[DISPLAY_COLS] = 0;

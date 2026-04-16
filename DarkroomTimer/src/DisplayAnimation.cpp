@@ -3,6 +3,10 @@
 #include "Hardware.h"
 #include "Utils.h"
 
+#ifdef PIO_UNIT_TESTING
+    #define micros gMillis
+#endif
+
 #define BIT_ARRAY1(a) \
     { (((a) >> 0) & 0xFF) }
 #define BIT_ARRAY2(a) \
@@ -320,22 +324,302 @@ uint16_t RussianDickKicker::tick() {
     return frameTime;
 }
 
+namespace {
+// clang-format off
+constexpr uint8_t kNosePic[] PROGMEM = {
+    0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00100, 0b01010, 0b00000
+};
+constexpr uint8_t kStraightEyePic[] PROGMEM = {
+    0b01110, 0b10001, 0b10001, 0b10101, 0b10001, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kRightEyePic[] PROGMEM = {
+    0b01110, 0b10001, 0b10001, 0b10000, 0b10010, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kLeftEyePic[] PROGMEM = {
+    0b01110, 0b10001, 0b10001, 0b00001, 0b01001, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kPreclosedEyePic[] PROGMEM = {
+    0b00000, 0b00000, 0b01110, 0b10001, 0b10101, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kClosedEye1Pic[] PROGMEM = {
+    0b00000, 0b00000, 0b01110, 0b11111, 0b00000, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kClosedEye2Pic[] PROGMEM = {
+    0b00000, 0b01110, 0b11111, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kSleepyEyePic[] PROGMEM = {
+    0b00000, 0b00100, 0b01010, 0b10001, 0b00000, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kSmileMousePic[] PROGMEM = {
+    0b00000, 0b00000, 0b10001, 0b01110, 0b00000, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kTongueMousePic[] PROGMEM = {
+    0b00000, 0b00000, 0b10001, 0b01110, 0b01000, 0b10001, 0b11001, 0b01110
+};
+constexpr uint8_t kYawnMousePic[] PROGMEM = {
+    0b00000, 0b01110, 0b10001, 0b10001, 0b01110, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kYawnClosedMousePic[] PROGMEM = {
+    0b00000, 0b00000, 0b01110, 0b10001, 0b01110, 0b00000, 0b00000, 0b00000
+};
+// clang-format on
+
+#define kNose "\x80"
+#define kStreightEye "\x81"
+#define kSmileMouse "\x82"
+#define kYawnMouse "\x83"
+#define kYawnClosedMouse "\x84"
+
+#define kRightEye "\x85"
+#define kLeftEye "\x86"
+#define kTongueMouse "\x87"
+
+#define kPreclosedEye "\x85"
+#define kClosedEye1 "\x86"
+#define kClosedEye2 "\x87"
+
+#define kSleepyEye "\x85"
+#define kSleepyOpenEye "\x86"
+
+} // namespace
+
+void SleepyTimer::setPhaseChars() {
+    gLcd.addPROGMEMCustomChar(kNose[0], kNosePic);
+    gLcd.addPROGMEMCustomChar(kStreightEye[0], kStraightEyePic);
+    gLcd.addPROGMEMCustomChar(kSmileMouse[0], kSmileMousePic);
+    gLcd.addPROGMEMCustomChar(kYawnMouse[0], kYawnMousePic);
+    gLcd.addPROGMEMCustomChar(kYawnClosedMouse[0], kYawnClosedMousePic);
+
+    switch (m_phase) {
+    case WakedUp:
+        gLcd.addPROGMEMCustomChar(kRightEye[0], kRightEyePic);
+        gLcd.addPROGMEMCustomChar(kLeftEye[0], kLeftEyePic);
+        gLcd.addPROGMEMCustomChar(kTongueMouse[0], kTongueMousePic);
+        break;
+    case GoingToSleep:
+    case WakingUp:
+        gLcd.addPROGMEMCustomChar(kPreclosedEye[0], kPreclosedEyePic);
+        gLcd.addPROGMEMCustomChar(kClosedEye1[0], kClosedEye1Pic);
+        gLcd.addPROGMEMCustomChar(kClosedEye2[0], kClosedEye2Pic);
+        break;
+    case Sleep:
+        gLcd.addPROGMEMCustomChar(kSleepyEye[0], kSleepyEyePic);
+        gLcd.addPROGMEMCustomChar(kSleepyOpenEye[0], kPreclosedEyePic);
+        break;
+    default:;
+    }
+}
+
+void SleepyTimer::nextPhase() {
+    m_phase = ADD_TO_ENUM(Phase, m_phase, 1);
+    m_inPhaseCnt = 0;
+}
+
+uint16_t SleepyTimer::tick() {
+    gLcd.beginFastPrint();
+
+    gLcd.clear();
+    setPhaseChars();
+
+    ++m_inPhaseCnt;
+    uint16_t entropy = micros() + gAnalogRead(A6);
+
+    switch (m_phase) {
+    case WakedUp:
+        gLcd.setCursor(5, 0);
+        switch (entropy % 5) {
+        case 0:
+            gLcd.print(kRightEye " " kNose " " kRightEye);
+            break;
+        case 1:
+            gLcd.print(kLeftEye " " kNose " " kLeftEye);
+            break;
+        default:
+            gLcd.print(kStreightEye " " kNose " " kStreightEye);
+        }
+
+        gLcd.setCursor(7, 1);
+        gLcd.print(kSmileMouse);
+
+        if (entropy % 21 == 0) {
+            gLcd.setCursor(5, 0);
+            gLcd.print(kLeftEye " " kNose " " kRightEye);
+            gLcd.setCursor(7, 1);
+            gLcd.print(kTongueMouse);
+        }
+
+        if (m_inPhaseCnt == 15)
+            nextPhase();
+        break;
+    case GoingToSleep:
+        gLcd.setCursor(5, 0);
+        switch (m_inPhaseCnt) {
+        case 1:
+            gLcd.print(kStreightEye " " kNose " " kPreclosedEye);
+            break;
+        case 2:
+            gLcd.print(kPreclosedEye " " kNose " " kPreclosedEye);
+            break;
+        case 3:
+        case 4:
+            gLcd.print(kClosedEye1 " " kNose " " kClosedEye1);
+            break;
+        case 5:
+        case 6:
+        default:
+            gLcd.print(kClosedEye2 " " kNose " " kClosedEye2);
+            break;
+        }
+
+        gLcd.setCursor(7, 1);
+        switch (m_inPhaseCnt) {
+        case 1:
+        case 4:
+            gLcd.print(kYawnMouse);
+            break;
+        default:
+            gLcd.print(kYawnClosedMouse);
+        }
+
+        if (m_inPhaseCnt == 6)
+            nextPhase();
+        break;
+    case Sleep:
+        gLcd.setCursor(5, 0);
+        switch (m_inPhaseCnt % 2) {
+        case 0:
+            gLcd.print("^ " kNose " ^");
+            break;
+        default:
+            gLcd.print(kSleepyEye " " kNose " " kSleepyEye);
+            break;
+        }
+
+        if (entropy % 31 == 0) {
+            gLcd.setCursor(5, 0);
+            gLcd.print(kSleepyOpenEye);
+        }
+
+        if (entropy % 30 == 0) {
+            gLcd.setCursor(9, 0);
+            gLcd.print(kSleepyOpenEye);
+        }
+
+        gLcd.setCursor(7, 1);
+        switch (entropy % 8) {
+        case 0:
+            gLcd.print(kSmileMouse);
+            break;
+        case 1:
+        case 2:
+        case 3:
+            gLcd.print(kYawnMouse);
+            break;
+        case 4:
+        case 5:
+        case 6:
+            gLcd.print(kYawnClosedMouse);
+            break;
+        default:
+            gLcd.print("o");
+            break;
+        }
+
+        switch (m_inPhaseCnt % 4) {
+        case 0:
+            gLcd.setCursor(10, 0);
+            gLcd.print(" z Z");
+            gLcd.setCursor(10, 1);
+            gLcd.print("z");
+            break;
+        case 1:
+            gLcd.setCursor(10, 0);
+            gLcd.print("  z ");
+            gLcd.setCursor(10, 1);
+            gLcd.print(" z");
+            break;
+        case 2:
+            gLcd.setCursor(10, 0);
+            gLcd.print("    Z");
+            gLcd.setCursor(10, 1);
+            gLcd.print("z z");
+            break;
+        default:
+            gLcd.setCursor(10, 0);
+            gLcd.print("    z");
+            gLcd.setCursor(10, 1);
+            gLcd.print(" z");
+            break;
+        }
+
+        if (m_inPhaseCnt == 100)
+            nextPhase();
+        break;
+    case WakingUp:
+        gLcd.setCursor(5, 0);
+        switch (m_inPhaseCnt) {
+        case 1:
+            gLcd.print(kClosedEye2 " " kNose " " kClosedEye2);
+            break;
+        case 2:
+        case 4:
+        case 5:
+        case 7:
+            gLcd.print(kClosedEye1 " " kNose " " kClosedEye1);
+            break;
+        case 3:
+            gLcd.print(kClosedEye1 " " kNose " " kPreclosedEye);
+            break;
+        case 6:
+            gLcd.print(kPreclosedEye " " kNose " " kClosedEye1);
+            break;
+        case 8:
+        default:
+            gLcd.print(kPreclosedEye " " kNose " " kPreclosedEye);
+            break;
+        }
+
+        gLcd.setCursor(7, 1);
+        switch (m_inPhaseCnt) {
+        case 1:
+        case 8:
+            gLcd.print(kSmileMouse);
+            break;
+        case 2:
+        case 4:
+        case 7:
+            gLcd.print(kYawnMouse);
+            break;
+        default:
+            gLcd.print(kYawnClosedMouse);
+        }
+
+        if (m_inPhaseCnt == 8)
+            nextPhase();
+        break;
+    case last_:
+        break;
+    }
+
+    gLcd.endFastPrint();
+
+    return 1000;
+}
+
 DisplayAnimation* DisplayAnimation::createAnimation(Id id) {
     static uint8_t gAnimationBuf[sizeof(DvdAnimation)];
 
 tryAgain:
     switch (id) {
     case random:
-#ifdef PIO_UNIT_TESTING
-    #define micros gMillis
-#endif
         id = static_cast<Id>(random + micros() % (last_ - random));
-#undef micros
         goto tryAgain;
     case dvd:
         return new (gAnimationBuf) DvdAnimation();
     case dickKicker:
         return new (gAnimationBuf) RussianDickKicker();
+    case sleepyTimer:
+        return new (gAnimationBuf) SleepyTimer();
     case last_:
     default:
         return nullptr;
@@ -350,6 +634,8 @@ const __FlashStringHelper* DisplayAnimation::getAnimationName(Id id) {
         return F("DVD");
     case dickKicker:
         return F("Dick Kicker");
+    case sleepyTimer:
+        return F("Sleepy");
     case last_:
     default:
         return nullptr;
