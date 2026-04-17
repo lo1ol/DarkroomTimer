@@ -11,6 +11,7 @@ void loop_();
 void setUp() {
     gCurrentTime = 0;
     gSettings = kDefaultSettings;
+    gSettings.idleAfterMinutes = 0;
     gSettings.updateEEPROM();
     gTimer = Timer{};
     gEncoder.clear();
@@ -1891,6 +1892,10 @@ void checkSettings() {
     loop_();
     TEST_DISPLAY(kWrenchSymTop " Notify melody", kWrenchSymBottom " Alarm        " kBellSym);
 
+    gModeBtn.emulClick();
+    loop_();
+    gModeBtn.emulClick();
+    loop_();
     gModeBtn.emulClick();
     loop_();
     TEST_ASSERT_EQUAL_STRING(kWrenchSymTop " Version       ", gLcd.getLine(0));

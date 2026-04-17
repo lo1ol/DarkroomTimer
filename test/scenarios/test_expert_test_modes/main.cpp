@@ -11,6 +11,7 @@ void loop_();
 void setUp() {
     gCurrentTime = 0;
     gSettings = kDefaultSettings;
+    gSettings.idleAfterMinutes = 0;
     gSettings.updateEEPROM();
     gTimer = Timer{};
     gEncoder.clear();

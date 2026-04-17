@@ -630,7 +630,7 @@ DisplayAnimation* DisplayAnimation::createAnimation(Id id) {
 tryAgain:
     switch (id) {
     case random:
-        id = static_cast<Id>(random + micros() % (last_ - random));
+        id = static_cast<Id>(1 + (micros() % (last_ - 1)));
         goto tryAgain;
     case dvd:
         return new (gAnimationBuf) DvdAnimation();
