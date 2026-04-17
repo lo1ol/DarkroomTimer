@@ -8,13 +8,13 @@
 #endif
 
 #define BIT_ARRAY1(a) \
-    { (((a) >> 0) & 0xFF) }
+    { (((0b##a) >> 0) & 0xFF) }
 #define BIT_ARRAY2(a) \
-    { (((a) >> 0) & 0xFF), (((a) >> 8) & 0xFF) }
+    { (((0b##a) >> 0) & 0xFF), (((0b##a) >> 8) & 0xFF) }
 #define BIT_ARRAY3(a) \
-    { (((a) >> 0) & 0xFF), (((a) >> 8) & 0xFF), (((a) >> 16) & 0xFF) }
+    { (((0b##a) >> 0) & 0xFF), (((0b##a) >> 8) & 0xFF), (((0b##a) >> 16) & 0xFF) }
 #define BIT_ARRAY4(a) \
-    { (((a) >> 0) & 0xFF), (((a) >> 8) & 0xFF), (((a) >> 16) & 0xFF), (((a) >> 24) & 0xFF) }
+    { (((0b##a) >> 0) & 0xFF), (((0b##a) >> 8) & 0xFF), (((0b##a) >> 16) & 0xFF), (((0b##a) >> 24) & 0xFF) }
 
 RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset, uint8_t yOffset) {
     RenderedImgDesc res;
@@ -116,7 +116,18 @@ uint16_t BounceAnimation::tick() {
     printRenderedImg(renderedImg, col);
     gLcd.endFastPrint();
 
-    m_xPos += m_xShift;
+    auto xShift = m_xShift;
+
+    // to make animation more random
+    uint16_t entropy = micros() + gAnalogRead(A6);
+    if (entropy % 150 == 0) {
+        if (m_xShift > 0)
+            xShift = 1 + m_xShift % 2;
+        else
+            xShift = -1 - (-m_xShift) % 2;
+    }
+
+    m_xPos += xShift;
     m_yPos += m_yShift;
 
     if (m_xPos <= 0) {
@@ -124,14 +135,14 @@ uint16_t BounceAnimation::tick() {
         m_xShift = kBaseXShift;
     }
 
-    if (m_xPos + m_imgDesc->bytesInRow * 8 >= 80) {
-        m_xPos = 80 - m_imgDesc->bytesInRow * 8;
+    if (m_xPos + m_imgDesc->width >= 80) {
+        m_xPos = 80 - m_imgDesc->width;
         m_xShift = -kBaseXShift;
     }
 
     if (m_yPos <= 0) {
         m_yPos = 0;
-        m_yShift = kBaseXShift;
+        m_yShift = kBaseYShift;
     }
 
     if (m_yPos + m_imgDesc->height >= 16) {
@@ -139,29 +150,30 @@ uint16_t BounceAnimation::tick() {
         m_yShift = -kBaseYShift;
     }
 
-    return 300;
+    return 500;
 }
 
 namespace {
 // clang-format off
 constexpr uint8_t gDvdImg[][2] PROGMEM = {
-    BIT_ARRAY2(0b1110110001111100),
-    BIT_ARRAY2(0b1110110001111100),
-    BIT_ARRAY2(0b0011010001000110),
-    BIT_ARRAY2(0b1001010001010010),
-    BIT_ARRAY2(0b1001001010010010),
-    BIT_ARRAY2(0b1011001010010110),
-    BIT_ARRAY2(0b1110000100011100),
-    BIT_ARRAY2(0b0000000000000000),
-    BIT_ARRAY2(0b0001111111111000),
-    BIT_ARRAY2(0b0111111001111100),
-    BIT_ARRAY2(0b0011111111110000),
+    BIT_ARRAY2(1110110001111100),
+    BIT_ARRAY2(1110110001111100),
+    BIT_ARRAY2(0011010001000110),
+    BIT_ARRAY2(1001010001010010),
+    BIT_ARRAY2(1001001010010010),
+    BIT_ARRAY2(1011001010010110),
+    BIT_ARRAY2(1110000100011100),
+    BIT_ARRAY2(0000000000000000),
+    BIT_ARRAY2(0001111111111000),
+    BIT_ARRAY2(0111111001111100),
+    BIT_ARRAY2(0011111111110000),
 };
 // clang-format on
 
 ImgDesc gDvdImgDesc{
     .img = reinterpret_cast<const uint8_t*>(gDvdImg),
     .height = ARRAY_SIZE(gDvdImg),
+    .width = 15,
     .bytesInRow = 2,
 };
 } // namespace
@@ -176,119 +188,121 @@ constexpr uint8_t gRussianDickKickerFrameTime[7] = {
     20, 12, 7, 7, 7, 7, 15,
 };
 
+// TODO store penis and kicker separately
+
 // clang-format off
 constexpr uint8_t gRussianDickKickerFrames[][gRussianDickKickerHeight][gRussianDickKickerBytesInRow] PROGMEM = {
     {
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b001111100000000000000000),
-        BIT_ARRAY3(0b010010010000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000010000110000000000000),
-        BIT_ARRAY3(0b000101001001000110000000),
-        BIT_ARRAY3(0b000101000101111101000000),
-        BIT_ARRAY3(0b000101001001111101000000),
-        BIT_ARRAY3(0b000101100110000110000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(001111100000000000000000),
+        BIT_ARRAY3(010010010000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000010000110000000000000),
+        BIT_ARRAY3(000101001001000110000000),
+        BIT_ARRAY3(000101000101111101000000),
+        BIT_ARRAY3(000101001001111101000000),
+        BIT_ARRAY3(000101100110000110000000),
     },
     {
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000111100000000000000000),
-        BIT_ARRAY3(0b001010011000000000000000),
-        BIT_ARRAY3(0b001010000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b111101000110000000000000),
-        BIT_ARRAY3(0b100001001001000110000000),
-        BIT_ARRAY3(0b000001000101111101000000),
-        BIT_ARRAY3(0b000001001001111101000000),
-        BIT_ARRAY3(0b000001100110000110000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000111100000000000000000),
+        BIT_ARRAY3(001010011000000000000000),
+        BIT_ARRAY3(001010000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(111101000110000000000000),
+        BIT_ARRAY3(100001001001000110000000),
+        BIT_ARRAY3(000001000101111101000000),
+        BIT_ARRAY3(000001001001111101000000),
+        BIT_ARRAY3(000001100110000110000000),
     },
     {
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000011100000000000000000),
-        BIT_ARRAY3(0b000010011000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010100011000000000000),
-        BIT_ARRAY3(0b000010000100100011000000),
-        BIT_ARRAY3(0b000001100010111110100000),
-        BIT_ARRAY3(0b000001010100111110100000),
-        BIT_ARRAY3(0b000001001111000011000000),
-        BIT_ARRAY3(0b000001100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000011100000000000000000),
+        BIT_ARRAY3(000010011000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010100011000000000000),
+        BIT_ARRAY3(000010000100100011000000),
+        BIT_ARRAY3(000001100010111110100000),
+        BIT_ARRAY3(000001010100111110100000),
+        BIT_ARRAY3(000001001111000011000000),
+        BIT_ARRAY3(000001100000000000000000),
     },
     {
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000011100000000000000000),
-        BIT_ARRAY3(0b000010011000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010100000110000000000),
-        BIT_ARRAY3(0b000010000001001000110000),
-        BIT_ARRAY3(0b000001100000101111101000),
-        BIT_ARRAY3(0b000001010001001111101000),
-        BIT_ARRAY3(0b000001001100110000110000),
-        BIT_ARRAY3(0b000001100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000011100000000000000000),
+        BIT_ARRAY3(000010011000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010100000110000000000),
+        BIT_ARRAY3(000010000001001000110000),
+        BIT_ARRAY3(000001100000101111101000),
+        BIT_ARRAY3(000001010001001111101000),
+        BIT_ARRAY3(000001001100110000110000),
+        BIT_ARRAY3(000001100000000000000000),
     },
     {
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000111100000000000000000),
-        BIT_ARRAY3(0b000010011000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000010000000011000000000),
-        BIT_ARRAY3(0b000101000000100100011000),
-        BIT_ARRAY3(0b000101000000010111110100),
-        BIT_ARRAY3(0b000101000000100111110100),
-        BIT_ARRAY3(0b000101100000011000011000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000111100000000000000000),
+        BIT_ARRAY3(000010011000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000010000000011000000000),
+        BIT_ARRAY3(000101000000100100011000),
+        BIT_ARRAY3(000101000000010111110100),
+        BIT_ARRAY3(000101000000100111110100),
+        BIT_ARRAY3(000101100000011000011000),
     },
     {
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000100100000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000111100000000000000000),
-        BIT_ARRAY3(0b000010011000000000000000),
-        BIT_ARRAY3(0b000011000000000000000000),
-        BIT_ARRAY3(0b000010000000000000000000),
-        BIT_ARRAY3(0b000010000000001100000000),
-        BIT_ARRAY3(0b000101000000010010001100),
-        BIT_ARRAY3(0b000101000000001011111010),
-        BIT_ARRAY3(0b000101000000010011111010),
-        BIT_ARRAY3(0b000101100000001100001100),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000100100000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000111100000000000000000),
+        BIT_ARRAY3(000010011000000000000000),
+        BIT_ARRAY3(000011000000000000000000),
+        BIT_ARRAY3(000010000000000000000000),
+        BIT_ARRAY3(000010000000001100000000),
+        BIT_ARRAY3(000101000000010010001100),
+        BIT_ARRAY3(000101000000001011111010),
+        BIT_ARRAY3(000101000000010011111010),
+        BIT_ARRAY3(000101100000001100001100),
     },
     {
-        BIT_ARRAY3(0b000000110000000000000000),
-        BIT_ARRAY3(0b000001001000000000000000),
-        BIT_ARRAY3(0b000001001000000000000000),
-        BIT_ARRAY3(0b000000110000000000000000),
-        BIT_ARRAY3(0b000000100000000000000000),
-        BIT_ARRAY3(0b000011111000000000000000),
-        BIT_ARRAY3(0b000100101000000000000000),
-        BIT_ARRAY3(0b000000100000000000000000),
-        BIT_ARRAY3(0b000000100000000000000000),
-        BIT_ARRAY3(0b000000100000001100000000),
-        BIT_ARRAY3(0b000001010000010010001100),
-        BIT_ARRAY3(0b000001010000001011111010),
-        BIT_ARRAY3(0b000001010000010011111010),
-        BIT_ARRAY3(0b000001111000001100001100),
+        BIT_ARRAY3(000000110000000000000000),
+        BIT_ARRAY3(000001001000000000000000),
+        BIT_ARRAY3(000001001000000000000000),
+        BIT_ARRAY3(000000110000000000000000),
+        BIT_ARRAY3(000000100000000000000000),
+        BIT_ARRAY3(000011111000000000000000),
+        BIT_ARRAY3(000100101000000000000000),
+        BIT_ARRAY3(000000100000000000000000),
+        BIT_ARRAY3(000000100000000000000000),
+        BIT_ARRAY3(000000100000001100000000),
+        BIT_ARRAY3(000001010000010010001100),
+        BIT_ARRAY3(000001010000001011111010),
+        BIT_ARRAY3(000001010000010011111010),
+        BIT_ARRAY3(000001111000001100001100),
     },
 };
 // clang-format on
@@ -298,6 +312,7 @@ constexpr uint8_t gRussianDickKickerFrames[][gRussianDickKickerHeight][gRussianD
 uint16_t RussianDickKicker::tick() {
     ImgDesc img{ .img = reinterpret_cast<const uint8_t*>(gRussianDickKickerFrames[m_currentFrame]),
                  .height = gRussianDickKickerHeight,
+                 .width = 23,
                  .bytesInRow = gRussianDickKickerBytesInRow };
 
     auto renderedImg = renderImg(img, 2, 2);
@@ -412,7 +427,7 @@ void SleepyTimer::setPhaseChars() {
 
 void SleepyTimer::nextPhase() {
     m_phase = ADD_TO_ENUM(Phase, m_phase, 1);
-    m_inPhaseCnt = 0;
+    m_inPhaseTime = 0;
 }
 
 uint16_t SleepyTimer::tick() {
@@ -421,13 +436,13 @@ uint16_t SleepyTimer::tick() {
     gLcd.clear();
     setPhaseChars();
 
-    ++m_inPhaseCnt;
+    ++m_inPhaseTime;
     uint16_t entropy = micros() + gAnalogRead(A6);
 
     switch (m_phase) {
     case WakedUp:
         gLcd.setCursor(5, 0);
-        switch (entropy % 5) {
+        switch (entropy % 4) {
         case 0:
             gLcd.print(kRightEye " " kNose " " kRightEye);
             break;
@@ -448,12 +463,12 @@ uint16_t SleepyTimer::tick() {
             gLcd.print(kTongueMouse);
         }
 
-        if (m_inPhaseCnt == 15)
+        if (m_inPhaseTime == 15)
             nextPhase();
         break;
     case GoingToSleep:
         gLcd.setCursor(5, 0);
-        switch (m_inPhaseCnt) {
+        switch (m_inPhaseTime) {
         case 1:
             gLcd.print(kStreightEye " " kNose " " kPreclosedEye);
             break;
@@ -472,21 +487,24 @@ uint16_t SleepyTimer::tick() {
         }
 
         gLcd.setCursor(7, 1);
-        switch (m_inPhaseCnt) {
+        switch (m_inPhaseTime) {
         case 1:
         case 4:
             gLcd.print(kYawnMouse);
+            break;
+        case 6:
+            gLcd.print(kSmileMouse);
             break;
         default:
             gLcd.print(kYawnClosedMouse);
         }
 
-        if (m_inPhaseCnt == 6)
+        if (m_inPhaseTime == 6)
             nextPhase();
         break;
     case Sleep:
         gLcd.setCursor(5, 0);
-        switch (m_inPhaseCnt % 2) {
+        switch (m_inPhaseTime % 2) {
         case 0:
             gLcd.print("^ " kNose " ^");
             break;
@@ -525,7 +543,7 @@ uint16_t SleepyTimer::tick() {
             break;
         }
 
-        switch (m_inPhaseCnt % 4) {
+        switch (m_inPhaseTime % 4) {
         case 0:
             gLcd.setCursor(10, 0);
             gLcd.print(" z Z");
@@ -552,12 +570,12 @@ uint16_t SleepyTimer::tick() {
             break;
         }
 
-        if (m_inPhaseCnt == 100)
+        if (m_inPhaseTime == 100)
             nextPhase();
         break;
     case WakingUp:
         gLcd.setCursor(5, 0);
-        switch (m_inPhaseCnt) {
+        switch (m_inPhaseTime) {
         case 1:
             gLcd.print(kClosedEye2 " " kNose " " kClosedEye2);
             break;
@@ -580,7 +598,7 @@ uint16_t SleepyTimer::tick() {
         }
 
         gLcd.setCursor(7, 1);
-        switch (m_inPhaseCnt) {
+        switch (m_inPhaseTime) {
         case 1:
         case 8:
             gLcd.print(kSmileMouse);
@@ -594,7 +612,7 @@ uint16_t SleepyTimer::tick() {
             gLcd.print(kYawnClosedMouse);
         }
 
-        if (m_inPhaseCnt == 8)
+        if (m_inPhaseTime == 8)
             nextPhase();
         break;
     case last_:

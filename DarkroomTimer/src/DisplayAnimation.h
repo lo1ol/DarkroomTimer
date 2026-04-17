@@ -13,6 +13,7 @@
 struct ImgDesc {
     const uint8_t* img;
     uint8_t height;
+    uint8_t width;
     uint8_t bytesInRow;
 };
 
@@ -91,5 +92,5 @@ private:
     void nextPhase();
 
     Phase m_phase = Phase::WakedUp;
-    uint8_t m_inPhaseCnt = 0;
+    uint8_t m_inPhaseTime = 0;
 };

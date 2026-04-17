@@ -298,23 +298,19 @@ void processIdle() {
     if (!gSettings.idleAfterMinutes)
         return;
 
-    if (gBlocked && !gBlockedByIdle) {
-        gLastAction = gMillis();
-        return;
-    }
+    if (!gBlockedByIdle) {
+        if (gBlocked || gEncoder.getDir() || gEncoderBtn.pressing() || gStartBtn.pressing() || gViewBtn.pressing() ||
+            gModeBtn.pressing()) {
+            gLastAction = gMillis();
+            return;
+        }
 
-    if (gEncoder.getDir() || gEncoderBtn.pressing() || gStartBtn.pressing() || gViewBtn.pressing() ||
-        gModeBtn.pressing()) {
-        gLastAction = gMillis();
-    }
+        if (gMillis() - gLastAction < gSettings.idleAfterMinutes * 60000L)
+            return;
 
-    if (!gBlockedByIdle && gMillis() - gLastAction > gSettings.idleAfterMinutes * 60000L) {
         gBlockedByIdle = gBlocked = true;
         gIdleShower.startAnimation(gSettings.idleAnimation);
     }
-
-    if (!gBlockedByIdle)
-        return;
 
     if (!gIdleShower.tick())
         return;
