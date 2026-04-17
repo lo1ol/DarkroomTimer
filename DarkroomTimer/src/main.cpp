@@ -315,6 +315,7 @@ void processIdle() {
     if (!gIdleShower.tick())
         return;
 
+    gLastAction = gMillis();
     gBlockedByIdle = gBlocked = false;
     gDisplay.setupCharset(Charset::Main);
     gModeProcessor->repaint();
