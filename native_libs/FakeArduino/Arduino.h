@@ -13,7 +13,8 @@
 #define pinMode(pin, mode)
 #define noInterrupts()
 #define interrupts()
-#define strncpy_P(m_fwInfo, src, size) strcpy(m_fwInfo, src)
+#define strncpy_P(dst, src, size) strcpy(dst, src)
+#define memcpy_P memcpy
 #define PGM_P const char*
 #define PROGMEM
 

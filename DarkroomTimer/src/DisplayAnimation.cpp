@@ -41,12 +41,7 @@ RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset,
                 }
 
                 uint32_t imgRowPixels = 0;
-
-#ifdef PIO_UNIT_TESTING
-    #define memcpy_P memcpy
-#endif
                 memcpy_P(&imgRowPixels, img.img + imgRow * img.bytesInRow, img.bytesInRow);
-#undef memcpy_P
 
                 int8_t offset = img.bytesInRow * 8 - (colN + 1) * 5 + xOffset;
                 if (offset >= 0)

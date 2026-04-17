@@ -88,13 +88,13 @@ void Lcd::clear() {
 }
 
 void Lcd::addPROGMEMCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
-    lcdCmd(0x40 | location << 3);
+    lcdCmd(0x40 | (location & 0x0F) << 3);
     for (uint8_t i = 0; i != sizeof(matrix); ++i)
         lcdData(pgm_read_byte(matrix + i));
 }
 
 void Lcd::addRAMCustomChar(uint8_t location, const uint8_t (&matrix)[8]) {
-    lcdCmd(0x40 | location << 3);
+    lcdCmd(0x40 | (location & 0x0F) << 3);
     for (uint8_t i = 0; i != sizeof(matrix); ++i)
         lcdData(matrix[i]);
 }
