@@ -210,10 +210,14 @@ Define this at UserConfig.h:
 
 ### I updated  firmware and timer stoped to control enlarger
 
-After 0.5.1 version default Relay pin was moved from  A4 to D4 pin. You can add this line to UserConfig.h to fix it:
+After 0.5.1 version default Relay pin was moved from  A4 to D4 pin. You can add this line to `DarkroomTimer/UserConfig.h` to fix it:
 ```cpp
 #define RELAY_PIN A4
 ```
+
+Or just copy [DarkroomTimer/UserConfig.FirstRevision.h](DarkroomTimer/UserConfig.FirstRevision.h) file to `DarkroomTimer/UserConfig.h`
+
+If you wanna to update timer build at second revision use copy this file [DarkroomTimer/UserConfig.SecondRevision.h](DarkroomTimer/UserConfig.SecondRevision.h) to `DarkroomTimer/UserConfig.h`
 
 ### Where and how to create `UserConfig.h`
 

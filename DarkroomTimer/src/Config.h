@@ -18,6 +18,12 @@
     // Use user config values if exists
     #if __has_include("../UserConfig.h")
         #include "../UserConfig.h"
+    // try current dir too
+    #elif __has_include("UserConfig.h")
+        #include "UserConfig.h"
+    // try subparent dir too
+    #elif __has_include("../../UserConfig.h")
+        #include "../../UserConfig.h"
     #endif
 #endif
 

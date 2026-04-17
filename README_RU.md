@@ -224,10 +224,14 @@ pio run -t upload
 
 ### Я обновил прошибку и таймер перестал контролировать увеличитель
 
-После версии 0.5.1 дефолтный пин для контроля SSR был перенесен c пина A4 на D4. Чтобы вернуть старое поведение, добавьте такую строку в UserConfig.h
+После версии 0.5.1 дефолтный пин для контроля SSR был перенесен c пина A4 на D4. Чтобы вернуть старое поведение, добавьте такую строку в `DarkroomTimer/UserConfig.h`
 ```cpp
 #define RELAY_PIN A4
 ```
+
+Или просто скопируйте файл [DarkroomTimer/UserConfig.FirstRevision.h](DarkroomTimer/UserConfig.FirstRevision.h) в `DarkroomTimer/UserConfig.h`
+
+Если вы хотите прошить таймер собранный во второй ревизии скопируйте [DarkroomTimer/UserConfig.SecondRevision.h](DarkroomTimer/UserConfig.SecondRevision.h) в `DarkroomTimer/UserConfig.h`
 
 ### Где и как создать `UserConfig.h`
 
