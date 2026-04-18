@@ -24,11 +24,12 @@
 
 ## Settings
 
-1. Lamp's heatup time (Lag time)
+1. Lamp's heatup time (Lag time). Click `Start` button at settings to test it
 2. LED Backlight
 3. Beep volume
 4. Auto turn off lamp time in view mode
 5. Start with settings or not
+6. Idle animation and idle timeout. Click `Start` button at settings to see it
 
 ## Modes
 
