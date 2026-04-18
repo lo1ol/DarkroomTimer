@@ -26,6 +26,8 @@ public:
         assert(m_c < DISPLAY_COLS);
         m_lines[m_r][m_c] = ch;
         ++m_c;
+
+        ++m_printCallCount;
     }
 
     void setCursor(uint8_t c, uint8_t r) {

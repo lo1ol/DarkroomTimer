@@ -2,14 +2,20 @@
 
 #include "Hardware.h"
 
-void IdleShower::startAnimation(DisplayAnimation::Id id) {
-    if (m_anim)
-        m_anim->~DisplayAnimation();
+void IdleShower::startAnim(DisplayAnimation::Id id) {
+    stopAnim();
 
     m_anim = DisplayAnimation::createAnimation(id);
     gDisplay.reset();
     gDisplay.tick();
     m_nextUpdateTime = 0;
+}
+
+void IdleShower::stopAnim() {
+    if (m_anim)
+        m_anim->~DisplayAnimation();
+
+    m_anim = nullptr;
 }
 
 bool IdleShower::tick() {

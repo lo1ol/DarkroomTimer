@@ -309,12 +309,13 @@ void processIdle() {
             return;
 
         gBlockedByIdle = gBlocked = true;
-        gIdleShower.startAnimation(gSettings.idleAnimation);
+        gIdleShower.startAnim(gSettings.idleAnimation);
     }
 
     if (!gIdleShower.tick())
         return;
 
+    gIdleShower.stopAnim();
     gLastAction = gMillis();
     gBlockedByIdle = gBlocked = false;
     gDisplay.setupCharset(Charset::Main);

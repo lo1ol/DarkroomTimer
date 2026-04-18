@@ -84,13 +84,14 @@ void SettingsSetter::processIdleAnimation() {
         if (!gIdleShower.tick())
             return;
 
+        gIdleShower.stopAnim();
         m_playingIdleAnim = false;
         gDisplay.setupCharset(Charset::Main);
         repaint();
     }
 
     if (gStartBtn.click()) {
-        gIdleShower.startAnimation(gSettings.idleAnimation);
+        gIdleShower.startAnim(gSettings.idleAnimation);
         m_playingIdleAnim = true;
     }
 

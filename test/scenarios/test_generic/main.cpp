@@ -1030,7 +1030,7 @@ void checkPrintMode() {
         gStartBtn.emulClick();
         loop_();
 
-        gCurrentTime += i * 1000;
+        gCurrentTime += i * 1000UL;
         gStartBtn.emulClick();
         loop_();
     }
@@ -2018,6 +2018,178 @@ void checkView() {
     TEST_ASSERT(!gRelayVal);
 }
 
+void checkIdle() {
+    gSettings.idleAfterMinutes = 1;
+    setup_();
+    loop_();
+
+    TEST_DISPLAY("F Stop test", "Init t:2");
+
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_TRUE(gIdleShower.showingAnim());
+
+    // check not waking up on doing nothing
+    for (uint8_t i = 0; i != 255; ++i) {
+        gLcd.resetCallCount();
+        gCurrentTime += 61 * 1000UL;
+        loop_();
+        TEST_ASSERT_TRUE(gIdleShower.showingAnim());
+        TEST_ASSERT(gLcd.printCallCount());
+    }
+
+    // check waking up on interraction
+    gEncoder.emulTurns(1);
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY("F Stop test", "Init t:2");
+
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_TRUE(gIdleShower.showingAnim());
+    gStartBtn.emulPress();
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY("F Stop test", "Init t:2");
+    gStartBtn.emulRelease();
+    loop_();
+
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_TRUE(gIdleShower.showingAnim());
+    gEncoderBtn.emulPress();
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY("F Stop test", "Init t:2");
+    gEncoderBtn.emulRelease();
+    loop_();
+
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_TRUE(gIdleShower.showingAnim());
+    gModeBtn.emulPress();
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY("F Stop test", "Init t:2");
+    gModeBtn.emulRelease();
+    loop_();
+
+    gViewBtn.emulPress();
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY("F Stop test", "Init t:2");
+    gViewBtn.emulRelease();
+    loop_();
+
+    // check not go to sleep at settings
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    TEST_DISPLAY(kWrenchSymTop " Lag time", kWrenchSymBottom " 0");
+    gViewBtn.emulRelease();
+    gModeBtn.emulRelease();
+    loop_();
+
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_TRUE(!gIdleShower.showingAnim());
+
+    gViewBtn.emulHold();
+    gModeBtn.emulHold();
+    loop_();
+    TEST_DISPLAY("F Stop test", "Init t:2");
+    gViewBtn.emulRelease();
+    gModeBtn.emulRelease();
+    loop_();
+
+    // check not go to sleep during view
+    gViewBtn.emulClick();
+    loop_();
+    TEST_DISPLAY(kLampSym " View", kLampLight1Sym " Auto stop: 180");
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    gViewBtn.emulClick();
+    loop_();
+
+    // check not go to sleep during printing
+    gEncoder.emulRetTime(120_s);
+    loop_();
+    TEST_DISPLAY("F Stop test", "Init t:120");
+
+    gModeBtn.emulClick();
+    loop_();
+    gModeBtn.emulClick();
+    loop_();
+    TEST_DISPLAY(kPlaySym "       240 480", "960 1920");
+
+    gStartBtn.emulClick();
+    loop_();
+    TEST_DISPLAY(kPlaySym "   Lag 240 480", "960 1920");
+
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY(kPlaySym "  59.0 240 480", "960 1920");
+
+    gCurrentTime += 58 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY(kPlaySym "   1.0 240 480", "960 1920");
+
+    gCurrentTime += 2 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY(kPlaySym " 120       480", "960 1920");
+
+    gCurrentTime += 61 * 1000UL;
+    loop_();
+    TEST_ASSERT_TRUE(gIdleShower.showingAnim());
+    gEncoder.emulTurns(-1);
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    TEST_DISPLAY(kPlaySym " 120       480", "960 1920");
+
+    // check not go to sleep on any interaction
+    gCurrentTime += 59 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    gEncoder.emulTurns(-1);
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    gCurrentTime += 59 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+
+    gModeBtn.emulPress();
+    loop_();
+    gModeBtn.emulRelease();
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    gCurrentTime += 59 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+
+    gStartBtn.emulPress();
+    loop_();
+    gStartBtn.emulRelease();
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    gCurrentTime += 59 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+
+    gViewBtn.emulPress();
+    loop_();
+    gViewBtn.emulRelease();
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+    gCurrentTime += 59 * 1000UL;
+    loop_();
+    TEST_ASSERT_FALSE(gIdleShower.showingAnim());
+}
+
 int main() {
     UNITY_BEGIN();
 
@@ -2041,5 +2213,7 @@ int main() {
 
     RUN_TEST(checkSettings);
     RUN_TEST(checkView);
+
+    RUN_TEST(checkIdle);
     UNITY_END();
 }

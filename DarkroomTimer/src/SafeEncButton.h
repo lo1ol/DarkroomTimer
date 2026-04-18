@@ -24,11 +24,11 @@ public:
     void emulHold() { m_reqHold = true; }
     void emulClick() { m_reqClick = true; }
 
-    bool pressing() const { return m_pressing; }
-    bool press() const { return m_justPress; }
-    bool holding() const { return m_holding; }
-    bool hold() const { return m_justHolded; }
-    bool click() const { return m_justClicked; }
+    [[nodiscard]] bool pressing() const { return m_pressing; }
+    [[nodiscard]] bool press() const { return m_justPress; }
+    [[nodiscard]] bool holding() const { return m_holding; }
+    [[nodiscard]] bool hold() const { return m_justHolded; }
+    [[nodiscard]] bool click() const { return m_justClicked; }
     void skipEvents() {
         m_justClicked = false;
         m_justHolded = false;

@@ -4,10 +4,13 @@
 
 class IdleShower {
 public:
-    void startAnimation(DisplayAnimation::Id animId);
+    void startAnim(DisplayAnimation::Id animId);
+    void stopAnim();
 
     // return true if need to exit
     bool tick();
+
+    bool showingAnim() const { return m_anim; }
 
 private:
     DisplayAnimation* m_anim = nullptr;
