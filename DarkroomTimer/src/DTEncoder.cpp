@@ -25,17 +25,22 @@ void DTEncoder::isr() {
     if (m_lastEncoderState != 0x03 || m_subPos == 0)
         return;
 
+    uint32_t curTime = gMillis();
+    if (m_waitForEventSilence && curTime < m_lastTurnChangeTime + 300) {
+        m_lastTurnChangeTime = curTime;
+        return;
+    }
+    m_waitForEventSilence = false;
+
     int8_t dir = (m_subPos > 0) ? 1 : -1;
     m_subPos = 0;
 
-    uint16_t curTime = gMillis();
-    if (static_cast<uint16_t>(curTime - m_lastTurnChangeTime) < ENCODER_FAST_FAST_TIMEOUT)
+    if (static_cast<uint32_t>(curTime - m_lastTurnChangeTime) < ENCODER_FAST_FAST_TIMEOUT)
         m_turnCounters[2] += dir;
-    else if (static_cast<uint16_t>(curTime - m_lastTurnChangeTime) < ENCODER_FAST_TIMEOUT)
+    else if (static_cast<uint32_t>(curTime - m_lastTurnChangeTime) < ENCODER_FAST_TIMEOUT)
         m_turnCounters[1] += dir;
     else
         m_turnCounters[0] += dir;
-
     m_lastTurnChangeTime = curTime;
 }
 
@@ -81,6 +86,10 @@ int8_t DTEncoder::getShift() const {
 
 int8_t DTEncoder::getAceleratedShift(uint8_t factor1, uint8_t factor2) const {
     return m_retTurnCounters[0] + m_retTurnCounters[1] * factor1 + m_retTurnCounters[2] * factor2;
+}
+
+void DTEncoder::startRespondAfterEventSilence() {
+    m_waitForEventSilence = true;
 }
 
 void DTEncoder::clear() {

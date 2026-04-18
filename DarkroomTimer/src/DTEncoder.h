@@ -21,6 +21,8 @@ public:
     void tick();
     void clear();
 
+    void startRespondAfterEventSilence();
+
 private:
     [[nodiscard]] int8_t getShift() const;
     [[nodiscard]] int8_t getAceleratedShift(uint8_t factor1, uint8_t factor2) const;
@@ -33,9 +35,10 @@ private:
     int8_t m_turnCounters[3] = {};
     int8_t m_lastEncoderState = 0;
     int8_t m_subPos = 0;
-    uint16_t m_lastTurnChangeTime = 0;
 
     int8_t m_retTurnCounters[3] = {};
+    uint32_t m_lastTurnChangeTime = 0;
+    bool m_waitForEventSilence = false;
 
 #ifdef PIO_UNIT_TESTING
 public:

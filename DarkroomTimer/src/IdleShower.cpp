@@ -24,6 +24,7 @@ bool IdleShower::tick() {
 
     if (gEncoder.getDir()) {
         gEncoder.clear();
+        gEncoder.startRespondAfterEventSilence();
         return true;
     }
 
