@@ -114,7 +114,7 @@ uint16_t BounceAnimation::tick() {
     auto xShift = m_xShift;
 
     // to make animation more random
-    uint16_t entropy = micros() + gAnalogRead(A6);
+    uint32_t entropy = genRandom();
     if (entropy % 150 == 0) {
         if (m_xShift > 0)
             xShift = 1 + m_xShift % 2;
@@ -432,7 +432,7 @@ uint16_t SleepyTimer::tick() {
     setPhaseChars();
 
     ++m_inPhaseTime;
-    uint16_t entropy = micros() + gAnalogRead(A6);
+    uint32_t entropy = genRandom();
 
     switch (m_phase) {
     case WakedUp:
@@ -619,13 +619,235 @@ uint16_t SleepyTimer::tick() {
     return 1000;
 }
 
+namespace {
+constexpr uint8_t gSpaceShipImg[][2] PROGMEM = {
+    BIT_ARRAY2(1111000000000000), BIT_ARRAY2(0001010000000000), BIT_ARRAY2(0011111000000000),
+    BIT_ARRAY2(0011101100000000), BIT_ARRAY2(1111110011000000), BIT_ARRAY2(0000001100000000),
+};
+
+ImgDesc gSpaceShipImgDesc{
+    .img = reinterpret_cast<const uint8_t*>(gSpaceShipImg),
+    .height = ARRAY_SIZE(gSpaceShipImg),
+    .width = 10,
+    .bytesInRow = 2,
+};
+
+// clang-format off
+constexpr uint8_t kStar1Pic[] PROGMEM = {
+    0b00000, 0b00010, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000
+};
+constexpr uint8_t kStar2Pic[] PROGMEM = {
+    0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00100, 0b00000, 0b00000
+};
+constexpr uint8_t kTwoStarsPic[] PROGMEM = {
+    0b00000, 0b00000, 0b00001, 0b00000, 0b00000, 0b00000, 0b01000, 0b00000
+};
+
+constexpr uint8_t kMiddleStarPic[] PROGMEM = {
+   0b00000, 0b00000, 0b00100, 0b01010, 0b00100, 0b00000, 0b00000, 0b00000
+};
+// clang-format on
+
+#define kNothing ' '
+#define kStar1 '\x84'
+#define kStar2 '\x85'
+#define kTwoStars '\x86'
+#define kMiddleStar '.'
+#define kBigStar '\x87'
+#define kHugeStar '*'
+#define kPlanet 'o'
+#define kGalactic 's'
+#define kEnemy '\x7e'
+#define kSatellite '%'
+
+} // namespace
+
+SpaceShip::SpaceShip() {
+    gLcd.addPROGMEMCustomChar(kStar1, kStar1Pic);
+    gLcd.addPROGMEMCustomChar(kStar2, kStar2Pic);
+    gLcd.addPROGMEMCustomChar(kTwoStars, kTwoStarsPic);
+    gLcd.addPROGMEMCustomChar(kBigStar, kMiddleStarPic);
+
+    // init space objects
+    for (uint8_t i = 0; i != 16; ++i)
+        shiftSpace();
+}
+
+void SpaceShip::shiftSpace() {
+    m_phase++;
+
+    if (m_lastBigObjectDistance < 16)
+        m_lastBigObjectDistance++;
+
+    for (uint8_t rowN = 0; rowN != 2; ++rowN) {
+        uint64_t* row = &m_r0spaceObjects;
+        if (rowN == 1)
+            row = &m_r1spaceObjects;
+
+        SpaceObject prevObject = static_cast<SpaceObject>((*row >> 60) & 0x0F);
+        *row >>= 4;
+
+tryAgain:
+        uint32_t entropy = genRandom() - m_phase;
+        SpaceObject object = SpaceObject::Nothing;
+        bool bigObject = false;
+
+        if (entropy % 3 == 0) {
+            object = SpaceObject::Star1;
+        }
+
+        if (entropy % 3 == 1) {
+            object = SpaceObject::Star2;
+        }
+
+        if (entropy % 23 == 0) {
+            object = SpaceObject::TwoStars;
+        }
+
+        if (entropy % 37 == 0) {
+            object = SpaceObject::MiddleStar;
+        }
+
+        if (entropy % 83 == 0) {
+            object = SpaceObject::BigStar;
+            bigObject = true;
+        }
+        if (entropy % 307 == 0) {
+            object = SpaceObject::HugeStar;
+            bigObject = true;
+        }
+
+        if (entropy % 311 == 0) {
+            object = SpaceObject::Planet;
+            bigObject = true;
+        }
+
+        if (entropy % 313 == 0) {
+            object = SpaceObject::Galactic;
+            bigObject = true;
+        }
+
+        if (entropy % 397 == 0) {
+            object = SpaceObject::Enemy;
+            bigObject = true;
+        }
+
+        if (entropy % 401 == 0) {
+            object = SpaceObject::Satellite;
+            bigObject = true;
+        }
+
+        if (bigObject && m_lastBigObjectDistance < 8)
+            goto tryAgain;
+
+        // to prevent row of same objects
+        if (object != SpaceObject::Nothing && object == prevObject)
+            goto tryAgain;
+
+        if (bigObject)
+            m_lastBigObjectDistance = 0;
+
+        *row |= static_cast<uint64_t>(object) << 60;
+    }
+}
+
+char SpaceShip::getSpaceObjectSym(SpaceObject obj) {
+    switch (obj) {
+    case Nothing:
+        return kNothing;
+    case Star1:
+        return kStar1;
+    case Star2:
+        return kStar2;
+    case TwoStars:
+        return kTwoStars;
+    case MiddleStar:
+        return kMiddleStar;
+    case BigStar:
+        return kBigStar;
+    case HugeStar:
+        return kHugeStar;
+    case Planet:
+        return kPlanet;
+    case Galactic:
+        return kGalactic;
+    case Enemy:
+        return kEnemy;
+    case Satellite:
+        return kSatellite;
+    }
+
+    return ' ';
+}
+
+void SpaceShip::shiftSpaceShip() {
+    auto entropy = genRandom();
+    switch (m_spaceShipDir) {
+    case 0:
+        if (entropy % 7)
+            break; // keep going
+        if (genRandom() % 2)
+            m_spaceShipDir = 1;
+        else
+            m_spaceShipDir = -1;
+        break;
+    case 1:
+    case -1:
+        if (entropy % 7 == 0)
+            m_spaceShipDir = 0;
+        break;
+    }
+
+    m_spaceshipYPos += m_spaceShipDir;
+    if (m_spaceshipYPos < 0) {
+        m_spaceshipYPos = 0;
+        m_spaceShipDir = 0;
+    }
+
+    if (m_spaceshipYPos + gSpaceShipImgDesc.height >= 16) {
+        m_spaceshipYPos = 16 - gSpaceShipImgDesc.height;
+        m_spaceShipDir = 0;
+    }
+}
+
+uint16_t SpaceShip::tick() {
+    shiftSpace();
+    shiftSpaceShip();
+
+    auto renderedSpaceShip = renderImg(gSpaceShipImgDesc, 0, m_spaceshipYPos);
+
+    gLcd.beginFastPrint();
+    gLcd.clear();
+
+    for (uint8_t rowN = 0; rowN != 2; ++rowN) {
+        uint64_t row;
+        if (rowN == 0)
+            row = m_r0spaceObjects;
+        else
+            row = m_r1spaceObjects;
+
+        gLcd.setCursor(0, rowN);
+        for (uint8_t colN = 0; colN != 16; ++colN)
+            gLcd.print(getSpaceObjectSym(static_cast<SpaceObject>((row >> colN * 4) & 0x0F)));
+    }
+
+    printRenderedImg(renderedSpaceShip, 3);
+    gLcd.endFastPrint();
+
+    return 300;
+}
+
+DisplayAnimation::DisplayAnimation() {
+    reinitRandomGenSeed(); // we need some random at some anims
+}
+
 DisplayAnimation* DisplayAnimation::createAnimation(Id id) {
-    static uint8_t gAnimationBuf[sizeof(DvdAnimation)];
+    static uint8_t gAnimationBuf[sizeof(SpaceShip)];
 
 tryAgain:
     switch (id) {
     case random:
-        id = static_cast<Id>(1 + (micros() % (last_ - 1)));
+        id = static_cast<Id>(1 + (genRandom() % (last_ - 1)));
         goto tryAgain;
     case dvd:
         return new (gAnimationBuf) DvdAnimation();
@@ -633,6 +855,8 @@ tryAgain:
         return new (gAnimationBuf) RussianDickKicker();
     case sleepyTimer:
         return new (gAnimationBuf) SleepyTimer();
+    case spaceship:
+        return new (gAnimationBuf) SpaceShip();
     case last_:
     default:
         return nullptr;
@@ -649,6 +873,8 @@ const __FlashStringHelper* DisplayAnimation::getAnimationName(Id id) {
         return F("Dick Kicker");
     case sleepyTimer:
         return F("Sleepy");
+    case spaceship:
+        return F("Spaceship");
     case last_:
     default:
         return nullptr;

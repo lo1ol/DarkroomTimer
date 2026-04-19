@@ -58,11 +58,16 @@ void checkSleepy() {
     testCommonAnimFunctions(DisplayAnimation::sleepyTimer);
 }
 
+void checkSpaceship() {
+    testCommonAnimFunctions(DisplayAnimation::spaceship);
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(checkCreation);
     RUN_TEST(checkDvd);
     RUN_TEST(checkDickKicker);
     RUN_TEST(checkSleepy);
+    RUN_TEST(checkSpaceship);
     UNITY_END();
 }

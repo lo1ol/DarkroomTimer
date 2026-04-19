@@ -30,6 +30,9 @@ extern Beeper gBeeper;
 extern uint8_t gModesCache[32];
 extern ScrollableContent gScrollableContent;
 
+void reinitRandomGenSeed();
+uint32_t genRandom();
+
 #ifdef PIO_UNIT_TESTING
 uint32_t gMillis();
 void gDigitalWrite(uint8_t, uint8_t);

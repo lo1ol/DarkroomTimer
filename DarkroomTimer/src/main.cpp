@@ -328,6 +328,8 @@ void setup() {
 void setup_() {
 #endif
 
+    reinitRandomGenSeed();
+
     gLcd.init();
     gDisplay.setupCharset(Charset::Main);
 

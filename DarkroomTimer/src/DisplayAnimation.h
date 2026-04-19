@@ -26,11 +26,13 @@ struct RenderedImgDesc {
 
 class DisplayAnimation {
 public:
+    DisplayAnimation();
+
     // return time to next update
     virtual uint16_t tick() = 0;
 
     // random has to be first
-    enum Id { random, dvd, dickKicker, sleepyTimer, last_ };
+    enum Id { random, dvd, dickKicker, sleepyTimer, spaceship, last_ };
 
     virtual ~DisplayAnimation() = default;
 
@@ -93,4 +95,40 @@ private:
 
     Phase m_phase = Phase::WakedUp;
     uint8_t m_inPhaseTime = 0;
+};
+
+class SpaceShip : public DisplayAnimation {
+public:
+    SpaceShip();
+
+    uint16_t tick() override;
+
+private:
+    enum SpaceObject : uint8_t {
+        Nothing,
+        Star1,
+        Star2,
+        TwoStars,
+        MiddleStar,
+        BigStar,
+        HugeStar,
+        Planet,
+        Galactic,
+        Enemy,
+        Satellite,
+    };
+
+    void shiftSpace();
+    void shiftSpaceShip();
+    char getSpaceObjectSym(SpaceObject);
+
+    int8_t m_spaceshipYPos = 3;
+    int8_t m_spaceShipDir = 0;
+
+    uint16_t m_phase = 0;
+
+    // each 4 bit of this object describes SpaceObject
+    uint64_t m_r0spaceObjects;
+    uint64_t m_r1spaceObjects;
+    uint8_t m_lastBigObjectDistance = 0;
 };

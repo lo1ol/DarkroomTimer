@@ -20,6 +20,25 @@ void setDisplayBacklight(uint8_t val) {
     gAnalogWrite(LCD_BACKLIGHT_PIN, val * LCD_BACKLIGHT_STEP);
 }
 
+uint32_t gRandomGenSeed;
+
+void reinitRandomGenSeed() {
+#ifdef PIO_UNIT_TESTING
+    gRandomGenSeed = gMillis();
+#else
+    gRandomGenSeed = micros() ^ gAnalogRead(A6);
+#endif
+}
+
+uint32_t genRandom() {
+    constexpr uint32_t a = 1103515245;
+    constexpr uint32_t c = 12345;
+    constexpr uint32_t m = 2147483648;
+
+    gRandomGenSeed = (a * gRandomGenSeed + c) % m;
+    return gRandomGenSeed;
+}
+
 #ifdef PIO_UNIT_TESTING
 int gBuzzerVal = 0;
 int gBacklightVal = 0;

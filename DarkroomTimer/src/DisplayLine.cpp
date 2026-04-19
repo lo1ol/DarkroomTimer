@@ -118,8 +118,6 @@ void DisplayLine::tickAnimation() {
     if (currentTime - m_lastAnimationUpdateTime < kAnimationUpdateRate)
         return;
 
-    static uint16_t gSeed = gAnalogRead(A6);
-
     char buf[DISPLAY_COLS + 1];
     buf[DISPLAY_COLS] = 0;
 
@@ -132,7 +130,7 @@ void DisplayLine::tickAnimation() {
     }
 
     for (uint8_t c = 0; c != DISPLAY_COLS; ++c)
-        buf[c] = 32 + (gSeed + micros()) % 95; // Print random ASCII char
+        buf[c] = 32 + genRandom() % 95; // Print random ASCII char
 
     uint8_t revealStage = t * DISPLAY_COLS / m_animationTime;
     constexpr uint8_t kRevealOrder[DISPLAY_COLS] = { 0, 15, 2, 14, 10, 1, 7, 4, 12, 5, 13, 6, 11, 8, 3, 9 };
