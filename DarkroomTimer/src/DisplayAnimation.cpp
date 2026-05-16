@@ -4,6 +4,9 @@
 #include "Utils.h"
 
 RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset, uint8_t yOffset) {
+    uint32_t imgPict[16];
+    memcpy_P(imgPict, img.img, sizeof(uint32_t) * img.height);
+
     RenderedImgDesc res;
 
     for (uint8_t rowN = 0; rowN != 2; ++rowN) {
@@ -29,9 +32,9 @@ RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset,
 
                 int8_t offset = img.width - (colN + 1) * 5 + xOffset;
                 if (offset >= 0)
-                    customSym[inSymRow] = (img.img[imgRow] >> offset) & 0x1F;
+                    customSym[inSymRow] = (imgPict[imgRow] >> offset) & 0x1F;
                 else
-                    customSym[inSymRow] = (img.img[imgRow] << -offset) & 0x1F;
+                    customSym[inSymRow] = (imgPict[imgRow] << -offset) & 0x1F;
 
                 if (customSym[inSymRow] != 0)
                     isEmptySym = false;
@@ -120,7 +123,7 @@ uint16_t BounceAnimation::tick() {
 
 namespace {
 // clang-format off
-constexpr uint32_t gDvdImg[] = {
+constexpr uint32_t gDvdImg[] PROGMEM = {
     0b111011000111110,
     0b001101000100011,
     0b100101000101001,
@@ -152,7 +155,7 @@ constexpr uint8_t gRussianDickKickerFrameTime[7] = {
 };
 
 // clang-format off
-constexpr uint32_t gRussianDickKickerFrames[7][gRussianDickKickerHeight] = {
+constexpr uint32_t gRussianDickKickerFrames[7][gRussianDickKickerHeight] PROGMEM = {
     {
         0b00001100000000000000000,
         0b00010010000000000000000,
