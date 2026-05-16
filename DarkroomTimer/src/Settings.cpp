@@ -1,19 +1,30 @@
 #include "Settings.h"
 
 #ifndef DT_NATIVE
-    #include <CRC32.h>
     #include <EEPROM.h>
 
     #include "Config.h"
 
+namespace {
+// https://en.wikipedia.org/wiki/BSD_checksum
+void hash_update(uint16_t& hash, const void* data, size_t size) {
+    const uint8_t* ptr = (const uint8_t*)data;
+    while (size--) {
+        hash = (hash >> 1) + ((hash & 1) << 15);
+        hash += *ptr++;
+    }
+}
+} // namespace
+
 Settings Settings::load() {
     Settings res;
     int idx = 0;
-    CRC32 crc32;
+    uint16_t hash = 0;
+
     #define GET_SETTING(value)    \
         EEPROM.get(idx, (value)); \
         idx += sizeof(value);     \
-        crc32.update(value);
+        hash_update(hash, &value, sizeof(value));
 
     GET_SETTING(res.lagTime);
     GET_SETTING(res.beepVolume);
@@ -24,13 +35,14 @@ Settings Settings::load() {
     GET_SETTING(res.idleAfterMinutes);
     GET_SETTING(res.idleAnimation);
 
-    uint32_t hash = crc32.finalize();
-    uint32_t storedHash;
+    uint16_t computedHash = hash;
+    uint16_t storedHash;
     GET_SETTING(storedHash);
+
     #undef GET_SETTING
 
     bool badSettings = false;
-    badSettings |= hash != storedHash;
+    badSettings |= storedHash != computedHash;
     badSettings |= res.lagTime < kMinLagTime;
     badSettings |= res.lagTime > kMaxLagTime;
     badSettings |= res.beepVolume < kMinBeepVolume;
@@ -53,11 +65,12 @@ Settings Settings::load() {
 
 void Settings::updateEEPROM() {
     int idx = 0;
-    CRC32 crc32;
+    uint16_t hash = 0;
+
     #define PUT_SETTING(value)    \
         EEPROM.put(idx, (value)); \
         idx += sizeof(value);     \
-        crc32.update(value);
+        hash_update(hash, &value, sizeof(value));
 
     PUT_SETTING(lagTime);
     PUT_SETTING(beepVolume);
@@ -67,7 +80,7 @@ void Settings::updateEEPROM() {
     PUT_SETTING(melody);
     PUT_SETTING(idleAfterMinutes);
     PUT_SETTING(idleAnimation);
-    PUT_SETTING(crc32.finalize());
+    PUT_SETTING(hash);
     #undef PUT_SETTING
 }
 

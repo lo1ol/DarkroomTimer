@@ -2,5 +2,3 @@
 # See https://docs.wokwi.com/guides/libraries
 
 EncButton
-CRC32
-LiquidCrystal
