@@ -11,6 +11,7 @@ Beeper gBeeper(BEEPER_PIN);
 uint8_t gModesCache[32];
 ScrollableContent gScrollableContent;
 Lcd gLcd;
+IdleShower gIdleShower;
 
 Display gDisplay(&gLcd);
 DTEncoder& gEncoder = DTEncoder::getInstance();

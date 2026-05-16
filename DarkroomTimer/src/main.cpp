@@ -13,7 +13,6 @@
 #include "Modes/PrintMode.h"
 #include "Modes/RelMaskMode.h"
 
-#include "IdleShower.h"
 #include "SettingsSetter.h"
 
 namespace {
@@ -295,7 +294,6 @@ void processMode() {
 void processIdle() {
     static bool gBlockedByIdle = false;
     static uint32_t gLastAction = millis();
-    static IdleShower gIdleShower;
 
     if (!gSettings.idleAfterMinutes)
         return;

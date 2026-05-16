@@ -46,6 +46,6 @@ constexpr Settings kDefaultSettings{
     .autoFinishViewMinutes = 3,
     .startWith = StartWith::Modes,
     .melody = Melody::nice,
-    .idleAfterMinutes = 3,
+    .idleAfterMinutes = 5,
     .idleAnimation = DisplayAnimation::random,
 };

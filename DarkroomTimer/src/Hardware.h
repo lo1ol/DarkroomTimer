@@ -6,6 +6,7 @@
 #include "Config.h"
 #include "DTEncoder.h"
 #include "Display.h"
+#include "IdleShower.h"
 #include "Lcd.h"
 #include "ScrollableContent.h"
 #include "Settings.h"
@@ -21,6 +22,7 @@ extern ButtonT<VIEW_BTN_PIN> gViewBtn;
 
 extern Lcd gLcd;
 extern Display gDisplay;
+extern IdleShower gIdleShower;
 
 extern Timer gTimer;
 extern Settings gSettings;

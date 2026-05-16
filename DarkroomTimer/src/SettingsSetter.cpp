@@ -72,6 +72,22 @@ void SettingsSetter::processSetMelody() const {
     repaint();
 }
 
+void SettingsSetter::processIdleTime() const {
+    if (!gEncoder.getInt(gSettings.idleAfterMinutes, 0, kMaxIdleAfterMinutes))
+        return;
+
+    repaint();
+}
+
+void SettingsSetter::processIdleAnimation() const {
+    uint8_t choice = gSettings.idleAnimation;
+    if (!gEncoder.getInt(choice, 0, DisplayAnimation::last_ - 1))
+        return;
+
+    gSettings.idleAnimation = static_cast<DisplayAnimation::Id>(choice);
+    repaint();
+}
+
 void SettingsSetter::process() {
     if (m_timer.state() != Timer::RUNNING) {
         int8_t shift = 0;
@@ -111,6 +127,12 @@ void SettingsSetter::process() {
         break;
     case Step::setMelody:
         processSetMelody();
+        break;
+    case Step::setIdleTime:
+        processIdleTime();
+        break;
+    case Step::setIdleAnimation:
+        processIdleAnimation();
         break;
     case Step::checkVersion:
         break;
@@ -166,6 +188,17 @@ void SettingsSetter::repaint() const {
         gDisplay[0] << F("Notify melody");
         gDisplay[1] << Melody::getMelodyName(gSettings.melody);
         gDisplay[1] >> F(kBellSym);
+        return;
+    case Step::setIdleTime:
+        gDisplay[0] << F("Idle time");
+        if (gSettings.idleAfterMinutes == 0)
+            gDisplay[1] << F("No");
+        else
+            gDisplay[1] << gSettings.idleAfterMinutes << F(" minute") << (gSettings.idleAfterMinutes == 1 ? "" : "s");
+        return;
+    case Step::setIdleAnimation:
+        gDisplay[0] << F("Idle animation");
+        gDisplay[1] << DisplayAnimation::getAnimationName(gSettings.idleAnimation);
         return;
     case Step::checkVersion:
         gDisplay[0] << F("Version");
