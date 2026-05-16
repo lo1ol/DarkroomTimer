@@ -79,7 +79,22 @@ void SettingsSetter::processIdleTime() const {
     repaint();
 }
 
-void SettingsSetter::processIdleAnimation() const {
+void SettingsSetter::processIdleAnimation() {
+    if (m_playingIdleAnim) {
+        if (!gIdleShower.tick())
+            return;
+
+        m_playingIdleAnim = false;
+        gDisplay.setupCharset(Charset::Main);
+        repaint();
+    }
+
+
+    if (gStartBtn.click()) {
+        gIdleShower.startAnimation(gSettings.idleAnimation);
+        m_playingIdleAnim = true;
+    }
+
     uint8_t choice = gSettings.idleAnimation;
     if (!gEncoder.getInt(choice, 0, DisplayAnimation::last_ - 1))
         return;
@@ -89,7 +104,7 @@ void SettingsSetter::processIdleAnimation() const {
 }
 
 void SettingsSetter::process() {
-    if (m_timer.state() != Timer::RUNNING) {
+    if (couldBeClosed()) {
         int8_t shift = 0;
         if (gModeBtn.click())
             shift = 1;
@@ -211,5 +226,5 @@ void SettingsSetter::repaint() const {
 }
 
 bool SettingsSetter::couldBeClosed() const {
-    return m_timer.state() == Timer::STOPPED;
+    return m_timer.state() == Timer::STOPPED && !m_playingIdleAnim;
 }

@@ -35,9 +35,10 @@ private:
     void processStartWith() const;
     void processSetMelody() const;
     void processIdleTime() const;
-    void processIdleAnimation() const;
+    void processIdleAnimation();
 
     Step m_step = Step::setLagTime;
     Time m_lagTime;
     Timer m_timer{};
+    bool m_playingIdleAnim = false;
 };
