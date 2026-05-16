@@ -6,6 +6,8 @@
 
 class ScrollableContent {
 public:
+    ScrollableContent();
+
     static constexpr uint8_t kMaxLineCnt = 10;
 
     void reset();
@@ -42,7 +44,7 @@ public:
     uint8_t m_firstPrintedLine = 0;
     bool m_needGoToCurrent = false;
 
-    char(m_lines[kMaxLineCnt])[DISPLAY_COLS + 1] = {};
+    char(m_lines[kMaxLineCnt])[DISPLAY_COLS + 1];
 
 #ifdef PIO_UNIT_TESTING
 public:

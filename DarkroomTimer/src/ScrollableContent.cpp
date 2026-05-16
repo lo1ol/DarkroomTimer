@@ -2,6 +2,10 @@
 
 #include "Hardware.h"
 
+ScrollableContent::ScrollableContent() {
+    memset(m_lines, 0, sizeof(m_lines));
+}
+
 void ScrollableContent::reset() {
     m_currentLine = -1;
     m_line = 0;

@@ -11,9 +11,9 @@
 #endif
 
 struct ImgDesc {
-    const uint32_t* img;
+    const uint8_t* img;
     uint8_t height;
-    uint8_t width;
+    uint8_t bytesInRow;
 };
 
 struct RenderedImgDesc {
