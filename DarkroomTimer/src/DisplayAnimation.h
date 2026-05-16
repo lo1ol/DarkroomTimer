@@ -46,7 +46,7 @@ public:
 
 protected:
     static RenderedImgDesc renderImg(const ImgDesc& img, uint8_t xOffset, uint8_t yOffset);
-    static void printRenderedImg(const RenderedImgDesc& desc, const uint8_t col);
+    static void printRenderedImg(const RenderedImgDesc& desc, const int8_t col);
 };
 
 class BounceAnimation : public DisplayAnimation {
@@ -77,5 +77,5 @@ public:
 
 private:
     uint8_t m_currentFrame = 0;
-    uint8_t m_xPos = 0;
+    int8_t m_xPos = -4;
 };

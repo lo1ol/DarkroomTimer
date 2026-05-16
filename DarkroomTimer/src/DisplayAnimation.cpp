@@ -54,7 +54,7 @@ RenderedImgDesc DisplayAnimation::renderImg(const ImgDesc& img, uint8_t xOffset,
     return res;
 }
 
-void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, const uint8_t col) {
+void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, const int8_t col) {
     char symN = '\x80';
     for (uint8_t symId = 0; symId != desc.customSymsCnt; ++symId)
         gLcd.fastAddCustomChar(symN++, desc.customSyms[symId]);
@@ -67,7 +67,10 @@ void DisplayAnimation::printRenderedImg(const RenderedImgDesc& desc, const uint8
         bool needSetCursror = true;
 
         for (uint8_t i = 0; rowStr[i]; ++i) {
-            if (col + i == 16)
+            if (col + i < 0)
+                continue;
+
+            if (col + i > 16)
                 needSetCursror = true;
 
             if (rowStr[i] == ' ') {
@@ -278,7 +281,7 @@ uint16_t RussianDickKicker::tick() {
                  .height = gRussianDickKickerHeight,
                  .width = gRussianDickKickerWidth };
 
-    auto renderedImg = renderImg(img, 0, 2);
+    auto renderedImg = renderImg(img, 2, 2);
 
     gLcd.beginFastPrint();
     gLcd.clear();
@@ -308,7 +311,7 @@ DisplayAnimation* DisplayAnimation::createAnimation(Id id) {
 tryAgain:
     switch (id) {
     case random:
-        id = static_cast<Id>(random + millis() % (last_ - random));
+        id = static_cast<Id>(random + micros() % (last_ - random));
         goto tryAgain;
     case dvd:
         return new (gAnimationBuf) DvdAnimation();
